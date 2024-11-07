@@ -1,11 +1,11 @@
 .container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-  .section {
-    max-width: 90%;
-  }
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+//   .section {
+//     max-width: 90%;
+//   }
 
 .content {
   display: flex;
@@ -15,19 +15,19 @@
 }
 .children {
   flex-grow: 1;
-//   padding: 2.4rem;
+  //   padding: 2.4rem;
   background-color: #fafafa;
   overflow-y: auto;
   overflow-x: hidden;
-  
 
   @media screen and (min-width: 768px) {
     // display: block;
   }
 
-  & > div:last-child {
+  & > div {
     display: flex;
     justify-content: center;
     width: 100%;
   }
+ 
 }
