@@ -60,6 +60,8 @@
   flex-wrap: wrap;
   text-align: start;
   margin-block-start: 3rem;
+  margin-inline:5rem ;
+
 
   @media screen and (max-width: 540px) {
     display: block;
