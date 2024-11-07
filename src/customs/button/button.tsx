@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 interface ButtonProps extends PropsWithChildren {
   type?: 'button' | 'submit' | 'reset'; // Define specific types for better usage
   onClick?: () => void;
-  variant?: 'white' | 'red' | 'green' | 'redOutline' | 'greenOutline'; // Limit to specific variants
+  variant?: 'white' | 'red' | 'green' | 'redOutline' | 'greenOutline' | 'transparent'; // Limit to specific variants
   disabled?: boolean;
   className?: string;
   icon?: React.ReactNode;
@@ -30,7 +30,8 @@ const Button: FC<ButtonProps> = ({
     red: style.red,
     green: style.green,
     redOutline: style.redOutline,
-    greenOutline: style.greenOutline
+    greenOutline: style.greenOutline,
+    transparent: style.transparent,
   };
 
   const buttonStyle = variantList[variant] || variantList.green; // Fallback to green if variant is invalid
