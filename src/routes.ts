@@ -1,7 +1,7 @@
 export const routes = {
-  home: "/jum",
-  auth: {
-    login: "/login",
+  // home: "/",
+  page: {
+    home: "/",
     
   },    
 };

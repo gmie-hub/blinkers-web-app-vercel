@@ -1,8 +1,367 @@
-.main{
-    display: flex;
-    justify-content: center;
-    width: 100%;
+.main {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
-.section{
-width: 90%;
+.section {
+  max-width: 90%;
+}
+
+// //MarketPlace
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
+  justify-content: start;
+  gap: 20px;
+  text-align: start;
+}
+
+.card {
+  background-color: var(--color-primary-white);
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 32%; // Default width for 3 cards per row
+  border-bottom: 4px solid #009900; // Green border
+  box-sizing: border-box;
+
+  /* Adjust card width if there's only one card */
+  @media (max-width: 1024px) {
+    width: 48%; // On medium screens (tablet or small desktop), show 2 cards per row
+  }
+
+  @media (max-width: 600px) {
+    width: 100%; // On small screens (mobile), show 1 card per row
+  }
+}
+
+.card h3 {
+  font-weight: 500;
+  font-size: 2rem;
+  padding-block: 1rem;
+}
+
+.card p {
+  color: var(--color-body-text);
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+.head h1 {
+  font-weight: 500;
+  color: var(--color-header-text);
+  font-size: 4rem;
+}
+.head h4 {
+  color: var(--color-body-text);
+}
+
+//promoted Ads
+.promoHead {
+  display: flex;
+  justify-content: space-between;
+}
+.promoHead p {
+  color: var(--color-header-text);
+  font-weight: 500;
+  font-size: 2.5rem;
+}
+.promoImageContainer {
+  display: flex;
+  flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
+  justify-content: start; // Center the images in the container
+  gap: 3rem; // Space between the images
+  text-align: start;
+}
+
+.promoImage {
+  width: 23%; // Default width for 4 images per row
+  box-sizing: border-box; // Ensure padding and margin don't affect the layout
+  background-color: var(--color-primary-white);
+
+  @media (max-width: 600px) {
+    width: 100% !important; // On small screens (mobile), show 1 image per row
+  }
+}
+
+.promoImage img {
+  width: 100%; // Make the image fill the container width
+  height: auto; // Maintain aspect ratio
+  object-fit: contain; // Ensure the image fits within the container without being cropped or stretched
+}
+.arrow {
+  display: flex;
+  gap: 2rem;
+  margin-inline-end: 1rem;
+  margin-block: 2rem;
+}
+
+.dotPagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 1rem 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-block: 3rem;
+}
+
+.activeDot {
+  background-color: #009900;
+}
+
+.disabledArrow {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.promoHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: 2rem;
+
+  .arrowContainer {
+    display: flex;
+    gap: 10px;
+
+    .arrowButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      background-color: var(--color-green); // Default green background
+    }
+
+    .greenBackground {
+      background-color: #009900; // Green when clickable
+    }
+
+    .disabledArrow {
+      cursor: not-allowed;
+      background-color: #eeeeee; // Red background when disabled
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+//Recommended
+.recommendedImage {
+  width: 23%; // Default width for 4 images per row
+  box-sizing: border-box; // Ensure padding and margin don't affect the layout
+  // background-color: var(--color-primary-white);
+  background-color: #ffffff;
+
+  @media (max-width: 600px) {
+    width: 100% !important; // On small screens (mobile), show 1 image per row
+  }
+}
+
+.recommendedImage img {
+  width: 100%; // Make the image fill the container width
+  height: auto; // Maintain aspect ratio
+  object-fit: contain; // Ensure the image fits within the container without being cropped or stretched
+}
+
+//Access
+.section1 {
+  padding: 3rem;
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  border-radius: 0.8rem;
+  gap: 11rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.leftSection,
+.rightSection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+}
+
+.leftSection p {
+  color: var(--color-body-text);
+  padding-block: 1rem;
+  padding-block-end: 4rem;
+}
+.leftSection h3 {
+  color: var(--color-body-black);
+  font-weight: 600;
+  font-size: 3.2rem;
+}
+
+//GetStarted
+.getStarted {
+  padding: 3rem;
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  border-radius: 0.8rem;
+  // gap: 11rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 2rem; // Reduce the gap for smaller screens
+  }
+}
+
+.getStartedRight,
+.getStartedLeft {
+  flex: 1;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Centers content vertically
+  align-items: center; // Centers content horizontally
+  text-align: center;
+
+  @media (max-width: 768px) {
+    width: 100%; // Full width on smaller screens
+  }
+}
+
+.double {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.single {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.getStartedLeft {
+  display: grid;
+  grid-template-columns: 50px auto; // First column for icons, second for text
+  row-gap: 1.5rem; // Space between rows
+  column-gap: 2rem; // Space between the icon and text columns
+  align-items: start; // Align items at the top
+}
+
+.cardContent {
+  display: contents; // Allows the items inside to follow the grid from the parent
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: start;
+}
+
+.getStartedHead {
+  display: flex;
+  flex-direction: column;
+}
+.getStartedHead h2 {
+  font-weight: 500;
+  color: var(--color-header-text);
+  font-size: 4rem;
+}
+.getStartedHead p {
+  color: var(--color-body-text);
+}
+
+//trends
+.TrendsHead {
+  font-weight: 500;
+  color: var(--color-header-text);
+  font-size: 4rem;
+}
+.trendContainer {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; // Three columns for left, middle, right
+  gap: 2rem; // Space between columns
+  align-items: center;
+  justify-items: center;
+  padding: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // Stack content in one column on smaller screens
+  }
+}
+
+.leftSectionTrend,
+.rightSectionTrend {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; // Space between the two items in rows
+  align-items: start; // Align items to the left
+}
+
+// .trendImage {
+//   text-align: center;
+//   background-color: #ffffff;
+// }
+.trendImage {
+  text-align: center;
+  position: relative; // Allows absolute positioning of the favorite icon
+  text-align: center;
+}
+
+.favoriteIcon {
+  position: absolute;
+  // left: 7rem; // Adjust the position as needed
+
+  z-index: 10; // Place it above other elements
+}
+
+.favoriteIconMiddle {
+  position: absolute;
+  left: 10rem; // Adjust the position as needed
+
+  z-index: 10; // Place it above other elements
+}
+
+.trendImage p {
+  padding: 0.5rem;
+  text-align: start;
+}
+
+.middleSectionTrend {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Centers content in the middle
+  align-items: center; // Horizontally center the content
+  height: 100%; // Ensure the section takes up full height
+  position: relative; // Allows positioning the button at the bottom
+}
+
+.buttonStyle {
+  position: absolute; // Position the button at the bottom
+  bottom: 0; // Aligns the button to the bottom of the container
+  margin-bottom: 2rem; // Adds some spacing from the bottom
+}
+
+.starWrapper {
+  align-items: start;
+  display: flex;
+  padding-inline-start: 0.5rem;
+  padding-block-end: 2rem;
+  gap: 1rem;
 }

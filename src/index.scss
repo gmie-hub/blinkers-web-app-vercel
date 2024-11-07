@@ -22,7 +22,7 @@ body {
   font-family: 'Lato', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: white;
+  background-color: #EEEEEE;
   /* font-size: 62.5%; */
   font-weight: 400;
   font-size: 1.4rem;
@@ -320,3 +320,16 @@ margin-block: 0.5rem;
 
 
 
+
+.buttonStyle {
+  min-width: 22rem;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    min-width: 22rem;
+    width: 0 !important;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100% !important;
+  }
+}

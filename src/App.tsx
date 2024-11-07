@@ -6,7 +6,7 @@ import { routes } from './routes';
 function App() {
 
   const appRoutes = [
-    { path: routes.home, element: <HomePage /> },
+    { path: routes.page .home, element: <HomePage /> },
 
   
 
@@ -19,6 +19,7 @@ function App() {
           <Route key={index} path={item.path} element={item.element} />
         ))}
       </Route>
+      
 
      
     </Routes>
