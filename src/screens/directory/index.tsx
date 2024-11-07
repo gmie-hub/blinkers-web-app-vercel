@@ -41,32 +41,22 @@ const DirectoryPage = () => {
 
   return (
     <section>
-      <div className={styles.greenContainer}>
+      <section className={styles.greenContainer}>
         <p>Directory</p>
         <p>Explore Various Business Listings</p>
 
-              <div className={styles.inputContainer}>
-                  
-          <span>
-            <select name="select" className={styles.selectBox}>
-              <option value="" disabled selected>
-                All Category
-              </option>
-              <option>hello</option>
-              <option>hello</option>
-              <option>hello</option>
-            </select>
-          </span>
+        <div className={styles.inputContainer}>
+          <select>
+            <option>hello</option>
+            <option>hello</option>
+            <option>hello</option>
+          </select>
 
-          <span>
-            <input type="text" placeholder="Search..." name="query" />
-          </span>
+          <input type="search" placeholder="search businesses" />
 
-          <span>
-            <Button type="button" text="search" />
-          </span>
+          <Button type="submit" text="search" className={styles.button} />
         </div>
-      </div>
+      </section>
 
       <section className={styles.cardContainer}>
         {cardData.map((card) => (
