@@ -12,7 +12,6 @@ import Trends from "./trend";
 const Home = () => {
   return (
         <section>
-          <br /><br />
           <Directory />
           <MoreThanMarket />
           <PromotedAds />
@@ -20,10 +19,7 @@ const Home = () => {
           <Access />
           <GetStarted />
           <Trends />
-          <br />
-          <Footer />
         </section>
-      // <Foot />
   );
 };
 export default Home;

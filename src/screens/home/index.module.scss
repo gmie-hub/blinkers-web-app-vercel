@@ -63,6 +63,7 @@
 .promoHead {
   display: flex;
   justify-content: space-between;
+  padding-inline-end: 0.4rem;
 }
 .promoHead p {
   color: var(--color-header-text);
@@ -376,6 +377,7 @@
   justify-content: center;
   gap: 4rem;
   text-align: center;
+  margin-block: 2rem;
 }
 
 .directryCard {

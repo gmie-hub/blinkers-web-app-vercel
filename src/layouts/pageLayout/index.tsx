@@ -2,6 +2,8 @@
 import { Outlet } from 'react-router-dom';
 
 import styles from './styles.module.scss';
+import Foot from '../footer/foot';
+import Footer from '../footer/footer';
 
 
 const Layout = () => {
@@ -29,8 +31,10 @@ const Layout = () => {
           <div>
             <Outlet />
           </div>
-          {/* <Footer/> */}
+          <Footer/>
         </section>
+        <Foot />
+
       </section>
     </main>
   );
