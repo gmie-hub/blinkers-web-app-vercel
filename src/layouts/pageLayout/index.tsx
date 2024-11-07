@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 
-import Header from "../header/header";
 
 import styles from "./styles.module.scss";
 import Foot from "../footer/foot";
@@ -19,7 +18,7 @@ const Layout = () => {
 
   return (
     <main className={styles.container}>
-      <Header />
+      {/* <Header /> */}
       <section className={styles.content}>
         {/* <Header onOpen={showDrawer} /> */}
 

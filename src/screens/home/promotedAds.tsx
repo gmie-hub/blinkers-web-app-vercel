@@ -88,7 +88,7 @@ const PromotedAds = () => {
               currentPage === 1 ? styles.disabledArrow : styles.greenBackground
             }`}
             onClick={handlePrev}
-            style={currentPage === 1 ? { backgroundColor: "#EEEEEE" } : {}}
+            style={currentPage === 1 ? { backgroundColor: "#009900" } : {}}
           >
             <Image src={LeftIcon} alt="Left Arrow" preview={false} />
           </div>
@@ -99,7 +99,7 @@ const PromotedAds = () => {
                 : styles.greenBackground
             }`}
             onClick={handleNext}
-            style={currentPage === totalPages ? { backgroundColor: "red" } : {}}
+            style={currentPage === totalPages ? { backgroundColor: "#009900" } : {}}
           >
             <Image src={RightIcon} alt="Right Arrow" preview={false} />
           </div>
