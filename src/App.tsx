@@ -2,6 +2,7 @@ import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import HomePage from './screens/home/index'
 import { routes } from './routes';
+import Layout from './layouts/pageLayout';
 
 function App() {
 
@@ -14,9 +15,11 @@ function App() {
   ];
   return (
     <Routes>
-      <Route>
-        {appRoutes.map((item,index) => (
-          <Route key={index} path={item.path} element={item.element} />
+     
+
+      <Route element={<Layout />}>
+        {appRoutes.map((item) => (
+          <Route path={item.path} element={item.element} />
         ))}
       </Route>
       
