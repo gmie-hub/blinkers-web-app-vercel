@@ -328,13 +328,19 @@
 .favoriteIcon {
   position: absolute;
   // left: 7rem; // Adjust the position as needed
+  display: flex;
+  width: 100%;
+  justify-content: end;
 
   z-index: 10; // Place it above other elements
 }
 
 .favoriteIconMiddle {
   position: absolute;
-  left: 10rem; // Adjust the position as needed
+  // left: 7rem; // Adjust the position as needed
+  display: flex;
+  width: 100%;
+  justify-content: end;
 
   z-index: 10; // Place it above other elements
 }

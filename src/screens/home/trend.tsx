@@ -5,7 +5,7 @@ import Product3 from "../../assets/Image (1).svg";
 import Button from "../../customs/button/button";
 import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
-import favorite from "../../assets/staryellow.svg";
+import favorite from "../../assets/Icon + container.svg";
 
 // Data array
 const cardData = [
@@ -31,7 +31,7 @@ const cardData = [
     title: "Female Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
-    rating:3
+    rating: 3,
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const cardData = [
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
-    rating:5
+    rating: 5,
   },
   {
     id: 5,
@@ -47,83 +47,121 @@ const cardData = [
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
-    rating:4
+    rating: 4,
   },
 ];
 
-
 const Trends = () => {
-    return (
-      <div  style={{marginBlock:'2rem'}}>
-        <div>
-          <p className={styles.TrendsHead}>Trending Now</p>
-        </div>
-  
-        <section className={styles.trendContainer}>
-          {/* Left section with two items */}
-          <div className={styles.leftSectionTrend}>
-            {cardData.slice(0, 2).map((card) => (
-              <div className={styles.trendImage} key={card.id}>
-                <div style={{width:'100%'}}>
-                <Image width={20} className={styles.favoriteIcon} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
+  return (
+    <div style={{ marginBlock: "2rem" }}>
+      <div>
+        <p className={styles.TrendsHead}>Trending Now</p>
+      </div>
 
-                </div>
-                {card.icon}
-                <div style={{background:'white'}}>
+      <section className={styles.trendContainer}>
+        {/* Left section with two items */}
+        <div className={styles.leftSectionTrend}>
+          {cardData.slice(0, 2).map((card) => (
+            <div className={styles.trendImage} key={card.id}>
+              <div className={styles.favoriteIcon}>
+                <Image
+                  width={30}
+                  src={favorite}
+                  alt="Favorite"
+                  preview={false}
+                />{" "}
+                {/* Add favorite icon */}
+              </div>
+              {card.icon}
+              <div style={{ background: "white" }}>
                 <p>{card.title}</p>
                 <p>{card.location}</p>
                 <p>{card.amount}</p>
                 <div className={styles.starWrapper}>
-                  {countUpTo(card?.rating || 0, <Image width={20} src={StarYellow} alt="StarYellow" preview={false} />, <Image width={20} src={Star} alt="Star" preview={false} />)}
+                  {countUpTo(
+                    card?.rating || 0,
+                    <Image
+                      width={20}
+                      src={StarYellow}
+                      alt="StarYellow"
+                      preview={false}
+                    />,
+                    <Image width={20} src={Star} alt="Star" preview={false} />
+                  )}
                 </div>
-
-                </div>
-             
               </div>
-            ))}
-          </div>
-  
-          {/* Middle section with one item centered */}
-          <div className={styles.middleSectionTrend}>
-            <div className={styles.trendImage} key={cardData[2].id}>
-              <Image width={20} className={styles.favoriteIconMiddle} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
-              {cardData[2].icon}
-              <div  style={{background:'white'}}>
+            </div>
+          ))}
+        </div>
+
+        {/* Middle section with one item centered */}
+        <div className={styles.middleSectionTrend}>
+          <div className={styles.trendImage} key={cardData[2].id}>
+            <div className={styles.favoriteIcon}>
+              <Image width={30} src={favorite} alt="Favorite" preview={false} />{" "}
+              {/* Add favorite icon */}
+            </div>{" "}
+            {cardData[2].icon}
+            <div style={{ background: "white" }}>
               <p>{cardData[2].title}</p>
               <p>{cardData[2].location}</p>
               <p>{cardData[2].amount}</p>
               <div className={styles.starWrapper}>
-                {countUpTo(cardData[2]?.rating || 0, <Image width={20} src={StarYellow} alt="StarYellow" preview={false} />, <Image width={20} src={Star} alt="Star" preview={false} />)}
+                {countUpTo(
+                  cardData[2]?.rating || 0,
+                  <Image
+                    width={20}
+                    src={StarYellow}
+                    alt="StarYellow"
+                    preview={false}
+                  />,
+                  <Image width={20} src={Star} alt="Star" preview={false} />
+                )}
               </div>
-              </div>
-           
             </div>
-            <Button type="button" variant="green" text="Shop Now" className={styles.buttonStyle} />
           </div>
-  
-          {/* Right section with two items */}
-          <div className={styles.rightSectionTrend}>
-            {cardData.slice(3).map((card) => (
-              <div className={styles.trendImage} key={card.id}>
-                <Image width={20} className={styles.favoriteIcon} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
-                {card.icon}
-                <div style={{background:'white'}}>
+          <Button
+            type="button"
+            variant="green"
+            text="Shop Now"
+            className={styles.buttonStyle}
+          />
+        </div>
+
+        {/* Right section with two items */}
+        <div className={styles.rightSectionTrend}>
+          {cardData.slice(3).map((card) => (
+            <div className={styles.trendImage} key={card.id}>
+                  <div className={styles.favoriteIcon} >
+                <Image width={30} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
+
+                </div>
+              {/* Add favorite icon */}
+              {card.icon}
+              <div style={{ background: "white" }}>
                 <p>{card.title}</p>
                 <p>{card.location}</p>
                 <p>{card.amount}</p>
                 <div className={styles.starWrapper}>
-                  {countUpTo(card?.rating || 0, <Image width={20} src={StarYellow} alt="StarYellow" preview={false} />, <Image width={20} src={Star} alt="Star" preview={false} />)}
-                </div>
-
+                  {countUpTo(
+                    card?.rating || 0,
+                    <Image
+                      width={20}
+                      src={StarYellow}
+                      alt="StarYellow"
+                      preview={false}
+                    />,
+                    <Image width={20} src={Star} alt="Star" preview={false} />
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
-      </div>
-    );
-  };
-  
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+};
 
 export default Trends;
 
