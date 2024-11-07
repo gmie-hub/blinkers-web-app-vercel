@@ -11,9 +11,7 @@ import Trends from "./trend";
 
 const Home = () => {
   return (
-    <main>
-      <section className={styles.main}>
-        <section className={styles.section}>
+        <section>
           <br /><br />
           <Directory />
           <MoreThanMarket />
@@ -25,9 +23,7 @@ const Home = () => {
           <br />
           <Footer />
         </section>
-      </section>
-      <Foot />
-    </main>
+      // <Foot />
   );
 };
 export default Home;

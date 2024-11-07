@@ -12,7 +12,7 @@
 .cardContainer {
   display: flex;
   flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
-  justify-content: start;
+  justify-content: center;
   gap: 20px;
   text-align: start;
 }
@@ -48,6 +48,7 @@
   display: flex;
   flex-direction: column;
   text-align: start;
+  padding-inline-start: 0.5rem;
 }
 .head h1 {
   font-weight: 500;
@@ -372,8 +373,8 @@
 .directryContainer {
   display: flex;
   flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
-  justify-content: start;
-  gap: 20px;
+  justify-content: center;
+  gap: 4rem;
   text-align: center;
 }
 
