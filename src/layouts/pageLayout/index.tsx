@@ -1,8 +1,10 @@
 import { Outlet } from "react-router-dom";
 
-import styles from "./styles.module.scss";
-import Footer from "../footer/footer";
 import Header from "../header/header";
+
+import styles from "./styles.module.scss";
+import Foot from "../footer/foot";
+import Footer from "../footer/footer";
 
 const Layout = () => {
   //   const [, setOpen] = useState(false);
@@ -25,8 +27,9 @@ const Layout = () => {
           <div>
             <Outlet />
           </div>
-          {/* <Footer/> */}
+          <Footer />
         </section>
+        <Foot />
       </section>
     </main>
   );

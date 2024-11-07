@@ -9,7 +9,7 @@ import Iphone from "../../assets/Iphone.svg";
 
 const Footer = () => {
   return (
-    <div>
+    <main>
       <section className={styles.section1}>
         <div className={styles.leftSection}>
           <h3>Download The App</h3>
@@ -98,7 +98,7 @@ const Footer = () => {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 export default Footer;

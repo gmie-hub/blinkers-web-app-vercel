@@ -53,7 +53,7 @@ const cardData = [
 ];
 const MoreThanMarket = () => {
   return (
-    <div>
+    <div style={{marginBlock:'2rem'}}>
         <div className={styles.head}>
         <h1>We Are More Than A Market Place</h1>
         <h4>Connect, shop, sell, get jobs and grow your business</h4>

@@ -51,11 +51,10 @@ const cardData = [
   },
 ];
 
-// Main component
-// Main component
+
 const Trends = () => {
     return (
-      <div>
+      <div  style={{marginBlock:'2rem'}}>
         <div>
           <p className={styles.TrendsHead}>Trending Now</p>
         </div>
