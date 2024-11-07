@@ -4,13 +4,14 @@ import cardIcon from "../../assets/image 21.svg";
 import Image4 from "../../assets/image 23.svg";
 import Image8 from "../../assets/image 27.svg";
 import Image24 from "../../assets/image 28 (1).svg";
+import SearchInput from "../../customs/searchInput";
 
 const cardData = [
     {
       id: 1,
       icon: <Image src={cardIcon} alt="cardIcon" preview={false} />,
       title: "Categories",
-      content:'BrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowse diverse product categories to find exactly what you need.'
+      content:'Browse diverse product categories to find exactly what you need.'
     },
     {
       id: 2,
@@ -62,6 +63,12 @@ const Directory = () => {
                     : "#D0B214", // Apply different colors based on the card index
               }}>{card.title}</h3>
               <p>{card.content}</p>
+              <br />
+              <SearchInput
+            placeholder="What are you looking for?"
+            width="10rem"
+            // isBtn={true} // Show the button on the right side
+          />
             </div>
           ))}
      

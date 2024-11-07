@@ -1,0 +1,40 @@
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap:2rem
+}
+
+.searchInput {
+  flex: 1;
+  padding-block: 1rem;
+  padding-inline-start: 5rem; /* Space for the search icon */
+  font-size: 1.6rem;
+  border: 0.5px solid #EEEEEE;
+  border-radius: 0.8rem;
+  outline: none;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 2rem; /* Position the icon at the left */
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.searchBtn {
+//   position: absolute;
+//   top: 50%;
+//   right: 0rem; /* Position the button on the right side */
+//   transform: translateY(-50%);
+//   background-color: transparent;
+  border: none;
+  cursor: pointer;
+//   padding: 1rem;
+width: 10rem;
+}

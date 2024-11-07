@@ -5,7 +5,6 @@
     justify-content: center;
     align-items: center;
     transition: background-image 0.5s ease-in-out; // Smooth transition for background change
-    background-color: red;
   }
   
   .home {
@@ -44,3 +43,8 @@
     right: 10px; // Position on the right side
   }
   
+  .searchWrapper{
+    padding: 2rem;
+    background-color: white;
+    border-radius: 0.8rem;
+  }

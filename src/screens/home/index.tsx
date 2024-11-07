@@ -9,16 +9,19 @@ import Trends from "./trend";
 
 const Home = () => {
   return (
-        <section>
-          <PictureBg/>
-          <Directory />
-          <MoreThanMarket />
-          <PromotedAds />
-          <RecommendedAds />
-          <Access />
-          <GetStarted />
-          <Trends />
-        </section>
+    <section>
+      {" "}
+      <PictureBg />
+      <div style={{ paddingInline: "5rem" }}>
+        <Directory />
+        <MoreThanMarket />
+        <PromotedAds />
+        <RecommendedAds />
+        <Access />
+        <GetStarted />
+        <Trends />
+      </div>
+    </section>
   );
 };
 export default Home;

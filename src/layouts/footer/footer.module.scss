@@ -2,11 +2,12 @@
   background: var(--color-main-primary);
   border: solid 1px var(--color-main-primary);
   padding: 3rem;
-  min-width: 100%;
+  // min-width: 100%;
   display: flex;
   // flex-direction: row;
   border-radius: 0.8rem;
   gap: 11rem;
+  margin-inline:5rem ;
 
   @media (max-width: 768px) {
     flex-direction: column;
