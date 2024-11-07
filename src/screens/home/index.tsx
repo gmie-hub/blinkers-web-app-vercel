@@ -1,6 +1,7 @@
 import Foot from "../../layouts/footer/foot";
 import Footer from "../../layouts/footer/footer";
 import Access from "./access";
+import Directory from "./directory";
 import GetStarted from "./getStarted";
 import styles from "./index.module.scss";
 import MoreThanMarket from "./moreThanMarket";
@@ -13,13 +14,15 @@ const Home = () => {
     <main>
       <section className={styles.main}>
         <section className={styles.section}>
-            <MoreThanMarket/>
-            <PromotedAds/>
-            <RecommendedAds/>
-            <Access/>
-            <GetStarted/>
-            <Trends/>
-            <br />
+          <br /><br />
+          <Directory />
+          <MoreThanMarket />
+          <PromotedAds />
+          <RecommendedAds />
+          <Access />
+          <GetStarted />
+          <Trends />
+          <br />
           <Footer />
         </section>
       </section>

@@ -1,11 +1,11 @@
-.main {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-.section {
-  max-width: 90%;
-}
+// .main {
+//   display: flex;
+//   justify-content: center;
+//   width: 100%;
+// }
+// .section {
+//   max-width: 90%;
+// }
 
 // //MarketPlace
 
@@ -299,7 +299,6 @@
   gap: 2rem; // Space between columns
   align-items: center;
   justify-items: center;
-  padding: 2rem;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr; // Stack content in one column on smaller screens
@@ -364,4 +363,34 @@
   padding-inline-start: 0.5rem;
   padding-block-end: 2rem;
   gap: 1rem;
+}
+
+
+
+//directry
+
+.directryContainer {
+  display: flex;
+  flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
+  justify-content: start;
+  gap: 20px;
+  text-align: center;
+}
+
+.directryCard {
+  background-color: var(--color-primary-white);
+  // padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 48%; // Default width for 3 cards per row
+  box-sizing: border-box;
+  padding-inline: 10rem;
+
+  /* Adjust card width if there's only one card */
+  @media (max-width: 1024px) {
+    width: 48%; // On medium screens (tablet or small desktop), show 2 cards per row
+  }
+
+  @media (max-width: 600px) {
+    width: 100%; // On small screens (mobile), show 1 card per row
+  }
 }
