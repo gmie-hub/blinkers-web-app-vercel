@@ -10,7 +10,7 @@ const cardData = [
       id: 1,
       icon: <Image src={cardIcon} alt="cardIcon" preview={false} />,
       title: "Categories",
-      content:'Browse diverse product categories to find exactly what you need.'
+      content:'BrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowseBrowse diverse product categories to find exactly what you need.'
     },
     {
       id: 2,

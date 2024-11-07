@@ -1,0 +1,46 @@
+.image {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-image 0.5s ease-in-out; // Smooth transition for background change
+    background-color: red;
+  }
+  
+  .home {
+    text-align: center;
+    color: white;
+  }
+  
+  .picHead {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .picPara {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .leftArrow, .rightArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5); // Transparent background for the arrows
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .leftArrow {
+    left: 10px; // Position on the left side
+  }
+  
+  .rightArrow {
+    right: 10px; // Position on the right side
+  }
+  

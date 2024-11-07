@@ -387,6 +387,8 @@
   width: 48%; // Default width for 3 cards per row
   box-sizing: border-box;
   padding-inline: 10rem;
+  padding-block: 4rem;
+  overflow-wrap:anywhere;
 
   /* Adjust card width if there's only one card */
   @media (max-width: 1024px) {
