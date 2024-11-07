@@ -91,7 +91,7 @@ const Footer = () => {
             <div>
               <Image
                 src={GoolgeStoreIcon}
-                alt="appleStoreIcon"
+                alt="GoolgeStoreIcon"
                 preview={false}
               />
             </div>
