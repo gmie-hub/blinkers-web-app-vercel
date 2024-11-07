@@ -1,11 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { Drawer } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Drawer } from "antd";
+import { Outlet } from "react-router-dom";
 
-import styles from './styles.module.scss';
-import Footer from '../footer/footer';
-
+import styles from "./styles.module.scss";
+import Footer from "../footer/footer";
 
 const Layout = () => {
   const [open, setOpen] = useState(false);
@@ -19,16 +18,11 @@ const Layout = () => {
   };
 
   return (
-    <main className={styles.container} >
-     
-  
-
+    <main className={styles.container}>
       <section className={styles.content}>
         {/* <Header onOpen={showDrawer} /> */}
 
         <section className={styles.children}>
-        
-
           <div>
             <Outlet />
           </div>
