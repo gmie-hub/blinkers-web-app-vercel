@@ -21,6 +21,28 @@
   }
 }
 
+.transparent {
+  padding: auto;
+  background-color: transparent;
+  color: #707070;
+  padding-block: 1.35rem;
+  border: none;
+  font-weight: var(--font-w-normal);
+  width: 100%;
+  cursor: pointer;
+
+  & > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &:hover {
+    color: green;
+  }
+}
+
 .red {
   @extend .white;
   background: var(--color-red-text);

@@ -8,9 +8,16 @@ import { Card as AntdCard } from "antd";
 import Benz from "../../assets/ben.svg";
 import Burger from "../../assets/burger.svg";
 import Button from "../../customs/button/button";
-import whatsapp from "../../assets/whatsapp.svg"
+import whatsapp from "../../assets/whatsapp.svg";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../routes";
 
 const NotClaimed = () => {
+  const navigate = useNavigate();
+
+  const handleNavigateToClaim = () => {
+    navigate(routes.page.Subscription);
+  };
   return (
     <section className={styles.container}>
       <section className={styles.mainContent}>
@@ -32,6 +39,7 @@ const NotClaimed = () => {
               <p>Followers</p>
 
               <Button
+                onClick={handleNavigateToClaim}
                 type="submit"
                 text="Claim This Business"
                 className={styles.button}

@@ -80,7 +80,7 @@ const RecommendedAds = () => {
   return (
     <div>
       <div className={styles.promoHead}>
-        <p>Promoted Ads</p>
+        <p>Recommended Ads</p>
 
         <div className={styles.arrowContainer}>
           <div
@@ -88,7 +88,7 @@ const RecommendedAds = () => {
               currentPage === 1 ? styles.disabledArrow : styles.greenBackground
             }`}
             onClick={handlePrev}
-            style={currentPage === 1 ? { backgroundColor: "#EEEEEE" } : {}}
+            style={currentPage === 1 ? { backgroundColor: "#009900" } : {}}
           >
             <Image src={LeftIcon} alt="Left Arrow" preview={false} />
           </div>
@@ -99,7 +99,7 @@ const RecommendedAds = () => {
                 : styles.greenBackground
             }`}
             onClick={handleNext}
-            style={currentPage === totalPages ? { backgroundColor: "red" } : {}}
+            style={currentPage === totalPages ? { backgroundColor: "#009900" } : {}}
           >
             <Image src={RightIcon} alt="Right Arrow" preview={false} />
           </div>

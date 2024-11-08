@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   width: 100%;
 }
@@ -15,8 +16,8 @@
 }
 .children {
   flex-grow: 1;
-  //   padding: 2.4rem;
-  background-color: #fafafa;
+    // padding: 5rem;
+//   background-color: #fafafa;
   overflow-y: auto;
   overflow-x: hidden;
 

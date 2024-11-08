@@ -1,7 +1,3 @@
-// import directory from "./screens/directory";
-
-import NotClaimed from "./screens/notClaimed/notClaimed";
-
 export const routes = {
   // home: "/",
   page: {
@@ -13,5 +9,7 @@ export const routes = {
     // notClaimed
 
     NotClaimed: "/notClaimed",
+
+    Subscription: "/subscription",
   },
 };

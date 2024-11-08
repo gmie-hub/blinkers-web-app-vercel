@@ -9,8 +9,8 @@ import Iphone from "../../assets/Iphone.svg";
 
 const Footer = () => {
   return (
-    <div>
-      <section className={styles.section1}>
+    <main>
+      <section className={styles.section1} >
         <div className={styles.leftSection}>
           <h3>Download The App</h3>
           <p>
@@ -91,14 +91,14 @@ const Footer = () => {
             <div>
               <Image
                 src={GoolgeStoreIcon}
-                alt="appleStoreIcon"
+                alt="GoolgeStoreIcon"
                 preview={false}
               />
             </div>
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 export default Footer;

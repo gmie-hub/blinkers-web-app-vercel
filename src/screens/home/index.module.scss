@@ -1,8 +1,8 @@
-// .main {
-//   display: flex;
-//   justify-content: center;
-//   width: 100%;
-// }
+.main {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+}
 // .section {
 //   max-width: 90%;
 // }
@@ -12,7 +12,7 @@
 .cardContainer {
   display: flex;
   flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
-  justify-content: start;
+  justify-content: center;
   gap: 20px;
   text-align: start;
 }
@@ -48,6 +48,7 @@
   display: flex;
   flex-direction: column;
   text-align: start;
+  padding-inline-start: 0.5rem;
 }
 .head h1 {
   font-weight: 500;
@@ -62,6 +63,7 @@
 .promoHead {
   display: flex;
   justify-content: space-between;
+  padding-inline-end: 0.4rem;
 }
 .promoHead p {
   color: var(--color-header-text);
@@ -326,13 +328,19 @@
 .favoriteIcon {
   position: absolute;
   // left: 7rem; // Adjust the position as needed
+  display: flex;
+  width: 100%;
+  justify-content: end;
 
   z-index: 10; // Place it above other elements
 }
 
 .favoriteIconMiddle {
   position: absolute;
-  left: 10rem; // Adjust the position as needed
+  // left: 7rem; // Adjust the position as needed
+  display: flex;
+  width: 100%;
+  justify-content: end;
 
   z-index: 10; // Place it above other elements
 }
@@ -372,9 +380,10 @@
 .directryContainer {
   display: flex;
   flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
-  justify-content: start;
-  gap: 20px;
+  justify-content: center;
+  gap: 4rem;
   text-align: center;
+  margin-block: 2rem;
 }
 
 .directryCard {
@@ -384,6 +393,8 @@
   width: 48%; // Default width for 3 cards per row
   box-sizing: border-box;
   padding-inline: 10rem;
+  padding-block: 4rem;
+  overflow-wrap:anywhere;
 
   /* Adjust card width if there's only one card */
   @media (max-width: 1024px) {
