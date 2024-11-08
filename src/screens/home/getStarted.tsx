@@ -47,7 +47,7 @@ const GetStarted = () => {
       </div>
       <section className={styles.getStarted}>
         <div className={styles.getStartedRight}>
-          <div className={styles.doube}>
+          <div className={styles.double}>
             <Image src={Icon5} alt="Icon5" preview={false} />,
             <Image src={Icon6} alt="Icon6" preview={false} />,
           </div>

@@ -53,7 +53,7 @@ const cardData = [
 
 const Trends = () => {
   return (
-    <div style={{ marginBlock: "2rem" }}>
+    <div style={{ paddingBlockEnd: "10rem" }}>
       <div>
         <p className={styles.TrendsHead}>Trending Now</p>
       </div>
@@ -124,7 +124,7 @@ const Trends = () => {
             type="button"
             variant="green"
             text="Shop Now"
-            className={styles.buttonStyle}
+            className={styles.buttonStyleTrend}
           />
         </div>
 
@@ -157,8 +157,22 @@ const Trends = () => {
               </div>
             </div>
           ))}
+    
         </div>
+        <div>
+        <Button
+            type="button"
+            variant="green"
+            text="Shop Now"
+            className={styles.buttonStyleTrendBigscreen}
+          />
+        </div>
+     
+
+      
       </section>
+
+ 
     </div>
   );
 };

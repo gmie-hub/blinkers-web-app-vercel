@@ -134,13 +134,13 @@ const PictureBg = () => {
         </p>
         <br />
 
-        <div className={styles.searchWrapper}>
-          <SearchInput
-            placeholder="What are you looking for?"
-            width="40rem"
-            isBtn={true} // Show the button on the right side
-          />
-        </div>
+          <div className={styles.searchWrapper}>
+            <SearchInput
+              placeholder="What are you looking for?"
+              // width="40rem"
+              isBtn={true} // Show the button on the right side
+            />
+          </div>
 
         <br />
         <Button text="Shop Now" className="buttonStyle" />

@@ -6,13 +6,14 @@ import MoreThanMarket from "./moreThanMarket";
 import PromotedAds from "./promotedAds";
 import RecommendedAds from "./recommendedAds";
 import Trends from "./trend";
+import styles from "./index.module.scss";
 
 const Home = () => {
   return (
     <section>
       {" "}
       <PictureBg />
-      <div style={{ paddingInline: "5rem" }}>
+      <div className={styles.wrapper}>
         <Directory />
         <MoreThanMarket />
         <PromotedAds />

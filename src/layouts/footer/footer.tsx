@@ -41,7 +41,7 @@ const Footer = () => {
       </section>
       <section className={styles.section2}>
         <div className={styles.section2Item}>
-          <div className={styles.list}>
+          <div className={styles.list1}>
             <Image
               className={styles.BlinkersLogo}
               src={BlinkersLogo}
@@ -75,11 +75,14 @@ const Footer = () => {
             <p>FAQ</p>
           </div>
         </div>
+      
         <div className={styles.section2Item}>
-          <div className={styles.list}>
+          <div className={styles.list2}>
             <p style={{ paddingBlockEnd: "0.5rem" }} className={styles.title}>
               Contact Info
             </p>
+
+            <div className={styles.smallsre}>
             <div>
               <Image
                 className={styles.BlinkersLogo}
@@ -95,6 +98,9 @@ const Footer = () => {
                 preview={false}
               />
             </div>
+              
+            </div>
+          
           </div>
         </div>
       </section>

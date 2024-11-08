@@ -111,7 +111,7 @@ const PromotedAds = () => {
         {currentData.map((card) => (
           <div className={styles.promoImage} key={card.id}>
             {card.icon}
-          </div>
+          </div>  
         ))}
       </section>
 

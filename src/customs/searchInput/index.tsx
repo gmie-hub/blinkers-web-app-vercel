@@ -28,7 +28,7 @@ const SearchInput: React.FC<Props> = ({
         type="text"
         className={styles.searchInput}
         placeholder={placeholder || "Search"}
-        style={{ width: width || "30rem" }}
+        // style={{ width: width }}
         {...rest}
       />
 

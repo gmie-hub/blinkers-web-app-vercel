@@ -1,50 +1,117 @@
+
 .image {
-    position: relative;
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-image 0.5s ease-in-out; // Smooth transition for background change
-  }
-  
-  .home {
-    text-align: center;
-    color: white;
-  }
-  
+  position: relative;
+  height: 90vh; // Use viewport height for better scaling
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-image 0.5s ease-in-out;
+  background-size: cover;
+  background-position: center;
+}
+
+.home {
+  text-align: center;
+  color: white;
+  padding: 1rem; // Add padding to avoid text overflow
+}
+
+.picHead {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.picPara {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.leftArrow, .rightArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5); // Transparent background for the arrows
+  padding: 10px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftArrow {
+  left: 10px;
+}
+
+.rightArrow {
+  right: 10px;
+}
+
+.searchWrapper {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.8rem;
+  max-width: 100%;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
   .picHead {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 2rem; // Adjust font size for tablets
   }
-  
+
   .picPara {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
+    font-size: 1rem;
   }
-  
+
+  .searchWrapper {
+    padding: 1.5rem;
+    width: 90%; // Adjust width for smaller screens
+  }
+}
+
+@media (max-width: 768px) {
+  .picHead {
+    font-size: 1.8rem; // Adjust for smaller tablets
+  }
+
+  .picPara {
+    font-size: 0.9rem;
+  }
+
   .leftArrow, .rightArrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.5); // Transparent background for the arrows
-    padding: 10px;
-    border-radius: 50%;
+    font-size: 1.5rem; // Reduce arrow size
+    padding: 8px; // Adjust padding
+  }
+}
+
+@media (max-width: 480px) {
+  .home{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
   }
-  
-  .leftArrow {
-    left: 10px; // Position on the left side
+  .image {
+    height: 60vh; // Reduce height for mobile screens
   }
-  
-  .rightArrow {
-    right: 10px; // Position on the right side
+
+  .picHead {
+    font-size: 1.5rem; // Smaller font for mobile
   }
-  
-  .searchWrapper{
-    padding: 2rem;
-    background-color: white;
-    border-radius: 0.8rem;
+
+  .picPara {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
   }
+
+  .searchWrapper {
+    padding: 1rem;
+    display: flex;
+    // width: 80%; // Adjust width for smaller devices
+  }
+
+  .leftArrow, .rightArrow {
+    font-size: 1.2rem; // Reduce size of arrows on mobile
+    padding: 6px;
+  }
+}

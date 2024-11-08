@@ -6,6 +6,13 @@
 // .section {
 //   max-width: 90%;
 // }
+.wrapper{
+padding-inline: 5rem;
+@media (max-width: 600px) {
+  padding-inline: 2rem;
+  
+}
+}
 
 // //MarketPlace
 
@@ -83,8 +90,13 @@
   box-sizing: border-box; // Ensure padding and margin don't affect the layout
   background-color: var(--color-primary-white);
 
-  @media (max-width: 600px) {
-    width: 100% !important; // On small screens (mobile), show 1 image per row
+
+
+  @media (max-width:820px) {
+    width: 20%; // On small screens (mobile), show 1 card per row
+  }
+  @media (max-width:640px) {
+    width: 100%; // On small screens (mobile), show 1 card per row
   }
 }
 
@@ -168,10 +180,13 @@
   box-sizing: border-box; // Ensure padding and margin don't affect the layout
   // background-color: var(--color-primary-white);
   background-color: #ffffff;
-
-  @media (max-width: 600px) {
-    width: 100% !important; // On small screens (mobile), show 1 image per row
+  @media (max-width:820px) {
+    width: 20%; // On small screens (mobile), show 1 card per row
   }
+  @media (max-width:640px) {
+    width: 100%; // On small screens (mobile), show 1 card per row
+  }
+
 }
 
 .recommendedImage img {
@@ -182,7 +197,7 @@
 
 //Access
 .section1 {
-  padding: 3rem;
+  padding-block: 3rem;
   min-width: 100%;
   display: flex;
   flex-direction: row;
@@ -204,6 +219,12 @@
   text-align: start;
 }
 
+.rightSection {
+  @media (max-width: 768px) {
+    align-items: center;
+  }
+
+}
 .leftSection p {
   color: var(--color-body-text);
   padding-block: 1rem;
@@ -217,7 +238,7 @@
 
 //GetStarted
 .getStarted {
-  padding: 3rem;
+  padding-block: 3rem;
   min-width: 100%;
   display: flex;
   flex-direction: row;
@@ -246,15 +267,23 @@
 }
 
 .double {
+  @media (max-width: 768px) {
+
   display: flex;
   justify-content: space-between;
   width: 100%;
+  }
 }
 
 .single {
+
   display: flex;
   justify-content: center;
   width: 100%;
+  @media (max-width: 768px) {
+    width: 53%;
+
+  }
 }
 
 .getStartedLeft {
@@ -289,6 +318,9 @@
   color: var(--color-body-text);
 }
 
+
+
+
 //trends
 .TrendsHead {
   font-weight: 500;
@@ -304,6 +336,9 @@
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr; // Stack content in one column on smaller screens
+  }
+  @media (max-width: 600px) {
+    justify-items: normal;
   }
 }
 
@@ -323,6 +358,9 @@
   text-align: center;
   position: relative; // Allows absolute positioning of the favorite icon
   text-align: center;
+  @media (max-width: 600px) {
+   width: 100%;
+  }
 }
 
 .favoriteIcon {
@@ -363,6 +401,25 @@
   position: absolute; // Position the button at the bottom
   bottom: 0; // Aligns the button to the bottom of the container
   margin-bottom: 2rem; // Adds some spacing from the bottom
+
+  
+}
+.buttonStyleTrend {
+  position: absolute; // Position the button at the bottom
+  bottom: 0; // Aligns the button to the bottom of the container
+  margin-bottom: 2rem; // Adds some spacing from the bottom
+
+  @media (max-width: 600px) {
+    display: none;
+   }
+}
+.buttonStyleTrendBigscreen {
+  bottom: 0; // Aligns the button to the bottom of the container
+  margin-bottom: 2rem; // Adds some spacing from the bottom
+  width: 22rem !important;
+  @media (min-width: 601px) {
+    display: none;
+   }
 }
 
 .starWrapper {
@@ -384,6 +441,7 @@
   gap: 4rem;
   text-align: center;
   margin-block: 2rem;
+ 
 }
 
 .directryCard {
@@ -401,7 +459,14 @@
     width: 48%; // On medium screens (tablet or small desktop), show 2 cards per row
   }
 
-  @media (max-width: 600px) {
+  @media (max-width:820px) {
+    width: 45%; // On small screens (mobile), show 1 card per row
+    // padding-inline: rem;
+    padding-inline: 2em;
+
+
+  }
+  @media (max-width:640px) {
     width: 100%; // On small screens (mobile), show 1 card per row
   }
 }

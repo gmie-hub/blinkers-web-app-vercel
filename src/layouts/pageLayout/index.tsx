@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Foot from "../footer/foot";
 import Footer from "../footer/footer";
+import Header from "../header/header";
 
 const Layout = () => {
   //   const [, setOpen] = useState(false);
