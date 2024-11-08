@@ -19,7 +19,7 @@ const Layout = () => {
 
   return (
     <main className={styles.container}>
-      {/* <Header /> */}
+      <Header />
       <section className={styles.content}>
         {/* <Header onOpen={showDrawer} /> */}
 
