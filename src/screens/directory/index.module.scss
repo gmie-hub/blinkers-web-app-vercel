@@ -94,17 +94,28 @@
 
 .inputContainer > select {
   width: 247px;
+  padding-inline-start: 10px;
   padding-block: 1rem;
   @media screen and (min-width: 768px) {
     width: 700px;
+    padding-inline-start: 10px;
   }
 }
 
 .inputContainer > input {
-  width: 200px;
+  width: 247px;
+  padding-inline-start: 10px;
   padding-block: 1rem;
   @media screen and (min-width: 768px) {
-    width: 900px;
+    width: 700px;
     padding-inline-start: 10px;
   }
+}
+
+.inputContainer > button{
+  width: 10rem;
+  @media screen and (min-width:768px) {
+    width: 500px;
+  }
+
 }
