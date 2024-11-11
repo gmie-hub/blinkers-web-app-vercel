@@ -1,0 +1,58 @@
+.section1 {
+  background-color: green;
+  border: solid 1px var(--color-main-primary);
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 174px;
+  padding-block: 4rem;
+}
+
+.inputContainer {
+  flex-direction: row;
+  background-color: white;
+  border-radius: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 2.4rem;
+  gap: 2rem;
+  padding-block: 1rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.inputContainer > select {
+  height: 6.2rem;
+  padding: 1.6rem;
+  width: 292px;
+  background-color: #fafafa;
+  border: none;
+}
+
+.button {
+  width: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section1 > p:nth-child(1) {
+  color: white;
+  font-weight: 700;
+  font-size: 4rem;
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.section1 > p:nth-child(2) {
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: white;
+  margin-block: 2rem;
+}

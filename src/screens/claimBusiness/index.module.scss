@@ -1,0 +1,40 @@
+.container {
+  flex-direction: column;
+  justify-content: center;
+
+  @media screen and (min-width: 768px) {
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+    display: flex;
+    padding: 2rem;
+    gap: 2rem;
+    flex-direction: row;
+  }
+}
+
+.secondContainer {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  align-items: start;
+}
+
+.messageBox {
+  width: 327px;
+  height: 175px;
+  margin-inline:0.5rem;
+  @media screen and (min-width: 768px) {
+    padding: 1.6rem;
+    width: 445px;
+    height: 175px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    resize: none;
+  }
+}
+
+.textArea > p {
+  text-align: left;
+}

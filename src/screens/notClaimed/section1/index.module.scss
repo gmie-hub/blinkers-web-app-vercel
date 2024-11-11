@@ -1,0 +1,71 @@
+.mainContent {
+  flex-direction: row;
+  margin-inline: 2.4rem;
+  @media screen and (min-width: 768px) {
+    display: flex;
+    gap: 2rem;
+    margin-inline: 5rem;
+    margin-block: 3rem;
+  }
+}
+
+.cardImage {
+  width: 180px;
+  height: 100px;
+  gap: 0px;
+  border-radius: 8px 0px 0px 0px;
+}
+
+.businessDetails {
+  text-align: left;
+}
+
+.socialIcons {
+  margin-block: 3.2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialIcons > img {
+  width: 40px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.star {
+  width: 25px;
+  height: 15px;
+}
+
+.rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.followers {
+  display: flex;
+}
+
+// .followers > div:nth-child(1) {
+//   width: 143px;
+//   height: 40px;
+//   border: 1px solid red;
+// }
+
+// .address {
+//   text-align: left;
+//   font-size: 1.2rem;
+// }
+
+// .address > div{
+//   margin-block: 1rem;
+// }
+
+
+// .address > div > span:nth-child(2){
+//   font-size: 1rem;
+// }
