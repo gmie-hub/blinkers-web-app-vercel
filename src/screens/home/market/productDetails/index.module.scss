@@ -218,7 +218,10 @@
   //   display: flex;
   //   justify-content: start;
   width: 100%;
-  padding-inline:2rem;
+  // @media (max-width: 768px) {
+
+  // margin-inline:1rem!important;
+  // }
 }
 
 .payment {

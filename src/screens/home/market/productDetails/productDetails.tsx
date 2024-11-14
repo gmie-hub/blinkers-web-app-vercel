@@ -22,10 +22,11 @@ import Reviews from "./tabs/review";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
+import SmallScreen from "./smallScreenSellerDetails";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -77,12 +78,34 @@ const items: TabsProps["items"] = [
     children: <Reviews limit={3} />,
   },
 ];
-const Main = () => {
+const BigScreen = () => {
   
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
   const navigate = useNavigate();
   const [flagSeller, setFlagSeller] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
+
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // On small screens, ensure isFilterVisible is false by default
+    if (windowWidth < 1024) {
+      //show <SmallScreen Copmpnent/>
+      <SmallScreen/>
+    } else {
+      //show <big Screen Copmpnent/>
+      <BigScreen/>
+    }
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [windowWidth]);
 
   const handleTabChange = (key: string) => {
     setActiveKey(key);
@@ -383,4 +406,4 @@ const Main = () => {
     </div>
   );
 };
-export default Main;
+export default BigScreen;

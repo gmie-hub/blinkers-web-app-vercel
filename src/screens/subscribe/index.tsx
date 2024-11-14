@@ -1,4 +1,3 @@
-import React from 'react'
 import Card from '../../customs/card/card'
 import Button from '../../customs/button/button'
 import styles from "./index.module.scss"

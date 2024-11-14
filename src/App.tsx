@@ -7,7 +7,7 @@ import DirectoryPage from "./screens/directory";
 import NotClaimed from "./screens/notClaimed/notClaimed";
 import Subscription from "./screens/subscribe";
 import Market from "./screens/home/market/market";
-import ProductDetails from "./screens/home/market/productDetails/smallScreenSellerDetails";
+import ProductDetails from "./screens/home/market/productDetails/productDetailsToDisplay";
 import RelatedAds from "./screens/home/relatedAds/relatedAds";
 import Review from "./screens/home/market/review/review";
 import SellersProfile from "./screens/home/sellersProfile/sellersProfile";
