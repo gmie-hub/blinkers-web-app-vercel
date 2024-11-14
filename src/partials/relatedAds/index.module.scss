@@ -1,0 +1,128 @@
+.promoHead {
+  display: flex;
+  justify-content: space-between;
+  padding-inline-end: 0.4rem;
+  // padding-block-start: 7rem;
+  padding-block-end: 2.7rem;
+
+}
+
+.promoHead p {
+  color: var(--color-header-text);
+  font-weight: 500;
+  font-size: 2.5rem;
+}
+.relatedWrapper{
+  margin-block: 6.4rem;
+}
+.seeMore {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  & > p {
+    color: var(--color-primary-green) !important;
+    font-size: 2rem !important;
+  }
+}
+
+// .favoriteIcon {
+//   position: absolute;
+//   // left: 7rem; // Adjust the position as needed
+//   display: flex;
+//   width: 100%;
+//   justify-content: end;
+
+//   z-index: 10; // Place it above other elements
+// }
+
+
+
+.promoImageContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; // Space between images
+    width: 100%; // Ensure the container takes up 100% of the screen width
+    box-sizing: border-box;
+    justify-content: space-between; // Spread images across the row
+  }
+  
+  // .promoImage {
+  //   flex: 1 1 calc(24% - 1rem); // 4 images per row, accounting for the gap
+  //   max-width: calc(24% - 1rem); // Ensures 4 items fit within the width
+  //   background-color: #ffffff;
+  //   box-sizing: border-box;
+  //   border-radius: 1rem; // Optional: rounding top corners
+  //     // border-top-right-radius: 1rem; 
+  //   img {
+  //     width: 100%; // Image takes up full width of the container
+  //     height: auto; // Maintain the image aspect ratio
+  //     object-fit: contain; // Ensure image fits without distortion
+  //     border-top-left-radius: 1rem; // Optional: rounding top corners
+  //     border-top-right-radius: 1rem;
+  //   }
+  // }
+  
+  .promoImage {
+    position: relative; // Add this to make .favoriteIcon position relative to the promoImage container
+    flex: 1 1 calc(24% - 1rem);
+    max-width: calc(24% - 1rem);
+    background-color: #ffffff;
+    box-sizing: border-box;
+    border-radius: 1rem;
+  
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
+  
+    .favoriteIcon {
+      position: absolute;
+      top: 1rem; // Adjust as needed
+      right: 1rem; // Adjust as needed
+      z-index: 10;
+      display: flex;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .promoImage {
+      flex: 1 1 calc(33.33% - 1rem); // 3 images per row on medium-sized screens
+      max-width: calc(33.33% - 1rem); 
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .promoImage {
+      flex: 1 1 calc(50% - 1rem); // 2 images per row on smaller screens
+      max-width: calc(50% - 1rem);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .promoImage {
+      flex: 1 1 100%; // 1 image per row on very small screens
+      max-width: 100%; // Ensure full width for single images
+      margin: 0 auto; // Center the image
+    }
+  }
+.productList {
+  background-color: #ffffff;
+  padding-inline-start: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+.starWrapper {
+  align-items: end;
+  display: flex;
+  padding-inline-start: 0.5rem;
+  padding-block-end: 2rem;
+  gap: 1rem;
+}
+
+

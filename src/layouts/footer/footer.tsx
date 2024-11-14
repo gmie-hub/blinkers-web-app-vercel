@@ -9,7 +9,7 @@ import Iphone from "../../assets/Iphone.svg";
 
 const Footer = () => {
   return (
-    <main>
+    <main className={styles.footerWrapper}>
       <section className={styles.section1} >
         <div className={styles.leftSection}>
           <h3>Download The App</h3>

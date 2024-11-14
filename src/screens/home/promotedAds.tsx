@@ -78,7 +78,7 @@ const PromotedAds = () => {
   };
 
   return (
-    <div  style={{marginBlock:'2rem'}}>
+    <div  className={styles.promoWrapper}>
       <div className={styles.promoHead}>
         <p>Promoted Ads</p>
 

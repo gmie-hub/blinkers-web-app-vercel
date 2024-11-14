@@ -4,7 +4,7 @@ import Icon from "../../assets/image 17.svg";
 import Button from "../../customs/button/button";
 const Access = () => {
   return (
-    <div  style={{marginBlock:'2rem'}}>
+    <div className={styles.accessWrapper}>
       <section className={styles.section1}>
         <div className={styles.rightSection}>
           <Image src={Icon} alt="Icon" preview={false} />

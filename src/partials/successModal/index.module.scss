@@ -1,0 +1,21 @@
+.ModalWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding-block: 3rem;
+    text-align: center !important;
+  
+    & > p {
+      font-size: 2.4rem;
+      font-weight: 500;
+      line-height: 36px;
+      letter-spacing: -0.02em;
+      color: #222222;
+    }
+  
+    & > .btn {
+      width: 100%;
+    }
+  }
+  

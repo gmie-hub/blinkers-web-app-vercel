@@ -20,7 +20,7 @@ a {
 }
 
 .navLink {
-  color: #707070;
+  color: var(--color-body-text);
   text-decoration: none;
   padding-bottom: 0.6rem;
   transition: color 0.3s;

@@ -6,12 +6,14 @@ import Button from "../../customs/button/button";
 import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
 import favorite from "../../assets/Icon + container.svg";
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 // Data array
 const cardData = [
   {
     id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -19,7 +21,7 @@ const cardData = [
   },
   {
     id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -27,7 +29,7 @@ const cardData = [
   },
   {
     id: 3,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
+    icon: <Image  src={Product3} alt="cardIcon" preview={false} />,
     title: "Female Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -35,7 +37,7 @@ const cardData = [
   },
   {
     id: 4,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image  src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -51,9 +53,23 @@ const cardData = [
   },
 ];
 
+
+
 const Trends = () => {
-  return (
-    <div style={{ paddingBlockEnd: "10rem" }}>
+  const navigate = useNavigate()
+
+  const handleNavigateToMarket = useCallback(
+    () => {
+      navigate(`/market`);
+      window.scrollTo(0, 0); // Scrolls to the top of the page
+
+    },
+    [navigate]
+  );
+
+  
+   return (
+    <div className={styles.accessWrapper}>
       <div>
         <p className={styles.TrendsHead}>Trending Now</p>
       </div>
@@ -73,7 +89,7 @@ const Trends = () => {
                 {/* Add favorite icon */}
               </div>
               {card.icon}
-              <div style={{ background: "white" }}>
+              <div className={styles.productList}>
                 <p>{card.title}</p>
                 <p>{card.location}</p>
                 <p>{card.amount}</p>
@@ -87,7 +103,7 @@ const Trends = () => {
                       preview={false}
                     />,
                     <Image width={20} src={Star} alt="Star" preview={false} />
-                  )}
+                  )} <span>(20)</span>
                 </div>
               </div>
             </div>
@@ -102,7 +118,7 @@ const Trends = () => {
               {/* Add favorite icon */}
             </div>{" "}
             {cardData[2].icon}
-            <div style={{ background: "white" }}>
+            <div  className={styles.productList}>
               <p>{cardData[2].title}</p>
               <p>{cardData[2].location}</p>
               <p>{cardData[2].amount}</p>
@@ -116,7 +132,7 @@ const Trends = () => {
                     preview={false}
                   />,
                   <Image width={20} src={Star} alt="Star" preview={false} />
-                )}
+                )} <span>(20)</span>
               </div>
             </div>
           </div>
@@ -125,6 +141,8 @@ const Trends = () => {
             variant="green"
             text="Shop Now"
             className={styles.buttonStyleTrend}
+            onClick={handleNavigateToMarket}
+
           />
         </div>
 
@@ -138,7 +156,7 @@ const Trends = () => {
                 </div>
               {/* Add favorite icon */}
               {card.icon}
-              <div style={{ background: "white" }}>
+              <div  className={styles.productList}>
                 <p>{card.title}</p>
                 <p>{card.location}</p>
                 <p>{card.amount}</p>
@@ -152,7 +170,7 @@ const Trends = () => {
                       preview={false}
                     />,
                     <Image width={20} src={Star} alt="Star" preview={false} />
-                  )}
+                  )} <span>(20)</span>
                 </div>
               </div>
             </div>
@@ -165,6 +183,7 @@ const Trends = () => {
             variant="green"
             text="Shop Now"
             className={styles.buttonStyleTrendBigscreen}
+            onClick={handleNavigateToMarket}
           />
         </div>
      
@@ -179,7 +198,7 @@ const Trends = () => {
 
 export default Trends;
 
-function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
+export function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
   const result = [];
   for (let i = 1; i <= 5; i++) {
     if (i > num) result.push(element1);

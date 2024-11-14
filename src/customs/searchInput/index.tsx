@@ -20,7 +20,7 @@ const SearchInput: React.FC<Props> = ({
     <form className={styles.searchContainer}>
       {/* Search Icon on the left */}
       <button className={styles.searchIcon} type="button">
-        <Image src={SearchIcon} alt="SearchIcon" preview={false} />
+        <Image width={12} src={SearchIcon} alt="SearchIcon" preview={false} />
       </button>
 
       {/* Input Field */}

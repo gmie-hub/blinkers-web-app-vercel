@@ -78,7 +78,7 @@ const RecommendedAds = () => {
   };
 
   return (
-    <div>
+    <div className={styles.promoWrapper}>
       <div className={styles.promoHead}>
         <p>Recommended Ads</p>
 
@@ -99,7 +99,7 @@ const RecommendedAds = () => {
                 : styles.greenBackground
             }`}
             onClick={handleNext}
-            style={currentPage === totalPages ? { backgroundColor: "#009900" } : {}}
+            style={currentPage === totalPages ? { backgroundColor: "# " } : {}}
           >
             <Image src={RightIcon} alt="Right Arrow" preview={false} />
           </div>
@@ -111,7 +111,7 @@ const RecommendedAds = () => {
         {currentData.map((card) => (
           <div className={styles.recommendedImage} key={card.id}>
             {card.icon}
-            <p style={{padding:'2rem'}}>Male Packing Shirt</p>
+            <p style={{padding:'2rem', display:'flex'}}>Male Packing Shirt</p>
           </div>
         ))}
       </section>

@@ -1,0 +1,212 @@
+.container {
+  width: 100%;
+  min-width: 100%;
+  // height: 100%; // Full height within the wrapper
+}
+
+.image {
+  position: relative;
+  //   height: 100    %; // Full height for the image section
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.5s ease-in-out;
+}
+
+.home {
+  text-align: center;
+  color: white;
+  padding: 4rem;
+  border-radius: 0.8rem;
+}
+
+.picHead {
+  font-size: 4rem;
+  font-weight: 700;
+  // margin-bottom: 0.5rem;
+  padding-block-end: 1.6rem;
+}
+
+.mainContainer {
+  display: flex;
+  margin-inline: 10rem;
+  gap: 4rem;
+}
+
+.leftSection {
+  flex: 0.4; /* 40% of the width */
+  padding: 2rem;
+}
+
+.rightSection {
+  flex: 0.6; /* 60% of the width */
+}
+
+.reviewbtn {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 1.6rem;
+  align-items: center;
+}
+.title {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--color-header-text);
+}
+.btn {
+  color: var(--color-primary-green);
+  font-size: 2rem;
+}
+.btnWrapper {
+  display: flex;
+  align-items: center;
+}
+.followBtn {
+  display: flex;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-block: 1.6rem;
+}
+.chatBtn {
+  margin-block-start: 1rem;
+  margin-block-end: 1.6rem;
+}
+.social {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-block-start: 4rem !important;
+  border-top: #eeeeee solid;
+  padding-block-start: 1.6rem;
+  @media (max-width: 768px) {
+    justify-content: center; // Center social icons on smaller screens
+  }
+}
+.card {
+  padding-inline: 4rem;
+  border: #eeeeee solid 1px;
+  padding-block: 2.4rem;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  border-top: #eeeeee solid 1px;
+  & > p {
+    padding-block: 0.6rem;
+  }
+}
+// .detailsflex{
+//     display: flex;
+//     flex-direction: column;
+//     & > span{
+//         padding-inline: 3.2rem !important;
+//     }
+
+// }
+
+.name {
+  color: var(--color-header-text);
+  font-weight: 600;
+  font-size: 2rem;
+  padding-block: 0.5rem;
+}
+
+.star {
+  // margin-block: 2rem;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block-end: 0.4rem;
+}
+.dot {
+  //   font-weight: bold;
+  //   color: var(--color-body-text);
+  margin-inline: 1rem;
+
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background-color: rgba(112, 112, 112, 1);
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .image {
+    height: auto; /* Ensure the image adjusts height based on content */
+    padding: 2rem; /* Adds padding for smaller screens */
+  }
+
+  .picHead {
+    font-size: 2.5rem; /* Smaller font size for headings on mobile */
+    padding-block-end: 1rem;
+  }
+
+  .mainContainer {
+    display: block; /* Stack the sections vertically */
+    margin-inline: 1.6rem; /* Smaller margin for mobile */
+    gap: 2rem; /* Adjust gap for smaller screens */
+  }
+
+  .leftSection,
+  .rightSection {
+    flex: 1; /* Full width on smaller screens */
+    padding: 1rem;
+  }
+
+  .reviewbtn {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .btn {
+    font-size: 1.8rem;
+  }
+
+  .followBtn {
+    flex-direction: column; /* Stack follow buttons vertically */
+    gap: 1rem;
+    margin-block: 1rem;
+  }
+
+  .chatBtn {
+    margin-block: 0.8rem;
+  }
+
+ 
+  .card {
+    padding-inline: 2rem;
+    padding-block: 1.6rem;
+  }
+
+  .info {
+    padding-block: 1rem;
+    & > p {
+      padding-block: 0.4rem;
+    }
+  }
+
+  .name {
+    font-size: 1.8rem;
+  }
+
+  .star {
+    flex-direction: column; /* Stack star items vertically */
+    gap: 0.4rem;
+    padding-block-end: 0.4rem;
+  }
+}

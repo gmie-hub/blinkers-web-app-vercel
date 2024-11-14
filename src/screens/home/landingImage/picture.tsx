@@ -75,8 +75,7 @@
 
 // export default PictureBg;
 
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "../../../customs/button/button";
 import styles from "./index.module.scss";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons"; // Antd icons for arrows
@@ -84,6 +83,7 @@ import Icon from "/Component 5.svg"; // Actual image import
 import Icon2 from "../../../assets/Component 6.svg"; // Actual image import
 import Icon3 from "../../../assets/Component 7.svg"; // Actual image import
 import SearchInput from "../../../customs/searchInput";
+import { useNavigate } from "react-router-dom";
 
 // Use the correct paths or URLs for the images
 const images = [
@@ -94,7 +94,7 @@ const images = [
 
 const PictureBg = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const navigate = useNavigate();
   // Function to handle moving to the next image
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -102,6 +102,12 @@ const PictureBg = () => {
     );
   };
 
+  const handleNavigateToMarket = useCallback(
+    () => {
+      navigate('/market');
+    },
+    [navigate]
+  );
   // Function to handle moving to the previous image
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -134,16 +140,16 @@ const PictureBg = () => {
         </p>
         <br />
 
-          <div className={styles.searchWrapper}>
-            <SearchInput
-              placeholder="What are you looking for?"
-              // width="40rem"
-              isBtn={true} // Show the button on the right side
-            />
-          </div>
+        <div className={styles.searchWrapper}>
+          <SearchInput
+            placeholder="What are you looking for?"
+            // width="40rem"
+            isBtn={true} // Show the button on the right side
+          />
+        </div>
 
         <br />
-        <Button text="Shop Now" className="buttonStyle" />
+        <Button onClick={handleNavigateToMarket} text="Shop Now" className="buttonStyle" />
       </div>
 
       {/* Left Arrow */}

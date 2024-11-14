@@ -1,0 +1,92 @@
+import { Field, FieldProps } from 'formik';
+import React, { useState } from 'react';
+import styles from './input.module.scss';
+import classNames from 'classnames';
+
+interface ComponentProps {
+  maxLength?: number;
+  label?: string;
+  name: string;
+  placeholder?: string;
+  disabled?: boolean;
+  type?: string;
+  asterisk?: boolean;
+  className?: string;
+  icon?: React.ReactNode;
+  deleteIcon?: React.ReactNode;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+}
+
+const Input: React.FC<ComponentProps> = (props) => {
+  const {
+    icon,
+    deleteIcon,
+    className,
+    name,
+    label,
+    disabled,
+    type,
+    placeholder,
+    value,
+    asterisk = false,
+  } = props;
+  const [isShowPassword, setIsShowPassword] = useState(false);
+
+  const showPasswordHandle = () => {
+    setIsShowPassword((prevState) => !prevState);
+  };
+
+  return (
+    <Field name={name}>
+      {({ field, meta }: FieldProps) => (
+        <div>
+          <label className={styles.label}>
+            {asterisk ? (
+              <span>
+                {label}
+                <sup className={styles.asterisk}>*</sup>
+              </span>
+            ) : (
+              label
+            )}
+          </label>
+
+          <div className={styles.wrapper}>
+            {type !== 'textarea' ? (
+              <div className={styles.inputContainer}>
+                {deleteIcon && <span className={styles.iconRight}>{deleteIcon}</span>}
+                
+                <input
+                  {...field}
+                  type={isShowPassword && type === 'password' ? 'text' : type}
+                  placeholder={placeholder}
+                  disabled={disabled}
+                  value={value}
+                  className={classNames(styles.input, className)}
+                />
+                {icon && <span className={styles.iconRight}>{icon}</span>} 
+                {type === 'password' && (
+                  <span
+                    className={styles.showToggle}
+                    onClick={showPasswordHandle}
+                    role="button"
+                    aria-label={isShowPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {isShowPassword ? '👁️' : '👁️‍🗨️'}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <textarea className={styles.textarea} {...field} placeholder={placeholder} rows={4}     disabled={disabled}               />
+            )}
+
+            {meta.touched && meta.error && <div className={styles.error}>{meta.error}</div>}
+          </div>
+        </div>
+      )}
+    </Field>
+  );
+};
+
+export default Input;

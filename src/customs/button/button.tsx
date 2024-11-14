@@ -6,10 +6,11 @@ import { Spin } from 'antd';
 interface ButtonProps extends PropsWithChildren {
   type?: 'button' | 'submit' | 'reset'; // Define specific types for better usage
   onClick?: () => void;
-  variant?: 'white' | 'red' | 'green' | 'redOutline' | 'greenOutline' | 'transparent'; // Limit to specific variants
+  variant?: 'white' | 'red' | 'green' | 'redOutline' | 'greenOutline' | 'transparent' |'noBg'; // Limit to specific variants
   disabled?: boolean;
   className?: string;
   icon?: React.ReactNode;
+  AfterTexticon?:React.ReactNode;
   text?: string; // Keep text for backward compatibility
   isLoading?: boolean;
 }
@@ -22,6 +23,7 @@ const Button: FC<ButtonProps> = ({
   disabled,
   className,
   icon,
+  AfterTexticon,
   text,
   isLoading,
 }) => {
@@ -32,6 +34,8 @@ const Button: FC<ButtonProps> = ({
     redOutline: style.redOutline,
     greenOutline: style.greenOutline,
     transparent: style.transparent,
+    noBg: style.noBg,
+
   };
 
   const buttonStyle = variantList[variant] || variantList.green; // Fallback to green if variant is invalid
@@ -45,6 +49,8 @@ const Button: FC<ButtonProps> = ({
           <>
             {icon && <span className={style.icon}>{icon}</span>}
             {text && <span className={style.text}>{text}</span>}
+            {AfterTexticon && <span className={style.icon}>{AfterTexticon}</span>}
+
           </>
         )}
 

@@ -40,7 +40,7 @@ const cardData = [
 ];
 const GetStarted = () => {
   return (
-    <div  style={{marginBlock:'2rem'}}>
+    <div  className={styles.accessWrapper}>
       <div className={styles.getStartedHead}>
         <h2>How To Get Started</h2>
         <p>Find, Connect, and Shop Directly with Sellers Worldwide</p>

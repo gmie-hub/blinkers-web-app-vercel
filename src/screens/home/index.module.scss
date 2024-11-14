@@ -6,12 +6,11 @@
 // .section {
 //   max-width: 90%;
 // }
-.wrapper{
-padding-inline: 5rem;
-@media (max-width: 600px) {
-  padding-inline: 2rem;
-  
-}
+.wrapper {
+  padding-inline: 5rem;
+  @media (max-width: 600px) {
+    padding-inline: 2rem;
+  }
 }
 
 // //MarketPlace
@@ -22,6 +21,10 @@ padding-inline: 5rem;
   justify-content: center;
   gap: 20px;
   text-align: start;
+  row-gap: 6.8rem;
+  @media (max-width: 600px) {
+    row-gap: 1.6rem;
+  }
 }
 
 .card {
@@ -61,6 +64,9 @@ padding-inline: 5rem;
   font-weight: 500;
   color: var(--color-header-text);
   font-size: 4rem;
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 }
 .head h4 {
   color: var(--color-body-text);
@@ -77,33 +83,64 @@ padding-inline: 5rem;
   font-weight: 500;
   font-size: 2.5rem;
 }
+
+.promoWrapper {
+  margin-block: 4.1rem;
+  @media (max-width: 768px) {
+    margin-block: 2.4rem;
+  }
+}
+
 .promoImageContainer {
   display: flex;
-  flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
-  justify-content: start; // Center the images in the container
-  gap: 3rem; // Space between the images
-  text-align: start;
+  flex-wrap: wrap; /* Ensures images wrap to the next line when necessary */
+  gap: 1rem; /* Adds a gap between the images */
+  width: 100%; /* Container takes full width */
+  box-sizing: border-box; /* Padding and border don't affect width calculation */
+  justify-content: space-between; /* Ensures images are evenly spaced across the row */
 }
 
 .promoImage {
-  width: 23%; // Default width for 4 images per row
-  box-sizing: border-box; // Ensure padding and margin don't affect the layout
-  background-color: var(--color-primary-white);
+  flex: 1 1 calc(25% - 1rem); /* 4 images per row, accounting for the gap */
+  max-width: calc(
+    25% - 1rem
+  ); /* Ensures the image containers fit within 100% */
+  box-sizing: border-box; /* Includes padding and border in width calculations */
 
-
-
-  @media (max-width:820px) {
-    width: 20%; // On small screens (mobile), show 1 card per row
-  }
-  @media (max-width:640px) {
-    width: 100%; // On small screens (mobile), show 1 card per row
+  img {
+    border-radius: 1rem;
+    width: 100%; /* Ensures the image fills the container */
+    height: auto; /* Maintains the image's aspect ratio */
+    object-fit: contain; /* Ensures the image fits within the container without distortion */
   }
 }
 
-.promoImage img {
-  width: 100%; // Make the image fill the container width
-  height: auto; // Maintain aspect ratio
-  object-fit: contain; // Ensure the image fits within the container without being cropped or stretched
+@media (max-width: 1024px) {
+  .promoImage {
+    flex: 1 1 calc(33.33% - 1rem); /* 3 images per row on medium-sized screens */
+    max-width: calc(33.33% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .promoImage {
+    flex: 1 1 calc(50% - 1rem); /* 2 images per row on smaller screens */
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .promoImage {
+    flex: 1 1 100%; /* 1 image per row on very small screens */
+    max-width: 100%; /* Ensure the image takes up full width */
+    margin: 0 auto; /* Center the image */
+  }
+}
+.marketplaceWrapper {
+  margin-block: 6.4rem;
+  @media (max-width: 600px) {
+    margin-block: 2.4rem;
+  }
 }
 .arrow {
   display: flex;
@@ -142,7 +179,7 @@ padding-inline: 5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-block: 2rem;
+  margin-block-end: 2.4rem;
 
   .arrowContainer {
     display: flex;
@@ -174,25 +211,51 @@ padding-inline: 5rem;
   }
 }
 
-//Recommended
-.recommendedImage {
-  width: 23%; // Default width for 4 images per row
-  box-sizing: border-box; // Ensure padding and margin don't affect the layout
-  // background-color: var(--color-primary-white);
-  background-color: #ffffff;
-  @media (max-width:820px) {
-    width: 20%; // On small screens (mobile), show 1 card per row
-  }
-  @media (max-width:640px) {
-    width: 100%; // On small screens (mobile), show 1 card per row
-  }
-
+.recommendedImageContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; // Space between images
+  width: 100%; // Ensure the container takes up 100% of the screen width
+  box-sizing: border-box;
+  justify-content: space-between; // Spread images across the row
 }
 
-.recommendedImage img {
-  width: 100%; // Make the image fill the container width
-  height: auto; // Maintain aspect ratio
-  object-fit: contain; // Ensure the image fits within the container without being cropped or stretched
+.recommendedImage {
+  flex: 1 1 calc(24% - 1rem); // 4 images per row, accounting for the gap
+  max-width: calc(24% - 1rem); // Ensures 4 items fit within the width
+  background-color: #ffffff;
+  box-sizing: border-box;
+  border-radius: 1rem; // Optional: rounding top corners
+  // border-top-right-radius: 1rem;
+  img {
+    width: 100%; // Image takes up full width of the container
+    height: auto; // Maintain the image aspect ratio
+    object-fit: contain; // Ensure image fits without distortion
+    border-top-left-radius: 1rem; // Optional: rounding top corners
+    border-top-right-radius: 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .recommendedImage {
+    flex: 1 1 calc(33.33% - 1rem); // 3 images per row on medium-sized screens
+    max-width: calc(33.33% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .recommendedImage {
+    flex: 1 1 calc(50% - 1rem); // 2 images per row on smaller screens
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .recommendedImage {
+    flex: 1 1 100%; // 1 image per row on very small screens
+    max-width: 100%; // Ensure full width for single images
+    margin: 0 auto; // Center the image
+  }
 }
 
 //Access
@@ -209,6 +272,13 @@ padding-inline: 5rem;
   }
 }
 
+.accessWrapper{
+  margin-block: 6.4rem;
+  @media (max-width: 768px) {
+    margin-block: 2.4rem;
+
+  }
+}
 .leftSection,
 .rightSection {
   flex: 1;
@@ -223,7 +293,6 @@ padding-inline: 5rem;
   @media (max-width: 768px) {
     align-items: center;
   }
-
 }
 .leftSection p {
   color: var(--color-body-text);
@@ -268,21 +337,18 @@ padding-inline: 5rem;
 
 .double {
   @media (max-width: 768px) {
-
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 }
 
 .single {
-
   display: flex;
   justify-content: center;
   width: 100%;
   @media (max-width: 768px) {
     width: 53%;
-
   }
 }
 
@@ -318,27 +384,61 @@ padding-inline: 5rem;
   color: var(--color-body-text);
 }
 
-
-
-
 //trends
 .TrendsHead {
   font-weight: 500;
   color: var(--color-header-text);
   font-size: 4rem;
 }
+// .trendContainer {
+//   display: grid;
+//   grid-template-columns: 1fr 2fr 1fr; // Three columns for left, middle, right
+//   gap: 2rem; // Space between columns
+//   align-items: center;
+//   justify-items: center;
+
+//   @media (max-width: 768px) {
+//     grid-template-columns: 1fr; // Stack content in one column on smaller screens
+//   }
+//   @media (max-width: 600px) {
+//     justify-items: normal;
+//   }
+// }
+
+// .leftSectionTrend,
+// .rightSectionTrend {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 2rem; // Space between the two items in rows
+//   align-items: start; // Align items to the left
+// }
+
+// .trendImage {
+//   text-align: center;
+//   position: relative; // Allows absolute positioning of the favorite icon
+//   text-align: center;
+//   @media (max-width: 600px) {
+//    width: 100%;
+//   }
+// }
+
 .trendContainer {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr; // Three columns for left, middle, right
-  gap: 2rem; // Space between columns
+  grid-template-columns: 1fr 2fr 1fr; /* Three columns for left, middle, right */
+  gap: 2rem; /* Space between columns */
   align-items: center;
   justify-items: center;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr; // Stack content in one column on smaller screens
+    grid-template-columns: 1fr; /* Stack content in one column on smaller screens */
   }
+
   @media (max-width: 600px) {
+    display: flex; /* Use flexbox for small screens */
+    flex-direction: column; /* Stack the sections vertically */
+    gap: 2rem; /* Space between the sections */
     justify-items: normal;
+    width: 100%; /* Ensure the container takes full width of the screen */
   }
 }
 
@@ -346,20 +446,21 @@ padding-inline: 5rem;
 .rightSectionTrend {
   display: flex;
   flex-direction: column;
-  gap: 2rem; // Space between the two items in rows
-  align-items: start; // Align items to the left
+  gap: 2rem; /* Space between the two items in rows */
+  align-items: start; /* Align items to the left */
 }
 
-// .trendImage {
-//   text-align: center;
-//   background-color: #ffffff;
-// }
 .trendImage {
   text-align: center;
-  position: relative; // Allows absolute positioning of the favorite icon
-  text-align: center;
+  position: relative; /* Allows absolute positioning of the favorite icon */
+  width: 100%; /* Make sure image occupies full width of the container */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensure image fits without stretching */
+  max-width: 100%; /* Ensure image doesn't overflow container */
+
   @media (max-width: 600px) {
-   width: 100%;
+    width: 100%; /* Full width on small screens */
+    height: auto; /* Maintain aspect ratio */
   }
 }
 
@@ -401,8 +502,6 @@ padding-inline: 5rem;
   position: absolute; // Position the button at the bottom
   bottom: 0; // Aligns the button to the bottom of the container
   margin-bottom: 2rem; // Adds some spacing from the bottom
-
-  
 }
 .buttonStyleTrend {
   position: absolute; // Position the button at the bottom
@@ -411,7 +510,7 @@ padding-inline: 5rem;
 
   @media (max-width: 600px) {
     display: none;
-   }
+  }
 }
 .buttonStyleTrendBigscreen {
   bottom: 0; // Aligns the button to the bottom of the container
@@ -419,18 +518,16 @@ padding-inline: 5rem;
   width: 22rem !important;
   @media (min-width: 601px) {
     display: none;
-   }
+  }
 }
 
 .starWrapper {
-  align-items: start;
+  align-items: end;
   display: flex;
   padding-inline-start: 0.5rem;
   padding-block-end: 2rem;
   gap: 1rem;
 }
-
-
 
 //directry
 
@@ -440,33 +537,39 @@ padding-inline: 5rem;
   justify-content: center;
   gap: 4rem;
   text-align: center;
-  margin-block: 2rem;
- 
+  margin-block: 6.4rem;
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+  }
 }
 
 .directryCard {
   background-color: var(--color-primary-white);
   // padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 48%; // Default width for 3 cards per row
+  width: 47%; // Default width for 3 cards per row
   box-sizing: border-box;
   padding-inline: 10rem;
   padding-block: 4rem;
-  overflow-wrap:anywhere;
+  overflow-wrap: anywhere;
 
   /* Adjust card width if there's only one card */
   @media (max-width: 1024px) {
     width: 48%; // On medium screens (tablet or small desktop), show 2 cards per row
   }
 
-  @media (max-width:820px) {
+  @media (max-width: 820px) {
     width: 45%; // On small screens (mobile), show 1 card per row
     // padding-inline: rem;
     padding-inline: 2em;
-
-
   }
-  @media (max-width:640px) {
+  @media (max-width: 640px) {
     width: 100%; // On small screens (mobile), show 1 card per row
   }
+}
+
+.productList {
+  background-color: #ffffff;
+  padding-inline-start: 1rem;
+  cursor: pointer;
 }
