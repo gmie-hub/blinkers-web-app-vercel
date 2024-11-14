@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "../../customs/card/card";
 import styles from "./index.module.scss";
 import Shoe from "../../assets/shoeIcon.svg";
