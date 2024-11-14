@@ -1,6 +1,5 @@
 import styles from "./smallscreen.module.scss";
 import { Image, Modal, Tabs, TabsProps } from "antd";
-import LocationIcon from "../../../../assets/location.svg";
 import ProductIcon from "../../../../assets/Ellipse 840.svg";
 import Button from "../../../../customs/button/button";
 import WhatsappLogo from "../../../../assets/whatsapp.svg";
@@ -77,7 +76,7 @@ const items: TabsProps["items"] = [
     children: <Reviews limit={3} />,
   },
 ];
-const Main = () => {
+const SmallScreen = () => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
   const navigate = useNavigate();
@@ -89,7 +88,7 @@ const Main = () => {
 
   const handleNavigateToSellersProfile = useCallback(() => {
     navigate(`/sellers-profile`);
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0);  
   }, [navigate]);
 
   return (
@@ -160,7 +159,8 @@ const Main = () => {
                 /> */}
 
                 <Image
-                  width={'24em'}
+                  width={'100%'}
+                //   maxWidth={10}
                   src={Product2}
                   alt="Product2"
                   preview={false}
@@ -187,24 +187,7 @@ const Main = () => {
             }}
           >
             <Form>
-              {/* <div className={styles.card}>
-                <h2 className={styles.payment}>₦40,000 </h2>
-                <div className={styles.location}>
-                  <Image
-                    src={LocationIcon}
-                    alt="LocationIcon"
-                    preview={false}
-                  />
-                  <p>20 Idowu street, Lekki Phase 1, Lagos, Nigeria</p>
-                </div>
-                <p>
-                  <span className={styles.title}>State:</span> Lagos
-                </p>
-                <p>
-                  <span className={styles.title}>Local Government Area:</span>{" "}
-                  Ikorodu
-                </p>
-              </div> */}
+            
               <div className={styles.card}>
                 <p className={styles.seller}>Safety Tips</p>
                 <ul>
@@ -224,11 +207,11 @@ const Main = () => {
                 </ul>
               </div>
               <div className={styles.card}>
-                <p className={styles.seller}>Seller’s Information </p>
+                <p className={styles.seller}>Seller’s Informatissssson </p>
                 <div className={styles.flexSeller}>
-                  <Image src={ProductIcon} width={'50%'} alt="ProductIcon" preview={false} />
+                  <Image src={ProductIcon} width={'2rem'} alt="ProductIcon" preview={false} />
                   <div>
-                    <p className={styles.name}>Omorinsola’s Store</p>
+                    <p className={styles.name}>rinsola’s Store</p>
                     <div className={styles.starWrapper}>
                       <span className={styles.star}>
                         <Image
@@ -405,4 +388,4 @@ const Main = () => {
     </div>
   );
 };
-export default Main;
+export default SmallScreen;

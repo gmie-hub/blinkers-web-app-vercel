@@ -9,6 +9,9 @@
 .flexContain {
   display: flex;
   gap: 2rem;
+  @media (max-width: 768px) {
+    margin-inline: 2rem;
+      }
 }
 .para {
   display: flex;
@@ -16,6 +19,9 @@
   flex-direction: column;
   padding-block: 1.6rem;
   // padding: 1.6rem;
+  @media (max-width: 768px) {
+margin-inline: 2rem;
+  }
 }
 .reviewContent{
   padding-block: 1rem;
