@@ -1,24 +1,128 @@
+// import { useState } from "react";
+// import { Image, Modal } from "antd";
+// import BlinkersLogo from "../../assets/Logo.svg";
+// import { NavLink } from "react-router-dom";
+// import styles from "./styles.module.scss";
+// import Button from "../../customs/button/button";
+// import CategoriesCard from "../../screens/home/category";
+
+// const Header = () => {
+//   const [isCardVisible, setIsCardVisible] = useState(false);
+//   const [isMenuOpen, setIsMenuOpen] = useState(false); // Toggle menu visibility on mobile
+
+//   // Function to toggle category modal visibility
+//   const handleCategoryClick = () => {
+//     setIsCardVisible(!isCardVisible);
+//   };
+
+//   // Function to toggle mobile menu visibility
+//   const toggleMenu = () => {
+//     setIsMenuOpen(!isMenuOpen);
+//   };
+
+//   return (
+//     <nav className={styles.container}>
+//       <Image src={BlinkersLogo} className={styles.logo} />
+
+//       {/* Menu Button for Mobile */}
+//       <button className={styles.menuButton} onClick={toggleMenu}>
+//         {isMenuOpen ? "✖" : "☰"} {/* Change icon based on menu state */}
+//       </button>
+
+//       {/* Navigation Links */}
+//       <div className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}>
+//         <NavLink
+//           to=""
+//           className={({ isActive }) =>
+//             isActive ? styles.activeNavLink : styles.navLink
+//           }
+//         >
+//           Home
+//         </NavLink>
+
+//         <span className={styles.navLink} onClick={handleCategoryClick} >
+//           Categories
+//         </span>
+
+//         {navItems.map((item) => (
+//           <NavLink
+//             key={item.id}
+//             to={item.route}
+//             className={({ isActive }) =>
+//               isActive ? styles.activeNavLink : styles.navLink
+//             }
+//           >
+//             {item.name}
+//           </NavLink>
+//         ))}
+//       </div>
+
+//       <div className={styles.rightNav}>
+//         <Button className={styles.btn}>Get Started</Button>
+//       </div>
+
+//       {/* Modal for Categories */}
+//       <Modal
+//         visible={isCardVisible}
+//         onCancel={handleCategoryClick}
+//         footer={null}
+//         closable={false}
+//         centered
+//         width={1300}
+//         style={{ top: "40px" }}
+//         bodyStyle={{
+//           paddingBlockStart: "5px",
+//         }}
+//       >
+//         <CategoriesCard />
+//       </Modal>
+//     </nav>
+//   );
+// };
+
+// const navItems = [
+//   { id: 1, name: "About Us", route: "/about-us" },
+//   { id: 2, name: "Contact Us", route: "/contact-us" },
+//   { id: 3, name: "Jobs", route: "/jobs" },
+//   { id: 4, name: "Directory", route: "/directory" },
+//   { id: 5, name: "Pricing", route: "/pricing" },
+// ];
+
+// export default Header;
+
 import { useState } from "react";
-import { Image, Modal } from "antd"; // Use Modal instead of Popover
+import { Image, Modal } from "antd";
 import BlinkersLogo from "../../assets/Logo.svg";
 import { NavLink } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Button from "../../customs/button/button";
-import CategoriesCard from "../../screens/home/category"; // Your CategoriesCard component
+import CategoriesCard from "../../screens/home/category";
 
 const Header = () => {
-  const [isCardVisible, setIsCardVisible] = useState(false); // State to control modal visibility
+  const [isCardVisible, setIsCardVisible] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Function to toggle modal visibility
+  // Function to toggle category modal visibility
   const handleCategoryClick = () => {
     setIsCardVisible(!isCardVisible);
   };
 
+  // Function to toggle mobile menu visibility
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className={styles.container}>
-      <Image src={BlinkersLogo} />
+      <Image src={BlinkersLogo} className={styles.logo} />
 
-      <div className={styles.middleNav}>
+      {/* Menu Button for Mobile */}
+      <button className={styles.menuButton} onClick={toggleMenu}>
+        {isMenuOpen ? "✖" : "☰"}
+      </button>
+
+      {/* Navigation Links */}
+      <div className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}>
         <NavLink
           to=""
           className={({ isActive }) =>
@@ -28,44 +132,49 @@ const Header = () => {
           Home
         </NavLink>
 
-        {/* Categories Button */}
-        <Button onClick={handleCategoryClick} variant="transparent">
+        <span className={styles.navLink} onClick={handleCategoryClick}>
           Categories
-        </Button>
+        </span>
 
-        {navItems.map((items) => (
+        {navItems.map((item) => (
           <NavLink
-            key={items.id}
-            to={items.route}
+            key={item.id}
+            to={item.route}
             className={({ isActive }) =>
               isActive ? styles.activeNavLink : styles.navLink
             }
           >
-            {items.name}
+            {item.name}
           </NavLink>
         ))}
+
+        {/* Get Started button - Displayed under nav items on small screens */}
+        {isMenuOpen && (
+          <div className={styles.mobileButtonWrapper}>
+            <Button className={styles.btn}>Get Started</Button>
+          </div>
+        )}
       </div>
 
-      <div>
+      {/* Right Nav - Shown only on large screens */}
+      <div className={styles.rightNav}>
         <Button className={styles.btn}>Get Started</Button>
       </div>
 
-      {/* Modal to center CategoriesCard */}
+      {/* Modal for Categories */}
       <Modal
         visible={isCardVisible}
-        onCancel={handleCategoryClick} // Close modal when clicked outside or 'X' is clicked
-        footer={null} // No footer buttons
-        closable={false} // Hides the default 'X' close button
-        centered // This ensures the modal is always centered on the screen
-        width={1300} // Set a custom width if necessary
-        style={{ top: "40px" }} // Adjust the top position to move modal down from the header
+        onCancel={handleCategoryClick}
+        footer={null}
+        closable={false}
+        centered
+        width={1300}
+        style={{ top: "40px" }}
         bodyStyle={{
-          paddingBlockStart: "5px", // Optional: you can adjust padding
+          paddingBlockStart: "5px",
         }}
       >
-        <div>
-          <CategoriesCard /> {/* Show CategoriesCard inside the modal */}
-        </div>
+        <CategoriesCard />
       </Modal>
     </nav>
   );

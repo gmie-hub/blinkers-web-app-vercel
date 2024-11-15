@@ -33,11 +33,12 @@
   display: flex;
   margin-inline: 10rem;
   gap: 4rem;
+  padding-block: 5.6rem;
 }
 
 .leftSection {
   flex: 0.4; /* 40% of the width */
-  padding: 2rem;
+  // padding: 2rem;
 }
 
 .rightSection {
@@ -155,18 +156,21 @@
     display: block; /* Stack the sections vertically */
     margin-inline: 1.6rem; /* Smaller margin for mobile */
     gap: 2rem; /* Adjust gap for smaller screens */
+    padding-block: 2.4rem;
+
+  
   }
 
   .leftSection,
   .rightSection {
     flex: 1; /* Full width on smaller screens */
-    padding: 1rem;
+    // padding: 1rem;
   }
 
   .reviewbtn {
-    flex-direction: column; /* Stack items vertically */
+    // flex-direction: column; /* Stack items vertically */
     align-items: flex-start;
-    gap: 1rem;
+    // gap: 1rem;
   }
 
   .title {

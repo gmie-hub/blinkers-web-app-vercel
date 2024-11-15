@@ -79,32 +79,29 @@ const items: TabsProps["items"] = [
   },
 ];
 const BigScreen = () => {
-  
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
   const navigate = useNavigate();
   const [flagSeller, setFlagSeller] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
 
-
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // On small screens, ensure isFilterVisible is false by default
     if (windowWidth < 1024) {
       //show <SmallScreen Copmpnent/>
-      <SmallScreen/>
+      <SmallScreen />;
     } else {
       //show <big Screen Copmpnent/>
-      <BigScreen/>
+      <BigScreen />;
     }
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [windowWidth]);
 
   const handleTabChange = (key: string) => {
@@ -168,13 +165,13 @@ const BigScreen = () => {
                   className={styles.productImage}
                 /> */}
 
-<Image
-    width="100%"
-  src={Product2}
-  alt="Product2"
-  preview={false}
-  className={styles.productImage}
-/>
+                <Image
+                  width={'100%'}
+                  src={Product2}
+                  alt="Product2"
+                  preview={false}
+                  className={styles.productImage}
+                />
               </div>
             </div>
           </div>
@@ -275,7 +272,9 @@ const BigScreen = () => {
                     }
                     text="Flag Seller"
                     variant="redOutline"
-                    onClick={()=>{setFlagSeller(true)}}
+                    onClick={() => {
+                      setFlagSeller(true);
+                    }}
                   />
                 </div>
 

@@ -143,9 +143,9 @@
   padding-block-end: 4.2rem;
 }
 
-.reviewInput{
-    margin-block-end: 6.4rem;
-    margin-block-start: 2.4rem;
+.reviewInput {
+  margin-block-end: 6.4rem;
+  margin-block-start: 2.4rem;
 }
 
 .leftContainer {
@@ -153,6 +153,12 @@
   width: 100%; /* Ensure container takes 100% width */
   flex-direction: row;
   margin-block-end: 3.4rem;
+  @media (max-width: 1024px) {
+
+    gap:4rem;
+  }
+
+
   //   gap: 4rem;
 }
 
@@ -377,7 +383,6 @@
   margin-block-end: 2rem;
   padding-block: 2.4rem;
 
-
   & > p {
     color: var(--color-body-text);
     padding-block: 0.8rem;
@@ -391,17 +396,13 @@
     color: var(--color-header-text);
     font-weight: 600;
     font-size: 1.8rem;
-    border-bottom: #D9D9D9 1px solid;
+    border-bottom: #d9d9d9 1px solid;
   }
 }
 
-.adding{
-    padding-block-start: 2.3rem;
+.adding {
+  padding-block-start: 2.3rem;
 }
-
-
-
-
 
 @media (max-width: 768px) {
   .container {
@@ -409,7 +410,8 @@
     gap: 2rem; /* Reduce gap for mobile */
   }
 
-  .leftSide, .rightSide {
+  .leftSide,
+  .rightSide {
     width: 100%; /* Full width for mobile */
   }
 
@@ -477,23 +479,27 @@
   //   padding: 1rem;
   // }
 
-  .leftContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    margin-block-end: 2rem;
-  
-    // Apply responsive layout for small screens
-    @media (max-width: 768px) {
-      flex-direction: column; // Stack elements in a column
-    }
-  }
-  
+  // .leftContainer {
+  //   display: flex;
+  //   flex-direction: row;
+  //   gap: 2rem;
+  //   margin-block-end: 2rem;
+
+  //   @media (max-width: 1024px) {
+  //     gap: 4rem;
+  //   }
+
+  //   // Apply responsive layout for small screens
+  //   @media (max-width: 768px) {
+  //     flex-direction: column; // Stack elements in a column
+  //   }
+  // }
+
   .firstSideLeft {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-  
+
     // Responsive layout for small screens
     @media (max-width: 768px) {
       order: 2; // Move this section below the large image
@@ -502,12 +508,12 @@
       align-items: center;
     }
   }
-  
+
   .secondSideLeft {
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
     // Responsive layout for small screens
     @media (max-width: 768px) {
       order: 1; // Keep the large image on top
@@ -515,7 +521,6 @@
       margin-bottom: 1rem; // Space between large image and small images
     }
   }
-  
 
   .dressCard img {
     width: 100%;

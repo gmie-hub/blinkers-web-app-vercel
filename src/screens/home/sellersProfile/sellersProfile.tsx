@@ -1,6 +1,6 @@
 import Icon from "/Container.svg";
 import styles from "./sellersProfile.module.scss";
-import Reviews from "../market/productDetails/tabs/review";
+import Reviews, { reviewData } from "../market/productDetails/tabs/review";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
@@ -17,6 +17,11 @@ import FlagLogo from "../../../assets/flag.svg";
 import SellersAds from "./postedAds/adsPostedbySeller";
 const SellerProfile = () => {
   const navigate = useNavigate();
+
+
+  
+  const hasReviews = reviewData?.lenght;
+  console.log(hasReviews , "hasReviews")
 
   const handleNavigateToReview = useCallback(() => {
     navigate(`/review`);
@@ -94,6 +99,7 @@ const SellerProfile = () => {
               <Button
                 icon={<Image src={CallLogo} alt="CallLogo" preview={false} />}
                 text="Chat With Seller"
+
               />
             </div>
 
@@ -118,6 +124,7 @@ const SellerProfile = () => {
           </div>
         </div>
         <div className={styles.rightSection}>
+          {hasReviews !== 0 &&
           <div className={styles.reviewbtn}>
             <p className={styles.title}> Review</p>
 
@@ -130,8 +137,8 @@ const SellerProfile = () => {
                 preview={false}
               />
             </div>
-          </div>
-          <Reviews canSellAllBtn={false} limit={4} />
+          </div>}
+          <Reviews canSeeAllBtn={false} limit={4}  />
         </div>
       </div>
       <div>
@@ -149,6 +156,7 @@ const SellerProfile = () => {
 
         <SellersAds showHeading={false} limit={4} />
       </div>
+
     </div>
   );
 };

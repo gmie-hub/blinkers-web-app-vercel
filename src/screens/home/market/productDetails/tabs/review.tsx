@@ -10,7 +10,7 @@ import Button from "../../../../../customs/button/button";
 import { useCallback } from "react";
 
 // Dummy array for business reviews
-const dummyBusinessReviewData: any = [
+export const reviewData: any = [
   {
     updated_at: "2024-11-10",
     rating: 4,
@@ -18,46 +18,46 @@ const dummyBusinessReviewData: any = [
       "Good customer service and fast delivery. I’m glad I shopped from Shop with Rinsy",
     reviewer: "Olajumoke",
   },
-  {
-    updated_at: "2024-11-08",
-    rating: 5,
-    review: "Exceptional experience!",
-    reviewer: "John Doe",
-  },
-  {
-    updated_at: "2024-11-05",
-    rating: 3,
-    review: "Good, but room for improvement.",
-    reviewer: "Jane Smith",
-  },
-  {
-    updated_at: "2024-11-05",
-    rating: 1,
-    review: "Disappointing service.",
-    reviewer: "Jane Smith",
-  },
-  {
-    updated_at: "2024-11-05",
-    rating: 2,
-    review: "Could be better.",
-    reviewer: "Jane Smith",
-  },
+  // {
+  //   updated_at: "2024-11-08",
+  //   rating: 5,
+  //   review: "Exceptional experience!",
+  //   reviewer: "John Doe",
+  // },
+  // {
+  //   updated_at: "2024-11-05",
+  //   rating: 3,
+  //   review: "Good, but room for improvement.",
+  //   reviewer: "Jane Smith",
+  // },
+  // {
+  //   updated_at: "2024-11-05",
+  //   rating: 1,
+  //   review: "Disappointing service.",
+  //   reviewer: "Jane Smith",
+  // },
+  // {
+  //   updated_at: "2024-11-05",
+  //   rating: 2,
+  //   review: "Could be better.",
+  //   reviewer: "Jane Smith",
+  // },
 ];
 
 // Accept `canSellAllBtn` and `limit` as props
 export default function Reviews({
-  canSellAllBtn = true,
-  limit = dummyBusinessReviewData.length, // Default to showing all reviews if limit is not provided
+  canSeeAllBtn = true,
+  limit = reviewData.length, // Default to showing all reviews if limit is not provided
 }: {
-  canSellAllBtn?: boolean;
+  canSeeAllBtn?: boolean;
   limit?: number;
 }) {
   const navigate = useNavigate();
 
   // Limit the reviews based on the passed `limit` prop
   const businessReviewData =
-    dummyBusinessReviewData?.length > 0 &&
-    dummyBusinessReviewData?.slice(0, limit);
+  reviewData?.length > 0 &&
+  reviewData?.slice(0, limit);
   const businessReviewError = false;
   const businessReviewErrorMessage = "Failed to load reviews";
 
@@ -134,7 +134,7 @@ export default function Reviews({
         )}
         {businessReviewError && <p>{businessReviewErrorMessage}</p>}
 
-        {canSellAllBtn && businessReviewData.length > 0 && (
+        {canSeeAllBtn && (businessReviewData.length > 0  || businessReviewData.length === undefined )&& (
           <div className={styles.seeBtn}>
             <Button
               text="See All Reviews"
