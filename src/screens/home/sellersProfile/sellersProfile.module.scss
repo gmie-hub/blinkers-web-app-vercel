@@ -1,6 +1,8 @@
 .container {
   width: 100%;
   min-width: 100%;
+  margin-block: 4rem;
+
   // height: 100%; // Full height within the wrapper
 }
 
@@ -37,12 +39,12 @@
 }
 
 .leftSection {
-  flex: 0.4; /* 40% of the width */
+  flex: 0.3; /* 40% of the width */
   // padding: 2rem;
 }
 
 .rightSection {
-  flex: 0.6; /* 60% of the width */
+  flex: 0.7; /* 60% of the width */
 }
 
 .reviewbtn {
@@ -59,6 +61,7 @@
 .btn {
   color: var(--color-primary-green);
   font-size: 2rem;
+  cursor: pointer;
 }
 .btnWrapper {
   display: flex;

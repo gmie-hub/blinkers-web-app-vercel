@@ -3,7 +3,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
+    // width: 100%;
     gap: 2rem;
   }
   
@@ -77,7 +77,7 @@
   
     .searchInput {
       font-size: 1rem; // Smaller font size for mobile devices
-      width: 100%; // Make input full-width on mobile
+      // width: 100%; // Make input full-width on mobile
       padding-block: 0.8rem;
       padding-inline-start: 3rem; // Adjust padding for icon
     }

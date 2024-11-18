@@ -1,7 +1,7 @@
 
 .image {
   position: relative;
-  height: 90vh; // Use viewport height for better scaling
+  // height: 90vh; // Use viewport height for better scaling
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,7 +13,7 @@
 .home {
   text-align: center;
   color: white;
-  padding: 1rem; // Add padding to avoid text overflow
+  padding-block: 5.8rem; // Add padding to avoid text overflow
 }
 
 .picHead {
@@ -114,4 +114,25 @@
     font-size: 1.2rem; // Reduce size of arrows on mobile
     padding: 6px;
   }
+}
+
+.dotPagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 1rem 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-block-start: 4rem;
+}
+
+.activeDot {
+  background-color: #009900;
 }

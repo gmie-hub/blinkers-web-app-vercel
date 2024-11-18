@@ -207,7 +207,7 @@ const SmallScreen = () => {
                 </ul>
               </div>
               <div className={styles.card}>
-                <p className={styles.seller}>Seller’s Informatissssson </p>
+                <p className={styles.seller}>Seller’s Information </p>
                 <div className={styles.flexSeller}>
                   <Image src={ProductIcon} width={'2rem'} alt="ProductIcon" preview={false} />
                   <div>

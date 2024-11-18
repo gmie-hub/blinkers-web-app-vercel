@@ -30,14 +30,10 @@ const WriteReview = () => {
     setShowCard(true); // Show the card
   };
 
-
-  const handleModalOkay = useCallback(
-    (   ) => {
-      navigate(`/sellers-profile`);
-      window.scrollTo(0, 0);
-    },
-    [navigate]
-  );
+  const handleModalOkay = useCallback(() => {
+    navigate(`/sellers-profile`);
+    window.scrollTo(0, 0);
+  }, [navigate]);
 
   return (
     <div className={styles.RewiwvWrapper}>
@@ -106,8 +102,7 @@ const WriteReview = () => {
         {showCard && (
           <div className={styles.submittedCard}>
             <div className={styles.cardContent}>
-            <Image src={DoneIcon} alt={DoneIcon} preview={false} />
-
+              <Image src={DoneIcon} alt={DoneIcon} preview={false} />
 
               <h2>Review Submitted</h2>
               <p>Your Rating and Review Has Been Submitted Successfully</p>

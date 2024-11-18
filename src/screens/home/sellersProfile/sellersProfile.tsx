@@ -15,6 +15,7 @@ import BrowseLogo from "../../../assets/Icon (4).svg";
 import CallLogo from "../../../assets/call.svg";
 import FlagLogo from "../../../assets/flag.svg";
 import SellersAds from "./postedAds/adsPostedbySeller";
+
 const SellerProfile = () => {
   const navigate = useNavigate();
 
@@ -98,7 +99,7 @@ const SellerProfile = () => {
             <div className={styles.chatBtn}>
               <Button
                 icon={<Image src={CallLogo} alt="CallLogo" preview={false} />}
-                text="Chat With Seller"
+                text="  "
 
               />
             </div>
@@ -156,6 +157,8 @@ const SellerProfile = () => {
 
         <SellersAds showHeading={false} limit={4} />
       </div>
+
+     
 
     </div>
   );

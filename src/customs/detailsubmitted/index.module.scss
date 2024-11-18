@@ -1,0 +1,39 @@
+.headerContainer {
+  margin: 1rem;
+
+  @media screen and (min-width: 768px) {
+    margin: 3rem;
+  }
+
+  p {
+    margin-block-start: 1rem;
+  font-size: 1rem;
+  font-weight: 400;
+  @media screen and (min-width: 768px) {
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+  }
+}
+
+h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  @media screen and (min-width: 768px) {
+    font-family: Lato;
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+  }
+}
+
+}
+
+
+
+
+.button {
+  margin-block-start: 4rem;
+  margin-block-end: 1rem;
+}

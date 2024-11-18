@@ -90,10 +90,10 @@
 
 // export default Header;
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Image, Modal } from "antd";
 import BlinkersLogo from "../../assets/Logo.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Button from "../../customs/button/button";
 import CategoriesCard from "../../screens/home/category";
@@ -101,6 +101,14 @@ import CategoriesCard from "../../screens/home/category";
 const Header = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleNavigateToLogin = useCallback(
+    () => {
+      navigate('/login');
+    },
+    [navigate]
+  );
 
   // Function to toggle category modal visibility
   const handleCategoryClick = () => {
@@ -158,7 +166,7 @@ const Header = () => {
 
       {/* Right Nav - Shown only on large screens */}
       <div className={styles.rightNav}>
-        <Button className={styles.btn}>Get Started</Button>
+        <Button onClick={()=>{handleNavigateToLogin()}} className={styles.btn}>Get Started</Button>
       </div>
 
       {/* Modal for Categories */}

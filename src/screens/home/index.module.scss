@@ -1,7 +1,7 @@
 .main {
   display: flex;
   justify-content: center;
-  width: 90%;
+  // width: 90%;
 }
 // .section {
 //   max-width: 90%;
@@ -571,7 +571,16 @@
 }
 
 .productList {
-  background-color: #ffffff;
-  padding-inline-start: 1rem;
+  padding-inline-start: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  border-radius: 0 0 1rem 1rem; 
+  box-shadow: 0px 4px 40px 0px #00990012;
+  border: solid  #00990012;
+
   cursor: pointer;
+  & > p {
+    padding-block-start: 0.5rem !important;
+  }
 }

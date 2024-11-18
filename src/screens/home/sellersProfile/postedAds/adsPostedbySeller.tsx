@@ -7,6 +7,8 @@ import StarYellow from "../../../../assets/staryellow.svg";
 import BackIncon from "../../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
 import { countUpTo } from "../../trend";
+import { useCallback } from "react";
+
 
 // Data array
 const cardData = [
@@ -54,27 +56,38 @@ const cardData = [
 ];
 
 // Main component with `limit` prop to control how many data to display
-const SellersAds = ({ limit = cardData.length, showHeading =true }: { limit?: number, showHeading?:boolean }) => {
+const SellersAds = ({
+  limit = cardData.length,
+  showHeading = true,
+}: {
+  limit?: number;
+  showHeading?: boolean;
+}) => {
   const navigate = useNavigate();
+
+  const handleNavigateToRelateSellerProfile = useCallback(() => {
+    navigate(`/sellers-profile`);
+    window.scrollTo(0, 0);
+  }, [navigate]);
 
   return (
     <div className="wrapper" style={{ marginBlock: "2rem" }}>
-        {
-            showHeading &&
-             <div onClick={() => navigate("/market")} className={styles.back}>
-             <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
-             <p>Back</p>
-           </div>
+      {showHeading && (
+        <div
+          onClick={() => handleNavigateToRelateSellerProfile()}
+          className={styles.back}
+        >
+          <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
+          <p>Back</p>
+        </div>
+      )}
 
-        }
-     
       <div>
-        {
-            showHeading &&  <div className={styles.promoHead}>
+        {showHeading && (
+          <div className={styles.promoHead}>
             <p>Ads Posted By Omorinsola’s Store</p>
           </div>
-        }
-       
+        )}
 
         {/* Display the promo images with the limit applied */}
         <section className={styles.promoImageContainer}>
@@ -103,6 +116,7 @@ const SellersAds = ({ limit = cardData.length, showHeading =true }: { limit?: nu
           ))}
         </section>
       </div>
+
     </div>
   );
 };

@@ -67,10 +67,8 @@
     position: relative; // Add this to make .favoriteIcon position relative to the promoImage container
     flex: 1 1 calc(24% - 1rem);
     max-width: calc(24% - 1rem);
-    background-color: #ffffff;
     box-sizing: border-box;
-    border-radius: 1rem;
-  
+ 
     img {
       width: 100%;
       height: auto;
@@ -110,12 +108,18 @@
     }
   }
 .productList {
-  background-color: #ffffff;
-  padding-inline-start: 1rem;
-  cursor: pointer;
+  padding-inline-start: 1.6rem;
   display: flex;
   flex-direction: column;
   text-align: start;
+  border-radius: 0 0 1rem 1rem; 
+  box-shadow: 0px 4px 40px 0px #00990012;
+  border: solid  #00990012;
+
+  cursor: pointer;
+  & > p {
+    padding-block-start: 0.5rem !important;
+  }
 }
 .starWrapper {
   align-items: end;
