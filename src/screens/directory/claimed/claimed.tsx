@@ -50,6 +50,11 @@ const Claimed = () => {
     window.scrollTo(0, 0);
   };
 
+  const handleNavigateToBack = () => {
+    setShowContent(true); // Hide the review form
+    setShowWriteReview(false); // Show the card
+    window.scrollTo(0, 0);
+  };
 //   const handleNavigateToWriteReview = useCallback(() => {
 //     navigate(`/write-review`);
 //     window.scrollTo(0, 0);
@@ -240,7 +245,7 @@ const Claimed = () => {
       {showWriteReview && (
         <div>
         <div
-          onClick={() => navigate('claimed')}
+          onClick={() => setShowWriteReview(false)}
           className={styles.back}
         >
           <Image width={9} src={BackIcon} alt="BackIcon" preview={false} />

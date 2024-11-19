@@ -150,11 +150,7 @@ const Directory = () => {
                 placeholder="Category"
                 options={[]}
               /> */}
-              <select>
-                <option>hello</option>
-                <option>hello</option>
-                <option>hello</option>
-              </select>
+           
 
               <SearchInput
                 placeholder="Search businesses..."
