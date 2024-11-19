@@ -22,6 +22,7 @@ export const routes = {
     SubscriptionPricing: "/subscription-pricing",
 
     ClaimedBusiness: "/claimed-business",
+    ClaimBusiness: "/claim-business",
 
     SubmittedSuccessfully: "/submittedsuccessfully",
   },

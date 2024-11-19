@@ -166,6 +166,10 @@
   margin-block: 4rem;
   border-radius: 0.8rem;
 
+  @media screen and (max-width: 768px) {
+    margin-block: 2.4rem;
+
+  }
   // height: 100%; // Full height within the wrapper
 }
 

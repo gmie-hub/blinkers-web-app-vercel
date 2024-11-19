@@ -1,4 +1,4 @@
-import styles from "./claim.module.scss";
+import styles from "./claimBus.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
@@ -9,26 +9,42 @@ import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
 import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
-import HouseLock from "../../../assets/House Lock.svg";
+import DoneIcon from "../../../assets/Done.svg";
 import { countUpTo } from "../../home/trend";
-import shareIcon from "../../../assets/share 2.svg";
+import HeadIcon from "../../../assets/Ehead.svg";
 import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
+import Upload from "../../../customs/upload/upload";
+import { Form, FormikProvider, FormikValues, useFormik } from "formik";
+import Input from "../../../customs/input/input";
 
 // import SellersAds from "./postedAds/adsPostedbySeller";
-const NotClaim = () => {
+const ClaimBusiness = () => {
   const navigate = useNavigate();
   const [showContent, setShowContent] = useState(true); // Manage review form visibility
   const [showCard, setShowCard] = useState(false); // Manage card visibility
+  const [uploadLogo, setUploadLogo] = useState<File | null>(null);
 
   //   const hasReviews = reviewData?.lenght;
   //   console.log(hasReviews , "hasReviews")
 
+  const clearFileLogo = () => {
+    setUploadLogo(null);
+  };
+
+  const handleFileChangeLogo = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: Function
+  ) => {
+    if (!e.target?.files) return;
+    const selectedFile = e.target?.files[0];
+    setUploadLogo(selectedFile);
+    setFieldValue("imageLogo", selectedFile); // Set the file in Formik
+  };
   const handleClaim = () => {
     setShowContent(false); // Hide the review form
     setShowCard(true); // Show the card
     window.scrollTo(0, 0);
-
   };
 
   const handleNavigateToRelatedBusiness = useCallback(() => {
@@ -36,15 +52,31 @@ const NotClaim = () => {
     window.scrollTo(0, 0);
   }, [navigate]);
 
-  const   handleNavigateToSubPlan = useCallback(() => {
+  const handleNavigateToSubPlan = useCallback(() => {
     navigate(`/subscription-pricing`);
     window.scrollTo(0, 0);
   }, [navigate]);
 
+  const formik = useFormik<FormikValues>({
+    initialValues: {
+      message: "",
+      file: "",
+    },
+    onSubmit: () => {},
+  });
+
   return (
-    <div className="wrapper">
+    <div className={styles.wrapper}>
       {showContent && (
-        <>
+        <div className={styles.claimWrapper}>
+          <div className={styles.top}>
+            <h1>Claim This Business</h1>
+            <p>
+              To claim this business, you have to verify that you are the owner
+              of the business
+            </p>
+          </div>
+
           <div className={styles.mainContainer}>
             <div className={styles.leftSection}>
               <div className={styles.card}>
@@ -76,24 +108,6 @@ const NotClaim = () => {
                     <p style={{ paddingBlockEnd: "0.4rem" }}>100</p>
                     <p>Followers</p>
                   </div>
-
-                  <div className={styles.starWrapper2}>
-                    <div className={styles.message}>
-                      <Image src={Star} alt="Star" preview={false} />
-
-                      <p>Write a review</p>
-                    </div>
-                    <div className={styles.message}>
-                      <Image src={shareIcon} alt="shareIcon" preview={false} />
-
-                      <p>Share</p>
-                    </div>
-                    <div className={styles.message}>
-                      <Image src={linkIcon} alt="linkIcon" preview={false} />
-
-                      <p>Follow</p>
-                    </div>
-                  </div>
                 </div>
 
                 <div>
@@ -116,22 +130,15 @@ const NotClaim = () => {
                   </div>
                 </div>
 
-                <div className={styles.chatBtn}>
-                  <Button
-                    onClick={()=>handleClaim()}
-                    text="Claim This Business"
-                  />
-                </div>
-
                 <div className={styles.social}>
                   <Image
                     src={WhatsappLogo}
                     alt="WhatsappLogo"
                     preview={false}
                   />
-                    <Image
-                //   width={40}
-                  height={35}
+                  <Image
+                    //   width={40}
+                    height={35}
                     src={FaceBookStoreIcon}
                     alt="FaceBookStoreIcon"
                     preview={false}
@@ -141,34 +148,55 @@ const NotClaim = () => {
                     alt="InstagramIcon"
                     preview={false}
                   />
-                
                 </div>
               </div>
             </div>
             <div className={styles.rightSection}>
-              <h1>About Shop With Rinsy</h1>
-              <p>
-                Shop with Rinsy encapsulates the meaning of beauty and elegance.
-                Whilst delivering both in the midst of luxury and elegance, the
-                peninsula’s ultimate getaway destination is also the ultimate
-                place to host your next event. Shop with Rinsy encapsulates the
-                meaning of beauty and elegance. Whilst delivering both in the
-                midst of luxury and elegance, the peninsula’s ultimate getaway
-                destination is also the ultimate place to host your next event.
-              </p>
+              <FormikProvider value={formik}>
+                <Form>
+                  <div className={styles.info}>
+                    <Image src={HeadIcon} alt="HeadIcon" preview={false} />
 
-              <div className={styles.photo}>
-                <h1>Photos</h1>
-                <p>No photos available yet</p>
-              </div>
-              <div className={styles.photo}>
-                <h1>Videos</h1>
-                <p>No Videos available yet</p>
-              </div>
-              <div className={styles.review}>
-                <h1>Reviews</h1>
-                <p>No Reviews available yet</p>
-              </div>
+                    <div className={styles.open}>
+                      <p>Ogunsola Omorinsola</p>
+                      <p>ogunsolaomorinsola@gmail.com</p>
+                    </div>
+                  </div>
+
+                  <div className={styles.inputContainer}>
+                    {/* {uploadLogo ? (
+                      <div className="small-gap">
+                        <Image />
+                        <span>{uploadLogo.name}</span>
+                        <Button
+                          onClick={clearFileLogo}
+                          variant="white"
+                          text="x"
+                        />
+                      </div>
+                    ) : (
+                      <Upload
+                        name="imageLogo"
+                        label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
+                        onChange={(e) =>
+                          handleFileChangeLogo(e, formik?.setFieldValue)
+                        }
+                      />
+                    )} */}
+
+                    <div className={styles.inputCon}>
+                      <Input
+                        name="review"
+                        placeholder="Write a message"
+                        type="textarea"
+                        label="Additional Message (Optional)"
+                      />
+                    </div>
+                  </div>
+
+                  <Button onClick={() => handleClaim()} text="Submit Form" />
+                </Form>
+              </FormikProvider>
             </div>
           </div>
 
@@ -192,22 +220,25 @@ const NotClaim = () => {
 
             <RelatedBusinesses showHeading={false} limit={4} />
           </div>
-        </>
+        </div>
       )}
 
       {showCard && (
         <div className={styles.submittedCard}>
           <div className={styles.cardContent}>
-            <Image src={HouseLock} alt={HouseLock} preview={false} />
+            <Image src={DoneIcon} alt={DoneIcon} preview={false} />
 
-            <h2>Subscribe to Claim This Business</h2>
+            <h2>Details Submitted Successfully</h2>
             <p>
-              Choose a subscription plan to be able to claim and manage your
-              business.
+              We’ve received your details and once we verify it, you will be
+              able to edit your business details in your profile. We will
+              contact you via email.
             </p>
             <Button
-              onClick={()=>{handleNavigateToSubPlan()}} // Show review form when "Okay" is clicked
-              text="Check Out Subscription plan"
+              onClick={() => {
+                handleNavigateToSubPlan();
+              }} // Show review form when "Okay" is clicked
+              text="Okay"
             />
           </div>
         </div>
@@ -215,4 +246,4 @@ const NotClaim = () => {
     </div>
   );
 };
-export default NotClaim;
+export default ClaimBusiness;
