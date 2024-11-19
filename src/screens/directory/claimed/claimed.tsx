@@ -245,7 +245,7 @@ const Claimed = () => {
       {showWriteReview && (
         <div>
         <div
-          onClick={() => setShowWriteReview(false)}
+          onClick={() => handleNavigateToBack()}
           className={styles.back}
         >
           <Image width={9} src={BackIcon} alt="BackIcon" preview={false} />
