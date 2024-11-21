@@ -76,6 +76,7 @@ const items: TabsProps["items"] = [
     children: <Reviews limit={3} />,
   },
 ];
+
 const SmallScreen = () => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -88,40 +89,35 @@ const SmallScreen = () => {
 
   const handleNavigateToSellersProfile = useCallback(() => {
     navigate(`/sellers-profile`);
-    window.scrollTo(0, 0);  
+    window.scrollTo(0, 0);
   }, [navigate]);
 
   return (
     <div className="wrapper">
       <div className={styles.container}>
         <div className={styles.leftSide}>
-
-     <div style={{marginInlineStart:'1rem'}}>
-
-     <h2 style={{display:'flex'}}>Mini Skater Dress</h2>
-          <p className={styles.fashion}>Fashion Accessories</p>{" "}
-
-          <div className={styles.accessories}>
-            <h2 className={styles.payment} >₦40,000 </h2>
-            <div className={styles.eye}>
-              <Image src={TimeIcon} alt={TimeIcon} preview={false} />
-              <p> Posted 3 months ago</p>
+          <div style={{ marginInlineStart: "1rem" }}>
+            <h2 style={{ display: "flex" }}>Mini Skater Dress</h2>
+            <p className={styles.fashion}>Fashion Accessories</p>{" "}
+            <div className={styles.accessories}>
+              <h2 className={styles.payment}>₦40,000 </h2>
+              <div className={styles.eye}>
+                <Image src={TimeIcon} alt={TimeIcon} preview={false} />
+                <p> Posted 3 months ago</p>
+              </div>
+              <div className={styles.eye}>
+                <Image src={EyeIcon} alt={EyeIcon} preview={false} />
+                <p>400 Views</p>
+              </div>
+              <p className={styles.payment}>
+                <span className={styles.title}>State:</span> Lagos
+              </p>
+              <p>
+                <span className={styles.title}>Local Government Area:</span>{" "}
+                Ikorodu
+              </p>
             </div>
-            <div className={styles.eye}>
-              <Image src={EyeIcon} alt={EyeIcon} preview={false} />
-              <p>400 Views</p>
-            </div>
-            <p className={styles.payment}>
-                  <span className={styles.title}>State:</span> Lagos
-                </p>
-                <p>
-                  <span className={styles.title}>Local Government Area:</span>{" "}
-                  Ikorodu
-                </p> 
           </div>
-
-     </div>
-
 
           <div className={styles.leftContainer}>
             <div className={styles.firstSideLeft}>
@@ -129,8 +125,8 @@ const SmallScreen = () => {
                 <div key={dress.id} className={styles.dressCard}>
                   <div>
                     <Image
-                    //   width={"12rem"}
-                    //   height={"12rem"}
+                      //   width={"12rem"}
+                      //   height={"12rem"}
                       src={dress.image}
                       alt={dress.title}
                       preview={false}
@@ -139,6 +135,7 @@ const SmallScreen = () => {
                 </div>
               ))}
             </div>
+
             <div className={styles.secondSideLeft}>
               <div className={styles.promoImage}>
                 <div className={styles.favoriteIcon}>
@@ -159,8 +156,8 @@ const SmallScreen = () => {
                 /> */}
 
                 <Image
-                  width={'100%'}
-                //   maxWidth={10}
+                  width={"100%"}
+                  //   maxWidth={10}
                   src={Product2}
                   alt="Product2"
                   preview={false}
@@ -187,9 +184,9 @@ const SmallScreen = () => {
             }}
           >
             <Form>
-            
               <div className={styles.card}>
                 <p className={styles.seller}>Safety Tips</p>
+
                 <ul>
                   {safetyTips.map((tip) => (
                     <li
@@ -198,7 +195,7 @@ const SmallScreen = () => {
                         listStyleType: "disc",
                         marginLeft: "20px",
                         paddingBlock: "0.2rem",
-                        fontSize:'1.4rem'
+                        fontSize: "1.4rem",
                       }}
                     >
                       {tip.text}
@@ -206,12 +203,21 @@ const SmallScreen = () => {
                   ))}
                 </ul>
               </div>
+
               <div className={styles.card}>
                 <p className={styles.seller}>Seller’s Information </p>
+
                 <div className={styles.flexSeller}>
-                  <Image src={ProductIcon} width={'2rem'} alt="ProductIcon" preview={false} />
+                  <Image
+                    src={ProductIcon}
+                    width={"2rem"}
+                    alt="ProductIcon"
+                    preview={false}
+                  />
+
                   <div>
                     <p className={styles.name}>rinsola’s Store</p>
+
                     <div className={styles.starWrapper}>
                       <span className={styles.star}>
                         <Image
@@ -227,7 +233,6 @@ const SmallScreen = () => {
                     </div>
                   </div>
                   <p className={styles.member}>Member Since Sept 2024</p>
-
                 </div>
 
                 <div className={styles.social}>
@@ -236,16 +241,19 @@ const SmallScreen = () => {
                     alt="WhatsappLogo"
                     preview={false}
                   />
+
                   <Image
                     src={InstagramIcon}
                     alt="InstagramIcon"
                     preview={false}
                   />
+
                   <Image
                     src={FaceBookStoreIcon}
                     alt="FaceBookStoreIcon"
                     preview={false}
                   />
+
                   <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
                 </div>
 
@@ -258,7 +266,7 @@ const SmallScreen = () => {
 
                   <Button text="Follow" variant="white" />
                 </div>
-             
+
                 <Button
                   icon={<Image src={CallLogo} alt="CallLogo" preview={false} />}
                   text="Click To Show Number"
@@ -278,6 +286,7 @@ const SmallScreen = () => {
                 </div>
 
                 <div></div>
+
                 <Button
                   className={styles.green}
                   icon={<Image src={CopyIcon} alt="CopyIcon" preview={false} />}
@@ -304,12 +313,11 @@ const SmallScreen = () => {
                   </div>
                 </div>
               </div>
-
-          
             </Form>
           </Formik>
         </div>
       </div>
+
       {activeKey === "2" && (
         <div>
           <Formik

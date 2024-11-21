@@ -166,7 +166,7 @@ const Header = () => {
 
       {/* Right Nav - Shown only on large screens */}
       <div className={styles.rightNav}>
-        <Button onClick={()=>{handleNavigateToLogin()}} className={styles.btn}>Get Started</Button>
+        <Button onClick={handleNavigateToLogin} className={styles.btn}>Get Started</Button>
       </div>
 
       {/* Modal for Categories */}
