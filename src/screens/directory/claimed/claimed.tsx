@@ -65,10 +65,10 @@ const Claimed = () => {
     window.scrollTo(0, 0);
   }, [navigate]);
 
-  const handleNavigateToSubPlan = useCallback(() => {
-    navigate(`/subscription-pricing`);
-    window.scrollTo(0, 0);
-  }, [navigate]);
+  // const handleNavigateToSubPlan = useCallback(() => {
+  //   navigate(`/subscription-pricing`);
+  //   window.scrollTo(0, 0);
+  // }, [navigate]);
 
   return (
     <div className="wrapper">
