@@ -14,6 +14,9 @@ import { countUpTo } from "../../home/trend";
 import shareIcon from "../../../assets/share 2.svg";
 import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
+import TimeIcon from "../../../assets/time42.svg";
+import LocationIcon from "../../../assets/locationnot.svg";
+import CallIcon from "../../../assets/callclaim.svg";
 
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const NotClaim = () => {
@@ -98,7 +101,7 @@ const NotClaim = () => {
 
                 <div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
 
                     <div className={styles.open}>
                       <p>Opening Hours</p>
@@ -106,11 +109,11 @@ const NotClaim = () => {
                     </div>
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={LocationIcon} alt="LocationIcon" preview={false} />
                     4, blinkers street, Lekki, Nigeria
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={CallIcon} alt="CallIcon" preview={false} />
 
                     <p>09012345678</p>
                   </div>

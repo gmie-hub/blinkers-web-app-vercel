@@ -3,7 +3,6 @@ import { Image, Pagination } from "antd";
 import Product2 from "../../assets/Image.svg";
 import Product3 from "../../assets/Image (1).svg";
 import { useCallback, useState } from "react";
-import favorite from "../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
@@ -150,7 +149,6 @@ const Directory = () => {
                 placeholder="Category"
                 options={[]}
               /> */}
-           
 
               <SearchInput
                 placeholder="Search businesses..."
@@ -169,9 +167,9 @@ const Directory = () => {
             key={card.id}
             onClick={() => handleNavigateToNotClaim(card.id)}
           >
-            <div className={styles.favoriteIcon}>
+            {/* <div className={styles.favoriteIcon}>
               <Image width={30} src={favorite} alt="Favorite" preview={false} />
-            </div>
+            </div> */}
             {card.icon}
             <div className={styles.productList}>
               <p>{card.title}</p>

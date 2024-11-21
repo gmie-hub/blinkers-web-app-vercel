@@ -5,6 +5,8 @@ import Product3 from "../../../assets/Image (1).svg";
 import BackIncon from "../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
+import LocationIcon from "../../../assets/locationrelated.svg";
+import CallIcon from "../../../assets/callrelated.svg";
 
 // Data array
 const cardData = [
@@ -88,9 +90,22 @@ const RelatedBusinesses = ({
             <div className={styles.promoImage} key={card.id}>
               {card.icon}
               <div className={styles.productList}>
+
                 <p>{card.title}</p>
+                <div className={styles.info}>
+                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
+
                 <p>{card.location}</p>
+
+                </div>
+                <div className={styles.info}>
+                <Image width={20} height={20} src={CallIcon} alt="CallIcon" preview={false} />
+
                 <p>{card.amount}</p>
+
+                </div>
+                <p className={styles.subjectBg}>Fashion Accessories</p>
+
               </div>
             </div>
           ))}
