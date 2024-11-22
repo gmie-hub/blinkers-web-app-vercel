@@ -28,7 +28,11 @@
 .mainContainer {
   // display: flex;
   gap: 4rem;
-  padding-block: 5.6rem;
+  padding-block: 6.4rem;
+  @media screen and (max-width: 768px) {
+    margin-block: 2.4rem;
+
+  }
 }
 
 .card {

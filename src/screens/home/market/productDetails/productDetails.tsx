@@ -5,9 +5,9 @@ import ProductIcon from "../../../../assets/Ellipse 840.svg";
 import Button from "../../../../customs/button/button";
 import WhatsappLogo from "../../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../../assets/instagram.svg";
-import FaceBookStoreIcon from "../../../../assets/facebook.svg";
+import FaceBookStoreIcon from "../../../../assets/fbIcon.svg";
 import BrowseLogo from "../../../../assets/Icon (4).svg";
-import CallLogo from "../../../../assets/call.svg";
+import CallLogo from "../../../../assets/callsp.svg";
 import FlagLogo from "../../../../assets/flag.svg";
 import CopyIcon from "../../../../assets/copy.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
@@ -257,6 +257,8 @@ const BigScreen = () => {
                     src={FaceBookStoreIcon}
                     alt="FaceBookStoreIcon"
                     preview={false}
+                    // width={40}
+                    height={32}
                   />
                   <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
                 </div>

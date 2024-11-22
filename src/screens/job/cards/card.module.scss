@@ -1,0 +1,75 @@
+.whyWrapper {
+    margin: 0; /* Remove any default margins */
+    padding: 0; /* Remove padding */
+    width: 100%; /* Ensure the wrapper spans the full width */
+    margin-block: 4rem;
+  }
+  
+  .cardContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap to the next line when necessary */
+    justify-content: space-between; /* Align items with no extra space at edges */
+    gap: 2.4rem; /* Space between cards */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    width: 100%; /* Ensure the container spans the full width */
+  }
+  
+  .chooseCard {
+    border: #EEEEEE solid 1px;
+    flex: 1 1 calc(25% - 2.4rem); /* Adjust width for 4 cards per row, considering the gap */
+    background-color: var(--color-primary-white);
+    padding-block: 1.2rem;
+    padding-inline: 1.6rem;
+    box-shadow: 0px 4px 40px 0px #00990012;
+    box-sizing: border-box;
+    border-top-right-radius: 0.8rem;
+    border-bottom-left-radius: 0.8rem;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    gap: 1.2rem; /* Space between card elements */
+    max-width: calc(25% - 2.4rem);
+    @media (max-width: 1024px) {
+      flex: 1 1 calc(50% - 2.4rem); /* 2 cards per row on medium screens */
+    }
+  
+    @media (max-width: 600px) {
+      flex: 1 1 100%; /* 1 card per row on small screens */
+    }
+  }
+  
+  .chooseCard h3 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--color-header-text);
+    margin: 0; /* Remove default margin */
+  }
+  
+  .chooseCard p {
+    color: var(--color-body-text);
+    margin: 0; /* Remove default margin */
+  }
+  
+  .cardWrapper {
+    display: flex; /* Use flexbox for the card container */
+    align-items: flex-start; /* Align items to the top */
+    gap: 0.5rem; /* Add space between icon and text */
+  }
+  
+  .icon {
+    font-size: 2rem; /* Adjust icon size */
+    margin-right: 1rem; /* Space between icon and text */
+  }
+  
+  .textContent {
+    display: flex;
+    flex-direction: column; /* Stack text vertically */
+    // justify-content: center; /* Center text vertically */
+    text-align: start
+  }
+  
+  .textContent p {
+    margin: 0; /* Remove default margin */
+    font-size: 1rem; /* Adjust text size */
+  }
+  

@@ -25,6 +25,7 @@ export const routes = {
     ClaimBusiness: "/claim-business",
 
     SubmittedSuccessfully: "/submittedsuccessfully",
+    job:"/jobs"
   },
 
   auth: {

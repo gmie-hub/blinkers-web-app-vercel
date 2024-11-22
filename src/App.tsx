@@ -15,7 +15,7 @@ import RelatedAds from "./screens/home/relatedAds/relatedAds";
 import Review from "./screens/home/market/review/review";
 import SellersProfile from "./screens/home/sellersProfile/sellersProfile";
 import SellersPostedAds from "./screens/home/sellersProfile/postedAds/adsPostedbySeller";
-// import WriteReview from "./screens/home/market/writeReview/writeReview";
+import WriteReview from "./screens/home/market/writeReview/writeReview";
 import SubmittedSuccessfully from "./customs/detailsubmitted";
 import Login from "./screens/Auth/login";
 import AuthLayout from "./screens/Auth/authLayout";
@@ -26,6 +26,7 @@ import VerificationCode from "./screens/Auth/verificationCode";
 import ContactUs from "./screens/contactUs/contactUs";
 import AboutUs from "./screens/aboutUs/aboutUs";
 import FAQ from "./screens/FAQ/faq";
+import Job from "./screens/job/job";
 
 function App() {
   const appRoutes = [
@@ -37,7 +38,7 @@ function App() {
     { path: routes.page.review, element: <Review /> },
     { path: routes.page.sellersProfile, element: <SellersProfile /> },
     { path: routes.page.posetedAdsBySeller, element: <SellersPostedAds /> },
-    // { path: routes.page.writeReview, element: <WriteReview /> },
+    { path: routes.page.writeReview, element: <WriteReview /> },
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },
@@ -46,6 +47,7 @@ function App() {
     { path: routes.page.SubscriptionPricing, element: <SubscriptionPricing /> },
     { path: routes.page.ClaimBusiness, element: <ClaimBusiness /> },
     { path: routes.page.ClaimedBusiness, element: <ClaimedBusiness /> },
+    { path: routes.page.job, element: <Job /> },
 
     {
       path: routes.page.SubmittedSuccessfully,

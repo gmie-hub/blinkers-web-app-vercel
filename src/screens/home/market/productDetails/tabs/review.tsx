@@ -118,7 +118,7 @@ export default function Reviews({
                   text="Write A Review"
                   variant="transparent"
                   className="buttonStyle"
-                  onClick={handleNavigateToReview}
+                  onClick={()=>{navigate('/write-review')}}
                   icon={
                     <Image
                       width={20}

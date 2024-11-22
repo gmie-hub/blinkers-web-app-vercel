@@ -4,7 +4,7 @@ import ProductIcon from "../../../../assets/Ellipse 840.svg";
 import Button from "../../../../customs/button/button";
 import WhatsappLogo from "../../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../../assets/instagram.svg";
-import FaceBookStoreIcon from "../../../../assets/facebook.svg";
+import FaceBookStoreIcon from "../../../../assets/fbIcon.svg";
 import BrowseLogo from "../../../../assets/Icon (4).svg";
 import CallLogo from "../../../../assets/call.svg";
 import FlagLogo from "../../../../assets/flag.svg";
@@ -245,6 +245,7 @@ const SmallScreen = () => {
                     src={FaceBookStoreIcon}
                     alt="FaceBookStoreIcon"
                     preview={false}
+                    height={32}
                   />
                   <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
                 </div>

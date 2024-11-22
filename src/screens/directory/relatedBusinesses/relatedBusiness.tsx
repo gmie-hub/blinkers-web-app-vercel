@@ -69,7 +69,7 @@ const RelatedBusinesses = ({
   }, [navigate]);
 
   return (
-    <div>
+    <div className="wrapper">
       {showHeading && (
         <div onClick={() => handleNavigateToNotClaim()} className={styles.back}>
           <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />

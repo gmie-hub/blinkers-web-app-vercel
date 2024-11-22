@@ -1,8 +1,19 @@
 .marketplaceWrapper {
+  margin-block-start: 6.4rem;
+  margin-block-end: 15.4rem;
+
+  @media (max-width: 600px) {
+    margin-block-start: 2.4rem;
+    margin-block-end: 5.4rem;
+
+  }
+}
+.whyWrapper{
   margin-block: 6.4rem;
 
   @media (max-width: 600px) {
     margin-block: 2.4rem;
+
   }
 }
 .cardContainer {
@@ -35,12 +46,14 @@
   }
 }
 
-// .card h3 {
-//   font-weight: 500;
-//   font-size: 2rem;
-//   padding-block: 1rem;
-//   display: flex;
-// }
+.card h3 {
+  font-weight: 500;
+  font-size: 2rem;
+  padding-block-start: 1.2rem;
+  padding-block-end: 0.8rem;
+
+  display: flex;
+}
 
 .card p {
   color: var(--color-body-text);
@@ -88,6 +101,7 @@
   font-size: 4rem;
   font-weight: 600;
   color: var(--color-header-text);
+  padding-block-end: 3.2rem;
 }
 
 .leftSection {

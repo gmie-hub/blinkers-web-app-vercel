@@ -38,7 +38,7 @@ export default function Reviews() {
 
   const handleNavigateToProductDetails = useCallback(
     (id?: number) => {
-      navigate(`/product-details/${id}`);
+      navigate(-1);
       window.scrollTo(0, 0);
     },
     [navigate]

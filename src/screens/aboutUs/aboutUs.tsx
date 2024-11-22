@@ -1,20 +1,23 @@
 import Icon from "/Container.svg";
 import styles from "./aboutUs.module.scss";
 import { Image } from "antd";
-import cardIcon from "../../assets/image 21.svg";
 import Main from "./secondSection.tsx";
 import WhyChooseUs from "./whyChooseUs.tsx";
 import Aim from "./aim/aims.tsx";
+import Image1 from "../../assets/about1.svg";
+import Image2 from "../../assets/about2.svg"
+import Image3 from "../../assets/about3.svg";
+import Image4 from "../../assets/about4.svg";
 
 const cardData = [
   {
     id: 1,
     icon: (
       <Image
-        width="100%"
-        height={"19.3rem"}
-        src={cardIcon}
-        alt="cardIcon"
+        // width="23rem"
+        // height={"19.3rem"}
+        src={Image1}
+        alt="Image1"
         preview={false}
       />
     ),
@@ -23,10 +26,10 @@ const cardData = [
     id: 2,
     icon: (
       <Image
-        width="100%"
-        height={"19.3rem"}
-        src={cardIcon}
-        alt="cardIcon"
+      // width="23rem"
+      // height={"19.3rem"}
+        src={Image2}
+        alt="Image2"
         preview={false}
       />
     ),
@@ -35,10 +38,10 @@ const cardData = [
     id: 3,
     icon: (
       <Image
-        width="100%"
-        height={"19.3rem"}
-        src={cardIcon}
-        alt="cardIcon"
+      // width="23rem"
+      // height={"19.3rem"}
+        src={Image3}
+        alt="Image3"
         preview={false}
       />
     ),
@@ -47,10 +50,10 @@ const cardData = [
     id: 4,
     icon: (
       <Image
-        width="100%"
-        height={"19.3rem"}
-        src={cardIcon}
-        alt="cardIcon"
+      // width="23rem"
+      // height={"19.3rem"}
+        src={Image4}
+        alt="Image4"
         preview={false}
       />
     ),

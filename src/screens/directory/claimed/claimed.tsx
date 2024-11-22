@@ -16,14 +16,18 @@ import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
 import StarYellow from "../../../assets/staryellow.svg";
 import verifyIcon from "../../../assets/verify.svg";
 import copyIcon from "../../../assets/copywhite.svg";
-import WriteReview from "../../home/market/writeReview/writeReview";
-import BackIcon from "../../../assets/back.svg";
-
+// import WriteReview from "../../home/market/writeReview/writeReview";
+import TimeIcon from "../../../assets/time42.svg";
+import LocationIcon from "../../../assets/locationnot.svg";
+import CallIcon from "../../../assets/callclaim.svg";
+import WebICon from "../../../assets/webicon.svg";
+import MailIcon from "../../../assets/mailicon.svg";
+import Reviews from "../../home/market/productDetails/tabs/review";
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const Claimed = () => {
   const navigate = useNavigate();
   const [showContent, setShowContent] = useState(true); // Manage review form visibility
-  const [showWriteReview, setShowWriteReview] = useState(false); // Manage card visibility
+  // const [showWriteReview, setShowWriteReview] = useState(false); // Manage card visibility
 
   const [openShare, setOpenShare] = useState(false); 
 
@@ -44,21 +48,28 @@ const Claimed = () => {
         });
     }, [textToCopy]);
 
-  const handleNavigateToWriteReview = () => {
-    setShowContent(false); // Hide the review form
-    setShowWriteReview(true); // Show the card
-    window.scrollTo(0, 0);
-  };
+  // const handleNavigateToWriteReview = () => {
+  //   setShowContent(false); // Hide the review form
+  //   setShowWriteReview(true); // Show the card
+  //   window.scrollTo(0, 0);
+  // };
 
-  const handleNavigateToBack = () => {
-    setShowContent(true); // Hide the review form
-    setShowWriteReview(false); // Show the card
+  // const handleNavigateToBack = () => {
+  //   setShowContent(true); // Hide the review form
+  //   setShowWriteReview(false); // Show the card
+  //   window.scrollTo(0, 0);
+  // };
+  // const handleNavigateToWriteReview = useCallback(() => {
+  //   navigate(`/write-review`);
+  //   window.scrollTo(0, 0);
+  // }, [navigate]);
+
+
+  const handleNavigateTReview = useCallback(() => {
+    navigate(`/review`);
     window.scrollTo(0, 0);
-  };
-//   const handleNavigateToWriteReview = useCallback(() => {
-//     navigate(`/write-review`);
-//     window.scrollTo(0, 0);
-//   }, [navigate]);
+  }, [navigate]);
+
 
   const handleNavigateToRelatedBusiness = useCallback(() => {
     navigate(`/related-businesses`);
@@ -120,7 +131,7 @@ const Claimed = () => {
                   <div className={styles.starWrapper2}>
                     <div
                       onClick={() => {
-                        handleNavigateToWriteReview();
+                        navigate('/write-review');
                       }}
                       className={styles.message}
                     >
@@ -143,7 +154,7 @@ const Claimed = () => {
 
                 <div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
 
                     <div className={styles.open}>
                       <p>Opening Hours</p>
@@ -151,21 +162,21 @@ const Claimed = () => {
                     </div>
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={LocationIcon} alt="LocationIcon" preview={false} />
                     4, blinkers street, Lekki, Nigeria
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={CallIcon} alt="CallIcon" preview={false} />
 
                     <p>09012345678</p>
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={MailIcon} alt="MailIcon" preview={false} />
 
                     <p>shopwithrinsy@gmail.com</p>
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={WebICon} alt="WebICon" preview={false} />
 
                     <p>www.shopwithrinsy.com</p>
                   </div>
@@ -213,8 +224,27 @@ const Claimed = () => {
                 <p>No Videos available yet</p>
               </div>
               <div className={styles.review}>
+                <div className={styles.reviewbtn}>
                 <h1>Reviews</h1>
-                <p>No Reviews available yet</p>
+
+
+                <div
+                onClick={handleNavigateTReview}
+                className={styles.btnWrapper}
+              >
+                <p className={styles.btn}>See All</p>
+                <Image
+                  width={20}
+                  src={ArrowIcon}
+                  alt="ArrowIcon"
+                  preview={false}
+                />
+              </div>
+
+                </div>
+                
+                {/* <p>No Reviews available yet</p> */}
+                <Reviews limit={3}  canSeeAllBtn={false}/>,
               </div>
             </div>
           </div>
@@ -242,19 +272,7 @@ const Claimed = () => {
         </>
       )}
 
-      {showWriteReview && (
-        <div>
-        <div
-          onClick={() => handleNavigateToBack()}
-          className={styles.back}
-        >
-          <Image width={9} src={BackIcon} alt="BackIcon" preview={false} />
-          <p>Back</p>
-        </div>
-              <WriteReview />
-        </div>
-  
-      )}
+    
       <Modal
         open={openShare}
         onCancel={() => setOpenShare(false)}
