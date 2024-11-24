@@ -5,7 +5,7 @@
 /* Header Styles */
 .header {
   width: 100%;
-  background-color: #009900;
+  background-color: var(--color-primary-green);
   padding: 0.8rem 0;
   text-align: center;
   border-top-left-radius: 10px;
@@ -45,7 +45,7 @@
 
 .year {
   font-size: 1.4rem;
-  color: #707070;
+  color: var(--color-body-text);
 }
 
 .subBtn {

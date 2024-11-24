@@ -107,8 +107,8 @@
 }
 .WhiteButtonStyle {
   @extend .buttonStyle;
-  background-color: #ffffff;
-  color: #009900;
+  background-color: var(--color-primary-white);
+  color: var(--color-primary-green);
 }
 .btnFlex {
   display: flex;
@@ -122,4 +122,3 @@
   font-size: 2.5rem;
   font-weight: bold;
 }
-    

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import {useState } from "react";
 import { Image, Modal } from "antd";
 import BlinkersLogo from "../../assets/Logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -13,9 +13,9 @@ const Header = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleNavigateToLogin = useCallback(() => {
+  const handleNavigateToLogin = () => {
     navigate("/login");
-  }, [navigate]);
+  };
 
   // Function to toggle category modal visibility
   const handleCategoryClick = () => {
@@ -42,6 +42,8 @@ const Header = () => {
         className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}
       >
         <NavLink
+                  onClick={()=>{setIsMenuOpen(false)}}
+
           to=""
           className={({ isActive }) =>
             isActive ? styles.activeNavLink : styles.navLink
@@ -62,6 +64,7 @@ const Header = () => {
 
         {navItems.map((item) => (
           <NavLink
+          onClick={()=>{setIsMenuOpen(false)}}
             key={item.id}
             to={item.route}
             className={({ isActive }) =>
@@ -75,7 +78,9 @@ const Header = () => {
         {/* Get Started button - Displayed under nav items on small screens */}
         {isMenuOpen && (
           <div className={styles.mobileButtonWrapper}>
-            <Button className={styles.btn}>Get Started</Button>
+            <Button    onClick={() => {
+            handleNavigateToLogin();
+          }}className={styles.btn}>Get Started</Button>
           </div>
         )}
       </div>
@@ -105,7 +110,7 @@ const Header = () => {
           paddingBlockStart: "5px",
         }}
       >
-        <CategoriesCard />
+        <CategoriesCard handleClose={()=>setIsCardVisible(false)} />
       </Modal>
     </nav>
   );

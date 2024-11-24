@@ -1,11 +1,9 @@
-import styles from "./relatedBusiness.module.scss";
+import styles from "./styles.module.scss";
 import { Image } from "antd";
 import Product2 from "../../../assets/Image.svg";
 import Product3 from "../../../assets/Image (1).svg";
 import BackIncon from "../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
-import LocationIcon from "../../../assets/locationrelated.svg";
-import CallIcon from "../../../assets/callrelated.svg";
 
 // Data array
 const cardData = [
@@ -49,11 +47,19 @@ const cardData = [
     amount: "₦40,000",
     rating: 4,
   },
+  {
+    id: 6,
+    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+    title: "Male Packing Shirt",
+    location: "Lekki, Lagos",
+    amount: "₦40,000",
+    rating: 4,
+  },
   // Add more data as needed...
 ];
 
 // Main component with `limit` prop to control how many data to display
-const RelatedBusinesses = ({
+const ImagePage = ({
   limit = cardData.length,
   showHeading = true,
 }: {
@@ -62,24 +68,28 @@ const RelatedBusinesses = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleNavigateToNotClaim = () => {
-    navigate(`/not-claim/1`);
+  const handleNavigateToPrevious = () => {
+    navigate(-1)
     window.scrollTo(0, 0);
   }
 
   return (
-    <div className="wrapper">
+    <div className="wrapper" >
+
       {showHeading && (
-        <div onClick={() => handleNavigateToNotClaim()} className={styles.back}>
+        <div onClick={() => handleNavigateToPrevious()} className={styles.back}>
           <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
           <p>Back</p>
         </div>
       )}
+      <div  className={styles.imageWrapper} >
 
-      <div>
+     
+
+      <div  className={styles.InnerWrapper} >
         {showHeading && (
           <div className={styles.promoHead}>
-            <p>Related Businesses</p>
+            <p>Videos</p>
           </div>
         )}
 
@@ -88,30 +98,14 @@ const RelatedBusinesses = ({
           {cardData.slice(0, limit).map((card) => (
             <div className={styles.promoImage} key={card.id}>
               {card.icon}
-              <div className={styles.productList}>
-
-                <p>{card.title}</p>
-                <div className={styles.info}>
-                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
-
-                <p>{card.location}</p>
-
-                </div>
-                <div className={styles.info}>
-                <Image width={20} height={20} src={CallIcon} alt="CallIcon" preview={false} />
-
-                <p>{card.amount}</p>
-
-                </div>
-                <p className={styles.subjectBg}>Fashion Accessories</p>
-
-              </div>
+             
             </div>
           ))}
         </section>
+      </div>
       </div>
     </div>
   );
 };
 
-export default RelatedBusinesses;
+export default ImagePage;

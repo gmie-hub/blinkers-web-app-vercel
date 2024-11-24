@@ -4,7 +4,7 @@ import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
 import Product2 from "../../assets/Image.svg";
 import Product3 from "../../assets/Image (1).svg";
-import { useCallback, useState } from "react";
+import {useState } from "react";
 import favorite from "../../assets/Icon + container.svg";
 import righIcont from "../../assets/arrow-right-green.svg";
 import { useNavigate } from "react-router-dom";
@@ -66,14 +66,14 @@ const RelatedAds = () => {
   const endIndex = startIndex + pageSize;
   const currentData = cardData.slice(startIndex, endIndex);
 
-  const handleNavigateToRelatedAds = useCallback(
-    () => {
-      navigate('/related-ads');
-      window.scrollTo(0, 0); // Scrolls to the top of the page
+  const handleNavigateToRelatedAds = ()=>{
+    navigate('/related-ads');
+    window.scrollTo(0, 0); // Scrolls to the top of the page
 
-    },
-    [navigate]
-  );
+  }
+ 
+   
+
 
   return (
     <div className={styles.relatedWrapper}>

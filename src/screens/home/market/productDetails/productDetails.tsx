@@ -22,7 +22,7 @@ import Reviews from "./tabs/review";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
@@ -108,10 +108,10 @@ const BigScreen = () => {
     setActiveKey(key);
   };
 
-  const handleNavigateToSellersProfile = useCallback(() => {
+  const handleNavigateToSellersProfile = () => {
     navigate(`/sellers-profile`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   return (
     <div className="wrapper">

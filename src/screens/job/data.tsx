@@ -1,6 +1,4 @@
 import { Image } from "antd";
-import Image1 from "../../assets/why1.svg";
-import Image2 from "../../assets/why2.svg";
 import Image3 from "../../assets/why3.svg";
 export const cardData = [
   {

@@ -1,10 +1,7 @@
 import styles from "./index.module.scss";
 import { Image } from "antd";
-import cardIcon from "../../../assets/image 7.svg";
 import Image4 from "../../../assets/image 4.svg";
-import Image8 from "../../../assets/image 8.svg";
 import Image24 from "../../../assets/image 24.svg";
-
 import Image5 from "../../../assets/about5.svg";
 import Image6 from "../../../assets/about6.svg";
 import Image7 from "../../../assets/about7.svg";

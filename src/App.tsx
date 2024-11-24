@@ -27,6 +27,12 @@ import ContactUs from "./screens/contactUs/contactUs";
 import AboutUs from "./screens/aboutUs/aboutUs";
 import FAQ from "./screens/FAQ/faq";
 import Job from "./screens/job/job";
+import JobDetails from "./screens/job/jobDetails/jobDetails";
+import JobLikeThis from "./screens/job/jobLikeThis/jobsLikeThis";
+
+import Images from "./screens/directory/gallery/image";
+import Videos from "./screens/directory/gallery/video";
+
 
 function App() {
   const appRoutes = [
@@ -48,6 +54,11 @@ function App() {
     { path: routes.page.ClaimBusiness, element: <ClaimBusiness /> },
     { path: routes.page.ClaimedBusiness, element: <ClaimedBusiness /> },
     { path: routes.page.job, element: <Job /> },
+    { path: routes.page.jobDetails, element: <JobDetails /> },
+    { path: routes.page.JobLikeThis, element: <JobLikeThis /> },
+
+    { path: routes.page.images, element: <Images /> },
+    { path: routes.page.videos, element: <Videos /> },
 
     {
       path: routes.page.SubmittedSuccessfully,

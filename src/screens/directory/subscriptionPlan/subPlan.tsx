@@ -40,7 +40,7 @@ const SubPlan = () => {
                   display: "flex",
                   alignItems: "center",
                   marginBottom: "0.8rem",
-                  color:'#707070'
+                  color:'var(--color-body-text)'
                 }}
               >
                 <CheckOutlined style={{ color: "#009900", marginRight: "8px" }} />

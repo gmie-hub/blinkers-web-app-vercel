@@ -7,7 +7,6 @@ import StarIconGreen from "../../../../../assets/star.svg";
 import EmptyIcon from "../../../../../assets/Empty Image.svg";
 import { Image } from "antd";
 import Button from "../../../../../customs/button/button";
-import { useCallback } from "react";
 
 // Dummy array for business reviews
 export const reviewData: any = [
@@ -62,10 +61,10 @@ export default function Reviews({
   const businessReviewErrorMessage = "Failed to load reviews";
 
   console.log(businessReviewData?.length, "len");
-  const handleNavigateToReview = useCallback(() => {
+  const handleNavigateToReview = () => {
     navigate(`/review`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   return (
     <div style={{ minWidth: "100%" }}>

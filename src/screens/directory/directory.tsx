@@ -2,7 +2,7 @@ import styles from "./directory.module.scss";
 import { Image, Pagination } from "antd";
 import Product2 from "../../assets/Image.svg";
 import Product3 from "../../assets/Image (1).svg";
-import { useCallback, useState } from "react";
+import {useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
@@ -122,12 +122,11 @@ const Directory = () => {
     setCurrentPage(page);
   };
 
-  const handleNavigateToNotClaim = useCallback(
+  const handleNavigateToNotClaim = 
     (id: number) => {
       navigate(`/not-claim/${id}`);
-    },
-    [navigate]
-  );
+    }
+  
 
   return (
     <div className="wrapper">

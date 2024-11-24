@@ -1,9 +1,6 @@
 import styles from "./job.module.scss";
 import { Image, Pagination } from "antd";
-import Product2 from "../../assets/Image.svg";
-import Product3 from "../../assets/Image (1).svg";
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {  useState } from "react";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
 import Button from "../../customs/button/button";
@@ -17,24 +14,18 @@ import { cardData } from "./data";
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8; // Set the number of items per page
-  const navigate = useNavigate();
 
   // Calculate the data to display for the current page
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentCards = cardData.slice(indexOfFirst, indexOfLast);
+//   const indexOfLast = currentPage * itemsPerPage;
+//   const indexOfFirst = indexOfLast - itemsPerPage;
+//   const currentCards = cardData.slice(indexOfFirst, indexOfLast);
 
   // Handle page change
   const onPageChange = (page: any) => {
     setCurrentPage(page);
   };
 
-  const handleNavigateToNotClaim = useCallback(
-    (id: number) => {
-      navigate(`/not-claim/${id}`);
-    },
-    [navigate]
-  );
+
 
   return (
     <div className="wrapper">

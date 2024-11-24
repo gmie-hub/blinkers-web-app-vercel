@@ -20,7 +20,7 @@
   display: flex;
   flex-wrap: wrap; // Allow the cards to wrap to the next line when necessary
   justify-content: center;
-  gap: 2.4rem;
+  gap: 3.5rem;
   text-align: start;
   row-gap: 6.8rem;
   @media (max-width: 600px) {
@@ -35,10 +35,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 31%; // Default width for 3 cards per row
   box-sizing: border-box;
-
+  // width: calc(33% - 2.4rem);
   /* Adjust card width if there's only one card */
   @media (max-width: 1024px) {
-    width: 48%; // On medium screens (tablet or small desktop), show 2 cards per row
+    width: 50%; // On medium screens (tablet or small desktop), show 2 cards per row
   }
 
   @media (max-width: 600px) {
@@ -67,7 +67,7 @@
   padding-block-end: 2.4rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 31%; // Default width for 3 cards per row
-  border-bottom: 4px solid #009900; // Green border
+  border-bottom: 4px solid var(--color-primary-green); // Green border
   box-sizing: border-box;
   border-right: solid #009900 4px;
   border-top-right-radius: 0.8rem;

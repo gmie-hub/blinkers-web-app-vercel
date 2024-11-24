@@ -1,9 +1,5 @@
 import styles from "./secondSection.tsx/index.module.scss";
 import { Image } from "antd";
-import cardIcon from "../../assets/image 7.svg";
-import Image4 from "../../assets/image 4.svg";
-import Image8 from "../../assets/image 8.svg";
-
 import Image1 from "../../assets/why1.svg";
 import Image2 from "../../assets/why2.svg";
 import Image3 from "../../assets/why3.svg";

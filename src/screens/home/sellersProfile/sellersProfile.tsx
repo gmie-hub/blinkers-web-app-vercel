@@ -3,7 +3,6 @@ import styles from "./sellersProfile.module.scss";
 import Reviews, { reviewData } from "../market/productDetails/tabs/review";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { Image } from "antd";
 import ProductIcon from "../../../assets/Ellipse 840.svg";
@@ -27,20 +26,20 @@ const SellerProfile = () => {
   const hasReviews = reviewData?.lenght;
   console.log(hasReviews, "hasReviews");
 
-  const handleNavigateToReview = useCallback(() => {
+  const handleNavigateToReview = () => {
     navigate(`/review`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
-  const handleNavigateToSellersAds = useCallback(() => {
+  const handleNavigateToSellersAds = () => {
     navigate(`/sellers-posted-ads`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
-  const handleNavigateToWriteReview = useCallback(() => {
+  const handleNavigateToWriteReview = () => {
     navigate(`/write-review`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   return (
     <>

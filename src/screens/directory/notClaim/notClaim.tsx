@@ -1,7 +1,7 @@
 import styles from "./notClaim.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import {  useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { Image, message, Modal } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
@@ -33,7 +33,7 @@ const NotClaim = () => {
 
     const textToCopy = "blinkers/ shopwithrinsyaccderb/e";
   
-    const handleCopyLink = useCallback(() => {
+    const handleCopyLink = () => {
       navigator.clipboard
         .writeText(textToCopy)
         .then(() => {
@@ -42,7 +42,7 @@ const NotClaim = () => {
         .catch(() => {
           message.error("Failed to copy link. Please try again.");
         });
-    }, [textToCopy]);
+    }
 
   //   const hasReviews = reviewData?.lenght;
   //   console.log(hasReviews , "hasReviews")
@@ -54,23 +54,24 @@ const NotClaim = () => {
 
   };
 
-  const handleNavigateToRelatedBusiness = useCallback(() => {
+  const handleNavigateToRelatedBusiness =() => {
     navigate(`/related-businesses`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
-  const   handleNavigateToSubPlan = useCallback(() => {
+  const   handleNavigateToSubPlan = () => {
     navigate(`/subscription-pricing`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
-    const handleNavigateToWriteReview = useCallback(() => {
+    const handleNavigateToWriteReview =() => {
     navigate(`/write-review`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   return (
-    <div className="wrapper">
+    <>
+        <div className="wrapper">
       {showContent && (
         <>
           <div className={styles.mainContainer}>
@@ -218,8 +219,8 @@ const NotClaim = () => {
               </div>
             </div>
 
-            <RelatedBusinesses showHeading={false} limit={4} />
           </div>
+
         </>
       )}
 
@@ -262,6 +263,8 @@ const NotClaim = () => {
         </div>
       </Modal>
     </div>
+    <RelatedBusinesses showHeading={false} limit={4} />
+</>
   );
 };
 export default NotClaim;

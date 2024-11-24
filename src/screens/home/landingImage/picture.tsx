@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Button from "../../../customs/button/button";
 import styles from "./index.module.scss";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons"; // Antd icons for arrows
@@ -27,10 +27,9 @@ const PictureBg = () => {
     );
   };
 
-  const handleNavigateToMarket = useCallback(() => {
+  const handleNavigateToMarket = () => {
     navigate("/market");
-  }, [navigate]);
-
+  }
   // Function to handle moving to the previous image
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) =>

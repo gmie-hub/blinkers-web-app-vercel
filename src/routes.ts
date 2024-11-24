@@ -13,10 +13,9 @@ export const routes = {
     AboutUS: "/about-us",
     faq: "/faq",
 
-
     directory: "/directory",
     NotClaimed: "/not-claim/:id",
-    relatedBusinesses:"/related-businesses",
+    relatedBusinesses: "/related-businesses",
     Subscription: "/subscription",
 
     SubscriptionPricing: "/subscription-pricing",
@@ -25,7 +24,12 @@ export const routes = {
     ClaimBusiness: "/claim-business",
 
     SubmittedSuccessfully: "/submittedsuccessfully",
-    job:"/jobs"
+    job: "/jobs",
+    jobDetails: "/job-details",
+    JobLikeThis: "/job/more-jobs-like-this",
+
+    images: "/images",
+    videos: "/videos",
   },
 
   auth: {
@@ -34,7 +38,5 @@ export const routes = {
     resetPassword: "/reset-password",
     passwordResetSuccessful: "/password-reset-successful",
     VerificationCode: "/verification-code",
-
-   
   },
 };

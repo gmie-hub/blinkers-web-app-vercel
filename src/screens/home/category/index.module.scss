@@ -30,10 +30,9 @@
   border-radius: 5px;
   font-size: 16px;
   color: #333;
-  & > p {
-    cursor: pointer; 
+  width: max-content;
+    cursor: pointer; /* Add this line to make the items clickable */
 
-  }
 }
 
 /* Media query for tablet and small screens (max-width: 1024px) */

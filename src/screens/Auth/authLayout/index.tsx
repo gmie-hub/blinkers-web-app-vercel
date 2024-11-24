@@ -1,14 +1,15 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
 import { Image } from "antd";
 import BlinkersLogo from "../../../assets/Frame 1618868702.svg";
 import Stars from "../../../assets/Stars.svg";
 
 const AuthLayout = () => {
+  const navigate =useNavigate()
   return (
     <main className={styles.container}>
       <section className={styles.leftSide}>
-        <div className={styles.logoContainer}>
+        <div onClick={()=>navigate('/')} className={styles.logoContainer}>
           <Image src={BlinkersLogo} alt="Logo" preview={false} />
         </div>
 

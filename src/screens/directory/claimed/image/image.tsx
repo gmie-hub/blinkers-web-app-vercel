@@ -1,11 +1,7 @@
-import styles from "./relatedBusiness.module.scss";
+import styles from "./image.module.scss";
 import { Image } from "antd";
-import Product2 from "../../../assets/Image.svg";
-import Product3 from "../../../assets/Image (1).svg";
-import BackIncon from "../../../assets/back.svg";
-import { useNavigate } from "react-router-dom";
-import LocationIcon from "../../../assets/locationrelated.svg";
-import CallIcon from "../../../assets/callrelated.svg";
+import Product2 from "../../../../assets/Image.svg";
+import Product3 from "../../../../assets/Image (1).svg";
 
 // Data array
 const cardData = [
@@ -53,59 +49,35 @@ const cardData = [
 ];
 
 // Main component with `limit` prop to control how many data to display
-const RelatedBusinesses = ({
+const Images = ({
   limit = cardData.length,
-  showHeading = true,
 }: {
   limit?: number;
   showHeading?: boolean;
 }) => {
-  const navigate = useNavigate();
-
-  const handleNavigateToNotClaim = () => {
-    navigate(`/not-claim/1`);
-    window.scrollTo(0, 0);
-  }
 
   return (
-    <div className="wrapper">
-      {showHeading && (
+    <div >
+      {/* {showHeading && (
         <div onClick={() => handleNavigateToNotClaim()} className={styles.back}>
           <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
           <p>Back</p>
         </div>
-      )}
+      )} */}
 
       <div>
-        {showHeading && (
+        {/* {showHeading && (
           <div className={styles.promoHead}>
             <p>Related Businesses</p>
           </div>
-        )}
+        )} */}
 
         {/* Display the promo images with the limit applied */}
         <section className={styles.promoImageContainer}>
           {cardData.slice(0, limit).map((card) => (
             <div className={styles.promoImage} key={card.id}>
               {card.icon}
-              <div className={styles.productList}>
-
-                <p>{card.title}</p>
-                <div className={styles.info}>
-                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
-
-                <p>{card.location}</p>
-
-                </div>
-                <div className={styles.info}>
-                <Image width={20} height={20} src={CallIcon} alt="CallIcon" preview={false} />
-
-                <p>{card.amount}</p>
-
-                </div>
-                <p className={styles.subjectBg}>Fashion Accessories</p>
-
-              </div>
+           
             </div>
           ))}
         </section>
@@ -114,4 +86,4 @@ const RelatedBusinesses = ({
   );
 };
 
-export default RelatedBusinesses;
+export default Images;
