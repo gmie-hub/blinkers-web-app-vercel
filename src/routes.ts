@@ -42,6 +42,7 @@ export const routes = {
   },
 
   auth: {
+    signUp: "/sign-up",
     login: "/login",
     forgotPassword: "/forgot-password",
     resetPassword: "/reset-password",

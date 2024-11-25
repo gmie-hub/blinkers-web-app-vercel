@@ -29,9 +29,9 @@ const ModalContent = ({open,heading, text,handleCancel,handleClick,icon, BtnText
     >
       <section className={styles.ModalWrapper}>
       {icon ? icon :<Image src={DoneIcon} alt={DoneIcon} preview={false} />}
-        <h3>{heading}</h3>
+  {    heading && <h3>{heading}</h3>}
 
-        <p className={styles.ModalPara}>{text}</p>
+      {  text && <p className={styles.ModalPara}>{text}</p>}
         <div className={styles.btn}>
           <Button
             onClick={handleClick}

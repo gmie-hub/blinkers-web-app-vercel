@@ -18,6 +18,7 @@ import SellersPostedAds from "./screens/home/sellersProfile/postedAds/adsPostedb
 import WriteReview from "./screens/home/market/writeReview/writeReview";
 import SubmittedSuccessfully from "./customs/detailsubmitted";
 import Login from "./screens/Auth/login";
+import SignUp from "./screens/Auth/signUp";
 import AuthLayout from "./screens/Auth/authLayout";
 import ForgotPassword from "./screens/Auth/forgotPassword";
 import ResetPassword from "./screens/Auth/resetPassword";
@@ -78,6 +79,7 @@ function App() {
   ];
 
   const authRoutes = [
+    { path: routes.auth.signUp, element: <SignUp /> },
     { path: routes.auth.login, element: <Login /> },
     { path: routes.auth.forgotPassword, element: <ForgotPassword /> },
     { path: routes.auth.resetPassword, element: <ResetPassword /> },

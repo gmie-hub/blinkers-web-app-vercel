@@ -15,6 +15,7 @@ const cardData = [
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
+    phone:"09012345678",
     rating: 1,
   },
   {
@@ -24,6 +25,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 2,
+    phone:"09012345678",
+
   },
   {
     id: 3,
@@ -32,6 +35,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 3,
+    phone:"09012345678",
+
   },
   {
     id: 4,
@@ -40,6 +45,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 5,
+    phone:"09012345678",
+
   },
   {
     id: 5,
@@ -48,6 +55,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 4,
+    phone:"09012345678",
+
   },
   // Add more data as needed...
 ];
@@ -90,7 +99,7 @@ const RelatedBusinesses = ({
               {card.icon}
               <div className={styles.productList}>
 
-                <p>{card.title}</p>
+                <p className={styles.title}>{card.title}</p>
                 <div className={styles.info}>
                 <Image src={LocationIcon} alt="LocationIcon" preview={false} />
 
@@ -100,7 +109,7 @@ const RelatedBusinesses = ({
                 <div className={styles.info}>
                 <Image width={20} height={20} src={CallIcon} alt="CallIcon" preview={false} />
 
-                <p>{card.amount}</p>
+                <p>{card.phone}</p>
 
                 </div>
                 <p className={styles.subjectBg}>Fashion Accessories</p>
