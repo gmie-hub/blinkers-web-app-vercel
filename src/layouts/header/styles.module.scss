@@ -52,6 +52,11 @@ a {
   border-bottom: 2px solid green;
   padding-inline: 1rem;
 }
+.activeNavLink:hover {
+  color: green;
+  border-bottom: 2px solid green;
+  padding-inline: 1rem;
+}
 
 .menuButton {
   display: none;
