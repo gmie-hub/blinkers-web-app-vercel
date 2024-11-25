@@ -17,7 +17,7 @@
 }
 
 .promoImage {
-  border-radius: 1rem 1rem 0 0 ;
+  border-radius: 1rem 1rem 0 0;
   // border-radius: 2rem; /* Apply rounded corners */
   position: relative;
   width: calc(
@@ -72,13 +72,13 @@
 }
 
 .productList {
-    padding: 1.6rem;
-    display: flex;
-    flex-direction: column;
-    text-align: start;
-    border-radius: 0 0 1rem 1rem; 
-    box-shadow: 0px 4px 40px 0px #00990012;
-    border: solid  #00990012;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0px 4px 40px 0px #00990012;
+  border: solid #00990012;
   cursor: pointer;
   & > p {
     padding-block-start: 0.5rem !important;
@@ -107,7 +107,6 @@
   font-size: 1.2rem;
   padding-inline-end: 2.4rem;
   padding-inline-start: 1.6rem;
-
 }
 
 .image {
@@ -170,7 +169,6 @@
 
   @media screen and (max-width: 768px) {
     margin-block: 2.4rem;
-
   }
   // height: 100%; // Full height within the wrapper
 }
@@ -195,36 +193,48 @@
 }
 
 .subjectBg {
-    color: var(--color-primary-green);
-    background-color: var(--color-light-green);
-    padding: 0.8rem;
-    font-weight: 500;
-    font-size: 1.2rem;
-    margin-block-start: 1.6rem;
-    border-radius: 0.8rem;
-    max-width: fit-content; /* Adjust to content size */
+  color: var(--color-primary-green);
+  background-color: var(--color-light-green);
+  padding: 0.8rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin-block-start: 1.6rem;
+  border-radius: 0.8rem;
+  max-width: fit-content; /* Adjust to content size */
 }
 
 .inputContainer {
-    flex-direction: row;
-    background-color: white;
-    border-radius: 0.8rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-inline: 2.4rem;
-    gap: 2rem;
-    padding-block: 1rem;
-  
-    @media screen and (max-width: 768px) {
-      flex-direction: column;
-    }
+  flex-direction: row;
+  background-color: white;
+  border-radius: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: 2.4rem;
+  gap: 2rem;
+  padding-block: 1rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
   }
-  
-  .inputContainer > select {
-    height: 6.2rem;
-    padding: 1.6rem;
-    width: 292px;
-    background-color: #fafafa;
-    border: none;
-  }
+}
+
+.inputContainer > select {
+  height: 6.2rem;
+  padding: 1.6rem;
+  width: 292px;
+  background-color: #fafafa;
+  border: none;
+}
+
+.info {
+  display: flex;
+  padding-block-start: 0.8rem;
+  align-items: end;
+  gap: 0.8rem;
+}
+.title{
+  color: #222222;
+  font-weight: 700;
+  font-size: 1.8rem;
+}

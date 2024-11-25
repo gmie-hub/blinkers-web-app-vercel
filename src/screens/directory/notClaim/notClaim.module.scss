@@ -22,7 +22,7 @@
     font-weight: 500;
   }
   & > p {
-    color: #707070;
+    color: var(--color-body-text);
     padding-block-end: 4rem;
   }
 }
@@ -211,6 +211,7 @@
   // gap: 1rem;
   display: flex;
   flex-direction: row;
+  cursor: pointer;
 }
 
 .submittedCard {
@@ -246,4 +247,31 @@
 .submittedCard .buttonStyle {
   width: 100%;
   max-width: 200px; /* Ensure the button is not too wide */
+}
+
+.share {
+  display: flex;
+  justify-content: space-between;
+  margin-block-start: 2.4rem;
+  border: solid #eeeeee;
+  border-radius: 0.8rem;
+  align-items: center;
+  padding: 1.5rem;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: start;
+  }
+}
+.buttonStyle {
+  min-width: 13rem;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    min-width: 13rem;
+    width: 0 !important;
+  }
+  @media screen and (max-width: 768px) {
+    width: 10% !important;
+  }
 }

@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   margin: auto;
-  height: 100%;
+  // height: 100vh;
 }
 
 .smallScreen {
@@ -42,7 +42,7 @@
   & small {
     font-family: 400;
     font-size: 1.6rem;
-    color: #707070;
+    color: var(--color-body-text);
 
     @media screen and (max-width: 768px) {
       font-size: 1.4rem;
@@ -146,4 +146,16 @@
 .resend{
   color:var(--color-primary-green);
   text-decoration: underline;
+}
+
+.signUpLink {
+  font-weight: 700;
+  padding-inline-start: 0.8rem;
+  color:var(--color-primary-green);
+  
+  
+}
+
+.signUpLink:hover {
+  color: var(--color-hover-green); /* Replace this variable with your desired hover color */
 }

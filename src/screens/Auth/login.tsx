@@ -58,6 +58,13 @@ const Login = () => {
                 </div>
 
                 <Button type="submit" text="Log In" className={styles.button} />
+
+                <span style={{ display: "flex" }}>
+              Don’t have an account?
+              <Link to="/sign-up" className={styles.signUpLink}>
+                Sign Up
+              </Link>
+            </span>
               </Form>
             );
           }}

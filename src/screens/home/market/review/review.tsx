@@ -4,7 +4,6 @@ import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
 import { Image } from "antd";
 import BackIncon from "../../../../assets/back.svg";
-import { useCallback } from "react";
 
 // Dummy array for business reviews
 const dummyBusinessReviewData = [
@@ -36,17 +35,15 @@ export default function Reviews() {
   const businessReviewError = false; // Dummy error handling
   const businessReviewErrorMessage = "Failed to load reviews";
 
-  const handleNavigateToProductDetails = useCallback(
-    (id?: number) => {
-      navigate(`/product-details/${id}`);
+  const handleNavigateToProductDetails = 
+    () => {
+      navigate(-1);
       window.scrollTo(0, 0);
-    },
-    [navigate]
-  );
+    }
 
   return (
     <div className="wrapper">
-        <div onClick={() => handleNavigateToProductDetails(2)} className={styles.back}>
+        <div onClick={() => handleNavigateToProductDetails()} className={styles.back}>
           <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
           <p >Back</p>
         </div>

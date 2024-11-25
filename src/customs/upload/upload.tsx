@@ -38,12 +38,15 @@ const Upload: React.FC<UploadProps> = ({
 
           <label className={styles.upload}>
             <input type="file" hidden {...field} {...rest} value={undefined} />
-            {icon || <Image src={DocIcon} alt="DocIcon" preview={false} />
-        }
+            {icon || <Image src={DocIcon} alt="DocIcon" preview={false} />}
 
             <div>
               <h5 className={styles.fileTitle}>
-                {fileName ? fileName : "Select a file to upload"}
+                {fileName ? (
+                  fileName
+                ) : (
+                  <span>Click to <span style={{color:"#009900"}}> upload</span>  or drag and drop an image </span>
+                )}
               </h5>
 
               {/* <h5 className={styles.fileFormat}>xls,doc,docx,pdf</h5> */}

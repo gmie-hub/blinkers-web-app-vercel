@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./index.module.scss";
 
 // Define the type for the array items
@@ -111,7 +110,11 @@ const distributeItemsIntoColumns = (
   return columns;
 };
 
-const CategoriesCard: React.FC = () => {
+interface Props {
+  handleClose: () => void;
+}
+
+const CategoriesCard= ({handleClose}:Props) => {
   // Define the number of columns and max items per column
   const numColumns = 4;
   const itemsPerColumn = 10;
@@ -127,8 +130,11 @@ const CategoriesCard: React.FC = () => {
       <div className={styles.card}>
         {/* Render each column */}
         {columns.map((column, columnIndex) => (
-          <div key={columnIndex} className={styles.column}>
+          <div onClick={()=>{handleClose()}} key={columnIndex} className={styles.column}>
+            <p >
             {column}
+
+            </p>
           </div>
         ))}
       </div>

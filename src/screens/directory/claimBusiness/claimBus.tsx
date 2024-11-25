@@ -1,7 +1,7 @@
 import styles from "./claimBus.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import {useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { Image } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
@@ -50,15 +50,15 @@ const ClaimBusiness = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleNavigateToRelatedBusiness = useCallback(() => {
+  const handleNavigateToRelatedBusiness = () => {
     navigate(`/related-businesses`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  };
 
-  const handleNavigateToSubPlan = useCallback(() => {
+  const handleNavigateToSubPlan = () => {
     navigate(`/claimed-business`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   const formik = useFormik<FormikValues>({
     initialValues: {

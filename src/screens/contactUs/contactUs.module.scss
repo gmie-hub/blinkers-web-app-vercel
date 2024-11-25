@@ -6,7 +6,6 @@
   border-radius: 0.8rem;
   @media screen and (max-width: 768px) {
     margin-block: 2.4rem;
-
   }
 }
 
@@ -44,6 +43,9 @@
   border: 1px solid #eeeeee;
   margin-block-start: 2.4rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  @media screen and (max-width: 768px) {
+    padding: 2rem;
+  }
 }
 
 .leftSection {
@@ -73,7 +75,6 @@
   flex-direction: column;
   text-align: start;
   border-radius: 0.8rem;
-
 }
 
 @media (max-width: 768px) {
@@ -96,13 +97,15 @@
     display: block; /* Stack the sections vertically */
     margin-inline: 1.6rem; /* Smaller margin for mobile */
     gap: 2rem; /* Adjust gap for smaller screens */
-    padding-block: 2.4rem;
+    padding-block: 0.4rem;
+      font-size: 4rem;
+
   }
 
   .leftSection,
   .rightSection {
     flex: 1; /* Full width on smaller screens */
-    // padding: 1rem;
+    padding: 1rem;
   }
 }
 
@@ -127,6 +130,10 @@
     // align-items: start;
     text-align: start;
   }
+  @media (max-width: 768px) {
+    padding: 1.4rem;
+
+  }
 }
 
 .title {
@@ -135,6 +142,11 @@
   // display: flex;
   color: var(--color-header-text);
   padding-block-end: 4rem;
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    padding-block-end: 2rem;
+
+  }
 }
 .icon {
   padding-block-end: 1.6rem;
@@ -144,7 +156,6 @@
   margin-block: 2.4rem;
 }
 
-
-.btn{
-    padding-block-start: 1.6rem;
+.btn {
+  padding-block-start: 1.6rem;
 }
