@@ -29,6 +29,11 @@ import FAQ from "./screens/FAQ/faq";
 import Job from "./screens/job/job";
 import JobDetails from "./screens/job/jobDetails/jobDetails";
 import JobLikeThis from "./screens/job/jobLikeThis/jobsLikeThis";
+import RegisterAsApplicant from "./screens/job/apply/applyAsApplicant/index";
+import ApplyForJob from "./screens/job/applytoStrive/index";
+import PostJob from "./screens/job/postJob/postJob";
+
+import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
 
 import Images from "./screens/directory/gallery/image";
 import Videos from "./screens/directory/gallery/video";
@@ -39,7 +44,6 @@ function App() {
     { path: routes.page.home, element: <HomePage /> },
     { path: routes.page.market, element: <Market /> },
     { path: routes.page.productDetails, element: <ProductDetails /> },
-    { path: routes.page.directory, element: <Directory /> },
     { path: routes.page.relatedAds, element: <RelatedAds /> },
     { path: routes.page.review, element: <Review /> },
     { path: routes.page.sellersProfile, element: <SellersProfile /> },
@@ -48,22 +52,29 @@ function App() {
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },
-    { path: routes.page.NotClaimed, element: <NotClaim /> },
-    { path: routes.page.relatedBusinesses, element: <RelatedBusinesses /> },
-    { path: routes.page.SubscriptionPricing, element: <SubscriptionPricing /> },
-    { path: routes.page.ClaimBusiness, element: <ClaimBusiness /> },
-    { path: routes.page.ClaimedBusiness, element: <ClaimedBusiness /> },
-    { path: routes.page.job, element: <Job /> },
-    { path: routes.page.jobDetails, element: <JobDetails /> },
-    { path: routes.page.JobLikeThis, element: <JobLikeThis /> },
-
-    { path: routes.page.images, element: <Images /> },
-    { path: routes.page.videos, element: <Videos /> },
-
+    { path: routes.directory.directory, element: <Directory /> },
+    { path: routes.directory.NotClaimed, element: <NotClaim /> },
+    { path: routes.directory.relatedBusinesses, element: <RelatedBusinesses /> },
+    { path: routes.directory.SubscriptionPricing, element: <SubscriptionPricing /> },
+    { path: routes.directory.ClaimBusiness, element: <ClaimBusiness /> },
+    { path: routes.directory.ClaimedBusiness, element: <ClaimedBusiness /> },
     {
-      path: routes.page.SubmittedSuccessfully,
+      path: routes.directory.SubmittedSuccessfully,
       element: <SubmittedSuccessfully />,
     },
+
+    { path: routes.job.job, element: <Job /> },
+    { path: routes.job.jobDetails, element: <JobDetails /> },
+    { path: routes.job.JobLikeThis, element: <JobLikeThis /> },
+    { path: routes.job.images, element: <Images /> },
+    { path: routes.job.videos, element: <Videos /> },
+    { path: routes.job.RegAsApplicant, element: <RegisterAsApplicant /> },
+    { path: routes.job.AddBusiness, element: <AddBusiness /> },
+    { path: routes.job.applyForJob, element: <ApplyForJob /> },
+    { path: routes.job.postJob, element: <PostJob /> },
+
+
+ 
   ];
 
   const authRoutes = [

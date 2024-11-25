@@ -8,11 +8,14 @@ interface Props {
   handleCancel: () => void;
   handleClick: () => void;
   open: boolean;
-  text: string;
+  text?: string;
+  heading?:string;
+  icon?:any;
+  BtnText?:string
 
 }
 
-const ModalContent = ({open, text, handleCancel,handleClick }: Props) => {
+const ModalContent = ({open,heading, text,handleCancel,handleClick,icon, BtnText }: Props) => {
 
  
 
@@ -21,18 +24,19 @@ const ModalContent = ({open, text, handleCancel,handleClick }: Props) => {
       open={open}
       onCancel={handleCancel}
       centered
-      // title=""
+      title=""
       footer={null}
     >
       <section className={styles.ModalWrapper}>
-        <Image src={DoneIcon} alt={DoneIcon} preview={false} />
+      {icon ? icon :<Image src={DoneIcon} alt={DoneIcon} preview={false} />}
+        <h3>{heading}</h3>
 
         <p className={styles.ModalPara}>{text}</p>
         <div className={styles.btn}>
           <Button
             onClick={handleClick}
             type="button"
-            text={'Okay'}
+            text={ BtnText ? BtnText :'Okay' }
             className={styles.btn}
           />
         </div>

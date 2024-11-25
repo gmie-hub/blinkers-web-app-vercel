@@ -116,6 +116,11 @@
   align-items: center;
   justify-content: center;
   margin-block-start: 2.4rem;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    margin-inline:1.4rem;
+
+  }
 }
 
 .picHead {

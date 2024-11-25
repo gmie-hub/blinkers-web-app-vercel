@@ -1,20 +1,31 @@
 import Button from "../../../customs/button/button";
 import styles from "./jobDetails.module.scss";
 import Joblogo from "../../../assets/joblogo.svg";
-import FlagJob from "../../../assets/flag.svg";
+import FlagJobicon from "../../../assets/flag.svg";
 import JobLocation from "../../../assets/joblocation.svg";
 import StatusBadge from "../../../partials/statusBadge/statusBadge";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import MoreJobsLikeThis from "../jobLikeThis/jobsLikeThis";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "antd";
+import { useState } from "react";
+import FlagJob from "./flagJob/flagJob";
 
 const JobDetails = () => {
   const navigate = useNavigate();
+  const [flagJob, setFlagJob] = useState(false);
 
   const handleNavigateToMoreJob = () => {
     navigate("/job/more-jobs-like-this");
     window.scrollTo(0, 0);
+
+  }; 
+  const handleNavigateApplyToJob = () => {
+    navigate("/job/apply");
+    window.scrollTo(0, 0);
   };
+
+
   const status = "open"
   return (
     <main>
@@ -46,6 +57,7 @@ const JobDetails = () => {
                  type="submit"
                  text="Apply For Job"
                  className="buttonStyle"
+                 onClick={handleNavigateApplyToJob}
                />
              </div>
 
@@ -57,7 +69,8 @@ const JobDetails = () => {
                 variant="redOutline"
                 text="Flag This Job"
                 className={styles.buttonStyle}
-                icon={<img src={FlagJob} alt="FlagJob" />}
+                icon={<img src={FlagJobicon} alt="FlagJobicon" />}
+                onClick={()=>{setFlagJob(true)}}
               />
             </div>
             {
@@ -189,6 +202,16 @@ const JobDetails = () => {
         </div>
         <MoreJobsLikeThis limit={4} canSeeBtn={false} />,
       </section>
+
+      <Modal
+        open={flagJob}
+        onCancel={() => setFlagJob(false)}
+        centered
+        title="Flag Job"
+        footer={null}
+      >
+        <FlagJob handleCloseModal={() => setFlagJob(false)} />
+      </Modal>
     </main>
   );
 };

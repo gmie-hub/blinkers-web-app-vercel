@@ -1,30 +1,51 @@
 import styles from "./job.module.scss";
 import { Image, Pagination } from "antd";
-import {  useState } from "react";
+import { useState } from "react";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
 import Button from "../../customs/button/button";
 import job1 from "../../assets/job1.svg";
 import job2 from "../../assets/job2.svg";
-import Section2 from "./cards/cards";
 import { cardData } from "./data";
-
-
+import { useNavigate } from "react-router-dom";
+import ModalContent from "../../partials/successModal/modalContent";
+import warn from "../../assets/warning-circle-svgrepo-com 2.svg";
+import Section2 from "./cards/cards";
 
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // Set the number of items per page
+  const itemsPerPage = 8;
+  const navigate = useNavigate();
+  const [openSuccess, setOpenSuccess] = useState(false);
 
   // Calculate the data to display for the current page
-//   const indexOfLast = currentPage * itemsPerPage;
-//   const indexOfFirst = indexOfLast - itemsPerPage;
-//   const currentCards = cardData.slice(indexOfFirst, indexOfLast);
+  //   const indexOfLast = currentPage * itemsPerPage;
+  //   const indexOfFirst = indexOfLast - itemsPerPage;
+  //   const currentCards = cardData.slice(indexOfFirst, indexOfLast);
 
   // Handle page change
   const onPageChange = (page: any) => {
     setCurrentPage(page);
   };
 
+  const handleNavigateRegisterAsAnApplicant = () => {
+    navigate("/job/register-as-applicant");
+    window.scrollTo(0, 0);
+  };
+
+  
+  const handleNavigateAddBusiness= () => {
+    // navigate("/job/add-business"); 
+       navigate("/post-job");
+
+
+    window.scrollTo(0, 0);
+  };
+
+  // const handleNavigatePostJob = () => {
+  //   navigate("/post-job");
+  //   window.scrollTo(0, 0);
+  // };
 
 
   return (
@@ -54,6 +75,8 @@ const Jobs = () => {
               className={styles.buttonStyle}
               text="Post a Job"
               variant="white"
+              // onClick={() => setOpenSuccess(true)}
+              onClick={handleNavigateAddBusiness}
             />
 
             <Button
@@ -61,6 +84,7 @@ const Jobs = () => {
               className={styles.WhiteButtonStyle}
               text="Register as An Applicant"
               variant="white"
+              onClick={handleNavigateRegisterAsAnApplicant}
             />
           </div>
         </div>
@@ -79,6 +103,20 @@ const Jobs = () => {
           display: "flex",
           justifyContent: "center", // Ensure the pagination is centered
         }}
+      />
+
+      <ModalContent
+        icon={<img src={warn} alt="warn" />}
+        open={openSuccess}
+        handleCancel={() => setOpenSuccess(false)}
+        handleClick={() => {
+          setOpenSuccess(false);
+        }}
+        BtnText='Add Business To Directory'
+        heading="Business Not Added To Directory"
+        text={
+          "It looks like your business has not been registered in our directory, Add your business to the directory now to be able to post jobs."
+        }
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import styles from "./flagSeller.module.scss";
+import styles from "./flagJob.module.scss";
 import * as Yup from "yup";
 import { useState } from "react";
 import ReusableModal from "../../../../partials/deleteModal/deleteModal";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const FlagSeller = ({ handleCloseModal }: Props) => {
-//   const [formValues, setFormValues] = useState<FormikValues | null>(null); // Store form values here
+  //   const [formValues, setFormValues] = useState<FormikValues | null>(null); // Store form values here
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isDeleteSuccessful, setIsDeleteSucessful] = useState(false);
 
@@ -29,10 +29,10 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
 
     setIsDeleteModal(true);
   };
-  const handelDelete = () =>{
-    setIsDeleteSucessful(true) 
-     setIsDeleteModal(false) 
-  }
+  const handelDelete = () => {
+    setIsDeleteSucessful(true);
+    setIsDeleteModal(false);
+  };
 
   return (
     <div>
@@ -89,14 +89,13 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
       <ReusableModal
         open={isDeleteModal}
         handleCancel={() => setIsDeleteModal(false)}
-        title="Are You Sure You Want to Submit This Flag Claim?"
+        title="Are You Sure You Want To Flag This Job?"
         confirmText="Yes, Submit"
         cancelText="No, Go Back"
         handleConfirm={() => {
           handelDelete();
         }}
-        icon=               { <img src={DeleteIcon} alt="DeleteIcon" />}
-
+        icon={<img src={DeleteIcon} alt="DeleteIcon" />}
       />
 
       <ModalContent
@@ -105,7 +104,7 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
         handleClick={() => {
           setIsDeleteSucessful(false);
         }}
-        heading={"Seller Flagged Successfully"}
+        heading={"Job Flagged Successfully"}
       />
     </div>
   );

@@ -6,7 +6,7 @@ import WhatsappLogo from "../../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../../assets/instagram.svg";
 import FaceBookStoreIcon from "../../../../assets/fbIcon.svg";
 import BrowseLogo from "../../../../assets/Icon (4).svg";
-import CallLogo from "../../../../assets/call.svg";
+import CallLogo from "../../../../assets/click.svg";
 import FlagLogo from "../../../../assets/flag.svg";
 import CopyIcon from "../../../../assets/copy.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
@@ -374,7 +374,7 @@ const SmallScreen = () => {
         handleClick={() => {
           setOpenSuccess(false);
         }}
-        text={"Your Rating and Review Has Been Submitted Successfully"}
+        heading={"Your Rating and Review Has Been Submitted Successfully"}
       />
 
       <Modal

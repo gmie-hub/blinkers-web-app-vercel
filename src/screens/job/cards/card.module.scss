@@ -16,6 +16,7 @@
   }
   
   .chooseCard {
+    cursor: pointer;
     border: #EEEEEE solid 1px;
     flex: 1 1 calc(25% - 2.4rem); /* Adjust width for 4 cards per row, considering the gap */
     background-color: var(--color-primary-white);

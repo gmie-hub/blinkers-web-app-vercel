@@ -7,7 +7,7 @@ import WhatsappLogo from "../../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../../assets/instagram.svg";
 import FaceBookStoreIcon from "../../../../assets/fbIcon.svg";
 import BrowseLogo from "../../../../assets/Icon (4).svg";
-import CallLogo from "../../../../assets/callsp.svg";
+import CallLogo from "../../../../assets/click.svg";
 import FlagLogo from "../../../../assets/flag.svg";
 import CopyIcon from "../../../../assets/copy.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
@@ -22,7 +22,7 @@ import Reviews from "./tabs/review";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
@@ -111,7 +111,7 @@ const BigScreen = () => {
   const handleNavigateToSellersProfile = () => {
     navigate(`/sellers-profile`);
     window.scrollTo(0, 0);
-  }
+  };
 
   return (
     <div className="wrapper">
@@ -166,7 +166,7 @@ const BigScreen = () => {
                 /> */}
 
                 <Image
-                  width={'100%'}
+                  width={"100%"}
                   src={Product2}
                   alt="Product2"
                   preview={false}
@@ -263,7 +263,7 @@ const BigScreen = () => {
                   <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
                 </div>
                 <Button
-                  icon={<Image src={CallLogo} alt="CallLogo" preview={false} />}
+                  icon={<img src={CallLogo} alt="success" />}
                   text="Click To Show Number"
                 />
 
@@ -392,7 +392,7 @@ const BigScreen = () => {
         handleClick={() => {
           setOpenSuccess(false);
         }}
-        text={"Your Rating and Review Has Been Submitted Successfully"}
+        heading={"Your Rating and Review Has Been Submitted Successfully"}
       />
 
       <Modal
