@@ -1,12 +1,12 @@
-import { Form, Formik, FormikValues } from 'formik';
+import { Form, Formik } from 'formik';
 import styles from './postJob.module.scss';
 // import { Button, Card, Input, RouteIndicator, SearchableSelect, Select } from '../../../customs';
-import { App, Switch } from 'antd';
+import {  Switch } from 'antd';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
+// import {  useQueryClient } from '@tanstack/react-query';
 // import { CreateJob, getAllBusinessSearch, getJobDetails, UpdateJob } from '../../directory';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { routes } from '../../../routes';
 import Card from '../../../customs/card/card';
 import Input from '../../../customs/input/input';
@@ -18,17 +18,17 @@ import ModalContent from '../../../partials/successModal/modalContent';
 export default function PostJobs() {
   const navigate = useNavigate();
   const [openSuccess, setOpenSuccess] = useState(false);
-  const [editSuccess, setEditSuccess] = useState(false);
+  // const [editSuccess, setEditSuccess] = useState(false);
 
-  const { notification } = App.useApp();
-  const queryClient = useQueryClient();
+  // const { notification } = App.useApp();
+  // const queryClient = useQueryClient();
   const { id } = useParams();
-  const [searchValue, setSearchValue] = useState('');
+  // const [searchValue, setSearchValue] = useState('');
 
-  const handleSearchChange = (value: string) => {
-    console.log('Search Query:', value); // Access the search query value here
-    setSearchValue(value);
-  };
+  // const handleSearchChange = (value: string) => {
+  //   console.log('Search Query:', value); // Access the search query value here
+  //   setSearchValue(value);
+  // };
 
 //   const [getAllBusinessQuery, getJobDetailsQuery] = useQueries({
 //     queries: [
@@ -303,13 +303,13 @@ export default function PostJobs() {
             //   salary: JobDetailsData?.renumeration || '',
             //   accepting_applications: JobDetailsData?.status?.toString() === '1' ? true : false, // <-- Ensures boolean value
             }}
-            onSubmit={(values, { resetForm }) => {
+            onSubmit={() => {
             //   id ? EditJobHandler(values, resetForm) : CreateJobHandler(values, resetForm);
             }}
             enableReinitialize={true}
             // validationSchema={validationSchema}
           >
-            {({ handleChange, setFieldValue, values }) => {
+            {({ handleChange, setFieldValue }) => {
               return (
                 <Form>
                   <div className={styles.inputContainer}>
@@ -462,14 +462,7 @@ export default function PostJobs() {
                     </div>
 
                     <section className={styles.buttonGroup}>
-                      <Button
-                        variant="greenOutline"
-                        type="submit"
-                        disabled={false}
-                        text="Cancel"
-                        className={styles.btn}
-                        onClick={() => navigate(-1)}
-                      />
+                 
                       <Button
                         variant="green"
                         type="submit"
