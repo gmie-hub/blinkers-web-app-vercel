@@ -7,13 +7,12 @@ import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
 import favorite from "../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
 
 // Data array
 const cardData = [
   {
     id: 1,
-    icon: <Image src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image width={'100%'} src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -21,7 +20,7 @@ const cardData = [
   },
   {
     id: 2,
-    icon: <Image src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image width={'100%'} src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -29,7 +28,7 @@ const cardData = [
   },
   {
     id: 3,
-    icon: <Image  src={Product3} alt="cardIcon" preview={false} />,
+    icon: <Image width={'100%'} src={Product3} alt="cardIcon" preview={false} />,
     title: "Female Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -37,7 +36,7 @@ const cardData = [
   },
   {
     id: 4,
-    icon: <Image  src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image width={'100%'}  src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -45,7 +44,7 @@ const cardData = [
   },
   {
     id: 5,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+    icon: <Image  width="100%" src={Product2} alt="cardIcon" preview={false} />,
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
@@ -58,14 +57,12 @@ const cardData = [
 const Trends = () => {
   const navigate = useNavigate()
 
-  const handleNavigateToMarket = useCallback(
+  const handleNavigateToMarket = 
     () => {
       navigate(`/market`);
       window.scrollTo(0, 0); // Scrolls to the top of the page
 
-    },
-    [navigate]
-  );
+    }
 
   
    return (

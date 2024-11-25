@@ -4,7 +4,8 @@ import Product2 from "../../../assets/Image.svg";
 import Product3 from "../../../assets/Image (1).svg";
 import BackIncon from "../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import LocationIcon from "../../../assets/locationrelated.svg";
+import CallIcon from "../../../assets/callrelated.svg";
 
 // Data array
 const cardData = [
@@ -14,6 +15,7 @@ const cardData = [
     title: "Male Packing Shirt",
     location: "Lekki, Lagos",
     amount: "₦40,000",
+    phone:"09012345678",
     rating: 1,
   },
   {
@@ -23,6 +25,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 2,
+    phone:"09012345678",
+
   },
   {
     id: 3,
@@ -31,6 +35,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 3,
+    phone:"09012345678",
+
   },
   {
     id: 4,
@@ -39,6 +45,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 5,
+    phone:"09012345678",
+
   },
   {
     id: 5,
@@ -47,6 +55,8 @@ const cardData = [
     location: "Lekki, Lagos",
     amount: "₦40,000",
     rating: 4,
+    phone:"09012345678",
+
   },
   // Add more data as needed...
 ];
@@ -61,13 +71,13 @@ const RelatedBusinesses = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleNavigateToNotClaim = useCallback(() => {
+  const handleNavigateToNotClaim = () => {
     navigate(`/not-claim/1`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   return (
-    <div>
+    <div className="wrapper">
       {showHeading && (
         <div onClick={() => handleNavigateToNotClaim()} className={styles.back}>
           <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
@@ -88,9 +98,22 @@ const RelatedBusinesses = ({
             <div className={styles.promoImage} key={card.id}>
               {card.icon}
               <div className={styles.productList}>
-                <p>{card.title}</p>
+
+                <p className={styles.title}>{card.title}</p>
+                <div className={styles.info}>
+                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
+
                 <p>{card.location}</p>
-                <p>{card.amount}</p>
+
+                </div>
+                <div className={styles.info}>
+                <Image width={20} height={20} src={CallIcon} alt="CallIcon" preview={false} />
+
+                <p>{card.phone}</p>
+
+                </div>
+                <p className={styles.subjectBg}>Fashion Accessories</p>
+
               </div>
             </div>
           ))}

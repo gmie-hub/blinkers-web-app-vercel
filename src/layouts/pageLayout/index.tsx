@@ -7,15 +7,7 @@ import Footer from "../footer/footer";
 import Header from "../header/header";
 
 const Layout = () => {
-  //   const [, setOpen] = useState(false);
 
-  //   const showDrawer = useCallback(() => {
-  //     setOpen((prevState) => !prevState);
-  //   }, []);
-
-  //   const onClose = () => {
-  //     setOpen((prevState) => !prevState);
-  //   };
 
   return (
     <main className={styles.container}>

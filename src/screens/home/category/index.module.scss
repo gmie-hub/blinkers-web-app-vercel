@@ -1,10 +1,10 @@
 .card {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
+  gap: 2rem;
+  padding: 2rem;
   border-radius: 10px;
-  width: 85vw; /* 90% of the viewport width */
+  // width: 85vw; /* 90% of the viewport width */
   justify-content: center; /* Center the card horizontally */
   margin: 0 auto; /* Center the card horizontally on the screen */
 }
@@ -30,6 +30,9 @@
   border-radius: 5px;
   font-size: 16px;
   color: #333;
+  width: max-content;
+    cursor: pointer; /* Add this line to make the items clickable */
+
 }
 
 /* Media query for tablet and small screens (max-width: 1024px) */

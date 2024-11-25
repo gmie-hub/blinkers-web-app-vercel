@@ -7,7 +7,6 @@ import StarYellow from "../../../../assets/staryellow.svg";
 import BackIncon from "../../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
 import { countUpTo } from "../../trend";
-import { useCallback } from "react";
 
 
 // Data array
@@ -65,11 +64,10 @@ const SellersAds = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleNavigateToRelateSellerProfile = useCallback(() => {
+  const handleNavigateToRelateSellerProfile = () => {
     navigate(`/sellers-profile`);
     window.scrollTo(0, 0);
-  }, [navigate]);
-
+  }
   return (
     <div className="wrapper" style={{ marginBlock: "2rem" }}>
       {showHeading && (

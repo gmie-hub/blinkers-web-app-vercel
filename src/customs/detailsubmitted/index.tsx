@@ -8,7 +8,7 @@ import { routes } from "../../routes";
 const SubmittedSuccessfully = () => {
   const navigate = useNavigate();
   return (
-    <Card className={styles.headerContainer}>
+    <Card style={styles.headerContainer}>
       <img src={success} alt="success" />
 
       <h3>Details Submitted Suucessfully</h3>

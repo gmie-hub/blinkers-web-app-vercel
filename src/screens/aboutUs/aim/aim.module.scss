@@ -2,6 +2,9 @@
   display: flex;
   gap: 12.6rem;
   padding-block: 6.4rem;
+  @media (max-width: 600px) {
+ display: block;
+  }
 }
 
 .leftSection {

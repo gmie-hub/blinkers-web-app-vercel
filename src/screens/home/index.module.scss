@@ -169,7 +169,7 @@
 }
 
 .activeDot {
-  background-color: #009900;
+  background-color: var(--color-primary-green);
 }
 
 .disabledArrow {
@@ -198,7 +198,7 @@
     }
 
     .greenBackground {
-      background-color: #009900; // Green when clickable
+      background-color: var(--color-primary-green); // Green when clickable
     }
 
     .disabledArrow {
@@ -225,7 +225,7 @@
 .recommendedImage {
   flex: 1 1 calc(24% - 1rem); // 4 images per row, accounting for the gap
   max-width: calc(24% - 1rem); // Ensures 4 items fit within the width
-  background-color: #ffffff;
+  background-color: var(--color-primary-white);
   box-sizing: border-box;
   border-radius: 1rem; // Optional: rounding top corners
   // border-top-right-radius: 1rem;
@@ -436,7 +436,7 @@
   }
 
   @media (max-width: 600px) {
-    display: flex; /* Use flexbox for small screens */
+    display: block; /* Use flexbox for small screens */
     flex-direction: column; /* Stack the sections vertically */
     gap: 2rem; /* Space between the sections */
     justify-items: normal;
@@ -450,6 +450,10 @@
   flex-direction: column;
   gap: 2rem; /* Space between the two items in rows */
   align-items: start; /* Align items to the left */
+  @media (max-width: 600px) {
+    margin-block-end: 2rem;
+  }
+
 }
 
 .trendImage {
@@ -498,6 +502,11 @@
   align-items: center; // Horizontally center the content
   height: 100%; // Ensure the section takes up full height
   position: relative; // Allows positioning the button at the bottom
+
+  @media (max-width: 600px) {
+    margin-block-end: 2rem;
+  }
+
 }
 
 .buttonStyle {

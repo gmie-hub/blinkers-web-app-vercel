@@ -2,109 +2,98 @@ import styles from "./directory.module.scss";
 import { Image, Pagination } from "antd";
 import Product2 from "../../assets/Image.svg";
 import Product3 from "../../assets/Image (1).svg";
-import { useCallback, useState } from "react";
-import favorite from "../../assets/Icon + container.svg";
+import {useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
+import CallIcon from "../../assets/callrelated.svg"
+import LocationIcon from "../../assets/locationrelated.svg";
 
 // Data array
 const cardData = [
   {
     id: 1,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 1,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 2,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 2,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 3,
     icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-    title: "Female Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 3,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 4,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 5,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 5,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 6,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 7,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 8,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 9,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 10,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 11,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
   {
     id: 12,
     icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
+    title: "Shop With Rinsy",
+    location: "4, blinkers street, Lekki, Nigeria",
+    phone: "09012345678",
   },
 ];
 
@@ -123,12 +112,11 @@ const Directory = () => {
     setCurrentPage(page);
   };
 
-  const handleNavigateToNotClaim = useCallback(
+  const handleNavigateToNotClaim = 
     (id: number) => {
       navigate(`/not-claim/${id}`);
-    },
-    [navigate]
-  );
+    }
+  
 
   return (
     <div className="wrapper">
@@ -150,7 +138,6 @@ const Directory = () => {
                 placeholder="Category"
                 options={[]}
               /> */}
-           
 
               <SearchInput
                 placeholder="Search businesses..."
@@ -169,15 +156,26 @@ const Directory = () => {
             key={card.id}
             onClick={() => handleNavigateToNotClaim(card.id)}
           >
-            <div className={styles.favoriteIcon}>
+            {/* <div className={styles.favoriteIcon}>
               <Image width={30} src={favorite} alt="Favorite" preview={false} />
-            </div>
+            </div> */}
             {card.icon}
             <div className={styles.productList}>
-              <p>{card.title}</p>
-              <p>{card.location}</p>
-              <p>{card.amount}</p>
-              <div className={styles.subjectBg}>Fashion Accessories</div>
+              <p className={styles.title}>{card.title}</p>
+
+              <div className={styles.info}>
+                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
+
+                <p>{card.location}</p>
+
+                </div>
+                <div className={styles.info}>
+                <Image  src={CallIcon} alt="CallIcon" preview={false} />
+
+                <p>{card.phone}</p>
+
+
+                </div>              <div className={styles.subjectBg}>Fashion Accessories</div>
               {/* <div className={styles.starWrapper}>
                 {countUpTo(
                   card?.rating || 0,

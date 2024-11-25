@@ -1,9 +1,9 @@
 import styles from "./notClaim.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import {  useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { Image } from "antd";
+import { Image, message, Modal } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
@@ -14,12 +14,35 @@ import { countUpTo } from "../../home/trend";
 import shareIcon from "../../../assets/share 2.svg";
 import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
+import TimeIcon from "../../../assets/time42.svg";
+import LocationIcon from "../../../assets/locationnot.svg";
+import CallIcon from "../../../assets/callclaim.svg";
+import copyIcon from "../../../assets/copywhite.svg";
 
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const NotClaim = () => {
   const navigate = useNavigate();
   const [showContent, setShowContent] = useState(true); // Manage review form visibility
   const [showCard, setShowCard] = useState(false); // Manage card visibility
+
+  const [openShare, setOpenShare] = useState(false); 
+
+  //   const hasReviews = reviewData?.lenght;
+  //   console.log(hasReviews , "hasReviews")
+
+
+    const textToCopy = "blinkers/ shopwithrinsyaccderb/e";
+  
+    const handleCopyLink = () => {
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          message.success("Link copied to clipboard!");
+        })
+        .catch(() => {
+          message.error("Failed to copy link. Please try again.");
+        });
+    }
 
   //   const hasReviews = reviewData?.lenght;
   //   console.log(hasReviews , "hasReviews")
@@ -31,18 +54,24 @@ const NotClaim = () => {
 
   };
 
-  const handleNavigateToRelatedBusiness = useCallback(() => {
+  const handleNavigateToRelatedBusiness =() => {
     navigate(`/related-businesses`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
-  const   handleNavigateToSubPlan = useCallback(() => {
+  const   handleNavigateToSubPlan = () => {
     navigate(`/subscription-pricing`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
+
+    const handleNavigateToWriteReview =() => {
+    navigate(`/write-review`);
+    window.scrollTo(0, 0);
+  }
 
   return (
-    <div className="wrapper">
+    <>
+        <div className="wrapper">
       {showContent && (
         <>
           <div className={styles.mainContainer}>
@@ -78,12 +107,12 @@ const NotClaim = () => {
                   </div>
 
                   <div className={styles.starWrapper2}>
-                    <div className={styles.message}>
+                    <div onClick={handleNavigateToWriteReview} className={styles.message}>
                       <Image src={Star} alt="Star" preview={false} />
 
                       <p>Write a review</p>
                     </div>
-                    <div className={styles.message}>
+                    <div onClick={()=>{setOpenShare(true)}} className={styles.message}>
                       <Image src={shareIcon} alt="shareIcon" preview={false} />
 
                       <p>Share</p>
@@ -98,7 +127,7 @@ const NotClaim = () => {
 
                 <div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
 
                     <div className={styles.open}>
                       <p>Opening Hours</p>
@@ -106,11 +135,11 @@ const NotClaim = () => {
                     </div>
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={LocationIcon} alt="LocationIcon" preview={false} />
                     4, blinkers street, Lekki, Nigeria
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={CallIcon} alt="CallIcon" preview={false} />
 
                     <p>09012345678</p>
                   </div>
@@ -190,8 +219,8 @@ const NotClaim = () => {
               </div>
             </div>
 
-            <RelatedBusinesses showHeading={false} limit={4} />
           </div>
+
         </>
       )}
 
@@ -212,7 +241,30 @@ const NotClaim = () => {
           </div>
         </div>
       )}
+      <Modal
+        open={openShare}
+        onCancel={() => setOpenShare(false)}
+        centered
+        title="Share Link"
+        footer={null}
+      >
+        
+        <div className={styles.share}>
+          <p>blinkers/ shopwithrinsyaccderb/e</p>
+
+          <Button
+            onClick={
+                handleCopyLink
+            }
+            icon={ <Image src={copyIcon} alt={copyIcon} preview={false} />        }
+            className={styles.buttonStyle}
+            text="Copy Link"
+          />
+        </div>
+      </Modal>
     </div>
+    <RelatedBusinesses showHeading={false} limit={4} />
+</>
   );
 };
 export default NotClaim;

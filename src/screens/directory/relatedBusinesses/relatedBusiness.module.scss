@@ -56,7 +56,7 @@
     font-size: 2.3rem;
   }
   .productList {
-    padding-inline-start: 1.6rem;
+    padding: 1.6rem;
     display: flex;
     flex-direction: column;
     text-align: start;
@@ -86,4 +86,27 @@
         font-size: 2rem;
         font-weight: 600;
     }
+  }
+  .info {
+    display: flex;
+    padding-block-start: 0.8rem;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  
+  .subjectBg {
+    color: var(--color-primary-green);
+    background-color: var(--color-light-green);
+    padding: 0.8rem;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-block-start: 1.6rem;
+    border-radius: 0.8rem;
+    max-width: fit-content;
+    display: inline;
+  }
+  .title{
+    color: #222222;
+    font-weight: 700;
+    font-size: 1.8rem;
   }

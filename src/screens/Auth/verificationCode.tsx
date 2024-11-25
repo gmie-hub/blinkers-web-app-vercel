@@ -188,7 +188,7 @@ const VerificationCode = () => {
                 ))}
               </div>
 
-              <Button type="submit" text="Verify" className={styles.button} />
+              <Button  type="submit" text="Verify" className={styles.button} />
 
               <div className={styles.footer}>
                 <p>

@@ -6,6 +6,7 @@ import ReusableModal from "../../../../partials/deleteModal/deleteModal";
 import Input from "../../../../customs/input/input";
 import Button from "../../../../customs/button/button";
 import ModalContent from "../../../../partials/successModal/modalContent";
+import DeleteIcon from "../../../../assets/del.svg";
 
 interface Props {
   handleCloseModal: () => void;
@@ -94,7 +95,8 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
         handleConfirm={() => {
           handelDelete();
         }}
-        // icon={<DeleteIcon />}
+        icon=               { <img src={DeleteIcon} alt="DeleteIcon" />}
+
       />
 
       <ModalContent
@@ -103,7 +105,7 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
         handleClick={() => {
           setIsDeleteSucessful(false);
         }}
-        text={"Seller Flagged Successfully"}
+        heading={"Seller Flagged Successfully"}
       />
     </div>
   );

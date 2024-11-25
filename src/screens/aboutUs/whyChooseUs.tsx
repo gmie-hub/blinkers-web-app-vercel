@@ -1,27 +1,28 @@
 import styles from "./secondSection.tsx/index.module.scss";
 import { Image } from "antd";
-import cardIcon from "../../assets/image 7.svg";
-import Image4 from "../../assets/image 4.svg";
-import Image8 from "../../assets/image 8.svg";
+import Image1 from "../../assets/why1.svg";
+import Image2 from "../../assets/why2.svg";
+import Image3 from "../../assets/why3.svg";
+
 
 const cardData = [
   {
     id: 1,
-    icon: <Image src={cardIcon} alt="cardIcon" preview={false} />,
+    icon: <Image src={Image3} alt="Image2" preview={false} />,
     title: "For Buyers",
     content:
       "Buyers can instantly connect with multiple sellers, compare offers, and negotiate prices before making a purchase. We also provide timely updates on new products, keeping buyers informed.",
   },
   {
     id: 2,
-    icon: <Image src={Image4} alt="cardIcon" preview={false} />,
+    icon: <Image src={Image1} alt="Image1" preview={false} />,
     title: "For Sellers",
     content:
       "Sellers can reach a targeted global audience, making it easy to introduce new products, connect with potential buyers, and expand their market reach effectively.",
   },
   {
     id: 3,
-    icon: <Image src={Image8} alt="cardIcon" preview={false} />,
+    icon: <Image src={Image2} alt="Image2" preview={false} />,
     title: "For Service Providers",
     content:
       "Service providers are listed based on their proximity to potential customers, and our real-time locator shows their location to facilitate seamless connections.",
@@ -32,7 +33,7 @@ const cardData = [
 const WhyChooseUs = () => {
   return (
     <div >
-  <div className={styles.marketplaceWrapper}>
+  <div className={styles.whyWrapper}>
       <div className={styles.head}>
         <h1>Why Choose Us</h1>
       </div>

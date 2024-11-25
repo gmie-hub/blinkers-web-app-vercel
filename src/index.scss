@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
 html,
 body {
-  width: 100%; 
+  width: 100%;
   height: 100%;
   scroll-behavior: smooth;
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
   /* font-size: 62.5%; */
 }
 
 :root {
   min-height: 100vh;
   font-size: 1.4rem;
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
   font-size: 62.5%;
 }
 
@@ -20,7 +20,7 @@ body {
   min-height: 100vh;
   min-width: 100vw;
   margin: 0;
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-primary-white);
@@ -34,7 +34,7 @@ body {
   --color-primary-bg: #f1f1f1;
   --color-primary-white: #ffffff;
   --color-primary-green: #009900;
-  --color-light-green: #0099001A;
+  --color-light-green: #0099001a;
 
   --color-body-text: #707070;
   --color-header-text: #222222;
@@ -51,7 +51,7 @@ body {
   --color-grey: #dedede;
   --color-grey-lighter: #e0e0e0;
   --color-grey-primary: #828282;
-  --color-grey5-light: #EEEEEE;
+  --color-grey5-light: #eeeeee;
 
   --font-s-2: 0.2rem;
   --font-s-4: 0.4rem;
@@ -72,13 +72,13 @@ body {
 }
 
 html {
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
   background-color: var(--color-main-bg);
 }
 
 body {
   overflow-x: hidden;
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
 }
 
 a {
@@ -87,7 +87,7 @@ a {
 
 p {
   color: var(--color-header-tex);
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
   font-size: 1.4rem;
 }
 
@@ -107,7 +107,7 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
 }
 
 a:link,
@@ -148,10 +148,9 @@ a:visited {
     width: 40rem; /* Set a reasonable width for tablets */
   }
   @media screen and (max-width: 540px) {
-padding-inline: 3rem;
-/* padding-block-end: 2rem; */
-gap: 2rem;
-
+    // padding-inline: 3rem;
+    /* padding-block-end: 2rem; */
+    gap: 2rem;
   }
 
   @media screen and (min-width: 1024px) {
@@ -165,33 +164,48 @@ gap: 2rem;
 
 .ant-steps-item-finish .ant-steps-item-tail::after,
 .ant-steps-item-process .ant-steps-item-tail::after {
-  background: green; /* Change this to any color you like */
+  background: green !important; /* Change this to any color you like */
+
+}
+
+.ant-steps .ant-steps-item-tail {
+  top: 21px; /* Override top value */
+  
+
+}
+
+ .ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+  /* Add any additional styles here */
+  padding: 0px;
+
 }
 
 .ant-steps-item-tail::after {
-  border-color: green;
+  border-color: green !important;
 }
 
-.ant-steps .ant-steps-item-custom > .ant-steps-item-container > .ant-steps-item-icon > .ant-steps-icon > div {
-  width: '50px';
-  height: '50px';
-  border-radius: '50%';
-  background: 'green';
-  color: 'white';
-  display: 'flex';
-  align-items: 'center';
-  justify-content: 'center';
-  font-size: '2rem';
-  
+.ant-steps
+  .ant-steps-item-custom
+  > .ant-steps-item-container
+  > .ant-steps-item-icon
+  > .ant-steps-icon
+  > div {
+  width: "50px";
+  height: "50px";
+  border-radius: "50%";
+  background: "red";
+  color: "white";
+  display: "flex";
+  align-items: "center";
+  justify-content: "center";
+  font-size: "2rem";
 }
-
 
 .ant-steps.ant-steps-vertical > .ant-steps-item .ant-steps-item-content {
   @media screen and (max-width: 540px) {
-
-  display: flex;
-  align-items: center;
-  padding-inline-start: 2rem;
+    display: flex;
+    align-items: center;
+    padding-inline-start: 2rem;
   }
 }
 .ant-menu-inline.ant-menu-root .ant-menu-item:focus {
@@ -217,7 +231,7 @@ gap: 2rem;
 }
 
 ::-webkit-scrollbar-track {
-  background: '#f1f1f1';
+  background: "#f1f1f1";
 }
 
 ::-webkit-scrollbar-thumb {
@@ -230,7 +244,7 @@ gap: 2rem;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
-  gap: 2rem;  
+  gap: 2rem;
   margin-block-start: 4rem;
 
   @media screen and (max-width: 768px) {
@@ -254,10 +268,10 @@ gap: 2rem;
 .spinColor {
   background-color: var(--color-green-bg);
 }
-.line{
+.line {
   width: 100%;
   border-bottom: 2px solid var(--color-grey5-light); /* Adds the red bottom border */
-margin-block: 0.5rem;
+  margin-block: 0.5rem;
 }
 .modalMain {
   display: flex;
@@ -293,10 +307,10 @@ margin-block: 0.5rem;
     width: 100% !important;
   }
 }
-.rejectButtonStyle {
-  @extend .buttonStyle;
-  color: red;
-}
+// .rejectButtonStyle {
+//   @extend .buttonStyle;
+//   color: red;
+// }
 .RejectModalWrapper {
   text-align: center;
   line-height: 3.2rem;
@@ -307,12 +321,11 @@ margin-block: 0.5rem;
   font-size: 1.6rem;
   font-weight: bold;
 }
-.label  {
+.label {
   color: var(--color-header-text);
   font-weight: 600;
   font-size: 1.6rem;
 }
-
 
 .editor-container {
   .ck-editor__editable_inline {
@@ -321,40 +334,32 @@ margin-block: 0.5rem;
   }
 }
 
+// .buttonStyle {
+//   min-width: 22rem;
+//   width: 100%;
 
+//   @media screen and (min-width: 768px) {
+//     min-width: 22rem;
+//     // width: 0 !important;
+//   }
+//   @media screen and (max-width: 768px) {
+//     // width: 100% !important;
+//     max-width: 22rem;
+//   }
+// }
 
-
-
-.buttonStyle {
-  min-width: 22rem;
-  width: 100%;
-
-  @media screen and (min-width: 768px) {
-    min-width: 22rem;
-    // width: 0 !important;
-  }
-  @media screen and (max-width: 768px) {
-    // width: 100% !important;
-    max-width: 22rem;
-
-  }
-}
-
-.wrapper{
+.wrapper {
   padding-inline: 10rem;
   @media (max-width: 600px) {
     padding-inline: 2.4rem;
-    
   }
-  }
+}
 
-
-  /* Custom styles for Ant Design Pagination */
+/* Custom styles for Ant Design Pagination */
 .ant-pagination-item {
   background-color: var(--color-primary-white);
   color: var(--color-body-black);
-  border: #E7E7E7 solid 1px !important;
-
+  border: #e7e7e7 solid 1px !important;
 }
 
 .ant-pagination-item-active {
@@ -363,6 +368,7 @@ margin-block: 0.5rem;
   border: var(--color-primary-green) solid 1px !important;
 }
 .ant-pagination .ant-pagination-item-active a {
-  color: var(--color-primary-white) !important; /* Text color inside the active page */
+  color: var(
+    --color-primary-white
+  ) !important; /* Text color inside the active page */
 }
-

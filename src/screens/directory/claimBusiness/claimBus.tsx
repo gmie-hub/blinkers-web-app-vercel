@@ -1,7 +1,7 @@
 import styles from "./claimBus.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import {useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { Image } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
@@ -12,11 +12,14 @@ import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
 import DoneIcon from "../../../assets/Done.svg";
 import { countUpTo } from "../../home/trend";
 import HeadIcon from "../../../assets/Ehead.svg";
-import linkIcon from "../../../assets/link-2.svg";
+// import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
 import Upload from "../../../customs/upload/upload";
 import { Form, FormikProvider, FormikValues, useFormik } from "formik";
 import Input from "../../../customs/input/input";
+import TimeIcon from "../../../assets/time42.svg";
+import LocationIcon from "../../../assets/locationnot.svg";
+import CallIcon from "../../../assets/callclaim.svg";
 
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const ClaimBusiness = () => {
@@ -47,15 +50,15 @@ const ClaimBusiness = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleNavigateToRelatedBusiness = useCallback(() => {
+  const handleNavigateToRelatedBusiness = () => {
     navigate(`/related-businesses`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  };
 
-  const handleNavigateToSubPlan = useCallback(() => {
-    navigate(`/subscription-pricing`);
+  const handleNavigateToSubPlan = () => {
+    navigate(`/claimed-business`);
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }
 
   const formik = useFormik<FormikValues>({
     initialValues: {
@@ -112,7 +115,7 @@ const ClaimBusiness = () => {
 
                 <div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
 
                     <div className={styles.open}>
                       <p>Opening Hours</p>
@@ -120,11 +123,11 @@ const ClaimBusiness = () => {
                     </div>
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={LocationIcon} alt="LocationIcon" preview={false} />
                     4, blinkers street, Lekki, Nigeria
                   </div>
                   <div className={styles.info}>
-                    <Image src={linkIcon} alt="linkIcon" preview={false} />
+                    <Image src={CallIcon} alt="CallIcon" preview={false} />
 
                     <p>09012345678</p>
                   </div>
@@ -164,7 +167,11 @@ const ClaimBusiness = () => {
                   </div>
 
                   <div className={styles.inputContainer}>
-                    {/* {uploadLogo ? (
+                    <div>
+                      <p>Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)</p>
+                      <br />
+
+                    {uploadLogo ? (
                       <div className="small-gap">
                         <Image />
                         <span>{uploadLogo.name}</span>
@@ -177,12 +184,15 @@ const ClaimBusiness = () => {
                     ) : (
                       <Upload
                         name="imageLogo"
-                        label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
+                        // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
                         onChange={(e) =>
                           handleFileChangeLogo(e, formik?.setFieldValue)
                         }
                       />
-                    )} */}
+                    )}
+
+                    </div>
+                
 
                     <div className={styles.inputCon}>
                       <Input

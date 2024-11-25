@@ -14,7 +14,7 @@ export const Theme: FC<PropsWithChildren> = ({ children }) => {
             colorPrimary: 'var(--color-green-text)',
           },
           Tabs: {
-            itemColor: '#707070',
+            itemColor: 'var(--color-body-text)',
             itemActiveColor: '#28a745',
             itemSelectedColor: '#28a745',
             inkBarColor: '#28a745',

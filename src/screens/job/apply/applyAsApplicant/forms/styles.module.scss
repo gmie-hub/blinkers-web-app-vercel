@@ -1,0 +1,71 @@
+.textContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  & p:nth-child(1) {
+    font-weight: 600;
+    font-size: 2rem;
+    margin-block-start: 4rem;
+    margin-block-end: 1rem;
+    // color: var(--color-header-text);
+    text-transform: capitalize;
+  }
+}
+
+.inputContainer {
+  // margin-inline: 1.6rem;
+  gap: 1.9rem;
+  display: flex;
+  flex-direction: column !important;
+  margin-block-start: 2.4rem;
+//   padding-inline: 3rem;
+//   color: #bebbbb;
+
+  @media screen and (max-width: 768px) {
+    padding-inline: 0.5rem;
+  }
+
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // margin-block-end: 1.3rem;
+  margin-block-start: 2.4rem;
+  flex-direction: row;
+
+  gap: 1.6rem;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block-start: 2.4rem;
+    flex-direction: column-reverse;
+
+  }
+}
+
+.btn {
+  width: 100%;
+}
+.popUp {
+  box-shadow: 0px 4px 40px 0px #5111ad0d;
+  border-radius: 0.8rem;
+  padding: 1.6rem;
+  border: solid 0.1rem #5111AD0D;
+   & > div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+   }
+   & > p{
+    color: #707070 !important;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+}

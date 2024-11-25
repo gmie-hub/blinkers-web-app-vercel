@@ -4,7 +4,7 @@ import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product2 from "../../../../assets/Image.svg";
 import Product3 from "../../../../assets/Image (1).svg";
-import { useCallback, useState } from "react";
+import {  useState } from "react";
 import favorite from "../../../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
 import { countUpTo } from "../../trend";
@@ -68,12 +68,10 @@ const RightSide = () => {
     setCurrentPage(page);
   };
 
-  const handleNavigateToProductDetails = useCallback(
+  const handleNavigateToProductDetails =
     (id: number) => {
       navigate(`/product-details/${id}`);
-    },
-    [navigate]
-  );
+    }
 
   return (
     <div>

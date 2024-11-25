@@ -7,12 +7,13 @@ import LoginIcon from "../../assets/Featured icon.svg";
 import BlinkersLogo from "../../assets/Frame 1618868702.svg"; // Actual image import
 
 import { Image } from "antd";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../routes';
 
 
 
 const ForgotPassword = () => {
+  const navigate = useNavigate()
   return (
     <section className={styles.container}>
       <div className={styles.smallScreen}>
@@ -43,7 +44,7 @@ const ForgotPassword = () => {
               
 
         
-                <Button type="submit" text="Send Code" className={styles.button} />
+                <Button onClick={()=>navigate('/verification-code')} type="submit" text="Send Code" className={styles.button} />
                 <div className={styles.footer}>
                   <p> Remember Password?</p>
 
