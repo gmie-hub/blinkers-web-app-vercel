@@ -4,7 +4,6 @@
   padding-inline-end: 0.4rem;
   // padding-block-start: 7rem;
   padding-block-end: 2.7rem;
-
 }
 
 .promoHead p {
@@ -12,8 +11,12 @@
   font-weight: 500;
   font-size: 2.5rem;
 }
-.relatedWrapper{
+.relatedWrapper {
   margin-block: 6.4rem;
+  @media (max-width: 768px) {
+    margin-block: 2.4rem;
+
+}
 }
 .seeMore {
   display: flex;
@@ -26,107 +29,185 @@
   }
 }
 
-// .favoriteIcon {
-//   position: absolute;
-//   // left: 7rem; // Adjust the position as needed
-//   display: flex;
-//   width: 100%;
-//   justify-content: end;
+// .promoImage {
+//   position: relative; // Add this to make .favoriteIcon position relative to the promoImage container
+  // flex: 1 1 calc(24% - 1rem);
+  // max-width: calc(24% - 1rem);
+  // box-sizing: border-box;
 
-//   z-index: 10; // Place it above other elements
+  // img {
+  //   width: 100%;
+  //   height: auto;
+  //   object-fit: contain;
+  //   border-top-left-radius: 1rem;
+  //   border-top-right-radius: 1rem;
+  // }
+
+  .favoriteIcon {
+    position: absolute;
+    top: 1rem; // Adjust as needed
+    right: 1rem; // Adjust as needed
+    z-index: 10;
+    display: flex;
+  }
+
+
+// @media (max-width: 1024px) {
+//   .promoImage {
+//     flex: 1 1 calc(33.33% - 1rem); // 3 images per row on medium-sized screens
+//     max-width: calc(33.33% - 1rem);
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   .promoImage {
+//     flex: 1 1 calc(50% - 1rem); // 2 images per row on smaller screens
+//     max-width: calc(50% - 1rem);
+//   }
+// }
+
+// @media (max-width: 480px) {
+//   .promoImage {
+//     flex: 1 1 100%; // 1 image per row on very small screens
+//     max-width: 100%; // Ensure full width for single images
+//     margin: 0 auto; // Center the image
+//   }
+// }
+// .productList {
+//   padding-inline-start: 1.6rem;
+//   display: flex;
+//   flex-direction: column;
+//   text-align: start;
+//   border-radius: 0 0 1rem 1rem;
+//   box-shadow: 0px 4px 40px 0px #00990012;
+//   border: solid #00990012;
+
+//   cursor: pointer;
+//   & > p {
+//     padding-block-start: 0.5rem !important;
+//   }
+// }
+.starWrapper {
+  align-items: end;
+  display: flex;
+  padding-block-end: 2rem;
+  gap: 1rem;
+}
+
+// .proImage {
+//   height: 26rem !important;
+// }
+
+
+// .promoImageContainer {
+//   display: grid; /* Use grid for a more controlled layout */
+//   grid-template-columns: repeat(4, 1fr); /* 3 items per row */
+//   gap: 3rem; /* Space between the items */
+//   row-gap: 4rem;
+//   justify-items: center; /* Align items in the center of each grid cell */
+// }
+
+// .promoImage {
+//   display: flex;
+//   flex-direction: column;
+//   // height: 26rem; /* Set fixed height for each item */
+//   width: 100%; /* Ensure it fills the available space */
+//   justify-content: space-between; /* Ensure the image and product list have equal space */
+//   background: #fff; /* Optional: add a background */
+//   border-radius: 8px; /* Optional: add rounded corners */
+//   overflow: hidden; /* Ensure no overflow */
+// }
+
+// .promoImage img {
+//   object-fit: cover; /* Ensure images cover the available space while maintaining their aspect ratio */
+//   // height: 14rem; /* Set fixed height for the image */
+//   width: 100%; /* Ensure the image fills the width */
+// }
+
+// .productList {
+//   // height: 12rem; /* Ensure the product list takes the remaining height */
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   padding: 1rem; /* Add padding to the product list */
+// }
+
+// .productList p {
+//   margin: 0; /* Remove margins for consistent spacing */
+// }
+
+// @media (max-width: 640px) {
+//   .promoImageContainer {
+//     grid-template-columns: repeat(
+//       1,
+//       1fr
+//     ); /* 2 items per row on smaller screens */
+//     gap: 2rem; /* Adjust the gap for smaller screens */
+//   }
+
+//   .promoImage {
+//     height: auto; /* Allow the height to be dynamic on smaller screens */
+//   }
 // }
 
 
 
 .promoImageContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem; // Space between images
-    width: 100%; // Ensure the container takes up 100% of the screen width
-    box-sizing: border-box;
-    justify-content: space-between; // Spread images across the row
-  }
-  
-  // .promoImage {
-  //   flex: 1 1 calc(24% - 1rem); // 4 images per row, accounting for the gap
-  //   max-width: calc(24% - 1rem); // Ensures 4 items fit within the width
-  //   background-color: #ffffff;
-  //   box-sizing: border-box;
-  //   border-radius: 1rem; // Optional: rounding top corners
-  //     // border-top-right-radius: 1rem; 
-  //   img {
-  //     width: 100%; // Image takes up full width of the container
-  //     height: auto; // Maintain the image aspect ratio
-  //     object-fit: contain; // Ensure image fits without distortion
-  //     border-top-left-radius: 1rem; // Optional: rounding top corners
-  //     border-top-right-radius: 1rem;
-  //   }
-  // }
-  
-  .promoImage {
-    position: relative; // Add this to make .favoriteIcon position relative to the promoImage container
-    flex: 1 1 calc(24% - 1rem);
-    max-width: calc(24% - 1rem);
-    box-sizing: border-box;
- 
-    img {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
-    }
-  
-    .favoriteIcon {
-      position: absolute;
-      top: 1rem; // Adjust as needed
-      right: 1rem; // Adjust as needed
-      z-index: 10;
-      display: flex;
-    }
-  }
-  
-  @media (max-width: 1024px) {
-    .promoImage {
-      flex: 1 1 calc(33.33% - 1rem); // 3 images per row on medium-sized screens
-      max-width: calc(33.33% - 1rem); 
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .promoImage {
-      flex: 1 1 calc(50% - 1rem); // 2 images per row on smaller screens
-      max-width: calc(50% - 1rem);
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .promoImage {
-      flex: 1 1 100%; // 1 image per row on very small screens
-      max-width: 100%; // Ensure full width for single images
-      margin: 0 auto; // Center the image
-    }
-  }
-.productList {
-  padding-inline-start: 1.6rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); // 4 items per row
+  gap: 2rem; // Adjust spacing between items
+  justify-items: center;
+}
+
+.promoImage {
+  background: #fff; 
+  border-radius: 8px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  text-align: start;
-  border-radius: 0 0 1rem 1rem; 
+  width: 100%; 
+  justify-content: space-between;
+  position: relative; 
   box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid  #00990012;
 
-  cursor: pointer;
-  & > p {
-    padding-block-start: 0.5rem !important;
+
+}
+
+.proImage {
+  width: 100%;
+  height: 200px; // Adjust height for a uniform layout
+  object-fit: cover; 
+}
+
+.productList {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem; 
+}
+
+.productList p {
+  margin: 0; 
+}
+
+@media (max-width: 1024px) {
+  .promoImageContainer {
+    grid-template-columns: repeat(3, 1fr); // 3 items per row
   }
 }
-.starWrapper {
-  align-items: end;
-  display: flex;
-  padding-inline-start: 0.5rem;
-  padding-block-end: 2rem;
-  gap: 1rem;
+
+@media (max-width: 768px) {
+  .promoImageContainer {
+    grid-template-columns: repeat(2, 1fr); // 2 items per row
+  }
 }
 
-
+@media (max-width: 480px) {
+  .promoImageContainer {
+    grid-template-columns: 1fr; // 1 item per row
+  }
+}
+.starNum{
+font-weight: 400;
+font-size: 1.4rem;  
+}

@@ -2,7 +2,7 @@ import styles from "./relatedBusiness.module.scss";
 import { Image } from "antd";
 import Product2 from "../../../assets/Image.svg";
 import Product3 from "../../../assets/Image (1).svg";
-import BackIncon from "../../../assets/back.svg";
+  import BackIncon from "../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
 import LocationIcon from "../../../assets/locationrelated.svg";
 import CallIcon from "../../../assets/callrelated.svg";

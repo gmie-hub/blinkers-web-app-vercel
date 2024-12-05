@@ -64,7 +64,7 @@
   & > p {
     color: var(--color-body-text);
     align-self: end;
-    padding-block-start: 0.8rem;
+    // padding-block-start: 0.8rem;
   }
 }
 .flex {
@@ -165,6 +165,10 @@
 .firstSideLeft {
   width: 30%; /* Set left side to take 30% of the container width */
   //   padding: 2rem;
+  gap: 2.4rem;
+  display: flex
+;
+  flex-direction: column;
 }
 .dressCard {
   // display: block;
@@ -209,13 +213,13 @@
 .favoriteIcon {
   // position: absolute;
   top: 1.5rem;
-  right: 7rem;
+  right: 0rem;
   // z-index: 10;
 
   position: absolute;
   // left: 7rem; // Adjust the position as needed
   display: flex;
-  width: 100%;
+  // width: 100%;
   justify-content: end;
 
   z-index: 10;
@@ -577,4 +581,52 @@
   .adding {
     padding-block-start: 1.6rem;
   }
+}
+
+
+
+
+.review {
+  padding-block-start: 2.4rem;
+  padding-block-end: 2.1rem;
+
+  //   & > h1 {
+  //     padding-block-end: 0.8rem;
+  //   }
+}
+.btn {
+  color: var(--color-primary-green);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.reviewbtn {
+  display: flex;
+  justify-content: space-between;
+  //   margin-block-end: 2.4rem;
+  align-items: center;
+  //   margin-block-start: 4rem;
+}
+.btnWrapper {
+  display: flex;
+  align-items: center;
+}
+.title {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--color-header-text);
+}
+
+.arrowButton {
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.arrowButton:hover {
+  background-color: #0056b3;
 }

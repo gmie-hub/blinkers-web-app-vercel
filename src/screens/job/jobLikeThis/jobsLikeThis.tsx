@@ -1,59 +1,101 @@
-import { useNavigate } from "react-router-dom";
-import { cardData } from "../data";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./styles.module.scss";
-import BackIcon from "../../../assets/back.svg";
+import { getTimeAgo } from "../../../utils/formatTime";
+import { AxiosError } from "axios";
+import { useQueries } from "@tanstack/react-query";
+import { getJobDetails } from "../../request";
+import RouteIndicator from "../../../customs/routeIndicator";
+import { Spin } from "antd";
 
 interface Props {
   canSeeBtn?: boolean;
   limit?: number;
 }
 
-const MoreJobsLikeThis = ({
-  canSeeBtn = true,
-  limit = cardData?.length,
-}: Props) => {
+const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  // Limit the reviews based on the passed `limit` prop
-  const businessReviewData =
-    cardData?.length > 0 ? cardData.slice(0, limit) : [];
+  const [getJobDetailsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-jobs-details", id],
+        queryFn: () => getJobDetails(parseInt(id!)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        // enabled:!!id
+      },
+    ],
+  });
+
+  const JobDetailsData = getJobDetailsQuery?.data?.data;
+  const jobDetailsError = getJobDetailsQuery?.error as AxiosError;
+  const jobDetailsErrorMessage =
+    jobDetailsError?.message || "An error occurred. Please try again later.";
+
+  const reletedJob = JobDetailsData?.related_jobs;
+
+  const relatedJobsData =
+    reletedJob && reletedJob?.length > 0
+      ? reletedJob.slice(0, limit)
+      : reletedJob;
+
   const businessReviewErrorMessage = "Failed to load reviews";
+  const handleNavigateDetails = (id: number) => {
+    navigate(`/job-details/${id}`);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div className="wrapper">
       <div className={styles.whyWrapper}>
         {canSeeBtn && (
-          <div onClick={() => navigate(-1)} className={styles.back}>
-            <img src={BackIcon} alt="BackIcon" />
-            <p>Back</p>
-          </div>
+          // <div onClick={() => navigate(-1)} className={styles.back}>
+          //   <img src={BackIcon} alt="BackIcon" />
+          //   <p>Back</p>
+          // </div>
+          <RouteIndicator showBack />
         )}
 
-        <div className={styles.cardContainer}>
-          {/* Only map through the data if it's not empty */}
-          {businessReviewData.length > 0 ? (
-            businessReviewData.map((card, index) => (
-              <div className={styles.chooseCard} key={index}>
-                <div className={styles.cardWrapper}>
-                  <div className={styles.icon}>{card.icon}</div>
-                  <div className={styles.textContent}>
-                    <h3>Customer Experience Manager</h3>
-                    <p>Blinkers Nigeria</p>
-                    {/* <p>{card.value}</p> Assuming card has a value to display */}
+        {getJobDetailsQuery?.isLoading ? (
+          <Spin />
+        ) : getJobDetailsQuery?.isError ? (
+          <h1 className="error">{jobDetailsErrorMessage}</h1>
+        ) : (
+          <div className={styles.cardContainer}>
+            {/* Only map through the data if it's not empty */}
+            {relatedJobsData && relatedJobsData.length > 0 ? (
+              relatedJobsData?.map((item: any, index: any) => (
+                <div
+                  onClick={() => handleNavigateDetails(item?.id)}
+                  className={styles.chooseCard}
+                  key={index}
+                >
+                  <div className={styles.cardWrapper}>
+                    {/* <div className={styles.icon}>{item.icon}</div> */}
+                    <div className={styles.textContent}>
+                      <h3>{item?.title}</h3>
+                      <p>Blinkers Nigeria</p>
+                      {/* <p>{card.value}</p> Assuming card has a value to display */}
+                    </div>
+                  </div>
+                  <div className={styles.full}>
+                    <span>{item?.employment_type}</span>{" "}
+                    <span className={styles.dot}></span>
+                    <span>{item?.job_type}</span>{" "}
+                    <span className={styles.dot}></span>
+                    <span>{item?.level}</span>
+                    <p className={styles.posted}>
+                      {getTimeAgo(item?.created_at || "")}
+                    </p>
                   </div>
                 </div>
-                <div className={styles.full}>
-                  <span>Full time</span> <span className={styles.dot}></span>
-                  <span>Remote</span> <span className={styles.dot}></span>
-                  <span>Mid level</span>
-                  <p className={styles.posted}>Posted 18hrs ago</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>{businessReviewErrorMessage}</p>
-          )}
-        </div>
+              ))
+            ) : (
+              <p>{businessReviewErrorMessage}</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

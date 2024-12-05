@@ -6,80 +6,116 @@ import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
 import Select from "../../../../../../customs/select/select";
 import Checkbox from "../../../../../../customs/checkBox/checkbox";
+import { EmploymentHistory } from "../../../../../../utils/type";
+import { useAtom, useSetAtom } from "jotai";
+import { EmploymentHistoryInfoAtom } from "../../../../../../utils/store";
+import { convertDate } from "../../../../../../utils/formatTime";
 
 interface ComponentProps {
   handleClose: () => void;
+  indexData: EmploymentHistory;
 }
 
-const EmpHistory: FC<ComponentProps> = ({ handleClose }) => {
+const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData }) => {
+  const EmployementHistoryData = useSetAtom(EmploymentHistoryInfoAtom);
+  const [empData] = useAtom(EmploymentHistoryInfoAtom); // Use the atom directly
+
+  console.log(empData, "indexDataindexDataindexDataindexData");
   return (
     <section>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          email: "",
+          job_title: indexData?.job_title || "",
+          job_type: indexData?.job_title || "",
+          company_name: indexData?.company_name || "",
+          location: indexData?.location || "",
+          start_date: convertDate(indexData?.start_date) || "",
+          end_date: convertDate(indexData?.end_date) || "",
+          WorkSummary: indexData?.WorkArrangement || "",
+          currentWork: indexData?.currentWork || "",
+          WorkArrangement: indexData?.WorkArrangement || "",
+
         }}
+        enableReinitialize={true}
         onSubmit={(values) => {
-          console.log(values);
+          const currentEmpHistoryInfo = JSON.parse(
+            localStorage.getItem("employment-History") ?? "[]"
+          );
+          if (indexData) {
+            const updatedEmpHisInfo = currentEmpHistoryInfo?.map(
+              (item: EmploymentHistory,) =>
+                item?.company_name === indexData?.company_name ? { ...item, ...values } : item
+            );
+            EmployementHistoryData(updatedEmpHisInfo);
+          } else {
+            const updatedEmpInfo = [...currentEmpHistoryInfo, values];
+            EmployementHistoryData(updatedEmpInfo);
+          }
+
           handleClose();
         }}
+
         // validationSchema={validationSchema}
       >
-        {({ handleChange }) => {
+        {({ handleChange, values, setFieldValue }) => {
           return (
             <Form>
               <div className={styles.inputContainer}>
                 <Input
-                  name="Job Title"
+                  name="job_title"
                   label="Job Title"
                   placeholder="Job Title"
                   type="text"
                 />
 
-                <Select
-                  name="Job Type"
+                <Input
+                  name="job_type"
+                  label="Job Type"
+                  placeholder="Job Type"
+                  type="text"
+                />
+                {/* <Select
+                  name="JobType"
                   label="Job Type"
                   placeholder=" Select Job Type"
                   options={[]}
                   onChange={handleChange}
-                />
+                /> */}
 
                 <Input
-                  label="Company’s Name"
+                  label="Company Name"
                   placeholder="Name of company "
-                  name="Company’s Name"
+                  name="company_name"
                   type="text"
                 />
                 <Input
                   label="Location"
                   placeholder="Enter Location"
-                  name="Location"
+                  name="location"
                   type="text"
                 />
                 <Input
                   label="Work Arrangement"
                   placeholder="Work Arrangement"
-                  name="Work Arrangement"
+                  name="WorkArrangement"
                   type="text"
                 />
 
                 <Input
-                  name="startDate"
+                  name="start_date"
                   placeholder="Start Date"
                   label="Start Date"
                   type="date"
                 />
                 <Input
-                  name="EndDate"
+                  name="end_date"
                   placeholder="End Date"
                   label="End Date"
                   type="date"
                 />
 
                 <Input
-                  name="Work Summary"
+                  name="WorkSummary"
                   label="Work Summary"
                   type="textarea"
                   placeholder="Write your day to day activities"
@@ -87,13 +123,23 @@ const EmpHistory: FC<ComponentProps> = ({ handleClose }) => {
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <p>0/2000</p>
                 </div>
-                <Checkbox
+                {/* <Checkbox
                   label={'I currently work here'}
                   name='Current'
+                /> */}
+
+                <Checkbox
+                  label="I currently work here"
+                  name="currentWork"
+                  checked={values.currentWork} // Bind `checked` to Formik's `values`
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    console.log(values?.currentWork);
+                    setFieldValue("currentWork", e.target.checked); // Update Formik's state
+                  }}
                 />
 
                 <section className={styles.buttonGroup}>
-                <Button
+                  <Button
                     variant="white"
                     type="submit"
                     disabled={false}

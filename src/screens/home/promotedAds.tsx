@@ -1,62 +1,41 @@
 import styles from "./index.module.scss";
-import { Image } from "antd";
+import { Image, Spin } from "antd";
 import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
-import Product1 from "../../assets/Product.svg";
-import Product2 from "../../assets/Image.svg";
-import Product3 from "../../assets/Image (1).svg";
 import { useState } from "react";
+import { AxiosError } from "axios";
+import { useQueries } from "@tanstack/react-query";
+import { getPromotedAds } from "../request";
 
-// Data array
-const cardData = [
-  {
-    id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 3,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 4,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 5,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 6,
-    icon: <Image width="100%" src={Product1} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 7,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 8,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 9,
-    icon: <Image width="100%" src={Product1} alt="cardIcon" preview={false} />,
-  },
-];
-
-// Main component
 const PromotedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4; // Number of items to display per page
-  const totalPages = Math.ceil(cardData.length / pageSize);
+
+  const [getPromotedAdsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-promoted-ads"],
+        queryFn: getPromotedAds,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+    ],
+  });
+
+  const promotedData = getPromotedAdsQuery?.data?.data?.data || [];
+  const promotedError = getPromotedAdsQuery?.error as AxiosError;
+  const promotedErrorMessage =
+    promotedError?.message || "An error occurred. Please try again later.";
+
+  const totalPages = Math.ceil(promotedData.length / pageSize);
 
   // Calculate the slice of data to display based on the current page
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentData = cardData.slice(startIndex, endIndex);
+  const currentData =
+    promotedData &&
+    promotedData?.length > 0 &&
+    promotedData?.slice(startIndex, endIndex);
 
   // Handle left button click (Previous)
   const handlePrev = () => {
@@ -73,12 +52,13 @@ const PromotedAds = () => {
   };
 
   // Handle dot click to jump to the respective page
-  const handleDotClick = (page: any) => {
+  const handleDotClick = (page: number) => {
     setCurrentPage(page);
   };
 
+  console.log(promotedData?.length, "promoted Data");
   return (
-    <div  className={styles.promoWrapper}>
+    <div className={styles.promoWrapper}>
       <div className={styles.promoHead}>
         <p>Promoted Ads</p>
 
@@ -99,34 +79,49 @@ const PromotedAds = () => {
                 : styles.greenBackground
             }`}
             onClick={handleNext}
-            style={currentPage === totalPages ? { backgroundColor: "#009900" } : {}}
+            style={
+              currentPage === totalPages ? { backgroundColor: "#009900" } : {}
+            }
           >
             <Image src={RightIcon} alt="Right Arrow" preview={false} />
           </div>
         </div>
       </div>
+      {getPromotedAdsQuery?.isLoading ? (
+        <Spin />
+      ) : getPromotedAdsQuery?.isError ? (
+        <h1 className="error">{promotedErrorMessage}</h1>
+      ) : (
+        <>
+          {/* Display the promo images */}
+          <section className={styles.promoImageContainer}>
+            {currentData &&
+              currentData?.length > 0 &&
+              currentData?.map((item:any , index:number) => (
+                <div className={styles.promoImage} key={item?.id}>
+                  <img
+                    src={item?.image}
+                    alt={item?.title}
+                    // className={styles.trendingProductImage}
+                    />
+                </div>
+              ))}
+          </section>
 
-      {/* Display the promo images */}
-      <section className={styles.promoImageContainer}>
-        {currentData.map((card) => (
-          <div className={styles.promoImage} key={card.id}>
-            {card.icon}
-          </div>  
-        ))}
-      </section>
-
-      {/* Dot-style pagination */}
-      <div className={styles.dotPagination}>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <span
-            key={index}
-            className={`${styles.dot} ${
-              currentPage === index + 1 ? styles.activeDot : ""
-            }`}
-            onClick={() => handleDotClick(index + 1)}
-          ></span>
-        ))}
-      </div>
+          {/* Dot-style pagination */}
+          <div className={styles.dotPagination}>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <span
+                key={index}
+                className={`${styles.dot} ${
+                  currentPage === index + 1 ? styles.activeDot : ""
+                }`}
+                onClick={() => handleDotClick(index + 1)}
+              ></span>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

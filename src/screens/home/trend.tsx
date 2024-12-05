@@ -1,201 +1,175 @@
 import styles from "./index.module.scss";
-import { Image } from "antd";
+import { Image, Spin } from "antd";
 import Product2 from "../../assets/Image.svg";
-import Product3 from "../../assets/Image (1).svg";
+import location from "../../assets/location.svg";
 import Button from "../../customs/button/button";
 import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
 import favorite from "../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import { getTrendingAds } from "../request";
+import { useQueries } from "@tanstack/react-query";
 
-// Data array
-const cardData = [
-  {
-    id: 1,
-    icon: <Image width={'100%'} src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 1,
-  },
-  {
-    id: 2,
-    icon: <Image width={'100%'} src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 2,
-  },
-  {
-    id: 3,
-    icon: <Image width={'100%'} src={Product3} alt="cardIcon" preview={false} />,
-    title: "Female Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 3,
-  },
-  {
-    id: 4,
-    icon: <Image width={'100%'}  src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 5,
-  },
-  {
-    id: 5,
-    icon: <Image  width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
-  },
-];
+// const Trends = () => {
+//   const navigate = useNavigate()
 
+//   const [getTrendingAdsQuery] = useQueries({
+//     queries: [
+//       {
+//         queryKey: ["get-trending-ads", ],
+//         queryFn: getTrendingAds,
+//         retry: 0,
+//         refetchOnWindowFocus: false,
+//       },
+//     ],
+//   });
 
+//   const trendData = getTrendingAdsQuery?.data?.data || [];
+//   const trendError = getTrendingAdsQuery?.error as AxiosError;
+//   const trendErrorMessage =
+//   trendError?.message || "An error occurred. Please try again later.";
+//   console.log(trendData, "JobData");
 
-const Trends = () => {
-  const navigate = useNavigate()
+//   const handleNavigateToMarket =
+//     () => {
+//       navigate(`/market`);
+//       window.scrollTo(0, 0); // Scrolls to the top of the page
 
-  const handleNavigateToMarket = 
-    () => {
-      navigate(`/market`);
-      window.scrollTo(0, 0); // Scrolls to the top of the page
+//     }
 
-    }
+//    return (
+//     <div className={styles.accessWrapper}>
+//       <div>
+//         <p className={styles.TrendsHead}>Trending Now</p>
+//       </div>
 
-  
-   return (
-    <div className={styles.accessWrapper}>
-      <div>
-        <p className={styles.TrendsHead}>Trending Now</p>
-      </div>
+//       <section className={styles.trendContainer}>
+//         {/* Left section with two items */}
+//         <div className={styles.leftSectionTrend}>
+//           {cardData?.slice(0, 2).map((card) => (
+//             <div className={styles.trendImage} key={card.id}>
+//               <div className={styles.favoriteIcon}>
+//                 <Image
+//                   width={30}
+//                   src={favorite}
+//                   alt="Favorite"
+//                   preview={false}
+//                 />{" "}
+//                 {/* Add favorite icon */}
+//               </div>
+//               {card.icon}
+//               <div className={styles.productList}>
+//                 <p>{card.title}</p>
+//                 <p>{card.location}</p>
+//                 <p>{card.amount}</p>
+//                 <div className={styles.starWrapper}>
+//                   {countUpTo(
+//                     card?.rating || 0,
+//                     <Image
+//                       width={20}
+//                       src={StarYellow}
+//                       alt="StarYellow"
+//                       preview={false}
+//                     />,
+//                     <Image width={20} src={Star} alt="Star" preview={false} />
+//                   )} <span>(20)</span>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
 
-      <section className={styles.trendContainer}>
-        {/* Left section with two items */}
-        <div className={styles.leftSectionTrend}>
-          {cardData.slice(0, 2).map((card) => (
-            <div className={styles.trendImage} key={card.id}>
-              <div className={styles.favoriteIcon}>
-                <Image
-                  width={30}
-                  src={favorite}
-                  alt="Favorite"
-                  preview={false}
-                />{" "}
-                {/* Add favorite icon */}
-              </div>
-              {card.icon}
-              <div className={styles.productList}>
-                <p>{card.title}</p>
-                <p>{card.location}</p>
-                <p>{card.amount}</p>
-                <div className={styles.starWrapper}>
-                  {countUpTo(
-                    card?.rating || 0,
-                    <Image
-                      width={20}
-                      src={StarYellow}
-                      alt="StarYellow"
-                      preview={false}
-                    />,
-                    <Image width={20} src={Star} alt="Star" preview={false} />
-                  )} <span>(20)</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+//         {/* Middle section with one item centered */}
+//         <div className={styles.middleSectionTrend}>
+//           <div className={styles.trendImage} key={cardData[2].id}>
+//             <div className={styles.favoriteIcon}>
+//               <Image width={30} src={favorite} alt="Favorite" preview={false} />{" "}
+//               {/* Add favorite icon */}
+//             </div>{" "}
+//             {cardData[2].icon}
+//             <div  className={styles.productList}>
+//               <p>{cardData[2].title}</p>
+//               <p>{cardData[2].location}</p>
+//               <p>{cardData[2].amount}</p>
+//               <div className={styles.starWrapper}>
+//                 {countUpTo(
+//                   cardData[2]?.rating || 0,
+//                   <Image
+//                     width={20}
+//                     src={StarYellow}
+//                     alt="StarYellow"
+//                     preview={false}
+//                   />,
+//                   <Image width={20} src={Star} alt="Star" preview={false} />
+//                 )} <span>(20)</span>
+//               </div>
+//             </div>
+//           </div>
+//           <Button
+//             type="button"
+//             variant="green"
+//             text="Shop Now"
+//             className={styles.buttonStyleTrend}
+//             onClick={handleNavigateToMarket}
 
-        {/* Middle section with one item centered */}
-        <div className={styles.middleSectionTrend}>
-          <div className={styles.trendImage} key={cardData[2].id}>
-            <div className={styles.favoriteIcon}>
-              <Image width={30} src={favorite} alt="Favorite" preview={false} />{" "}
-              {/* Add favorite icon */}
-            </div>{" "}
-            {cardData[2].icon}
-            <div  className={styles.productList}>
-              <p>{cardData[2].title}</p>
-              <p>{cardData[2].location}</p>
-              <p>{cardData[2].amount}</p>
-              <div className={styles.starWrapper}>
-                {countUpTo(
-                  cardData[2]?.rating || 0,
-                  <Image
-                    width={20}
-                    src={StarYellow}
-                    alt="StarYellow"
-                    preview={false}
-                  />,
-                  <Image width={20} src={Star} alt="Star" preview={false} />
-                )} <span>(20)</span>
-              </div>
-            </div>
-          </div>
-          <Button
-            type="button"
-            variant="green"
-            text="Shop Now"
-            className={styles.buttonStyleTrend}
-            onClick={handleNavigateToMarket}
+//           />
+//         </div>
 
-          />
-        </div>
+//         {/* Right section with two items */}
+//         <div className={styles.rightSectionTrend}>
+//           {cardData.slice(3).map((card) => (
+//             <div className={styles.trendImage} key={card.id}>
+//                   <div className={styles.favoriteIcon} >
+//                 <Image width={30} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
 
-        {/* Right section with two items */}
-        <div className={styles.rightSectionTrend}>
-          {cardData.slice(3).map((card) => (
-            <div className={styles.trendImage} key={card.id}>
-                  <div className={styles.favoriteIcon} >
-                <Image width={30} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
+//                 </div>
+//               {/* Add favorite icon */}
+//               {card.icon}
+//               <div  className={styles.productList}>
+//                 <p>{card.title}</p>
+//                 <p>{card.location}</p>
+//                 <p>{card.amount}</p>
+//                 <div className={styles.starWrapper}>
+//                   {countUpTo(
+//                     card?.rating || 0,
+//                     <Image
+//                       width={20}
+//                       src={StarYellow}
+//                       alt="StarYellow"
+//                       preview={false}
+//                     />,
+//                     <Image width={20} src={Star} alt="Star" preview={false} />
+//                   )} <span>(20)</span>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
 
-                </div>
-              {/* Add favorite icon */}
-              {card.icon}
-              <div  className={styles.productList}>
-                <p>{card.title}</p>
-                <p>{card.location}</p>
-                <p>{card.amount}</p>
-                <div className={styles.starWrapper}>
-                  {countUpTo(
-                    card?.rating || 0,
-                    <Image
-                      width={20}
-                      src={StarYellow}
-                      alt="StarYellow"
-                      preview={false}
-                    />,
-                    <Image width={20} src={Star} alt="Star" preview={false} />
-                  )} <span>(20)</span>
-                </div>
-              </div>
-            </div>
-          ))}
-    
-        </div>
-        <div>
-        <Button
-            type="button"
-            variant="green"
-            text="Shop Now"
-            className={styles.buttonStyleTrendBigscreen}
-            onClick={handleNavigateToMarket}
-          />
-        </div>
-     
+//         </div>
+//         <div>
+//         <Button
+//             type="button"
+//             variant="green"
+//             text="Shop Now"
+//             className={styles.buttonStyleTrendBigscreen}
+//             onClick={handleNavigateToMarket}
+//           />
+//         </div>
 
-      
-      </section>
+//       </section>
 
- 
-    </div>
-  );
-};
+//     </div>
+//   );
+// };
 
-export default Trends;
+// export default Trends;
 
-export function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
+export function countUpTo(
+  num: number,
+  element: JSX.Element,
+  element1: JSX.Element
+) {
   const result = [];
   for (let i = 1; i <= 5; i++) {
     if (i > num) result.push(element1);
@@ -203,3 +177,284 @@ export function countUpTo(num: number, element: JSX.Element, element1: JSX.Eleme
   }
   return result; // Return the array
 }
+
+const Trends = () => {
+  const navigate = useNavigate();
+
+  const [getTrendingAdsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-trending-ads"],
+        queryFn: getTrendingAds,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+    ],
+  });
+
+  const trendData = getTrendingAdsQuery?.data?.data || [];
+  const trendError = getTrendingAdsQuery?.error as AxiosError;
+  const trendErrorMessage =
+    trendError?.message || "An error occurred. Please try again later.";
+
+  const handleNavigateToMarket = () => {
+    navigate(`/market`);
+    window.scrollTo(0, 0); // Scrolls to the top of the page
+  };
+
+  return (
+    <div className={styles.accessWrapper}>
+      <div>
+        <p className={styles.TrendsHead}>Trending Now</p>
+      </div>
+      {getTrendingAdsQuery?.isLoading ? (
+        <Spin />
+      ) : getTrendingAdsQuery?.isError ? (
+        <h1 className="error">{trendErrorMessage}</h1>
+      ) : (
+        <section className={styles.trendContainer}>
+          <div className={styles.leftSectionTrend}>
+            {trendData &&
+              trendData?.length > 0 &&
+              trendData?.slice(0, 2)?.map((item: any, index: number) => (
+                <div className={styles.trendImage} key={item?.id || index}>
+                  <div className={styles.favoriteIcon}>
+                    <Image
+                      width={30}
+                      src={favorite}
+                      alt="Favorite"
+                      preview={false}
+                    />
+                  </div>
+                  <img
+                    // width={"100%"}
+                    className={styles.trendingProductImage}
+                    src={item?.add_images?.[0]?.add_image || Product2}
+                    alt={item?.title || "Product Image"}
+                    // preview={false}
+                  />
+                  <div className={styles.productList}>
+                    {/* <p style={{color:'#4F4F4F'}}>{item?.title || "No Title"}</p> */}
+                    <p style={{ color: "#4F4F4F" }}>
+                      {item?.title && item?.title?.length > 30
+                        ? `${item?.title?.slice(0, 30)}...`
+                        : item?.title}
+                    </p>
+                    <div className={styles.info}>
+                      <img src={location} alt="location" />
+
+                      <p>
+                        <span>
+                          {item?.local_govt?.local_government_area &&
+                            item?.local_govt?.local_government_area + ", "}
+                        </span>
+
+                        <span>{item?.state?.state_name}</span>
+                      </p>
+                    </div>
+
+                    <span className={styles.trendingdiscount}>
+                      {item?.discount_price &&
+                        `₦${item?.discount_price} (Discounted)`}
+                    </span>
+
+                    <span>
+                      {item?.discount_price === "" ? (
+                        <span>{`₦${item?.price}`}</span>
+                      ) : (
+                        <span
+                          className={styles.canceledText}
+                        >{`₦${item?.price}`}</span>
+                      )}
+                    </span>
+
+                    <div className={styles.starWrapper}>
+                      {countUpTo(
+                        item?.rating || 0,
+                        <Image
+                          width={20}
+                          src={StarYellow}
+                          alt="StarYellow"
+                          preview={false}
+                        />,
+                        <Image
+                          width={20}
+                          src={Star}
+                          alt="Star"
+                          preview={false}
+                        />
+                      )}
+                      <span>(20)</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+          {/* Middle section with one item centered */}
+          <div className={styles.middleSectionTrend}>
+            {trendData[3] && (
+              <div className={styles.trendImage} key={trendData[2].id}>
+                <div className={styles.favoriteIcon}>
+                  <Image
+                    width={30}
+                    src={favorite}
+                    alt="Favorite"
+                    preview={false}
+                  />
+                </div>
+                <img
+                  // width={"100%"}
+                  className={styles.trendingProductImage}
+                  src={trendData[3]?.add_images?.[0]?.add_image || Product2}
+                  alt={trendData[3]?.title || "Product Image"}
+                  // preview={false}
+                />
+                <div className={styles.productList}>
+                  <p style={{ color: "#4F4F4F" }}>
+                    {trendData[3]?.title && trendData[3]?.title?.length > 30
+                      ? `${trendData[3]?.title?.slice(0, 30)}...`
+                      : trendData[3]?.title}
+                  </p>{" "}
+                  <div className={styles.info}>
+                    <img src={location} alt="location" />
+
+                    <p>
+                      <span>
+                        {trendData[3]?.local_govt?.local_government_area &&
+                          trendData[3]?.local_govt?.local_government_area +
+                            ", "}
+                      </span>
+
+                      <span>{trendData[3]?.state?.state_name}</span>
+                    </p>
+                  </div>
+                  <span className={styles.trendingdiscount}>
+                    {trendData[3]?.discount_price &&
+                      `₦${trendData[3]?.discount_price} (Discounted)`}
+                  </span>
+                  <span>
+                    {trendData[3]?.discount_price === "" ? (
+                      <span>{`₦${trendData[3]?.price}`}</span>
+                    ) : (
+                      <span
+                        className={styles.canceledText}
+                      >{`₦${trendData[3]?.price}`}</span>
+                    )}
+                  </span>
+                  <div className={styles.starWrapper}>
+                    {countUpTo(
+                      trendData[2]?.rating || 0,
+                      <Image
+                        width={20}
+                        src={StarYellow}
+                        alt="StarYellow"
+                        preview={false}
+                      />,
+                      <Image width={20} src={Star} alt="Star" preview={false} />
+                    )}
+                    <span>(20)</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            <Button
+              type="button"
+              variant="green"
+              text="Shop Now"
+              className={styles.buttonStyleTrend}
+              onClick={handleNavigateToMarket}
+            />
+          </div>
+
+          {/* Right section with two items */}
+
+          <div className={styles.rightSectionTrend}>
+            {trendData &&
+              trendData?.length > 0 &&
+              trendData?.slice(4, 6)?.map((item: any, index: number) => (
+                <div className={styles.trendImage} key={item?.id || index}>
+                  <div className={styles.favoriteIcon}>
+                    <Image
+                      width={30}
+                      src={favorite}
+                      alt="Favorite"
+                      preview={false}
+                    />
+                  </div>
+                  <img
+                    // width={"100%"}
+                    className={styles.trendingProductImage}
+                    src={item?.add_images?.[0]?.add_image || Product2}
+                    alt={item?.title || "Product Image"}
+                    // preview={false}
+                  />
+                  <div className={styles.productList}>
+                  <p style={{ color: "#4F4F4F" }}>
+                    {item?.title && item?.title?.length > 30
+                      ? `${item?.title?.slice(0, 30)}...`
+                      : item?.title}
+                  </p>
+                    <div className={styles.info}>
+                      <img src={location} alt="location" />
+                      <p>
+                        <span>
+                          {item?.local_govt?.local_government_area &&
+                            item?.local_govt?.local_government_area + ", "}
+                        </span>
+
+                        <span>{item?.state?.state_name}</span>
+                      </p>{" "}
+                    </div>
+
+                    <span className={styles.trendingdiscount}>
+                      {item?.discount_price &&
+                        `₦${item?.discount_price} (Discounted)`}
+                    </span>
+                    <span>
+                      {item?.discount_price === "" ? (
+                        <span>{`₦${item?.price}`}</span>
+                      ) : (
+                        <span
+                          className={styles.canceledText}
+                        >{`₦${item?.price}`}</span>
+                      )}
+                    </span>
+                    <div className={styles.starWrapper}>
+                      {countUpTo(
+                        item?.rating || 0,
+                        <Image
+                          width={20}
+                          src={StarYellow}
+                          alt="StarYellow"
+                          preview={false}
+                        />,
+                        <Image
+                          width={20}
+                          src={Star}
+                          alt="Star"
+                          preview={false}
+                        />
+                      )}
+                      <span>(20)</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+          <div>
+            <Button
+              type="button"
+              variant="green"
+              text="Shop Now"
+              className={styles.buttonStyleTrendBigscreen}
+              onClick={handleNavigateToMarket}
+            />
+          </div>
+        </section>
+      )}
+    </div>
+  );
+};
+
+export default Trends;

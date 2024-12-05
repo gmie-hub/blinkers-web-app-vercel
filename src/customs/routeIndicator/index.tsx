@@ -3,7 +3,7 @@ import styles from "./index.module.scss";
 import BackIcon from "../../assets/back.svg";
 import ArrowSide from "../../assets/arrow-left.svg";
 import { routeParts } from "../../routes";
-import { routesArrayAtom } from "../../utils/store.tsx";
+import { routesArrayAtom } from "../../utils/store.ts";
 import { useSetAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
 import classNames from "classnames";
@@ -61,20 +61,20 @@ export default function RouteIndicator({
   return (
     <div className={classNames(styles.wrapper, show ? "" : styles.hide)}>
       {showBack && (
-        <div className={styles.back}>
+        <div onClick={() => navigate(-1)} className={styles.back}>
           <img
             src={BackIcon}
             alt="BackIcon"
-            onClick={() => navigate(-1)}
+            // onClick={() => navigate(-1)}
             className={styles.arrow} 
           />
           <p className={styles.element}>Go Back</p>
         </div>
       )}
 
-      {routeArray?.map((item, index) => {
+      {routeArray && routeArray.length > 0 && routeArray?.map((item, index) => {
         return (
-          <div key={item.route}>
+          <div key={item?.route}>
             {index !== 0 &&
              <img
              src={ArrowSide}
@@ -84,7 +84,7 @@ export default function RouteIndicator({
            />
             }
             <p
-              onClick={() => navigate(`${item.route}`)}
+              onClick={() => navigate(`${item?.route}`)}
               className={styles.element}
             >
               {item?.name}

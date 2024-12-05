@@ -7,7 +7,7 @@
   @media screen and (max-width: 768px) {
     flex-direction: column;
     align-items: start;
-    gap:2.4rem;
+    gap: 2.4rem;
   }
 }
 .btnFlex {
@@ -76,19 +76,18 @@
   gap: 1rem; /* Add spacing between items */
   padding: 1rem;
   box-sizing: border-box;
-  margin-block: 4rem;
+  margin-block-end: 4rem;
+  align-items: center;
 
   column-gap: 1.6rem;
   @media screen and (max-width: 768px) {
     grid-template-columns: 50% 50%; /* Define columns for left and right */
     margin-block: 2.4rem;
-
   }
 }
 
 .container > p:nth-child(odd) {
   color: #707070;
-
 }
 
 .container > p:nth-child(even) {
@@ -102,7 +101,6 @@
 
     justify-content: end;
     font-size: 1.6rem;
-
   }
 }
 
@@ -116,6 +114,11 @@
   //   & > h1 {
   //     padding-block-end: 0.8rem;
   //   }
+}
+.btn {
+  color: var(--color-primary-green);
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .reviewbtn {
@@ -138,10 +141,29 @@
   }
   @media screen and (max-width: 768px) {
     & > div {
-        padding-block-end: 2.4rem;
-        & > h3 {
+      padding-block-end: 2.4rem;
+      & > h3 {
         font-size: 1.6rem;
-        }
       }
+    }
   }
+}
+
+.icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+}
+
+.info {
+  display: flex;
+  gap: 1rem;
+  padding-block-start: 0.8rem;
+  align-items: center;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--color-header-text);
 }

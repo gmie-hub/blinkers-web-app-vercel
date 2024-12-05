@@ -5,6 +5,7 @@ interface ComponentProp {
   status: string;
 }
 
+
 const StatusBadge: FC<ComponentProp> = ({ status }) => {
   let style;
 

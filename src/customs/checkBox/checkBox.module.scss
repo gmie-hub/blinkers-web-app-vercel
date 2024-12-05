@@ -1,55 +1,57 @@
-.container {
-    display: flex;
-    align-items: center;
+.checkAndLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #222222;
+  border-color: green;
+
+  & input {
+    margin: 0;
     cursor: pointer;
-    padding-inline-end: 2rem;
-  }
-  
-  .container input[type='checkbox'] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .customCheckbox {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    background-color: var(--color-primary-white);
-    border-radius: 0.5rem;
+    width: 20px; /* Adjust size as needed */
+    height: 20px;
+    appearance: none; /* Remove default checkbox styling */
     border: 1px solid #828282;
+    border-radius: 4px;
+    background-color: white; /* Default background */
     position: relative;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
-  
-  .container input:checked + .customCheckbox {
-    background-color: #4caf50;
-    border-color: #4caf50;
-  }
-  
-  .customCheckbox::after {
-    content: '';
+
+
+
+  & input::after {
+    content: "";
     position: absolute;
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
     width: 6px;
     height: 10px;
-    border: solid white;
+    border: solid green; /* Green checkmark */
     border-width: 0 2px 2px 0;
-    transform: translate(-50%, -50%) rotate(45deg);
-    display: none;
+    display: none; /* Initially hidden */
   }
-  
-  .container input:checked + .customCheckbox::after {
-    display: block;
+
+  & input:checked::after {
+    display: block; /* Show checkmark when checked */
   }
-  
-  .checkBoxLabel {
-    margin-inline-start: 0.6rem;
-    font-size: 1.4rem;
-    white-space: nowrap;
-  
-    @media screen and (min-width: 768px) {
-      font-size: 1.6rem;
-    }
+
+  & label {
+    font-size: 1.2rem;
   }
-  
+}
+
+.label {
+  color: var(--color-black);
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 0px;
+  text-align: start !important;
+  white-space: nowrap;
+}
+
+.error {
+  font-size: 1rem;
+  color: red;
+}

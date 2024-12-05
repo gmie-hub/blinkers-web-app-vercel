@@ -5,7 +5,7 @@ export const routes = {
     home: "/",
     market: "/market",
     productDetails: "/product-details/:id",
-    relatedAds: "/related-ads",
+    relatedAds: "/related-ads/:id",
     review: "/review",
     sellersProfile: "/sellers-profile",
     posetedAdsBySeller: "/sellers-posted-ads",
@@ -13,17 +13,20 @@ export const routes = {
     ContactUs: "/contact-us",
     AboutUS: "/about-us",
     faq: "/faq",
+    homeMarket: "/market/:search",
+
    
   },
   job:{
     job: "/jobs",
-    jobDetails: "/job-details",
-    JobLikeThis: "/job/more-jobs-like-this",
+    homeJob: "/jobs/:search",
+    jobDetails: "/job-details/:id",
+    JobLikeThis: "/job/more-jobs-like-this/:id",
     images: "/images",
     videos: "/videos",
     RegAsApplicant: "/job/register-as-applicant",
     AddBusiness: "/job/add-business",
-    applyForJob:"/job/apply",
+    applyForJob:"/job/apply/:id",
     postJob:"/post-job",
 
 
@@ -45,9 +48,11 @@ export const routes = {
     signUp: "/sign-up",
     login: "/login",
     forgotPassword: "/forgot-password",
-    resetPassword: "/reset-password",
+    resetPassword: "/reset-password/:email",
     passwordResetSuccessful: "/password-reset-successful",
-    VerificationCode: "/verification-code",
+    VerificationCode: "/verification-code/:email",
+    ResetVerificationCode: "/reset-password-verification-code/:email/",
+
   },
 };
 

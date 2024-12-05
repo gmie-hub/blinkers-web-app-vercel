@@ -68,11 +68,21 @@ const PictureBg = () => {
         <br />
 
         <div className={styles.searchWrapper}>
-          <SearchInput
+            <SearchInput
             placeholder="What are you looking for?"
-            isBtn={true} // Show the button on the right side
-          />
-        </div>
+            // width="40rem"
+              // isBtn={true}
+              // onChange={handleInputChange}
+            >
+              <Button
+                type="button"
+                variant="green"
+                text="Search"
+                className={styles.searchBtn}
+                // onClick={handleSearch} // Set appliedSearchTerm here
+              />
+            </SearchInput>
+            </div>
 
         <br />
         <Button

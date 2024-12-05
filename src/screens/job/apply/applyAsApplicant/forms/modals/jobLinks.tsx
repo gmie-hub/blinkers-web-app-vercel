@@ -4,23 +4,46 @@ import { FC } from "react";
 // import * as Yup from "yup";
 import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
+import { useSetAtom } from "jotai";
+import { LinkInfoAtom } from "../../../../../../utils/store";
+import { LinkData } from "../../../../../../utils/type";
 
 interface ComponentProps {
   handleClose: () => void;
+  indexData:LinkData
 }
 
-const JobLinks: FC<ComponentProps> = ({ handleClose }) => {
+const JobLinks: FC<ComponentProps> = ({indexData, handleClose }) => {
+  const LinkAtomdata = useSetAtom(LinkInfoAtom);
+
   return (
     <section>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          email: "",
+          type: indexData?.type || "",
+          url: indexData?.url || "",
+      
         }}
+        enableReinitialize={true} 
+
         onSubmit={(values) => {
-          console.log(values);
+          const currentSkillInfo =
+           JSON.parse(
+            localStorage.getItem("link-data") ?? "[]"
+          );
+          if (indexData) {
+            const updatedLinkInfo = currentSkillInfo?.map(
+              (item: LinkData) =>
+                item?.id === indexData?.id
+                  ? { ...item, ...values }
+                  : item
+            );
+            LinkAtomdata(updatedLinkInfo);
+          } else {
+            const updatedLinkInfo = [...currentSkillInfo, values];
+            LinkAtomdata(updatedLinkInfo);
+          }
+
           handleClose();
         }}
         // validationSchema={validationSchema}
@@ -30,13 +53,13 @@ const JobLinks: FC<ComponentProps> = ({ handleClose }) => {
             <Form>
               <div className={styles.inputContainer}>
                 <Input
-                  name="Title"
+                  name="type"
                   label="Title"
                   placeholder="Title"
                   type="text"
                 />
                   <Input
-                  name="Link"
+                  name="url"
                   label="Link"
                   placeholder="Link"
                   type="text"

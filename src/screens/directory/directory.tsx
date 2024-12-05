@@ -2,29 +2,29 @@ import styles from "./directory.module.scss";
 import { Image, Pagination } from "antd";
 import Product2 from "../../assets/Image.svg";
 import Product3 from "../../assets/Image (1).svg";
-import {useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
-import CallIcon from "../../assets/callrelated.svg"
+import CallIcon from "../../assets/callrelated.svg";
 import LocationIcon from "../../assets/locationrelated.svg";
 
 // Data array
 const cardData = [
-  {
-    id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
+  // {
+  //   id: 1,
+  //   icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+  //   title: "Shop With Rinsy",
+  //   location: "4, blinkers street, Lekki, Nigeria",
+  //   phone: "09012345678",
+  // },
+  // {
+  //   id: 2,
+  //   icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
+  //   title: "Shop With Rinsy",
+  //   location: "4, blinkers street, Lekki, Nigeria",
+  //   phone: "09012345678",
+  // },
   {
     id: 3,
     icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
@@ -112,11 +112,9 @@ const Directory = () => {
     setCurrentPage(page);
   };
 
-  const handleNavigateToNotClaim = 
-    (id: number) => {
-      navigate(`/not-claim/${id}`);
-    }
-  
+  const handleNavigateToNotClaim = (id: number) => {
+    navigate(`/not-claim/${id}`);
+  };
 
   return (
     <div className="wrapper">
@@ -142,7 +140,7 @@ const Directory = () => {
               <SearchInput
                 placeholder="Search businesses..."
                 // width="40rem"
-                isBtn={true}
+                // isBtn={true}
               />
             </div>
           </div>
@@ -162,20 +160,17 @@ const Directory = () => {
             {card.icon}
             <div className={styles.productList}>
               <p className={styles.title}>{card.title}</p>
-
               <div className={styles.info}>
                 <Image src={LocationIcon} alt="LocationIcon" preview={false} />
 
                 <p>{card.location}</p>
-
-                </div>
-                <div className={styles.info}>
-                <Image  src={CallIcon} alt="CallIcon" preview={false} />
+              </div>
+              <div className={styles.info}>
+                <Image src={CallIcon} alt="CallIcon" preview={false} />
 
                 <p>{card.phone}</p>
-
-
-                </div>              <div className={styles.subjectBg}>Fashion Accessories</div>
+              </div>{" "}
+              <div className={styles.subjectBg}>Fashion Accessories</div>
               {/* <div className={styles.starWrapper}>
                 {countUpTo(
                   card?.rating || 0,
