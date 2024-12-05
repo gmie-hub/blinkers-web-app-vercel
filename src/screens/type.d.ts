@@ -198,6 +198,8 @@ interface ProductDatum {
   add_images:add_imagesDatum[];
   related_ads:RelatedProduct[];
   user:UserData;
+  views:number;
+  averageRating:string;
   
 
 }

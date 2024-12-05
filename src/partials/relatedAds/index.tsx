@@ -2,7 +2,7 @@ import styles from "./index.module.scss";
 import { Image, Spin } from "antd";
 import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
-import {  useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import favorite from "../../assets/Icon + container.svg";
 import LocationIcon from "../../assets/locationrelated.svg";
 import { countUpTo } from "../../screens/home/trend";
@@ -18,6 +18,7 @@ interface Props {
 
 const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [getProductDetailsQuery] = useQueries({
     queries: [
@@ -30,6 +31,11 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
       },
     ],
   });
+
+  const handleNavigateToProductDetails = (id: number) => {
+    navigate(`/product-details/${id}`);
+    window.scrollTo(0, 0);
+  };
 
   const productDetailsData = getProductDetailsQuery?.data?.data;
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
@@ -45,7 +51,6 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
       ? reletedJob.slice(0, limit)
       : reletedJob;
 
-
   return (
     <main className="wrapper">
       <div className={styles.relatedWrapper}>
@@ -60,7 +65,11 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
             {relatedAdssData &&
               relatedAdssData?.length > 0 &&
               relatedAdssData?.map((item, index) => (
-                <div className={styles.promoImage} key={index}>
+                <div
+                  onClick={() => handleNavigateToProductDetails(item.id)}
+                  className={styles.promoImage}
+                  key={index}
+                >
                   <div className={styles.favoriteIcon}>
                     <img width={30} src={favorite} alt="Favorite" />
                   </div>
@@ -75,13 +84,17 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
                         ? `${item?.title?.slice(0, 20)}...`
                         : item?.title}
                     </p>
-                    <div className={styles.info}>
-                      <Image src={LocationIcon} alt="Location" />
-                      <p>
-                        <span>{item?.local_govt?.local_government_area} </span>
-                        <span>{item?.state?.state_name}</span>
-                      </p>
-                    </div>
+                    {item?.state?.state_name !==null &&
+                      <div className={styles.info}>
+                        <Image src={LocationIcon} alt="Location" />
+                        <p>
+                          <span>
+                            {item?.local_govt?.local_government_area}{" "}
+                          </span>
+                          <span>{item?.state?.state_name}</span>
+                        </p>
+                      </div>
+                    }
                     <p style={{ color: "#222222", fontWeight: "600" }}>
                       ₦{item.price}
                     </p>

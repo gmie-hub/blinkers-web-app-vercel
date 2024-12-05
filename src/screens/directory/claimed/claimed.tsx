@@ -3,7 +3,7 @@ import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import {  useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { Image, Modal, message } from "antd";
+import { Image, Modal, } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
@@ -24,6 +24,7 @@ import WebICon from "../../../assets/webicon.svg";
 import MailIcon from "../../../assets/mailicon.svg";
 import Reviews from "../../home/market/productDetails/tabs/review";
 import Images from "./image/image";
+import { handleCopyLink } from "../../request";
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const Claimed = () => {
   const navigate = useNavigate();
@@ -37,16 +38,7 @@ const Claimed = () => {
 
   const textToCopy = "blinkers/ shopwithrinsyaccderb/e";
 
-  const handleCopyLink = () => {
-    navigator.clipboard
-      .writeText(textToCopy)
-      .then(() => {
-        message.success("Link copied to clipboard!");
-      })
-      .catch(() => {
-        message.error("Failed to copy link. Please try again.");
-      });
-  }
+
 
 
 
@@ -317,7 +309,7 @@ const Claimed = () => {
             <p>blinkers/ shopwithrinsyaccderb/e</p>
 
             <Button
-              onClick={handleCopyLink}
+              onClick={()=>handleCopyLink(textToCopy)}
               icon={<Image src={copyIcon} alt={copyIcon} preview={false} />}
               className={styles.buttonStyle}
               text="Copy Link"

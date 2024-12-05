@@ -1,4 +1,4 @@
-import { Form, Formik, FormikValues } from "formik";
+import { Form, Formik } from "formik";
 import styles from "../../apply/applyAsApplicant/forms/styles.module.scss";
 import { FC, useEffect, useState } from "react";
 import Input from "../../../../customs/input/input";
@@ -25,12 +25,6 @@ import {
 import { useAtom, useAtomValue } from "jotai";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import { ApplyForJobApi, getApplicantsbyId, ProfInfoApi } from "../../../request";
-import {
-  Education,
-  EmploymentHistory,
-  LinkData,
-  SkillsData,
-} from "../../../../utils/type";
 import { AxiosError } from "axios";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { routes } from "../../../../routes";
@@ -68,19 +62,19 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
   console.log(uploadedCoverLetter, "cover leteer i uploaded");
 
-  const clearLocalStorageData = () => {
-    const keysToClear = [
-      "cover-letter",
-      "education-info",
-      "employment-History",
-      "link-data",
-      "skill-data",
-    ];
+  // const clearLocalStorageData = () => {
+  //   const keysToClear = [
+  //     "cover-letter",
+  //     "education-info",
+  //     "employment-History",
+  //     "link-data",
+  //     "skill-data",
+  //   ];
 
-    keysToClear.forEach((key) => {
-      localStorage.removeItem(key);
-    });
-  };
+  //   keysToClear.forEach((key) => {
+  //     localStorage.removeItem(key);
+  //   });
+  // };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -222,105 +216,106 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     mutationKey: ["prof-info"],
   });
 
-  const ProfInfoHandler = async (
-    values: FormikValues,
-    resetForm: () => void
-  ) => {
-    const formData = new FormData();
+  // const ProfInfoHandler = async (
+  //   values: FormikValues,
+  //   resetForm: () => void
+  // ) => {
+  //   const formData = new FormData();
 
-    // Append simple fields
-    const id = user?.data?.id;
-    if (id) {
-      formData.append("user_id", id.toString()); // Convert id to string and append
-    }
-    formData.append("cv", upload as File);
-    // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
+  //   // Append simple fields
+  //   const id = user?.data?.id;
+  //   if (id) {
+  //     formData.append("user_id", id.toString()); // Convert id to string and append
+  //   }
+  //   formData.append("cv", upload as File);
+  //   // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
 
-    if (uploadedCoverLetter) {
-      formData.append("cover_letter", uploadedCoverLetter);
-    }
+  //   if (uploadedCoverLetter) {
+  //     formData.append("cover_letter", uploadedCoverLetter);
+  //   }
 
-    formData.append("specialization", values?.specialization);
+  //   formData.append("specialization", values?.specialization);
 
-    EmpHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
-      formData.append(
-        `employment_history[${index}][job_title]`,
-        item?.job_title
-      );
-      formData.append(`employment_history[${index}][job_type]`, item?.job_type);
-      formData.append(
-        `employment_history[${index}][company_name]`,
-        item?.company_name
-      );
-      formData.append(`employment_history[${index}][location]`, item?.location);
-      formData.append(
-        `employment_history[${index}][work_arrangement]`,
-        item?.WorkArrangement
-      );
-      formData.append(
-        `employment_history[${index}][start_date]`,
-        item?.start_date
-      );
-      formData.append(`employment_history[${index}][end_date]`, item?.end_date);
-      formData.append(
-        `employment_history[${index}][work_summary]`,
-        item?.WorkSummary
-      );
-      formData.append(
-        `employment_history[${index}][current_work]`,
-        item?.currentWork.toString()
-      );
-    });
+  //   EmpHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
+  //     formData.append(
+  //       `employment_history[${index}][job_title]`,
+  //       item?.job_title
+  //     );
+  //     formData.append(`employment_history[${index}][job_type]`, item?.job_type);
+  //     formData.append(
+  //       `employment_history[${index}][company_name]`,
+  //       item?.company_name
+  //     );
+  //     formData.append(`employment_history[${index}][location]`, item?.location);
+  //     formData.append(
+  //       `employment_history[${index}][work_arrangement]`,
+  //       item?.WorkArrangement
+  //     );
+  //     formData.append(
+  //       `employment_history[${index}][start_date]`,
+  //       item?.start_date
+  //     );
+  //     formData.append(`employment_history[${index}][end_date]`, item?.end_date);
+  //     formData.append(
+  //       `employment_history[${index}][work_summary]`,
+  //       item?.WorkSummary
+  //     );
+  //     formData.append(
+  //       `employment_history[${index}][current_work]`,
+  //       item?.currentWork.toString()
+  //     );
+  //   });
 
-    // Append education history as an array
-    EducationInfoData?.forEach((item: Education, index: number) => {
-      formData.append(`education[${index}][institution]`, item?.institution);
-      formData.append(`education[${index}][degree]`, item?.degree);
-      formData.append(
-        `education[${index}][field_of_study]`,
-        item?.field_of_study
-      );
-      formData.append(`education[${index}][grade]`, item?.Grade);
-      formData.append(`education[${index}][start_date]`, item?.start_date);
-      formData.append(`education[${index}][end_date]`, item?.end_date);
-      formData.append(
-        `education[${index}][still_studying]`,
-        item?.stillStudying.toString()
-      );
-    });
+  //   // Append education history as an array
+  //   EducationInfoData?.forEach((item: Education, index: number) => {
+  //     formData.append(`education[${index}][institution]`, item?.institution);
+  //     formData.append(`education[${index}][degree]`, item?.degree);
+  //     formData.append(
+  //       `education[${index}][field_of_study]`,
+  //       item?.field_of_study
+  //     );
+  //     formData.append(`education[${index}][grade]`, item?.Grade);
+  //     formData.append(`education[${index}][start_date]`, item?.start_date);
+  //     formData.append(`education[${index}][end_date]`, item?.end_date);
+  //     formData.append(
+  //       `education[${index}][still_studying]`,
+  //       item?.stillStudying.toString()
+  //     );
+  //   });
 
-    // Append skills as an array
-    SkillsData?.forEach((item: SkillsData, index: number) => {
-      formData.append(`skills[${index}]`, item?.skill);
-    });
+  //   // Append skills as an array
+  //   SkillsData?.forEach((item: SkillsData, index: number) => {
+  //     formData.append(`skills[${index}]`, item?.skill);
+  //   });
 
-    // Append links as an array
-    LinksData?.forEach((item: LinkData, index: number) => {
-      formData.append(`links[${index}][type]`, item?.type);
-      formData.append(`links[${index}][url]`, item?.url);
-    });
+  //   // Append links as an array
+  //   LinksData?.forEach((item: LinkData, index: number) => {
+  //     formData.append(`links[${index}][type]`, item?.type);
+  //     formData.append(`links[${index}][url]`, item?.url);
+  //   });
 
-    try {
-      await createProfInfoMutation.mutateAsync(formData, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          resetForm();
-          setOpenSuccess(true);
-          clearLocalStorageData();
-          ApplyJobHandler()
-        },
-      });
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description: "An error occurred while submitting your information.",
-      });
+  //   try {
+  //     await createProfInfoMutation.mutateAsync(formData, {
+  //       onSuccess: (data) => {
+  //         notification.success({
+  //           message: "Success",
+  //           description: data?.message,
+  //         });
+  //         resetForm();
+  //         setOpenSuccess(true);
+  //         clearLocalStorageData();
+         
+  //       },
+  //     });
+  //   } catch (error: any) {
+  //     notification.error({
+  //       message: "Error",
+  //       description: "An error occurred while submitting your information.",
+  //     });
+  //     // ApplyJobHandler()
 
-    }
-  };
+  //   }
+  // };
 
   const handleSucessPost = () => {
     setOpenSuccess(false);
@@ -352,10 +347,12 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: errorMessage(error) || "An error occurred",
+        description: error?.response?.data?.error || errorMessage(error) || "An error occurred",
       });
+    
     }
   };
+
 
   return (
     <section>
@@ -372,8 +369,10 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
             email: "",
           }}
           enableReinitialize={true}
-          onSubmit={(values, { resetForm }) => {
-            ProfInfoHandler(values, resetForm);
+          onSubmit={(values) => {
+            // ProfInfoHandler(values, resetForm);
+            ApplyJobHandler()
+            console.log(values)
           }}
         >
           {({ setFieldValue }) => (

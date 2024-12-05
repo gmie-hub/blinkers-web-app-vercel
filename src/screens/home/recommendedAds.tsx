@@ -2,13 +2,10 @@ import styles from "./index.module.scss";
 import { Image, Spin } from "antd";
 import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
-import Product1 from "../../assets/Product.svg";
-import Product2 from "../../assets/Image.svg";
-import Product3 from "../../assets/Image (1).svg";
 import { useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { getPromotedAds, getRecommededAds } from "../request";
+import { getPromotedAds, } from "../request";
 
 // Main component
 const RecommendedAds = () => {
@@ -101,7 +98,7 @@ const RecommendedAds = () => {
             {currentData &&
               currentData?.length > 0 &&
               currentData?.map((item: any, index: number) => (
-                <div className={styles.promoImage} key={item?.id}>
+                <div className={styles.promoImage} key={index}>
                   <div style={{height:'26rem'}}>
                   <img
                     src={item?.image}

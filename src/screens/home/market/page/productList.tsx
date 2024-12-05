@@ -30,7 +30,7 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
     queries: [
       {
         queryKey: ["get-all-market", currentPage, appliedSearchTerm],
-        queryFn: () => getAllMarket(currentPage, appliedSearchTerm || search),
+        queryFn: () => getAllMarket(currentPage, appliedSearchTerm || search || ''),
         retry: 0,
         refetchOnWindowFocus: false,
       },
@@ -44,14 +44,15 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
 
   const handleNavigateToProductDetails = (id: number) => {
     navigate(`/product-details/${id}`);
+    window.scrollTo(0, 0);
   };
 
   const handleBack = () => {
-    // Reset the search term and navigate to the jobs endpoint
-    search = ""; // Clear the search term
-    setCurrentPage(1); // Reset to the first page
-    navigate("/market"); // Navigate to the jobs page without a search term
-    getAllMarketQuery.refetch(); // This will re-fetch the data
+    appliedSearchTerm="";
+    search = ""; 
+    setCurrentPage(1); 
+    navigate("/market"); 
+    getAllMarketQuery.refetch(); 
   };
 
   return (
@@ -68,7 +69,7 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
                 <div
                   className={styles.promoImage}
                   key={index}
-                  onClick={() => handleNavigateToProductDetails(item.id)}
+                  onClick={() => handleNavigateToProductDetails(item?.id)}
                 >
                   <div className={styles.favoriteIcon}>
                     <img width={30} src={favorite} alt="Favorite" />

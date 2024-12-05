@@ -240,7 +240,7 @@
 .eye {
   display: flex;
   gap: 1rem;
-  align-items: baseline;
+  // align-items: baseline;
 }
 
 .secondSideLeft {
@@ -272,6 +272,7 @@
   height: auto;
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  height: 56rem;
 }
 
 .secondSideLeft button {

@@ -17,49 +17,44 @@ import { routes } from "../../routes";
 const Jobs = () => {
   const navigate = useNavigate();
   const [openAddBusiness, setOpenAddBusiness] = useState(false);
-  const { search } = useParams();
+  let { search } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || ''); 
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
   const user = useAtomValue(userAtom);
-    // const handleSearch = (searchTerm: string) => {
-  //   setSearchTerm(searchTerm); // Update state with the search term
-  //   console.log(searchTerm, 'searchTerm'); // Log or use the search term
-  // };
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
   };
 
   const handleSearch = () => {
-    setAppliedSearchTerm(searchTerm); // Update appliedSearchTerm only on button click
+    setAppliedSearchTerm(searchTerm); 
     console.log("Search Term Sent:", searchTerm);
+    search=""
   };
 
-  
   const handleNavigateRegisterAsAnApplicant = () => {
     navigate("/job/register-as-applicant");
     window.scrollTo(0, 0);
   };
 
   const handleNavigateAddBusiness = () => {
-    if(user?.data?.claim_status === null)
-    {
-      setOpenAddBusiness(true)
+    if (user?.data?.claim_status === null || user?.data?.claim_status?.toString() === '2' ) {
+      setOpenAddBusiness(true);
     }
-    else
 
     // navigate("/job/add-business");
-    navigate(routes.job.postJob);
+    else navigate(routes.job.postJob);
 
     window.scrollTo(0, 0);
   };
 
-  const handleCloseBusinessModal = () =>{
-    setOpenAddBusiness(false)
-    navigate(routes.job.AddBusiness)
-  }
-  console.log(searchTerm,'srr')
+  const handleCloseBusinessModal = () => {
+    setOpenAddBusiness(false);
+    navigate(routes.job.AddBusiness);
+  };
+  console.log(searchTerm, "srr");
 
   return (
     <div className="wrapper">
@@ -81,16 +76,14 @@ const Jobs = () => {
                 // isBtn={true}
                 onChange={handleInputChange}
               >
-
-              <Button
-                type="button"
-                variant="green"
-                text="Search"
-                className={styles.searchBtn}
-                onClick={handleSearch} // Set appliedSearchTerm here
+                <Button
+                  type="button"
+                  variant="green"
+                  text="Search"
+                  className={styles.searchBtn}
+                  onClick={handleSearch} // Set appliedSearchTerm here
                 />
-                </SearchInput>
-
+              </SearchInput>
             </div>
           </div>
           <div className={styles.btnFlex}>
@@ -102,26 +95,25 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            <Button
-              icon={<Image src={job2} alt={job2} preview={false} />}
-              className={styles.WhiteButtonStyle}
-              text="Register as An Applicant"
-              variant="white"
-              onClick={handleNavigateRegisterAsAnApplicant}
-            />
+            { !user?.data?.is_applicant &&(
+              <Button
+                icon={<Image src={job2} alt={job2} preview={false} />}
+                className={styles.WhiteButtonStyle}
+                text="Register as An Applicant"
+                variant="white"
+                onClick={handleNavigateRegisterAsAnApplicant}
+              />)
+            }
           </div>
         </div>
         <Section2 searchTerm={appliedSearchTerm} />
       </div>
 
-
       <ModalContent
         icon={<img src={warn} alt="warn" />}
         open={openAddBusiness}
         handleCancel={() => setOpenAddBusiness(false)}
-        handleClick= {
-          handleCloseBusinessModal
-        }
+        handleClick={handleCloseBusinessModal}
         BtnText="Add Business To Directory"
         heading="Business Not Added To Directory"
         text={

@@ -5,11 +5,9 @@ import { FC } from "react";
 import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
 import { SkillsData } from "../../../../../../utils/type";
-import { useAtomValue, useSetAtom } from "jotai";
+import {  useSetAtom } from "jotai";
 import { SkilsInfoAtom } from "../../../../../../utils/store";
-import { useMutation } from "@tanstack/react-query";
-import { ProfInfoApi, UpdateProfInfoApi } from "../../../../../request";
-import { App } from "antd";
+
 
 interface ComponentProps {
   handleClose: () => void;
@@ -18,49 +16,7 @@ interface ComponentProps {
 
 const Skill: FC<ComponentProps> = ({indexData ,handleClose }) => {
   const SkilsInfoAtomdata = useSetAtom(SkilsInfoAtom);
-  const { notification } = App.useApp();
-  const SkillsData = useAtomValue(SkilsInfoAtom);
 
-  const createProfInfoMutation = useMutation({
-    mutationFn: UpdateProfInfoApi,
-    mutationKey: ['prof-info'],
-  });
-
-
-  const UpdateProfInfoHandler = async (values: FormikValues, resetForm: () => void) => {
-    const formData = new FormData();
-  
-
-    // formData.append("user_id", '411');
-   
-
-  
-
-  
-    // Append skills as an array
-    SkillsData?.forEach((item: SkillsData, index: number) => {
-      formData.append(`skill[${index}]`, item?.skill);
-    });
-  
- 
-    try {
-      await createProfInfoMutation.mutateAsync(formData, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          resetForm();
-          // setOpenSuccess(true);
-        },
-      });
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description: "An error occurred while submitting your information.",
-      });
-    }
-  };
 
 
   return (
@@ -73,7 +29,7 @@ const Skill: FC<ComponentProps> = ({indexData ,handleClose }) => {
         }}
         enableReinitialize={true} 
 
-        onSubmit={(values,{resetForm}) => {
+        onSubmit={(values) => {
           const currentSkillInfo =
            JSON.parse(
             localStorage.getItem("skill-data") ?? "[]"

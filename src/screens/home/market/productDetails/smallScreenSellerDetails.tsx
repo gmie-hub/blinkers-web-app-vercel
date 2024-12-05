@@ -26,6 +26,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
 import { getTimeAgo } from "../../../../utils/formatTime";
+import { handleCopyLink } from "../../../request";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -51,6 +52,7 @@ const SmallScreen = ({ productDetailsData }: Props) => {
   const navigate = useNavigate();
   const [flagSeller, setFlagSeller] = useState(false);
   const { id } = useParams();
+  const [isNumberVisible, setIsNumberVisible] = useState(false);
 
 
   const items: TabsProps["items"] = [
@@ -80,6 +82,15 @@ const SmallScreen = ({ productDetailsData }: Props) => {
     navigate(`/related-ads/${id}`);
     window.scrollTo(0, 0); // Scroll to the top of the page
   };
+
+  const handleShowNumber = (textToCopy: string) => {
+    setIsNumberVisible(true);
+    if (isNumberVisible) {
+      handleCopyLink(textToCopy)
+      };
+    
+  };
+
   return (
     <main>
       <div className="wrapper">
@@ -96,8 +107,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                 </div>
                 <div className={styles.eye}>
                   <Image src={EyeIcon} alt={EyeIcon} preview={false} />
-                  <p>400 Views</p>
-                </div>
+                  <p>{productDetailsData?.views} {productDetailsData?.views && productDetailsData?.views < 2 ? 'View':'Views'}</p>
+                  </div>
                 <p className={styles.payment}>
                   <span className={styles.title}>State:</span> {productDetailsData?.state?.state_name}
                 </p>
@@ -209,8 +220,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                             alt="StarYellow"
                             preview={false}
                           />
-                          (18 ratings)
-                        </span>
+                          ({productDetailsData?.averageRating } ratings)
+                          </span>
                         <span className={styles.dot}>.</span>{" "}
                         <span>10 Followers</span>
                       </div>
@@ -253,6 +264,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                       <Image src={CallLogo} alt="CallLogo" preview={false} />
                     }
                     text="Click To Show Number"
+                    onClick={()=>handleShowNumber(productDetailsData?.user?.number || '')}
+
                   />
 
                   <div className={styles.flag}>
@@ -276,6 +289,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                     }
                     text="Copy URL"
                     variant="noBg"
+                    onClick={()=>{handleCopyLink(productDetailsData?.url  ||'')}}
+
                   />
 
                   <div className={styles.chatCart}>

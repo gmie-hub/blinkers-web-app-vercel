@@ -104,7 +104,8 @@
   justify-content: space-between; /* Ensures images are evenly spaced across the row */
   height: 26rem;
   align-items: center;
-  @media (max-width: 640px) {    height: auto; /* Allow the height to be dynamic on smaller screens */
+  @media (max-width: 640px) {
+    height: auto; /* Allow the height to be dynamic on smaller screens */
   }
 }
 
@@ -126,9 +127,7 @@
 @media (max-width: 1024px) {
   .promoImage {
     flex: 1 1 calc(25% - 1rem); /* 4 images per row, accounting for the gap */
-    max-width: calc(
-      25% - 1rem
-    ); 
+    max-width: calc(25% - 1rem);
   }
 }
 
@@ -249,7 +248,7 @@
 @media (max-width: 1024px) {
   .recommendedImage {
     flex: 1 1 calc(24% - 1rem); // 4 images per row, accounting for the gap
-    max-width: calc(24% - 1rem); 
+    max-width: calc(24% - 1rem);
   }
 }
 
@@ -282,11 +281,10 @@
   }
 }
 
-.accessWrapper{
+.accessWrapper {
   margin-block: 6.4rem;
   @media (max-width: 768px) {
     margin-block: 2.4rem;
-
   }
 }
 .leftSection,
@@ -399,6 +397,7 @@
   font-weight: 500;
   color: var(--color-header-text);
   font-size: 4rem;
+  text-align: center;
 }
 // .trendContainer {
 //   display: grid;
@@ -432,12 +431,13 @@
 //   }
 // }
 
-.trendingProductImage{
-height: 26rem;
+.trendingProductImage {
+  height: 26rem;
   width: 33rem;
+  object-fit: cover;
   @media (max-width: 768px) {
-width: 100%;
-height: fit-content;
+    width: 100%;
+    height: fit-content;
   }
 }
 
@@ -470,7 +470,6 @@ height: fit-content;
   @media (max-width: 600px) {
     margin-block-end: 2rem;
   }
-
 }
 
 .trendImage {
@@ -480,7 +479,7 @@ height: fit-content;
   height: auto; /* Maintain aspect ratio */
   object-fit: contain; /* Ensure image fits without stretching */
   max-width: 100%; /* Ensure image doesn't overflow container */
-
+  cursor: pointer;
   @media (max-width: 600px) {
     width: 100%; /* Full width on small screens */
     height: auto; /* Maintain aspect ratio */
@@ -523,7 +522,6 @@ height: fit-content;
   @media (max-width: 600px) {
     margin-block-end: 2rem;
   }
-
 }
 
 .buttonStyle {
@@ -601,7 +599,7 @@ height: fit-content;
   display: flex;
   flex-direction: column;
   text-align: start;
-  border-radius: 0 0 1rem 1rem; 
+  border-radius: 0 0 1rem 1rem;
   box-shadow: 0px 4px 40px 0px #00990012;
   // border: solid  #00990012;
 
@@ -613,16 +611,24 @@ height: fit-content;
 
 .canceledText {
   text-decoration: line-through;
-  color:red; /* Optional: Use a muted color for canceled text */
+  color: red; /* Optional: Use a muted color for canceled text */
 }
 
 .info {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  color: #6E6E6E;
+  color: #6e6e6e;
 }
-.trendingdiscount{
+.trendingdiscount {
   color: #222222;
   width: 600;
+}
+
+.dirTitle {
+  font-weight: 600;
+  font-size: 3.2rem;
+  @media (max-width: 640px) {
+    font-size: 2rem;
+  }
 }

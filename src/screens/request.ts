@@ -1,3 +1,4 @@
+import { message } from "antd";
 import api from "../utils/apiClient";
 
 export const getAllJobs = async (page: number, search?: string | number) => {
@@ -144,3 +145,18 @@ export   const JobTypeData = [
     value: 'other',
   },
 ];
+
+export const handleCopyLink = (textToCopy:string) => {
+  if (!textToCopy) {
+    message.warning("No text to copy.");
+    return;
+  }
+  navigator.clipboard
+    .writeText(textToCopy)
+    .then(() => {
+      message.success("copied to clipboard!");
+    })
+    .catch(() => {
+      message.error("Failed to copy . Please try again.");
+    });
+}

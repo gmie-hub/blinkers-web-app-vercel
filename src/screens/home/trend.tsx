@@ -11,160 +11,6 @@ import { AxiosError } from "axios";
 import { getTrendingAds } from "../request";
 import { useQueries } from "@tanstack/react-query";
 
-// const Trends = () => {
-//   const navigate = useNavigate()
-
-//   const [getTrendingAdsQuery] = useQueries({
-//     queries: [
-//       {
-//         queryKey: ["get-trending-ads", ],
-//         queryFn: getTrendingAds,
-//         retry: 0,
-//         refetchOnWindowFocus: false,
-//       },
-//     ],
-//   });
-
-//   const trendData = getTrendingAdsQuery?.data?.data || [];
-//   const trendError = getTrendingAdsQuery?.error as AxiosError;
-//   const trendErrorMessage =
-//   trendError?.message || "An error occurred. Please try again later.";
-//   console.log(trendData, "JobData");
-
-//   const handleNavigateToMarket =
-//     () => {
-//       navigate(`/market`);
-//       window.scrollTo(0, 0); // Scrolls to the top of the page
-
-//     }
-
-//    return (
-//     <div className={styles.accessWrapper}>
-//       <div>
-//         <p className={styles.TrendsHead}>Trending Now</p>
-//       </div>
-
-//       <section className={styles.trendContainer}>
-//         {/* Left section with two items */}
-//         <div className={styles.leftSectionTrend}>
-//           {cardData?.slice(0, 2).map((card) => (
-//             <div className={styles.trendImage} key={card.id}>
-//               <div className={styles.favoriteIcon}>
-//                 <Image
-//                   width={30}
-//                   src={favorite}
-//                   alt="Favorite"
-//                   preview={false}
-//                 />{" "}
-//                 {/* Add favorite icon */}
-//               </div>
-//               {card.icon}
-//               <div className={styles.productList}>
-//                 <p>{card.title}</p>
-//                 <p>{card.location}</p>
-//                 <p>{card.amount}</p>
-//                 <div className={styles.starWrapper}>
-//                   {countUpTo(
-//                     card?.rating || 0,
-//                     <Image
-//                       width={20}
-//                       src={StarYellow}
-//                       alt="StarYellow"
-//                       preview={false}
-//                     />,
-//                     <Image width={20} src={Star} alt="Star" preview={false} />
-//                   )} <span>(20)</span>
-//                 </div>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Middle section with one item centered */}
-//         <div className={styles.middleSectionTrend}>
-//           <div className={styles.trendImage} key={cardData[2].id}>
-//             <div className={styles.favoriteIcon}>
-//               <Image width={30} src={favorite} alt="Favorite" preview={false} />{" "}
-//               {/* Add favorite icon */}
-//             </div>{" "}
-//             {cardData[2].icon}
-//             <div  className={styles.productList}>
-//               <p>{cardData[2].title}</p>
-//               <p>{cardData[2].location}</p>
-//               <p>{cardData[2].amount}</p>
-//               <div className={styles.starWrapper}>
-//                 {countUpTo(
-//                   cardData[2]?.rating || 0,
-//                   <Image
-//                     width={20}
-//                     src={StarYellow}
-//                     alt="StarYellow"
-//                     preview={false}
-//                   />,
-//                   <Image width={20} src={Star} alt="Star" preview={false} />
-//                 )} <span>(20)</span>
-//               </div>
-//             </div>
-//           </div>
-//           <Button
-//             type="button"
-//             variant="green"
-//             text="Shop Now"
-//             className={styles.buttonStyleTrend}
-//             onClick={handleNavigateToMarket}
-
-//           />
-//         </div>
-
-//         {/* Right section with two items */}
-//         <div className={styles.rightSectionTrend}>
-//           {cardData.slice(3).map((card) => (
-//             <div className={styles.trendImage} key={card.id}>
-//                   <div className={styles.favoriteIcon} >
-//                 <Image width={30} src={favorite} alt="Favorite" preview={false} /> {/* Add favorite icon */}
-
-//                 </div>
-//               {/* Add favorite icon */}
-//               {card.icon}
-//               <div  className={styles.productList}>
-//                 <p>{card.title}</p>
-//                 <p>{card.location}</p>
-//                 <p>{card.amount}</p>
-//                 <div className={styles.starWrapper}>
-//                   {countUpTo(
-//                     card?.rating || 0,
-//                     <Image
-//                       width={20}
-//                       src={StarYellow}
-//                       alt="StarYellow"
-//                       preview={false}
-//                     />,
-//                     <Image width={20} src={Star} alt="Star" preview={false} />
-//                   )} <span>(20)</span>
-//                 </div>
-//               </div>
-//             </div>
-//           ))}
-
-//         </div>
-//         <div>
-//         <Button
-//             type="button"
-//             variant="green"
-//             text="Shop Now"
-//             className={styles.buttonStyleTrendBigscreen}
-//             onClick={handleNavigateToMarket}
-//           />
-//         </div>
-
-//       </section>
-
-//     </div>
-//   );
-// };
-
-// export default Trends;
-
 export function countUpTo(
   num: number,
   element: JSX.Element,
@@ -202,6 +48,11 @@ const Trends = () => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   };
 
+  const handleNavigateToProductDetails = (id: number) => {
+    navigate(`/product-details/${id}`);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className={styles.accessWrapper}>
       <div>
@@ -217,7 +68,7 @@ const Trends = () => {
             {trendData &&
               trendData?.length > 0 &&
               trendData?.slice(0, 2)?.map((item: any, index: number) => (
-                <div className={styles.trendImage} key={item?.id || index}>
+                <div onClick={() => handleNavigateToProductDetails(item?.id)} className={styles.trendImage} key={item?.id || index}>
                   <div className={styles.favoriteIcon}>
                     <Image
                       width={30}
@@ -294,7 +145,11 @@ const Trends = () => {
           {/* Middle section with one item centered */}
           <div className={styles.middleSectionTrend}>
             {trendData[3] && (
-              <div className={styles.trendImage} key={trendData[2].id}>
+              <div
+                onClick={() => handleNavigateToProductDetails(trendData[3]?.id)}
+                className={styles.trendImage}
+                key={trendData[3].id}
+              >
                 <div className={styles.favoriteIcon}>
                   <Image
                     width={30}
@@ -344,7 +199,7 @@ const Trends = () => {
                   </span>
                   <div className={styles.starWrapper}>
                     {countUpTo(
-                      trendData[2]?.rating || 0,
+                      trendData[3]?.rating || 0,
                       <Image
                         width={20}
                         src={StarYellow}
@@ -373,7 +228,7 @@ const Trends = () => {
             {trendData &&
               trendData?.length > 0 &&
               trendData?.slice(4, 6)?.map((item: any, index: number) => (
-                <div className={styles.trendImage} key={item?.id || index}>
+                <div onClick={() => handleNavigateToProductDetails(item?.id)}  className={styles.trendImage} key={item?.id || index}>
                   <div className={styles.favoriteIcon}>
                     <Image
                       width={30}
@@ -390,11 +245,11 @@ const Trends = () => {
                     // preview={false}
                   />
                   <div className={styles.productList}>
-                  <p style={{ color: "#4F4F4F" }}>
-                    {item?.title && item?.title?.length > 30
-                      ? `${item?.title?.slice(0, 30)}...`
-                      : item?.title}
-                  </p>
+                    <p style={{ color: "#4F4F4F" }}>
+                      {item?.title && item?.title?.length > 30
+                        ? `${item?.title?.slice(0, 30)}...`
+                        : item?.title}
+                    </p>
                     <div className={styles.info}>
                       <img src={location} alt="location" />
                       <p>

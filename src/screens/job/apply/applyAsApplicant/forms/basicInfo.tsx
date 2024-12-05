@@ -2,11 +2,10 @@ import { Form, Formik } from "formik";
 import styles from "./styles.module.scss";
 import { FC } from "react";
 // import * as Yup from "yup";
-import { useAtomValue, useSetAtom } from "jotai";
-import { EducationInfoAtom, userAtom } from "../../../../../utils/store";
+import { useAtomValue, } from "jotai";
+import { userAtom } from "../../../../../utils/store";
 import Input from "../../../../../customs/input/input";
 import Button from "../../../../../customs/button/button";
-import Info from "../../../../../assets/Info.svg";
 
 interface ComponentProps {
   handleNext: () => void;

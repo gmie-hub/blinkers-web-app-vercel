@@ -19,6 +19,7 @@ import CallIcon from "../../../assets/callclaim.svg";
 import WebICon from "../../../assets/webicon.svg";
 import MailIcon from "../../../assets/mailicon.svg";
 import StarG from "../../../assets/starger.svg";
+import RouteIndicator from "../../../customs/routeIndicator";
 
 const SellerProfile = () => {
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ const SellerProfile = () => {
   return (
     <>
     <div className="wrapper">
+
+      <RouteIndicator showBack />
       <div className={styles.container}>
         <div
           className={styles.image}

@@ -29,19 +29,7 @@
   }
 }
 
-// .promoImage {
-//   position: relative; // Add this to make .favoriteIcon position relative to the promoImage container
-  // flex: 1 1 calc(24% - 1rem);
-  // max-width: calc(24% - 1rem);
-  // box-sizing: border-box;
 
-  // img {
-  //   width: 100%;
-  //   height: auto;
-  //   object-fit: contain;
-  //   border-top-left-radius: 1rem;
-  //   border-top-right-radius: 1rem;
-  // }
 
   .favoriteIcon {
     position: absolute;
@@ -52,103 +40,13 @@
   }
 
 
-// @media (max-width: 1024px) {
-//   .promoImage {
-//     flex: 1 1 calc(33.33% - 1rem); // 3 images per row on medium-sized screens
-//     max-width: calc(33.33% - 1rem);
-//   }
-// }
 
-// @media (max-width: 768px) {
-//   .promoImage {
-//     flex: 1 1 calc(50% - 1rem); // 2 images per row on smaller screens
-//     max-width: calc(50% - 1rem);
-//   }
-// }
-
-// @media (max-width: 480px) {
-//   .promoImage {
-//     flex: 1 1 100%; // 1 image per row on very small screens
-//     max-width: 100%; // Ensure full width for single images
-//     margin: 0 auto; // Center the image
-//   }
-// }
-// .productList {
-//   padding-inline-start: 1.6rem;
-//   display: flex;
-//   flex-direction: column;
-//   text-align: start;
-//   border-radius: 0 0 1rem 1rem;
-//   box-shadow: 0px 4px 40px 0px #00990012;
-//   border: solid #00990012;
-
-//   cursor: pointer;
-//   & > p {
-//     padding-block-start: 0.5rem !important;
-//   }
-// }
 .starWrapper {
   align-items: end;
   display: flex;
   padding-block-end: 2rem;
   gap: 1rem;
 }
-
-// .proImage {
-//   height: 26rem !important;
-// }
-
-
-// .promoImageContainer {
-//   display: grid; /* Use grid for a more controlled layout */
-//   grid-template-columns: repeat(4, 1fr); /* 3 items per row */
-//   gap: 3rem; /* Space between the items */
-//   row-gap: 4rem;
-//   justify-items: center; /* Align items in the center of each grid cell */
-// }
-
-// .promoImage {
-//   display: flex;
-//   flex-direction: column;
-//   // height: 26rem; /* Set fixed height for each item */
-//   width: 100%; /* Ensure it fills the available space */
-//   justify-content: space-between; /* Ensure the image and product list have equal space */
-//   background: #fff; /* Optional: add a background */
-//   border-radius: 8px; /* Optional: add rounded corners */
-//   overflow: hidden; /* Ensure no overflow */
-// }
-
-// .promoImage img {
-//   object-fit: cover; /* Ensure images cover the available space while maintaining their aspect ratio */
-//   // height: 14rem; /* Set fixed height for the image */
-//   width: 100%; /* Ensure the image fills the width */
-// }
-
-// .productList {
-//   // height: 12rem; /* Ensure the product list takes the remaining height */
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
-//   padding: 1rem; /* Add padding to the product list */
-// }
-
-// .productList p {
-//   margin: 0; /* Remove margins for consistent spacing */
-// }
-
-// @media (max-width: 640px) {
-//   .promoImageContainer {
-//     grid-template-columns: repeat(
-//       1,
-//       1fr
-//     ); /* 2 items per row on smaller screens */
-//     gap: 2rem; /* Adjust the gap for smaller screens */
-//   }
-
-//   .promoImage {
-//     height: auto; /* Allow the height to be dynamic on smaller screens */
-//   }
-// }
 
 
 
@@ -169,7 +67,7 @@
   justify-content: space-between;
   position: relative; 
   box-shadow: 0px 4px 40px 0px #00990012;
-
+cursor: pointer;
 
 }
 

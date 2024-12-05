@@ -28,6 +28,7 @@ import FlagSeller from "../flagSeller/flagSeller";
 import SmallScreen from "./smallScreenSellerDetails";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
 import { getTimeAgo } from "../../../../utils/formatTime";
+import { handleCopyLink } from "../../../request";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -40,8 +41,6 @@ const safetyTips = [
   },
 ];
 
-
-
 interface Props {
   productDetailsData?: ProductDatum;
 }
@@ -52,6 +51,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
   const [flagSeller, setFlagSeller] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
   const { id } = useParams();
+  const [isNumberVisible, setIsNumberVisible] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -102,6 +102,15 @@ const BigScreen = ({ productDetailsData }: Props) => {
     },
   ];
 
+   const handleShowNumber = (textToCopy: string) => {
+    setIsNumberVisible(true);
+    if (isNumberVisible) {
+      handleCopyLink(textToCopy)
+      };
+    
+  };
+
+   
   return (
     <main>
       <div className="wrapper">
@@ -119,7 +128,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
               </div>
               <div className={styles.eye}>
                 <Image src={EyeIcon} alt={EyeIcon} preview={false} />
-                <p>400 Views</p>
+                <p>{productDetailsData?.views} {productDetailsData?.views && productDetailsData?.views < 2 ? 'View':'Views'}</p>
               </div>
             </div>
 
@@ -230,8 +239,9 @@ const BigScreen = ({ productDetailsData }: Props) => {
                             alt="StarYellow"
                             preview={false}
                           />
-                          (18 ratings)
-                        </span>
+{productDetailsData?.averageRating && parseInt(productDetailsData?.averageRating) > 2
+  ? `${productDetailsData?.averageRating} ratings`
+  : `${productDetailsData?.averageRating || "No"} rating`}                        </span>
                         <span className={styles.dot}>.</span>{" "}
                         <span>10 Followers</span>
                       </div>
@@ -272,7 +282,12 @@ const BigScreen = ({ productDetailsData }: Props) => {
                   </div>
                   <Button
                     icon={<img src={CallLogo} alt="success" />}
-                    text="Click To Show Number"
+                    text={
+                      isNumberVisible
+                        ? productDetailsData?.user?.number
+                        : "Click To Show Number"
+                    }
+                    onClick={()=>handleShowNumber(productDetailsData?.user?.number || '')}
                   />
 
                   <div className={styles.flag}>
@@ -296,6 +311,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
                     }
                     text="Copy URL"
                     variant="noBg"
+                    onClick={()=>{handleCopyLink(productDetailsData?.url  ||'')}}
                   />
 
                   <div className={styles.chatCart}>

@@ -9,7 +9,7 @@ import { getPromotedAds } from "../request";
 
 const PromotedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 4; // Number of items to display per page
+  const pageSize = 4; 
 
   const [getPromotedAdsQuery] = useQueries({
     queries: [
@@ -97,8 +97,8 @@ const PromotedAds = () => {
           <section className={styles.promoImageContainer}>
             {currentData &&
               currentData?.length > 0 &&
-              currentData?.map((item:any , index:number) => (
-                <div className={styles.promoImage} key={item?.id}>
+              currentData?.map((item:any,index:number) => (
+                <div style={{cursor:'pointer'}} onClick={() => window.open(item?.brand_url, "_blank")}  className={styles.promoImage} key={index }>
                   <img
                     src={item?.image}
                     alt={item?.title}

@@ -10,8 +10,6 @@ import DeleteIcon from "../../../../assets/del.svg";
 import { App } from "antd";
 import { FlagJobApi } from "../../../request";
 import { errorMessage } from "../../../../utils/errorMessage";
-import { useAtomValue } from "jotai";
-import { userAtom } from "../../../../utils/store";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
@@ -19,11 +17,11 @@ interface Props {
   handleCloseModal: () => void;
 }
 
-const FlagSeller = ({ handleCloseModal }: Props) => {
+const FlagJobs = ({ handleCloseModal }: Props) => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isDeleteSuccessful, setIsDeleteSuccessful] = useState(false);
   const { notification } = App.useApp();
-  const user = useAtomValue(userAtom);
+  // const user = useAtomValue(userAtom);
   const { id } = useParams(); // Extract job ID from URL
 
   const validationSchema = Yup.object().shape({
@@ -45,27 +43,30 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
 
     try {
       await FlagJobMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
+        onSuccess: () => {
+          // notification.success({
+          //   message: "Success",
+          //   description: data?.message,
+          // });
+          setIsDeleteSuccessful(true)
         },
       });
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: errorMessage(error) || "An error occurred",
+        description: error?.response?.data?.error || errorMessage(error) || "An error occurred",
       });
+      console.log(error?.response?.data?.error, 'error')
     }
+    handleCloseModal()
   };
 
-  const handleFlag = (values: FormikValues) => {
+  const handleFlag = () => {
     setIsDeleteModal(true);
   };
 
   const handleDelete = () => {
-    setIsDeleteSuccessful(true);
+   ;
     setIsDeleteModal(false);
   };
 
@@ -76,8 +77,8 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
           initialValues={{
             reasonForFlag: "",
           }}
-          onSubmit={(values) => {
-            handleFlag(values); // Pass values to handleFlag
+          onSubmit={() => {
+            handleFlag(); // Pass values to handleFlag
           }}
           validationSchema={validationSchema}
         >
@@ -105,6 +106,7 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
                     disabled={FlagJobMutation?.isPending}
                     text={FlagJobMutation?.isPending ? "loading..." : "submit"}
                     className={styles.btn}
+                    // onClick={handleCloseModal}
                   />
                 </section>
               </div>
@@ -138,4 +140,4 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
   );
 };
 
-export default FlagSeller;
+export default FlagJobs;

@@ -4,7 +4,6 @@ import { FC } from "react";
 // import * as Yup from "yup";
 import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
-import Select from "../../../../../../customs/select/select";
 import Checkbox from "../../../../../../customs/checkBox/checkbox";
 import { EmploymentHistory } from "../../../../../../utils/type";
 import { useAtom, useSetAtom } from "jotai";
@@ -57,7 +56,7 @@ const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData }) => {
 
         // validationSchema={validationSchema}
       >
-        {({ handleChange, values, setFieldValue }) => {
+        {({  values, setFieldValue }) => {
           return (
             <Form>
               <div className={styles.inputContainer}>

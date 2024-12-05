@@ -6,11 +6,11 @@ import StatusBadge from "../../../partials/statusBadge/statusBadge";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import MoreJobsLikeThis from "../jobLikeThis/jobsLikeThis";
 import { useNavigate, useParams } from "react-router-dom";
-import {  Modal, Spin } from "antd";
+import { App, Modal, Spin } from "antd";
 import { useState } from "react";
 import FlagJob from "./flagJob/flagJob";
-import { useQueries } from "@tanstack/react-query";
-import { getJobDetails } from "../../request";
+import { useMutation, useQueries } from "@tanstack/react-query";
+import { ApplyForJobApi, getJobDetails } from "../../request";
 import { AxiosError } from "axios";
 import { formatAmount, getTimeAgo } from "../../../utils/formatTime";
 import DOMPurify from "dompurify";
@@ -23,6 +23,7 @@ import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import { routes } from "../../../routes";
 import ModalContent from "../../../partials/successModal/modalContent";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const JobDetails = () => {
   const navigate = useNavigate();
@@ -30,14 +31,20 @@ const JobDetails = () => {
   const { id } = useParams();
   const user = useAtomValue(userAtom);
   const [regModal, setRegModal] = useState(false);
+  const { notification } = App.useApp();
 
   const handleNavigateToMoreJob = () => {
     navigate(`/job/more-jobs-like-this/${id}`);
     window.scrollTo(0, 0);
   };
   const handleNavigateApplyToJob = () => {
-    navigate(`/job/apply/${id}`);
-    window.scrollTo(0, 0);
+    if (user?.data?.is_applicant) {
+      // navigate(`/job/apply/${id}`);
+      ApplyJobHandler()
+      window.scrollTo(0, 0);
+    } else {
+      setRegModal(true);
+    }
   };
 
   const [getJobDetailsQuery] = useQueries({
@@ -83,8 +90,41 @@ const JobDetails = () => {
       setRegModal(true);
     }
   };
+
   const handleRegModal = () => {
     navigate(routes?.job?.RegAsApplicant);
+  };
+
+
+  const ApplyJobMutation = useMutation({
+    mutationFn: ApplyForJobApi,
+    mutationKey: ["apply-job"],
+  });
+
+
+  const ApplyJobHandler = async () => {
+    const payload: Partial<FlagJob> = {
+      job_id: id!,
+      applicant_id: 6,
+      message: "Applying",
+    };
+
+    try {
+      await ApplyJobMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: error?.response?.data?.error || errorMessage(error) || "An error occurred",
+      });
+    
+    }
   };
 
   return (
@@ -164,22 +204,35 @@ const JobDetails = () => {
 
                 <p>Job Type</p>
               </div>
-
-              <p>{JobDetailsData?.employment_type}</p>
+              <p>
+                {JobDetailsData?.employment_type &&
+                  JobDetailsData?.employment_type?.length > 0 &&
+                  JobDetailsData?.employment_type?.charAt(0).toUpperCase() +
+                    JobDetailsData?.employment_type?.slice(1)}
+              </p>
 
               <div className={styles.info}>
                 <img src={JobLevelIon} alt="TimeIcon" />
 
                 <p>Full Time</p>
               </div>
-
-              <p>{JobDetailsData?.level}</p>
+              <p>
+                {JobDetailsData?.level &&
+                  JobDetailsData?.level?.length > 0 &&
+                  JobDetailsData?.level?.charAt(0).toUpperCase() +
+                    JobDetailsData?.level?.slice(1)}
+              </p>
               <div className={styles.info}>
                 <img src={WorkIcon} alt="TimeIcon" />
 
                 <p>Work Arrangement</p>
               </div>
-              <p>{JobDetailsData?.job_type}</p>
+              <p>
+                {JobDetailsData?.job_type &&
+                  JobDetailsData?.job_type?.length > 0 &&
+                  JobDetailsData?.job_type?.charAt(0).toUpperCase() +
+                    JobDetailsData?.job_type?.slice(1)}
+              </p>
               <div className={styles.info}>
                 <img src={SalaryIcon} alt="TimeIcon" />
 
