@@ -64,7 +64,7 @@ export interface ExtendedUser {
 
 export interface UserData {
   data: UserLogin;
-  // message: string;
+  message: string;
 }
 
 export interface UserLogin {

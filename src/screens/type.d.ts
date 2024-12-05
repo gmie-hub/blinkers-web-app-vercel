@@ -322,11 +322,13 @@ interface UserData {
   website_address: string | null;
   applicant?: Applicant;
 
+
 }
 
 
 interface UserDataResponse extends Response {
   data: UserData;
+  message:string;
 }
 
 
