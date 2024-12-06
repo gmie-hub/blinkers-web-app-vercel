@@ -21,6 +21,11 @@ const Login = () => {
   const { notification } = App.useApp();
   const [user, setUser] = useAtom(userAtom);
 
+  const queryParams = new URLSearchParams(location.search);
+  const redirectPath = queryParams.get('redirect');
+
+  console.log(redirectPath,'redirectPath')
+
     /* eslint-enable react-hooks/exhaustive-deps */
     useEffect(() => {
       if (user?.data?.email && user?.data?.email !== '' ) {
@@ -62,7 +67,7 @@ const Login = () => {
           setUser(userResponse);
           
           resetForm()
-          navigate("/jobs");
+          navigate(redirectPath ? redirectPath : '/');
 
         },
       });

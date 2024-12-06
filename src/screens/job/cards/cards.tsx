@@ -59,7 +59,7 @@ const Section2 = ({ searchTerm }: Props) => {
       ) : (
         <>
           {/* <p>{searchTerm?.length > 0 && "Viewall"}</p> */}
-          {searchTerm?.length > 0 && (
+          {/* {searchTerm?.length > 0 && (
             <div>
               <Button
                 type="button"
@@ -71,7 +71,7 @@ const Section2 = ({ searchTerm }: Props) => {
               <br />
               <br />
             </div>
-          )}
+          )} */}
 
           <div className={styles.cardContainer}>
             {JobData && JobData?.length > 0 ? (
@@ -124,13 +124,13 @@ const Section2 = ({ searchTerm }: Props) => {
               <section style={{ width: "100%" }}>
                 <div className={styles.noDataContainer}>
                   <p>No data available</p>
-                  {/* <Button
+                  <Button
                     type="button"
                     className="buttonStyle"
                     onClick={handleBack}
                     text="view all jobs"
                     icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
-                  /> */}
+                  />
                 </div>
               </section>
             )}

@@ -1,5 +1,5 @@
 import styles from "./job.module.scss";
-import { Image } from "antd";
+import { Image, notification } from "antd";
 import { useState } from "react";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
@@ -19,19 +19,17 @@ const Jobs = () => {
   const [openAddBusiness, setOpenAddBusiness] = useState(false);
   let { search } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
-
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
   const user = useAtomValue(userAtom);
-  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
   };
 
   const handleSearch = () => {
-    setAppliedSearchTerm(searchTerm); 
+    setAppliedSearchTerm(searchTerm);
     console.log("Search Term Sent:", searchTerm);
-    search=""
+    search = "";
   };
 
   const handleNavigateRegisterAsAnApplicant = () => {
@@ -39,22 +37,40 @@ const Jobs = () => {
     window.scrollTo(0, 0);
   };
 
+
+ 
   const handleNavigateAddBusiness = () => {
-    if (user?.data?.claim_status === null || user?.data?.claim_status?.toString() === '2' ) {
+    const currentPath = location.pathname;
+  
+    if (!user) {
+      // Show notification before navigating
+      notification.error({
+        message: 'Log in required',
+        description: 'You need to log in to access this page!',
+        placement: 'top',
+        duration: 4, 
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else if (
+      user?.data?.claim_status === null ||
+      user?.data?.claim_status?.toString() === '2'
+    ) {
       setOpenAddBusiness(true);
+    } else {
+      navigate(routes.job.postJob);
     }
-
-    // navigate("/job/add-business");
-    else navigate(routes.job.postJob);
-
+  
     window.scrollTo(0, 0);
   };
-
+  
+  
   const handleCloseBusinessModal = () => {
     setOpenAddBusiness(false);
     navigate(routes.job.AddBusiness);
   };
-  console.log(searchTerm, "srr");
+
 
   return (
     <div className="wrapper">
@@ -95,15 +111,15 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            { !user?.data?.is_applicant &&(
+            {!user?.data?.is_applicant && (
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}
                 text="Register as An Applicant"
                 variant="white"
                 onClick={handleNavigateRegisterAsAnApplicant}
-              />)
-            }
+              />
+            )}
           </div>
         </div>
         <Section2 searchTerm={appliedSearchTerm} />
@@ -120,6 +136,14 @@ const Jobs = () => {
           "It looks like your business has not been registered in our directory, Add your business to the directory now to be able to post jobs."
         }
       />
+      {/* <ModalContent
+        icon={<img src={warn} alt="warn" />}
+        open={loginModal}
+        handleCancel={() => setOpenLoginModal(false)}
+        handleClick={handleNavigateToLogin}
+        BtnText="Login"
+        heading="Please Login to continue"
+      /> */}
     </div>
   );
 };

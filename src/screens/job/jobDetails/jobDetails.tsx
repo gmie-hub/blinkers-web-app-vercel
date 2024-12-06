@@ -323,7 +323,7 @@ const JobDetails = () => {
 
       <ModalContent
         open={regModal}
-        handleCancel={() => handleRegModal()}
+        handleCancel={() => setRegModal(false)}
         handleClick={() => {
           handleRegModal();
         }}
