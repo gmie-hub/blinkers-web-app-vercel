@@ -130,8 +130,8 @@ const Directory = () => {
                     <div className={styles.productList}>
                       <p className={styles.title}>
                         {/* {item?.name} */}
-                        {item?.name && item?.name?.length > 25
-                          ? item?.name?.slice(0, 25) + "..."
+                        {item?.name && item?.name?.length > 20
+                          ? item?.name?.slice(0, 20) + "..."
                           : item?.name}
                       </p>
                       {item?.address && (

@@ -32,7 +32,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { errorMessage } from "../../../../utils/errorMessage";
 import CustomSpin from "../../../../customs/spin";
 
-const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
+const ProfInfoFormStrive: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openModals, setOpenModals] = useState<{ [key: string]: boolean }>({});
   const [setIndexData] = useState<any>(null);
@@ -587,4 +587,4 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   );
 };
 
-export default ProfInfoForm;
+export default ProfInfoFormStrive;

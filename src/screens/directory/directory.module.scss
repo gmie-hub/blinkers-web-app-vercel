@@ -56,7 +56,7 @@ flex-direction: column;
   // height: auto; /* Maintain aspect ratio */
   // object-fit: cover; /* Cover the container area without distortion */
   // height: 26rem !important;
-  object-fit: contain;
+  object-fit: cover;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
