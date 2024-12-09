@@ -22,7 +22,7 @@ const Header = () => {
   const user = useAtomValue(userAtom);
   const setUser = useSetAtom(userAtom); // To update the user state
 
-  console.log(user?.data?.email, "emd");
+  console.log(user?.email, "emd");
 
   const handleNavigateToLogin = () => {
     navigate("/login");
@@ -113,7 +113,7 @@ const Header = () => {
         ))}
 
         {/* Get Started button - Displayed under nav items on small screens */}
-        {user?.data?.email !== undefined && isMenuOpen && (
+        {user?.email !== undefined && isMenuOpen && (
           <>
             <div className={styles.loggedInIcons}>
               <img
@@ -143,7 +143,7 @@ const Header = () => {
             </div>
           </>
         )}
-        {user?.data?.email === undefined && isMenuOpen && (
+        {user?.email === undefined && isMenuOpen && (
           <div className={styles.mobileButtonWrapper}>
             <Button
               onClick={() => {
@@ -159,7 +159,7 @@ const Header = () => {
 
       {/* Right Nav - Shown only on large screens */}
       <div className={styles.rightNav}>
-        {user?.data?.email !== undefined  && (
+        {user?.email !== undefined  && (
           <div className={styles.loggedInIcons}>
             <img
               src={NotyIcon}
@@ -183,7 +183,7 @@ const Header = () => {
             </Button>
           </div>
         )}
-        {user?.data?.email === undefined  && (
+        {user?.email === undefined  && (
           <Button onClick={handleNavigateToLogin} className={styles.btn}>
             Get Started
           </Button>

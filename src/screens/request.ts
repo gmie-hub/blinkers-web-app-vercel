@@ -7,6 +7,7 @@ export const getAllJobs = async (page: number, search?: string | number) => {
     ?.data as JobResponse;
 };
 
+
 export const getJobDetails = async (id: number) => {
   return (await api.get(`jobs/${id}`))?.data as JobDetailsResponse;
 };
@@ -15,8 +16,8 @@ export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };
 
-export const getAllCategory = async () => {
-  return (await api.get('categories'))?.data as CategoryResponse;
+export const getAllCategory = async (search:string | number) => {
+  return (await api.get(`categories?search=${search}`))?.data as CategoryResponse;
 };
 
 export const getTrendingAds = async () => {
@@ -32,13 +33,26 @@ export const getPromotedAds = async () => {
 };
 
 
+export const getAllBusiness = async (search: number | string, page?: number) => {
+  let url = `/businesses?search=${search}`;
 
-export const getAllBusinessSearch = async (search?: string) => {
-  return (await api.get(`/businesses?search=${search}`))?.data as AllBusinessesResponse;
+  if (page !== undefined) {
+    url += `&page=${page}`;
+  }
+
+  return (await api.get(url))?.data as any;
 };
 
+
 export const getAllMarket = async (page: number,search?: string | number) => {
-  return (await api.get(`/ads?page=${page}&search=${search}`))?.data as AllProductaResponse;
+
+  let url = `/ads?search=${search}`;
+
+  if (page !== undefined) {
+    url += `&page=${page}`;
+  }
+
+  return (await api.get(url))?.data as AllProductaResponse;
 };
 
 export const CreateJob = async (payload: Partial<JobDatum>) => {
@@ -62,9 +76,9 @@ export const ProfInfoApi = async (payload: FormData) => {
   )?.data;
 };
 
-export const UpdateProfInfoApi = async (payload: FormData) => {
+export const UpdateProfInfoApi = async (payload: FormData,id:number) => {
   return (
-    await api.patch('/applicants/5', payload, {
+    await api.patch(`/applicants/${id}`, payload, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   )?.data;
@@ -72,6 +86,10 @@ export const UpdateProfInfoApi = async (payload: FormData) => {
 
 export const getApplicantsbyId = async (id: number) => {
   return (await api.get(`/users/profile?user_id=${id}`))?.data as UserDataResponse;
+};
+
+export const getBusinessById = async (id: number) => {
+  return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;
 };
 
 

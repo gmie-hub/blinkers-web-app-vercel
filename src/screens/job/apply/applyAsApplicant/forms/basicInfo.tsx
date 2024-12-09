@@ -14,15 +14,16 @@ interface ComponentProps {
 const BasicInfoForm: FC<ComponentProps> = ({ handleNext }) => {
   // const basicInfoFormData = useSetAtom(EducationInfoAtom);
   const user = useAtomValue(userAtom);
+  console.log(user, 'userd jum')
 
   return (
     <section>
       <Formik
         initialValues={{
-          firstName: user?.data?.name,
+          firstName: user?.name,
           // lastName: "",
-          phoneNumber: user?.data?.number,
-          email: user?.data?.email,
+          phoneNumber: user?.number,
+          email: user?.email,
         }}
         onSubmit={() => {
           handleNext();

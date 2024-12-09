@@ -18,6 +18,10 @@ flex-direction: column;
   }
 
 }
+.proImage {
+  height: 26rem !important;
+}
+
 
 .promoImage {
   flex: 1 1 calc(25% - 4.4rem); /* Allow 4 items per row with spacing */
@@ -26,6 +30,9 @@ flex-direction: column;
   flex-direction: column; /* Stack content vertically */
   box-sizing: border-box;
   justify-content: start;
+  box-shadow: 0px 4px 40px 0px #00990012;
+
+
 
   /* Ensure cards stretch if fewer items */
   flex-grow: 1;
@@ -45,9 +52,13 @@ flex-direction: column;
 }
 
 .promoImage img {
-  width: 100%; /* Ensure the image fills the container width */
+  min-width:  100%; /* Ensure the image fills the container width */
   // height: auto; /* Maintain aspect ratio */
-  object-fit: cover; /* Cover the container area without distortion */
+  // object-fit: cover; /* Cover the container area without distortion */
+  // height: 26rem !important;
+  object-fit: contain;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 
@@ -67,7 +78,7 @@ flex-direction: column;
   text-align: start;
   border-radius: 0 0 1rem 1rem;
   box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid #00990012;
+  // border: solid #00990012;
   cursor: pointer;
   & > p {
     padding-block-start: 0.5rem !important;

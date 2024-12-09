@@ -220,13 +220,12 @@ const Main =  ({ appliedSearchTerm }: Props) => {
             )}
           </div>
 
-          <div>
+        
             <div className={styles.rightSide}>
               {/* <ProductList  /> */}
               <ProductList appliedSearchTerm={appliedSearchTerm} />
 
             </div>
-          </div>
         </div>
       </Form>
     </Formik>

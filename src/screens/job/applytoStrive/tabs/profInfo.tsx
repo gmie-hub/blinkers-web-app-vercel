@@ -9,7 +9,7 @@ import Plus from "../../../../assets/add.svg";
 import File from "../../../../assets/file-text.svg";
 import Delete from "../../../../assets/deleteicon.svg";
 import edit from "../../../../assets/edit-2.svg";
-import { App, Modal, Spin } from "antd";
+import { App, Modal } from "antd";
 import EmpHistory from ".././../apply/applyAsApplicant/forms/modals/employerHistory";
 import EducationModal from ".././../apply/applyAsApplicant/forms/modals/education";
 import CoverLetter from ".././../apply/applyAsApplicant/forms/modals/coverLetter";
@@ -30,11 +30,12 @@ import ModalContent from "../../../../partials/successModal/modalContent";
 import { routes } from "../../../../routes";
 import { useNavigate, useParams } from "react-router-dom";
 import { errorMessage } from "../../../../utils/errorMessage";
+import CustomSpin from "../../../../customs/spin";
 
 const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openModals, setOpenModals] = useState<{ [key: string]: boolean }>({});
-  const [indexData, setIndexData] = useState<any>(null);
+  const [setIndexData] = useState<any>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
   const EducationInfoData = useAtomValue(EducationInfoAtom);
   const EmpHistoryInfoData = useAtomValue(EmploymentHistoryInfoAtom);
@@ -53,12 +54,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
   // const [emp, setEmp] = useState([] as EmploymentHistory[]);
 
-  const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
+  const [uploadedCoverLetter] = useState(null);
 
-  // A function to handle the uploaded file
-  const handleCoverLetterUpload = (file: any) => {
-    setUploadedCoverLetter(file);
-  };
+
 
   console.log(uploadedCoverLetter, "cover leteer i uploaded");
 
@@ -112,7 +110,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     queries: [
       {
         queryKey: ["get-applicant"],
-        queryFn: () => getApplicantsbyId(user?.data?.id!),
+        queryFn: () => getApplicantsbyId(user?.id!),
         retry: 0,
         refetchOnWindowFocus: false,
       },
@@ -357,7 +355,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   return (
     <section>
       {getApplicantQuery?.isLoading ? (
-        <Spin />
+         <CustomSpin />
       ) : getApplicantQuery?.isError ? (
         <h1 className="error">{applicantDetailsErrorMessage}</h1>
       ) : (
@@ -403,7 +401,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <img src={File} alt="File" /> {user?.data?.name}'s
+                            <img src={File} alt="File" /> {user?.name}'s
                             Cv{" "}
                           </a>
                         )}
@@ -507,7 +505,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                         {SkillsData &&
                           SkillsData?.map((item, idx) => (
                             <div className={styles.help} key={idx}>
-                              <h4>{item?.skill}</h4>
+                              <h4>{item?.skills}</h4>
                               <img
                                 src={edit}
                                 alt="edit"
@@ -543,11 +541,11 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                       title={section.modalTitle}
                       footer={null}
                     >
-                      <section.ModalContent
+                      {/* <section.ModalContent
                         handleClose={() => handleCloseEdit(section.key)}
                         indexData={indexData}
                         onUpload={handleCoverLetterUpload}
-                      />
+                      /> */}
                     </Modal>
                   </div>
                 ))}

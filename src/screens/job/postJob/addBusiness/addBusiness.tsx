@@ -7,17 +7,21 @@ import Input from "../../../../customs/input/input";
 import { useState } from "react";
 import Upload from "../../../../customs/upload/upload";
 import ModalContent from "../../../../partials/successModal/modalContent";
-
 import { createBusiness, getAllCategory } from "../../../request";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { App, Spin } from "antd";
-import { AxiosError } from "axios";
-import Select from "../../../../customs/select/select";
+import { App } from "antd";
+import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect";
 
 const AddBusiness = () => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
   const { notification } = App.useApp();
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearchChange = (value: string) => {
+    console.log('Search Query:', value); // Access the search query value here
+    setSearchValue(value);
+  };
 
 
   const clearFile = () => {
@@ -100,23 +104,24 @@ const AddBusiness = () => {
     }
   };
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["get-all-category"],
-    queryFn: getAllCategory,
+  const { data, } = useQuery({
+    queryKey: ["get-all-category",searchValue],
+    queryFn:()=> getAllCategory(searchValue),
   });
 
   const categoryData = data?.data?.data ?? [];
-  const categoryError = error as AxiosError;
 
-  const categoryOptions = categoryData?.map((item) => {
-    if (isLoading) {
-      return <option value="">{<Spin size="small" />}</option>;
-    } else if (isError) {
-      return <option value="">{categoryError?.message}</option>;
-    } else {
-      return <option value={item?.id}>{item?.title}</option>;
-    }
-  });
+
+
+  const categoryOptions: { value: number; label: string }[] = [
+    { value: 0, label: 'Select Business' }, // Default option
+    ...(categoryData && categoryData?.length > 0
+      ? categoryData?.map((item: CategoryDatum) => ({
+          value: item?.id,
+          label: item?.title,
+        }))
+      : []),
+  ];
 
   return (
     <div className="wrapper">
@@ -153,7 +158,7 @@ const AddBusiness = () => {
 
               // validationSchema={validationSchema}
             >
-              {({ setFieldValue, handleChange }) => {
+              {({ setFieldValue, }) => {
                 return (
                   <Form>
                     <div className={styles.inputContainer}>
@@ -164,13 +169,21 @@ const AddBusiness = () => {
                         type="text"
                       />
 
-                      <Select
+                      {/* <Select
                         name="category"
                         label="Category"
                         placeholder="Category"
                         options={categoryOptions}
                         onChange={handleChange}
-                      />
+                      /> */}
+                      
+                    <SearchableSelect
+                      name="category"
+                      label="Category"
+                      options={categoryOptions}
+                      placeholder="Select Company Name"
+                      onSearchChange={handleSearchChange}
+                    />
 
                       <Input
                         name="BusinessAddress"

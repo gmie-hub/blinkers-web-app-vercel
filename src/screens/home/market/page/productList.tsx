@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image, Pagination, PaginationProps, Spin } from "antd";
+import { Image, Pagination, PaginationProps } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import LocationIcon from "../../../../assets/locationrelated.svg";
 import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use react-icons for the back icon
 import Button from "../../../../customs/button/button";
+import CustomSpin from "../../../../customs/spin";
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -58,7 +59,7 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
   return (
     <>
       {getAllMarketQuery?.isLoading ? (
-        <Spin />
+         <CustomSpin />
       ) : getAllMarketQuery?.isError ? (
         <h1 className="error">{marketErrorMessage}</h1>
       ) : (

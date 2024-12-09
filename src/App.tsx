@@ -56,6 +56,8 @@ function App() {
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },
     { path: routes.directory.directory, element: <Directory /> },
+    { path: routes.directory.homeDirectory, element: <Directory /> },
+
     { path: routes.directory.NotClaimed, element: <NotClaim /> },
     { path: routes.directory.relatedBusinesses, element: <RelatedBusinesses /> },
     { path: routes.directory.SubscriptionPricing, element: <SubscriptionPricing /> },

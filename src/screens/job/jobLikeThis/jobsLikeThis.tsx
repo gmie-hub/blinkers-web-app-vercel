@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { useQueries } from "@tanstack/react-query";
 import { getJobDetails } from "../../request";
 import RouteIndicator from "../../../customs/routeIndicator";
-import { Spin } from "antd";
+import CustomSpin from "../../../customs/spin";
 
 interface Props {
   canSeeBtn?: boolean;
@@ -58,7 +58,7 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
         )}
 
         {getJobDetailsQuery?.isLoading ? (
-          <Spin />
+           <CustomSpin />
         ) : getJobDetailsQuery?.isError ? (
           <h1 className="error">{jobDetailsErrorMessage}</h1>
         ) : (

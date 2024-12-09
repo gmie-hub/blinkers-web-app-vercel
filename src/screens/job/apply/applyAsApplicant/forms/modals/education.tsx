@@ -1,4 +1,4 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "../styles.module.scss";
 import { FC } from "react";
 import Input from "../../../../../../customs/input/input";
@@ -8,17 +8,21 @@ import { useSetAtom } from "jotai";
 import { EducationInfoAtom } from "../../../../../../utils/store";
 import { Education } from "../../../../../../utils/type";
 import { convertDate } from "../../../../../../utils/formatTime";
+import * as Yup from 'yup';
 
 interface ComponentProps {
   handleClose: () => void;
   indexData: Education;
+  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
+
 }
 
-const EducationModal: FC<ComponentProps> = ({ handleClose, indexData }) => {
-  const EducationInfoFormData = useSetAtom(EducationInfoAtom);
+const EducationModal: FC<ComponentProps> = ({ handleClose, indexData,  handleSubmit }) => {
+  const educationInfoFormData = useSetAtom(EducationInfoAtom);
 
   // Initial values are derived directly from `indexData`
   const initialValues = {
+    id: indexData?.id || 0,
     institution: indexData?.institution || "",
     degree: indexData?.degree || "",
     field_of_study: indexData?.field_of_study || "",
@@ -28,12 +32,25 @@ const EducationModal: FC<ComponentProps> = ({ handleClose, indexData }) => {
     stillStudying: indexData?.stillStudying || false, 
   };
 
+   const validationSchema = Yup.object({
+    institution: Yup.string().required("Institution name is required"),
+    degree: Yup.string().required("Degree is required"),
+    field_of_study: Yup.string().required("Field of study is required"),
+    Grade: Yup.string().required("Grade is required"),
+    start_date: Yup.date().required("Start date is required").nullable(),
+    // end_date: Yup.date().when('stillStudying', {
+    //   is: false,
+    //   then: Yup.date().required("End date is required").nullable(),
+    // }),
+  });
+
+
   return (
     <section>
       <Formik
         initialValues={initialValues}
         enableReinitialize={true} 
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           const currentEducationInfo = JSON.parse(
             localStorage.getItem("education-info") ?? "[]"
           );
@@ -41,18 +58,30 @@ const EducationModal: FC<ComponentProps> = ({ handleClose, indexData }) => {
           if (indexData) {
             const updatedEducationInfo = currentEducationInfo?.map(
               (item: Education) =>
-                item.institution === indexData?.institution
+                item?.id === indexData?.id
                   ? { ...item, ...values }
                   : item
             );
-            EducationInfoFormData(updatedEducationInfo);
+            educationInfoFormData(updatedEducationInfo);
           } else {
-            const updatedEducationInfo = [...currentEducationInfo, values];
-            EducationInfoFormData(updatedEducationInfo);
+            const newdata = {
+              ...values,
+              id: currentEducationInfo.length + 1, // Dynamically set id based on array length
+            };
+            const updatedEducationInfo = [...currentEducationInfo, newdata];
+            educationInfoFormData(updatedEducationInfo);
+            resetForm();
+
           }
+          handleSubmit(values, resetForm);
+          resetForm();
 
           handleClose();
+          resetForm();
+
         }}
+        validationSchema={validationSchema} // Attach validation schema
+
       >
         {({ setFieldValue ,values}) => (
           <Form>

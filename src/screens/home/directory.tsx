@@ -48,7 +48,7 @@ const cardData = [
   },
 ];
 
-const Directory = () => {
+const HomeDirectory = () => {
   const navigate = useNavigate(); // Hook for navigation
   const [searchValues, setSearchValues] = useState<{ [key: number]: string }>({}); // State to store search input value for each card
 
@@ -108,7 +108,7 @@ const Directory = () => {
             <br />
 
             <SearchInput
-              placeholder="Search for a Job..."
+              placeholder={card?.placeholder}
               value={searchValues[card.id] || ""} // Set the search value for the specific card
               onChange={(e) => handleSearchChange(e, card.id)} // Update the search value for this card
               onKeyDown={(e) => handleKeyDown(e, card.route, card.id)} // Trigger handleNavigate on Enter key press
@@ -127,4 +127,4 @@ const Directory = () => {
   );
 };
 
-export default Directory;
+export default HomeDirectory;

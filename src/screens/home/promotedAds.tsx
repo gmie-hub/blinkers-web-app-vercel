@@ -1,11 +1,12 @@
 import styles from "./index.module.scss";
-import { Image, Spin } from "antd";
+import { Image,  } from "antd";
 import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { useQueries } from "@tanstack/react-query";
 import { getPromotedAds } from "../request";
+import CustomSpin from "../../customs/spin";
 
 const PromotedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -88,7 +89,7 @@ const PromotedAds = () => {
         </div>
       </div>
       {getPromotedAdsQuery?.isLoading ? (
-        <Spin />
+         <CustomSpin />
       ) : getPromotedAdsQuery?.isError ? (
         <h1 className="error">{promotedErrorMessage}</h1>
       ) : (

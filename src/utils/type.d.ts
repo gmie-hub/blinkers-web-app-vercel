@@ -1,7 +1,7 @@
 import { UploadFile } from "antd";
 
 interface Education {
-  // id:number;
+  id:number;
   // Instituition: string;
   // Degree: string;
   // FieldStudy: string;
@@ -18,7 +18,7 @@ interface Education {
   degree:string;
 }
 interface EmploymentHistory {
-  // id:number;
+  id:number;
   // JobTitle: string;
   // JobType: string;
   // CompanyName: string;
@@ -45,7 +45,7 @@ interface CoverLetter {
 }
 interface SkillsData {
   id:number;
-  skill: string;
+  skills: string;
 
 }
 

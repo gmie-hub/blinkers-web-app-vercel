@@ -215,7 +215,6 @@ const ResetPasswordVerificationCode = () => {
         },
       });
     } catch (error: any) {
-      handleNavigateToResetPassword(email!);
 
       notification.error({
         message: "Error",
@@ -291,7 +290,7 @@ const ResetPasswordVerificationCode = () => {
               <Button
                 disabled={verifyOptMutation?.isPending}
                 type="submit"
-                text="Verify"
+                text={verifyOptMutation?.isPending ?  "loading..." : "Verify"}
                 className={styles.button}
               />
 

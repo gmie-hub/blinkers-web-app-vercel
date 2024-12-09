@@ -11,7 +11,7 @@ import Select from '../../../customs/select/select';
 import Button from '../../../customs/button/button';
 import ModalContent from '../../../partials/successModal/modalContent';
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
-import { CreateJob, employmentTypeData, getAllBusinessSearch, JobTypeData, LevelData } from '../../request';
+import { CreateJob, employmentTypeData, getAllBusiness, JobTypeData, LevelData } from '../../request';
 import SearchableSelect from '../../../customs/searchableSelect/searchableSelect';
 import Editor from '../../../customs/editor/editor';
 import RouteIndicator from '../../../customs/routeIndicator';
@@ -35,7 +35,7 @@ export default function PostJobs() {
     queries: [
       {
         queryKey: ['get-all-business', searchValue],
-        queryFn: () => getAllBusinessSearch(searchValue),
+        queryFn: () => getAllBusiness(searchValue),
         retry: 0,
         refetchOnWindowFocus: false,
       },

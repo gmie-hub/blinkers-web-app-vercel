@@ -1,5 +1,5 @@
 import api from "../../utils/apiClient";
-import { UserData } from "../../utils/store";
+// import { UserData } from "../../utils/store";
 
 export const SignUpCall = async (payload: Partial<signUp>) => {
   return (await api.post("/auth/register", payload))?.data as Response;
@@ -10,7 +10,7 @@ export const ResetPasswordCall = async (payload: Partial<ResetPasswordPayload>) 
 
 
 export const LoginApiCall = async (data: LoginPayload) => {
-  return (await api.post("/auth/login", data))?.data as UserData;
+  return (await api.post("/auth/login", data))?.data as any;
 };
 
 export const ForgotPasswordCall = async (email: string) => {

@@ -1,7 +1,7 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "../styles.module.scss";
 import { FC } from "react";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
 import Checkbox from "../../../../../../customs/checkBox/checkbox";
@@ -13,17 +13,49 @@ import { convertDate } from "../../../../../../utils/formatTime";
 interface ComponentProps {
   handleClose: () => void;
   indexData: EmploymentHistory;
+  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
+
 }
 
-const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData }) => {
-  const EmployementHistoryData = useSetAtom(EmploymentHistoryInfoAtom);
-  const [empData] = useAtom(EmploymentHistoryInfoAtom); // Use the atom directly
+const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData ,handleSubmit}) => {
+  const employementHistoryData = useSetAtom(EmploymentHistoryInfoAtom);
+  const [empData] = useAtom(EmploymentHistoryInfoAtom); 
 
   console.log(empData, "indexDataindexDataindexDataindexData");
+
+
+
+const validationSchema = Yup.object().shape({
+  job_title: Yup.string().required("Job Title is required"),
+  job_type: Yup.string().required("Job Type is required"),
+  company_name: Yup.string().required("Company Name is required"),
+  location: Yup.string().required("Location is required"),
+  WorkArrangement: Yup.string()
+    .required("Work Arrangement is required"),
+  start_date: Yup.date()
+    .required("Start Date is required")
+    .max(new Date(), "Start Date cannot be in the future"),
+  // end_date: Yup.date()
+  //   .nullable()
+  //   .when("currentWork", {
+  //     is: false, // Only validate `end_date` if `currentWork` is false
+  //     then: Yup.date()
+  //       .required("End Date is required")
+  //       .min(Yup.ref("start_date"), "End Date must be after Start Date"),
+  //   }),
+  WorkSummary: Yup.string()
+    .required("Work Summary is required")
+    .max(2000, "Work Summary cannot exceed 2000 characters"),
+
+  currentWork: Yup.boolean(),
+});
+
+
   return (
     <section>
       <Formik
         initialValues={{
+          id: indexData?.id || 0, 
           job_title: indexData?.job_title || "",
           job_type: indexData?.job_title || "",
           company_name: indexData?.company_name || "",
@@ -33,30 +65,39 @@ const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData }) => {
           WorkSummary: indexData?.WorkArrangement || "",
           currentWork: indexData?.currentWork || "",
           WorkArrangement: indexData?.WorkArrangement || "",
-
         }}
         enableReinitialize={true}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           const currentEmpHistoryInfo = JSON.parse(
             localStorage.getItem("employment-History") ?? "[]"
           );
           if (indexData) {
             const updatedEmpHisInfo = currentEmpHistoryInfo?.map(
-              (item: EmploymentHistory,) =>
-                item?.company_name === indexData?.company_name ? { ...item, ...values } : item
+              (item: EmploymentHistory) =>
+                item?.id === indexData?.id
+                  ? { ...item, ...values }
+                  : item
             );
-            EmployementHistoryData(updatedEmpHisInfo);
+            employementHistoryData(updatedEmpHisInfo);
           } else {
-            const updatedEmpInfo = [...currentEmpHistoryInfo, values];
-            EmployementHistoryData(updatedEmpInfo);
+            const newdata = {
+              ...values,
+              id: currentEmpHistoryInfo.length + 1, 
+            };
+            const updatedEmpInfo = [...currentEmpHistoryInfo, newdata];
+            employementHistoryData(updatedEmpInfo);
           }
 
+          handleSubmit(values, resetForm);
+          resetForm();
+
           handleClose();
+          resetForm();
         }}
 
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
-        {({  values, setFieldValue }) => {
+        {({ values, setFieldValue }) => {
           return (
             <Form>
               <div className={styles.inputContainer}>
@@ -73,13 +114,7 @@ const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData }) => {
                   placeholder="Job Type"
                   type="text"
                 />
-                {/* <Select
-                  name="JobType"
-                  label="Job Type"
-                  placeholder=" Select Job Type"
-                  options={[]}
-                  onChange={handleChange}
-                /> */}
+              
 
                 <Input
                   label="Company Name"
@@ -122,10 +157,7 @@ const EmpHistory: FC<ComponentProps> = ({ handleClose, indexData }) => {
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <p>0/2000</p>
                 </div>
-                {/* <Checkbox
-                  label={'I currently work here'}
-                  name='Current'
-                /> */}
+             
 
                 <Checkbox
                   label="I currently work here"

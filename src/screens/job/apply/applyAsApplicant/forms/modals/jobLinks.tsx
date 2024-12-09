@@ -1,7 +1,7 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "../styles.module.scss";
 import { FC } from "react";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
 import { useSetAtom } from "jotai";
@@ -10,43 +10,57 @@ import { LinkData } from "../../../../../../utils/type";
 
 interface ComponentProps {
   handleClose: () => void;
-  indexData:LinkData
+  indexData: LinkData;
+  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
 }
 
-const JobLinks: FC<ComponentProps> = ({indexData, handleClose }) => {
-  const LinkAtomdata = useSetAtom(LinkInfoAtom);
+const JobLinks: FC<ComponentProps> = ({
+  indexData,
+  handleClose,
+  handleSubmit,
+}) => {
+  const linkAtomdata = useSetAtom(LinkInfoAtom);
+
+  const validationSchema = Yup.object({
+    type: Yup.string().required("Title is required"),
+    url: Yup.string().required("Link is required").url("Invalid URL format"),
+  });
 
   return (
     <section>
       <Formik
         initialValues={{
+          id: indexData?.id || 0,
           type: indexData?.type || "",
           url: indexData?.url || "",
-      
         }}
-        enableReinitialize={true} 
-
-        onSubmit={(values) => {
-          const currentSkillInfo =
-           JSON.parse(
+        enableReinitialize={true}
+        onSubmit={(values, { resetForm }) => {
+          const currentLinkInfo = JSON.parse(
             localStorage.getItem("link-data") ?? "[]"
           );
           if (indexData) {
-            const updatedLinkInfo = currentSkillInfo?.map(
-              (item: LinkData) =>
-                item?.id === indexData?.id
-                  ? { ...item, ...values }
-                  : item
+            const updatedLinkInfo = currentLinkInfo?.map((item: LinkData) =>
+              item?.id === indexData?.id ? { ...item, ...values } : item
             );
-            LinkAtomdata(updatedLinkInfo);
+            linkAtomdata(updatedLinkInfo);
           } else {
-            const updatedLinkInfo = [...currentSkillInfo, values];
-            LinkAtomdata(updatedLinkInfo);
+            const newData = {
+              ...values,
+              id: currentLinkInfo.length + 1,
+            };
+            const updatedLinkInfo = [...currentLinkInfo, newData];
+            linkAtomdata(updatedLinkInfo);
+            
           }
 
+          handleSubmit(values, resetForm);
+          resetForm();
+
           handleClose();
+          resetForm();
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
         {() => {
           return (
@@ -58,20 +72,17 @@ const JobLinks: FC<ComponentProps> = ({indexData, handleClose }) => {
                   placeholder="Title"
                   type="text"
                 />
-                  <Input
-                  name="url"
-                  label="Link"
-                  placeholder="Link"
-                  type="text"
-                />
+                <Input name="url" label="Link" placeholder="Link" type="text" />
 
                 <section className={styles.buttonGroup}>
                   <Button
                     variant="white"
-                    type="submit"
+                    type="button"
                     disabled={false}
                     text="Cancel"
                     className={styles.btn}
+                    onClick={handleClose}
+
                   />
                   <Button
                     variant="green"

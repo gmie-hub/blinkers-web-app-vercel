@@ -4,16 +4,19 @@ import { useQueries } from "@tanstack/react-query";
 import { getAllJobs } from "../../request";
 import { useState } from "react";
 import { AxiosError } from "axios";
-import { Pagination, PaginationProps, Spin } from "antd";
+import { Pagination, PaginationProps } from "antd";
 import { getTimeAgo } from "../../../utils/formatTime";
-import FaArrowLeft from "../../../assets/backArrow.svg"; // Assuming you use react-icons for the back icon
+import FaArrowLeft from "../../../assets/backArrow.svg"; 
 import Button from "../../../customs/button/button";
+import CustomSpin from "../../../customs/spin";
 
 interface Props {
   searchTerm: string;
+  resetSearchTerm: () => void; 
+
 }
 
-const Section2 = ({ searchTerm }: Props) => {
+const JobLists = ({ searchTerm,resetSearchTerm }: Props) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,23 +46,22 @@ const Section2 = ({ searchTerm }: Props) => {
     jobError?.message || "An error occurred. Please try again later.";
 
   const handleBack = () => {
-    // Reset the search term and navigate to the jobs endpoint
-    searchTerm = ""; // Clear the search term
-    setCurrentPage(1); // Reset to the first page
-    navigate("/jobs"); // Navigate to the jobs page without a search term
-    getAllJobQuery.refetch(); // This will re-fetch the data
+    resetSearchTerm();
+    setCurrentPage(1); 
+    navigate("/jobs");
+    getAllJobQuery.refetch(); 
   };
 
   return (
     <div className={styles.whyWrapper}>
       {getAllJobQuery?.isLoading ? (
-        <Spin />
+         <CustomSpin />
       ) : getAllJobQuery?.isError ? (
         <h1 className="error">{jobErrorMessage}</h1>
       ) : (
         <>
           {/* <p>{searchTerm?.length > 0 && "Viewall"}</p> */}
-          {/* {searchTerm?.length > 0 && (
+          {searchTerm?.length > 0 && JobData?.length > 0 &&(
             <div>
               <Button
                 type="button"
@@ -71,7 +73,7 @@ const Section2 = ({ searchTerm }: Props) => {
               <br />
               <br />
             </div>
-          )} */}
+          )}
 
           <div className={styles.cardContainer}>
             {JobData && JobData?.length > 0 ? (
@@ -122,7 +124,7 @@ const Section2 = ({ searchTerm }: Props) => {
               ))
             ) : (
               <section style={{ width: "100%" }}>
-                <div className={styles.noDataContainer}>
+                <div className='noDataContainer'>
                   <p>No data available</p>
                   <Button
                     type="button"
@@ -154,4 +156,4 @@ const Section2 = ({ searchTerm }: Props) => {
     </div>
   );
 };
-export default Section2;
+export default JobLists;

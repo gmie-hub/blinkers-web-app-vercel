@@ -6,7 +6,7 @@ import StatusBadge from "../../../partials/statusBadge/statusBadge";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import MoreJobsLikeThis from "../jobLikeThis/jobsLikeThis";
 import { useNavigate, useParams } from "react-router-dom";
-import { App, Modal, Spin } from "antd";
+import { App, Modal } from "antd";
 import { useState } from "react";
 import FlagJob from "./flagJob/flagJob";
 import { useMutation, useQueries } from "@tanstack/react-query";
@@ -24,6 +24,7 @@ import { useAtomValue } from "jotai";
 import { routes } from "../../../routes";
 import ModalContent from "../../../partials/successModal/modalContent";
 import { errorMessage } from "../../../utils/errorMessage";
+import CustomSpin from "../../../customs/spin";
 
 const JobDetails = () => {
   const navigate = useNavigate();
@@ -32,19 +33,31 @@ const JobDetails = () => {
   const user = useAtomValue(userAtom);
   const [regModal, setRegModal] = useState(false);
   const { notification } = App.useApp();
+  const currentPath = location.pathname;
 
   const handleNavigateToMoreJob = () => {
     navigate(`/job/more-jobs-like-this/${id}`);
     window.scrollTo(0, 0);
   };
   const handleNavigateApplyToJob = () => {
-    if (user?.data?.is_applicant) {
+    // if (!user) {
+    //   notification.error({
+    //     message: "Log in required",
+    //     description: "You need to log in to access this page!",
+    //     placement: "top",
+    //     duration: 3,
+    //     onClose: () => {
+    //       navigate(`/login?redirect=${currentPath}`);
+    //     },
+    //   });
+    // } else 
+    if (user?.is_applicant) {
       // navigate(`/job/apply/${id}`);
-      ApplyJobHandler()
-      window.scrollTo(0, 0);
+      ApplyJobHandler();
     } else {
       setRegModal(true);
     }
+    window.scrollTo(0, 0);
   };
 
   const [getJobDetailsQuery] = useQueries({
@@ -84,7 +97,17 @@ const JobDetails = () => {
     return status;
   };
   const handleFlagJob = () => {
-    if (user?.data.is_applicant) {
+    if (!user) {
+      notification.error({
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else if (user.is_applicant) {
       setFlagJob(true);
     } else {
       setRegModal(true);
@@ -95,12 +118,10 @@ const JobDetails = () => {
     navigate(routes?.job?.RegAsApplicant);
   };
 
-
   const ApplyJobMutation = useMutation({
     mutationFn: ApplyForJobApi,
     mutationKey: ["apply-job"],
   });
-
 
   const ApplyJobHandler = async () => {
     const payload: Partial<FlagJob> = {
@@ -121,16 +142,18 @@ const JobDetails = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: error?.response?.data?.error || errorMessage(error) || "An error occurred",
+        description:
+          error?.response?.data?.error ||
+          errorMessage(error) ||
+          "An error occurred",
       });
-    
     }
   };
 
   return (
     <main>
       {getJobDetailsQuery?.isLoading ? (
-        <Spin />
+         <CustomSpin />
       ) : getJobDetailsQuery?.isError ? (
         <h1 className="error">{jobDetailsErrorMessage}</h1>
       ) : (
@@ -327,7 +350,7 @@ const JobDetails = () => {
         handleClick={() => {
           handleRegModal();
         }}
-        heading={"Please Register as an applicant before flag this job"}
+        heading={"Please Register as an applicant before perform this action"}
       />
     </main>
   );

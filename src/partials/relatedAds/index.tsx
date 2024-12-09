@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image, Spin } from "antd";
+import { Image } from "antd";
 import Star from "../../assets/Vector.svg";
 import StarYellow from "../../assets/staryellow.svg";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,6 +10,7 @@ import { useQueries } from "@tanstack/react-query";
 import { getProductDetails } from "../../screens/request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../customs/routeIndicator";
+import CustomSpin from "../../customs/spin";
 
 interface Props {
   limit?: number;
@@ -57,7 +58,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
         {canSeeBtn && <RouteIndicator showBack />}
 
         {getProductDetailsQuery?.isLoading ? (
-          <Spin />
+          <CustomSpin />
         ) : getProductDetailsQuery?.isError ? (
           <h1 className="error">{productDetailsErrorMessage}</h1>
         ) : (
@@ -84,7 +85,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
                         ? `${item?.title?.slice(0, 20)}...`
                         : item?.title}
                     </p>
-                    {item?.state?.state_name !==null &&
+                    {item?.state?.state_name !== null && (
                       <div className={styles.info}>
                         <Image src={LocationIcon} alt="Location" />
                         <p>
@@ -94,7 +95,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
                           <span>{item?.state?.state_name}</span>
                         </p>
                       </div>
-                    }
+                    )}
                     <p style={{ color: "#222222", fontWeight: "600" }}>
                       ₦{item.price}
                     </p>

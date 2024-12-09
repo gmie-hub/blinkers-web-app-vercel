@@ -9,7 +9,7 @@ import job2 from "../../assets/job2.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import ModalContent from "../../partials/successModal/modalContent";
 import warn from "../../assets/warning-circle-svgrepo-com 2.svg";
-import Section2 from "./cards/cards";
+import JobLists from "./cards/cards";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
 import { routes } from "../../routes";
@@ -21,6 +21,7 @@ const Jobs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
   const user = useAtomValue(userAtom);
+  const currentPath = location.pathname;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
@@ -33,17 +34,28 @@ const Jobs = () => {
   };
 
   const handleNavigateRegisterAsAnApplicant = () => {
+    if (!user) {
+      notification.error({
+        message: 'Log in required',
+        description: 'You need to log in to access this page!',
+        placement: 'top',
+        duration: 4, 
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    }
+      else{
     navigate("/job/register-as-applicant");
+      }
     window.scrollTo(0, 0);
   };
 
 
  
   const handleNavigateAddBusiness = () => {
-    const currentPath = location.pathname;
   
     if (!user) {
-      // Show notification before navigating
       notification.error({
         message: 'Log in required',
         description: 'You need to log in to access this page!',
@@ -54,8 +66,8 @@ const Jobs = () => {
         },
       });
     } else if (
-      user?.data?.claim_status === null ||
-      user?.data?.claim_status?.toString() === '2'
+      user?.claim_status === null ||
+      user?.claim_status?.toString() === '2'
     ) {
       setOpenAddBusiness(true);
     } else {
@@ -71,6 +83,12 @@ const Jobs = () => {
     navigate(routes.job.AddBusiness);
   };
 
+
+  const resetSearchTerm = () => {
+    setSearchTerm(""); // Clear the search term
+    console.log(searchTerm,'olak')
+    setAppliedSearchTerm(""); // Clear applied search term
+  };
 
   return (
     <div className="wrapper">
@@ -97,7 +115,8 @@ const Jobs = () => {
                   variant="green"
                   text="Search"
                   className={styles.searchBtn}
-                  onClick={handleSearch} // Set appliedSearchTerm here
+                  onClick={handleSearch} 
+                 
                 />
               </SearchInput>
             </div>
@@ -111,7 +130,7 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            {!user?.data?.is_applicant && (
+            {/* {!user?.is_applicant && ( */}
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}
@@ -119,10 +138,10 @@ const Jobs = () => {
                 variant="white"
                 onClick={handleNavigateRegisterAsAnApplicant}
               />
-            )}
-          </div>
+            {/* )} */}
+                      </div>
         </div>
-        <Section2 searchTerm={appliedSearchTerm} />
+        <JobLists searchTerm={appliedSearchTerm} resetSearchTerm={resetSearchTerm} />
       </div>
 
       <ModalContent

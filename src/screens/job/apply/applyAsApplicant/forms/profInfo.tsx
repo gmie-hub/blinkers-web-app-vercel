@@ -6,10 +6,10 @@ import Button from "../../../../../customs/button/button";
 import Upload from "../../../../../customs/upload/upload";
 import Folder from "../../../../../assets/folder.svg";
 import Plus from "../../../../../assets/add.svg";
-import File from "../../../../../assets/file-text.svg";
 import Delete from "../../../../../assets/deleteicon.svg";
 import edit from "../../../../../assets/edit-2.svg";
-import { App, Modal, Spin } from "antd";
+import { App, Modal } from "antd";
+import * as Yup from "yup";
 import EmpHistory from "./modals/employerHistory";
 import EducationModal from "./modals/education";
 import CoverLetter from "./modals/coverLetter";
@@ -22,9 +22,12 @@ import {
   SkilsInfoAtom,
   userAtom,
 } from "../../../../../utils/store";
-import { useAtom, useAtomValue } from "jotai";
-import { useMutation, useQueries } from "@tanstack/react-query";
-import { getApplicantsbyId, ProfInfoApi } from "../../../../request";
+import { useAtom } from "jotai";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import {
+  getApplicantsbyId,
+  ProfInfoApi,
+} from "../../../../request";
 import {
   Education,
   EmploymentHistory,
@@ -35,18 +38,25 @@ import { AxiosError } from "axios";
 import ModalContent from "../../../../../partials/successModal/modalContent";
 import { routes } from "../../../../../routes";
 import { useNavigate } from "react-router-dom";
+import CustomSpin from "../../../../../customs/spin";
+import api from "../../../../../utils/apiClient";
+
 
 const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openModals, setOpenModals] = useState<{ [key: string]: boolean }>({});
   const [indexData, setIndexData] = useState<any>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
-  const EducationInfoData = useAtomValue(EducationInfoAtom);
-  const EmpHistoryInfoData = useAtomValue(EmploymentHistoryInfoAtom);
-  const SkillsData = useAtomValue(SkilsInfoAtom);
-  const LinksData = useAtomValue(LinkInfoAtom);
-  const [user] = useAtom(userAtom);
+  const [educationInfoData,setEducationInfoData] = useAtom(EducationInfoAtom);
+  const [empHistoryInfoData,setEmpHistoryInfoData] = useAtom(EmploymentHistoryInfoAtom);
+  const [skillsData, setSkillsData] = useAtom(SkilsInfoAtom);
+  const [linksData,setLinkData] = useAtom(LinkInfoAtom);
+  const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
+  const [showAllSkills, setShowAllSkills] = useState(false);
+  const [showAllEducation, setShowAllEducation] = useState(false);
+  const [showAllEmploymentHistory, setShowAllEmploymentHistory] =
+    useState(false);
 
   const { notification } = App.useApp();
   const [uploadMode, setUploadMode] = useState(false); // State to toggle upload interface
@@ -55,6 +65,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     string | null
   >(null);
 
+  const queryClient =useQueryClient()
   // const [emp, setEmp] = useState([] as EmploymentHistory[]);
 
   const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
@@ -64,7 +75,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     setUploadedCoverLetter(file);
   };
 
-  console.log(uploadedCoverLetter, "cover leteer i uploaded");
 
   const clearLocalStorageData = () => {
     const keysToClear = [
@@ -86,6 +96,26 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   ) => {
     if (!e.target?.files) return;
     const selectedFile = e.target.files[0];
+
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
+      "image/gif",
+    ];
+    if (!validImageTypes.includes(selectedFile.type)) {
+      notification.error({
+        message: "Invalid File Type",
+        description:
+          "Please upload a valid file. Supported formats include: JPEG, PNG, JPG, PDF, DOC, DOCX, TXT, GIF.",
+      });
+      return;
+    }
+
     setUpload(selectedFile);
     setFieldValue("cv", selectedFile); // Set the file in Formik
 
@@ -116,12 +146,22 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     queries: [
       {
         queryKey: ["get-applicant"],
-        queryFn: () => getApplicantsbyId(user?.data?.id!),
+        queryFn: () => getApplicantsbyId(user?.id!),
         retry: 0,
         refetchOnWindowFocus: false,
       },
     ],
   });
+
+  useEffect(()=>{
+  if(user?.is_applicant && getApplicantQuery?.isFetched){
+    setLinkData(applicantDetailsData?.links || [])
+    setSkillsData(applicantDetailsData?.skills || [])
+    setEducationInfoData(applicantDetailsData?.education || [])
+    setEmpHistoryInfoData(applicantDetailsData?.employment_history || [])
+  }
+},[user?.is_applicant , getApplicantQuery?.isFetched,   ])
+
 
   const applicantDetailsData = getApplicantQuery?.data?.data?.applicant;
   const applicantDetailsError = getApplicantQuery?.error as AxiosError;
@@ -129,41 +169,28 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     applicantDetailsError?.message ||
     "An error occurred. Please try again later.";
 
-  // useEffect(()=>{
-  //   if(getApplicantQuery?.isSuccess && applicantDetailsData){
-  //     setUser((prevUser:any) => ({
-  //       ...prevUser?.data,
-  //       applicantId: applicantDetailsData?.id,
-  //     }));
-  //   }
-
-  // },[ getApplicantQuery?.isSuccess && applicantDetailsData])
-
-  // useEffect(() => {
-  //   // Check if employment history exists and is an array
-  //   if (applicantDetailsData?.employment_history) {
-  //     setEmp(applicantDetailsData.employment_history);
-  //   }
-  // }, [applicantDetailsData]);
+  console.log(applicantDetailsData, "applicantDetailsData");
 
   const emphistoryToDisplay =
-    EmpHistoryInfoData?.length === 0
+    empHistoryInfoData?.length === 0
       ? applicantDetailsData?.employment_history
-      : EmpHistoryInfoData;
+      : empHistoryInfoData;
 
   const educationToDisplay =
-    EducationInfoData?.length === 0
+    educationInfoData?.length === 0
       ? applicantDetailsData?.education
-      : EducationInfoData;
+      : educationInfoData;
 
   const linksToDisplay =
-    LinksData?.length === 0 ? applicantDetailsData?.links : LinksData;
+    linksData?.length === 0 ? applicantDetailsData?.links : linksData;
+
+  const skillsToDisplay =
+    skillsData?.length === 0 ? applicantDetailsData?.skills : skillsData;
 
   const coverletterToDisplay = filePrevieCoverLetterUrl
     ? filePrevieCoverLetterUrl
     : applicantDetailsData?.cover_letter_url;
 
-  console.log(filePrevieCoverLetterUrl, "coverletterToDisplay");
   const sections = [
     {
       title: "Employment History",
@@ -171,7 +198,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       description:
         "Add your qualifications to showcase your valuable work experiences.",
       onOpen: () => setOpenModals((prev) => ({ ...prev, employment: true })),
-      data: EmpHistoryInfoData ?? applicantDetailsData?.employment_history,
+      data: empHistoryInfoData ?? applicantDetailsData?.employment_history,
       ModalContent: EmpHistory,
       modalTitle: "Add Employment History",
     },
@@ -180,7 +207,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       key: "education",
       description: "Add your academic qualifications.",
       onOpen: () => setOpenModals((prev) => ({ ...prev, education: true })),
-      data: EducationInfoData,
+      data: educationInfoData,
       ModalContent: EducationModal,
       modalTitle: "Add Education",
     },
@@ -200,7 +227,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       description:
         "Highlight your skillset to demonstrate your capabilities and strengths in various areas.",
       onOpen: () => setOpenModals((prev) => ({ ...prev, skills: true })),
-      data: SkillsData,
+      data: skillsData,
       ModalContent: SkillsModal,
       modalTitle: "Add Skills",
     },
@@ -209,7 +236,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       key: "links",
       description: "Add your links, social media, portfolio, CV etc.",
       onOpen: () => setOpenModals((prev) => ({ ...prev, links: true })),
-      data: LinksData,
+      data: linksData,
       ModalContent: JobLinks,
       modalTitle: "Add Link",
     },
@@ -227,9 +254,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     const formData = new FormData();
 
     // Append simple fields
-    const id = user?.data?.id;
+    const id = user?.id;
     if (id) {
-      formData.append("user_id", id.toString()); // Convert id to string and append
+      formData.append("user_id", id?.toString()); // Convert id to string and append
     }
     formData.append("cv", upload as File);
     // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
@@ -240,7 +267,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
     formData.append("specialization", values?.specialization);
 
-    EmpHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
+    empHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
       formData.append(
         `employment_history[${index}][job_title]`,
         item?.job_title
@@ -266,12 +293,12 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       );
       formData.append(
         `employment_history[${index}][current_work]`,
-        item?.currentWork.toString()
+        item?.currentWork?.toString()
       );
     });
 
     // Append education history as an array
-    EducationInfoData?.forEach((item: Education, index: number) => {
+    educationInfoData?.forEach((item: Education, index: number) => {
       formData.append(`education[${index}][institution]`, item?.institution);
       formData.append(`education[${index}][degree]`, item?.degree);
       formData.append(
@@ -283,31 +310,161 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(`education[${index}][end_date]`, item?.end_date);
       formData.append(
         `education[${index}][still_studying]`,
-        item?.stillStudying.toString()
+        item?.stillStudying?.toString()
       );
     });
 
     // Append skills as an array
-    SkillsData?.forEach((item: SkillsData, index: number) => {
-      formData.append(`skills[${index}]`, item?.skill);
+    skillsData?.forEach((item: SkillsData, index: number) => {
+      formData.append(`skills[${index}]`, item?.skills);
     });
 
     // Append links as an array
-    LinksData?.forEach((item: LinkData, index: number) => {
+    linksData?.forEach((item: LinkData, index: number) => {
       formData.append(`links[${index}][type]`, item?.type);
       formData.append(`links[${index}][url]`, item?.url);
     });
 
     try {
       await createProfInfoMutation.mutateAsync(formData, {
+        onSuccess: () => {
+      
+          
+          resetForm();
+          setOpenSuccess(true);
+          clearLocalStorageData();
+          queryClient.refetchQueries({
+            queryKey: ["get-applicant"],
+          });
+          setUser((prevUser: any) => ({
+            ...prevUser,
+            is_applicant: true,
+          }));
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: "An error occurred while submitting your information.",
+      });
+      setUser((prevUser: any) => ({
+        ...prevUser,
+        is_applicant: false,
+      }));
+    }
+  };
+
+  const UpdateProfInfoApi = async (payload: FormData) => {
+    return (
+      await api.patch(`/applicants/${applicantDetailsData?.id}`, payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+    )?.data;
+  };
+
+  const EditProfInfoMutation = useMutation({
+    mutationFn: UpdateProfInfoApi,
+    mutationKey: ["update-info"],
+  });
+
+  const updateInfoHandler = async (
+    values: FormikValues,
+
+    resetForm: () => void
+  ) => {
+    const formData = new FormData();
+
+    // Append simple fields
+    const id = user?.id;
+    if (id) {
+      formData.append("user_id", id?.toString()); // Convert id to string and append
+    }
+    if(upload){
+      formData.append("cv", upload as File);
+
+    }
+    // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
+
+    if (uploadedCoverLetter) {
+      formData.append("cover_letter", uploadedCoverLetter);
+    }
+
+    formData.append("specialization", values?.specialization);
+
+    empHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
+      formData.append(
+        `employment_history[${index}][job_title]`,
+        item?.job_title
+      );
+      formData.append(`employment_history[${index}][job_type]`, item?.job_type);
+      formData.append(
+        `employment_history[${index}][company_name]`,
+        item?.company_name
+      );
+      formData.append(`employment_history[${index}][location]`, item?.location);
+      formData.append(
+        `employment_history[${index}][work_arrangement]`,
+        item?.WorkArrangement
+      );
+      formData.append(
+        `employment_history[${index}][start_date]`,
+        item?.start_date
+      );
+      formData.append(`employment_history[${index}][end_date]`, item?.end_date);
+      formData.append(
+        `employment_history[${index}][work_summary]`,
+        item?.WorkSummary
+      );
+      formData.append(
+        `employment_history[${index}][current_work]`,
+        item?.currentWork?.toString()
+      );
+    });
+
+    // Append education history as an array
+    educationInfoData?.forEach((item: Education, index: number) => {
+      formData.append(`education[${index}][institution]`, item?.institution);
+      formData.append(`education[${index}][degree]`, item?.degree);
+      formData.append(
+        `education[${index}][field_of_study]`,
+        item?.field_of_study
+      );
+      formData.append(`education[${index}][grade]`, item?.Grade);
+      formData.append(`education[${index}][start_date]`, item?.start_date);
+      formData.append(`education[${index}][end_date]`, item?.end_date);
+      formData.append(
+        `education[${index}][still_studying]`,
+        item?.stillStudying?.toString()
+      );
+    });
+
+    // Append skills as an array
+    skillsData?.forEach((item:any, index: number) => {
+      const skills  =  item?.skills ? item?.skills : item
+      formData.append(`skills[${index}]`, skills );
+    
+    });
+
+    // Append links as an array
+    linksData?.forEach((item: LinkData, index: number) => {
+      formData.append(`links[${index}][type]`, item?.type);
+      formData.append(`links[${index}][url]`, item?.url);
+    });
+    if (applicantDetailsData === null) return;
+
+    try {
+      await EditProfInfoMutation.mutateAsync(formData, {
         onSuccess: (data) => {
           notification.success({
             message: "Success",
             description: data?.message,
           });
           resetForm();
-          setOpenSuccess(true);
-          clearLocalStorageData();
+          queryClient.refetchQueries({
+            queryKey: ["get-applicant"],
+          });
+          // setOpenSucce ss(true);
+          // clearLocalStorageData();
         },
       });
     } catch (error: any) {
@@ -323,24 +480,33 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     navigate(routes?.job?.job);
   };
 
+  const validationSchema = Yup.object().shape({
+    cv: Yup.mixed().required("Cover letter is required"),
+    specialization: Yup.string()
+    .required("required") 
+  });
+
+
   return (
     <section>
       {getApplicantQuery?.isLoading ? (
-        <Spin />
+        <CustomSpin />
       ) : getApplicantQuery?.isError ? (
         <h1 className="error">{applicantDetailsErrorMessage}</h1>
       ) : (
         <Formik
           initialValues={{
-            cv: "",
+            cv: applicantDetailsData?.cv_url || "",
             specialization: applicantDetailsData?.specialization || "",
-            phoneNumber: "",
-            email: "",
+       
           }}
           enableReinitialize={true}
           onSubmit={(values, { resetForm }) => {
-            ProfInfoHandler(values, resetForm);
+            applicantDetailsData !== null ?
+               updateInfoHandler(values, resetForm)
+              : ProfInfoHandler(values, resetForm);
           }}
+          validationSchema={validationSchema}
         >
           {({ setFieldValue }) => (
             <Form>
@@ -360,20 +526,20 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                   (upload || applicantDetailsData?.cv_url) && (
                     <div className={styles.del}>
                       <div className={styles.cv}>
-                        {applicantDetailsData?.cv_url && (
-                          <a
-                            href={
-                              filePreviewUrl
-                                ? filePreviewUrl
-                                : applicantDetailsData?.cv_url
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img src={File} alt="File" /> {user?.data?.name}'s
-                            Cv{" "}
-                          </a>
-                        )}
+                        {/* {upload?.name ||applicantDetailsData?.cv_url && ( */}
+                        <a
+                          href={
+                            filePreviewUrl
+                              ? filePreviewUrl
+                              : applicantDetailsData?.cv_url
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {user?.name}'s Cv
+                          {/* <img src={File} alt="File" /> {user?.data?.name}'s Cv{" "} */}
+                        </a>
+                        {/* )} */}
                       </div>
                       <img
                         onClick={() => setUploadMode(true)}
@@ -391,7 +557,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
                 {uploadMode === false && (
                   <Button
-                    variant="green"
+                    variant="white"
                     type="button"
                     disabled={false}
                     text="Upload new cv"
@@ -400,7 +566,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                   />
                 )}
 
-                {sections.map((section) => (
+                {sections?.map((section) => (
                   <div key={section.key} className={styles.popUp}>
                     <div className={styles.popUpTitle}>
                       <h3>{section.title}</h3>
@@ -423,12 +589,15 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                         />
                       </div>
                     </div>
-                    <p>{section.description}</p>
+                    {applicantDetailsData === null && <p>{section.description}</p>}{" "}
                     {section.key === "employment" &&
                       emphistoryToDisplay &&
-                      emphistoryToDisplay?.length && (
+                      emphistoryToDisplay?.length > 0 && (
                         <div className={styles.card}>
-                          {emphistoryToDisplay?.map((item, idx) => (
+                          {(showAllEmploymentHistory
+                            ? emphistoryToDisplay
+                            : emphistoryToDisplay?.slice(0, 2)
+                          )?.map((item, idx) => (
                             <div className={styles.help} key={idx}>
                               <h4>{item?.company_name}</h4>
                               <img
@@ -439,14 +608,34 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                               />
                             </div>
                           ))}
+
+                          {emphistoryToDisplay.length > 2 && (
+                            <Button
+                              variant="white"
+                              type="button"
+                              text={
+                                showAllEmploymentHistory
+                                  ? "Show less"
+                                  : "View All"
+                              }
+                              className={styles.btn}
+                              onClick={() =>
+                                setShowAllEmploymentHistory(
+                                  !showAllEmploymentHistory
+                                )
+                              }
+                            />
+                          )}
                         </div>
                       )}
-
                     {section.key === "education" &&
                       educationToDisplay &&
                       educationToDisplay.length > 0 && (
                         <div className={styles.card}>
-                          {educationToDisplay?.map((item, idx) => (
+                          {(showAllEducation
+                            ? educationToDisplay
+                            : educationToDisplay?.slice(0, 2)
+                          )?.map((item, idx) => (
                             <div className={styles.help} key={idx}>
                               <h4>{item?.institution}</h4>
                               <img
@@ -457,9 +646,20 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                               />
                             </div>
                           ))}
+
+                          {educationToDisplay?.length > 2 && (
+                            <Button
+                              variant="white"
+                              type="button"
+                              text={showAllEducation ? "Show less" : "View All"}
+                              className={styles.btn}
+                              onClick={() =>
+                                setShowAllEducation(!showAllEducation)
+                              }
+                            />
+                          )}
                         </div>
                       )}
-
                     {section.key === "coverLetter" && coverletterToDisplay && (
                       <div className={styles.card}>
                         {/* <p>{CoverLetterData?.CoverLetter}</p> */}
@@ -468,13 +668,15 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                         )}
                       </div>
                     )}
-
-                    {section.key === "skills" && SkillsData?.length > 0 && (
-                      <div className={styles.card}>
-                        {SkillsData &&
-                          SkillsData?.map((item, idx) => (
-                            <div className={styles.help} key={idx}>
-                              <h4>{item?.skill}</h4>
+                    {section.key === "skills" &&
+                      skillsToDisplay?.length > 0 && (
+                        <div className={styles.card}>
+                          {(showAllSkills
+                            ? skillsToDisplay
+                            : skillsToDisplay?.slice(0, 2)
+                          )?.map((item: any, index: number) => (
+                            <div className={styles.help} key={index}>
+                              <h4>{item}</h4>
                               <img
                                 src={edit}
                                 alt="edit"
@@ -483,9 +685,17 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                               />
                             </div>
                           ))}
-                      </div>
-                    )}
-
+                          {skillsToDisplay.length > 2 && (
+                            <Button
+                              variant="white"
+                              type="button"
+                              text={showAllSkills ? "Show less" : "View All"}
+                              className={styles.btn}
+                              onClick={() => setShowAllSkills(!showAllSkills)}
+                            />
+                          )}
+                        </div>
+                      )}
                     {section.key === "links" &&
                       linksToDisplay &&
                       linksToDisplay?.length > 0 && (
@@ -514,6 +724,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                         handleClose={() => handleCloseEdit(section.key)}
                         indexData={indexData}
                         onUpload={handleCoverLetterUpload}
+                        handleSubmit={updateInfoHandler}
                       />
                     </Modal>
                   </div>
@@ -530,7 +741,15 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                 <Button
                   variant="green"
                   type="submit"
-                  text={createProfInfoMutation?.isPending ? "loading" : "Save"}
+                  text={
+                    applicantDetailsData !== null
+                      ? createProfInfoMutation?.isPending
+                        ? "Updating"
+                        : "Update"
+                      : createProfInfoMutation?.isPending
+                      ? "Saving"
+                      : "Save"
+                  }
                   disabled={createProfInfoMutation?.isPending}
                   className={styles.btn}
                 />

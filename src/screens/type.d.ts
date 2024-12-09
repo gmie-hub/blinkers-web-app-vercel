@@ -147,6 +147,10 @@ interface AllBusinessesDatum {
   business_hours: hour[];
   gallery: gallery[];
   logo: string;
+  total_followers:number;
+  average_rating:number;
+  instagram:string;
+  related_businesses:any
 }
 
 interface AllProductData {
@@ -261,6 +265,7 @@ interface Applicant {
   links?: Link[];
   created_at: string;
   updated_at: string;
+  skills
 }
 
 // interface Education {

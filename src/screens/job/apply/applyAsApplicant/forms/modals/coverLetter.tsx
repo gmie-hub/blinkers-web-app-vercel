@@ -1,99 +1,92 @@
-  import { Form, Formik } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "../styles.module.scss";
-import { FC, useState, } from "react";
+import { FC, useState } from "react";
 import Button from "../../../../../../customs/button/button";
 import Upload from "../../../../../../customs/upload/upload";
 import Folder from "../../../../../../assets/folder.svg";
 import { CoverLetter } from "../../../../../../utils/type";
 import { useAtom, useSetAtom } from "jotai";
 import { CoverLetterInfoAtom } from "../../../../../../utils/store";
+import { notification } from "antd";
+import * as Yup from "yup";
 
 interface ComponentProps {
   handleClose: () => void;
-  indexData: CoverLetter ; // Allow null for new entries
-  onUpload:any
+  indexData: CoverLetter; // Allow null for new entries
+  onUpload: any;
+  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
+
 }
 
-const CoverLetterPage: FC<ComponentProps> = ({ handleClose, indexData, onUpload }) => {
+const CoverLetterPage: FC<ComponentProps> = ({
+  handleClose,
+  indexData,
+  onUpload,
+  handleSubmit
+}) => {
   const [upload, setUpload] = useState<File | null>(null);
+  
   const [coverLetterData] = useAtom(CoverLetterInfoAtom);
   const setCoverLetterData = useSetAtom(CoverLetterInfoAtom);
-
-  
-  
-  // useEffect(() => {
-  //   // Set initial upload state if indexData exists
-  //   if (coverLetterData?.UploadCoverLetter) {
-  //     setUpload(coverLetterData.UploadCoverLetter);
-  //   }
-  // }, [coverLetterData]);
 
   const clearFile = () => {
     setUpload(null);
   };
 
+  console.log(upload, coverLetterData?.UploadCoverLetter, ".mupdjdj");
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
     if (!e.target?.files) return;
     const selectedFile = e.target?.files[0];
+
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/svg+xml",
+    ];
+    if (!validImageTypes.includes(selectedFile.type)) {
+      notification.error({
+        message: "Invalid File Type",
+        description: "Please upload a valid image (JPEG, PNG, GIF,SVG).",
+      });
+      return;
+    }
     setUpload(selectedFile);
     setFieldValue("UploadCoverLetter", selectedFile); // Set the file in Formik
-    onUpload(selectedFile)
+    onUpload(selectedFile);
   };
 
-  // const convertToBase64 = (file: File): Promise<string> => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => resolve(reader.result as string); // Resolve with base64 string
-  //     reader.onerror = () => reject(new Error("File reading failed"));
-  //     reader.readAsDataURL(file); // Convert file to base64
-  //   });
-  // };
+  const validationSchema = Yup.object().shape({
+    UploadCoverLetter: Yup.mixed().required("Cover letter is required"),
+  });
 
-  // const saveToLocalStorage = (key: string, value: any) => {
-  //   try {
-  //     localStorage.setItem(key, JSON.stringify(value));
-  //   } catch (error) {
-  //     console.error(`Failed to save ${key} to localStorage`, error);
-  //   }
-  // };
-
-  console.log(indexData)
   return (
     <section>
       <Formik
         initialValues={{
           // CoverLetter: coverLetterData?.CoverLetter || "", // Existing cover letter or empty
-          UploadCoverLetter: coverLetterData?.UploadCoverLetter || "", // Existing file or empty
+          UploadCoverLetter: indexData?.UploadCoverLetter || '',
         }}
-        enableReinitialize={true} 
-
-        onSubmit={async (values) => {
-          let base64File = null;
-
-          // Convert uploaded file to base64 if new file exists
-          // if (upload) {
-          //   try {
-          //     base64File = await convertToBase64(upload);
-          //   } catch (error) {
-          //     console.error("Error converting file to base64", error);
-          //   }
-          // }
-
+        enableReinitialize={true}
+        onSubmit={async (values,{resetForm}) => {
           const updatedData = {
             ...coverLetterData,
-            // CoverLetter: values.CoverLetter,
-            UploadCoverLetter: base64File || values.UploadCoverLetter, // Use base64 or existing data
+            UploadCoverLetter: values.UploadCoverLetter, // Use base64 or existing data
           };
 
-          // Save to atom and localStorage
           setCoverLetterData(updatedData);
-          // saveToLocalStorage("CoverLetterData", updatedData);
+          handleSubmit(values, resetForm);
+          resetForm();
 
-          handleClose(); // Close the form
+
+          handleClose(); 
+          resetForm();
+
         }}
+        validationSchema={validationSchema}
       >
         {({ setFieldValue }) => (
           <Form>
@@ -105,12 +98,16 @@ const CoverLetterPage: FC<ComponentProps> = ({ handleClose, indexData, onUpload 
                 </div>
                 <br />
                 {upload ? (
-              
-                  <div style={{display:'flex', gap:'2rem', justifyContent:'space-between'}}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "2rem",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <p>{upload.name}</p>
 
-                    <span  onClick={clearFile} >X</span>
-
+                    <span onClick={clearFile}>X</span>
                   </div>
                 ) : (
                   <Upload
@@ -120,12 +117,7 @@ const CoverLetterPage: FC<ComponentProps> = ({ handleClose, indexData, onUpload 
                 )}
               </div>
 
-              {/* <Input
-                name="CoverLetter"
-                label="Cover Letter (Optional)"
-                placeholder="Write Cover Letter"
-                type="textarea"
-              /> */}
+          
 
               <div className={styles.buttonGroup}>
                 <Button

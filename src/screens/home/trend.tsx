@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image, Spin } from "antd";
+import { Image } from "antd";
 import Product2 from "../../assets/Image.svg";
 import location from "../../assets/location.svg";
 import Button from "../../customs/button/button";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { getTrendingAds } from "../request";
 import { useQueries } from "@tanstack/react-query";
+import CustomSpin from "../../customs/spin";
 
 export function countUpTo(
   num: number,
@@ -18,8 +19,8 @@ export function countUpTo(
 ) {
   const result = [];
   for (let i = 1; i <= 5; i++) {
-    if (i > num) result.push(element1);
-    else result.push(element);
+    if (i > num) result?.push(element1);
+    else result?.push(element);
   }
   return result; // Return the array
 }
@@ -59,7 +60,7 @@ const Trends = () => {
         <p className={styles.TrendsHead}>Trending Now</p>
       </div>
       {getTrendingAdsQuery?.isLoading ? (
-        <Spin />
+         <CustomSpin />
       ) : getTrendingAdsQuery?.isError ? (
         <h1 className="error">{trendErrorMessage}</h1>
       ) : (

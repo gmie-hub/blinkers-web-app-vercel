@@ -290,7 +290,7 @@ const VerificationCode = () => {
                 ))}
               </div>
 
-              <Button disabled={verifyOptMutation?.isPending} type="submit" text="Verify" className={styles.button} />
+              <Button disabled={verifyOptMutation?.isPending} type="submit" text={verifyOptMutation?.isPending ? "loading" :  "Verify"} className={styles.button} />
 
               <div className={styles.footer}>
                 <p>

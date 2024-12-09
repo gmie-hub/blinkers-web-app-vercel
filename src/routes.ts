@@ -34,8 +34,9 @@ export const routes = {
 
   directory:{
     directory: "/directory",
-    NotClaimed: "/not-claim/:id",
-    relatedBusinesses: "/related-businesses",
+    homeDirectory: "/directory/:search",
+    NotClaimed: "/directory-details/:id",
+    relatedBusinesses: "/related-businesses/:id",
     Subscription: "/subscription",
     SubscriptionPricing: "/subscription-pricing",
     ClaimedBusiness: "/claimed-business",

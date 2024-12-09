@@ -3,11 +3,11 @@ import { routeParts } from "../routes";
 import { CoverLetter, Education, EmploymentHistory, LinkData, Route, RoutesPart, SkillsData, SocialInfo } from "./type";
 
 
-const EducationInfo = JSON.parse(localStorage.getItem("education-info") ?? "[]");
-const EmpHistoryInfo = JSON.parse(localStorage.getItem("employment-History") ?? "[]");
-const CoverLetterInfo = JSON.parse(localStorage.getItem("cover-letter") ?? "{}");
+const educationInfo = JSON.parse(localStorage.getItem("education-info") ?? "[]");
+const empHistoryInfo = JSON.parse(localStorage.getItem("employment-History") ?? "[]");
+const coverLetterInfo = JSON.parse(localStorage.getItem("cover-letter") ?? "{}");
 const skillData = JSON.parse(localStorage.getItem("skill-data") ?? "[]");
-const LinkDataInfo = JSON.parse(localStorage.getItem("link-data") ?? "[]");
+const linkDataInfo = JSON.parse(localStorage.getItem("link-data") ?? "[]");
 
 
 const socialInfo = JSON.parse(localStorage.getItem("social-info") ?? "{}");
@@ -19,17 +19,17 @@ const routesParts = JSON.parse(
 
 export const EducationInfoAtom = atomWithStorage<Education[]>(
   "education-info", 
-  EducationInfo 
+  educationInfo 
 );
 
 export const EmploymentHistoryInfoAtom = atomWithStorage<EmploymentHistory[] >(
   "employment-History", 
-  EmpHistoryInfo 
+  empHistoryInfo 
 );
 
 export const CoverLetterInfoAtom = atomWithStorage<CoverLetter>(
   "cover-letter", 
-  CoverLetterInfo 
+  coverLetterInfo 
 );
 export const SkilsInfoAtom = atomWithStorage<SkillsData[]>(
   "skill-data", 
@@ -38,7 +38,7 @@ export const SkilsInfoAtom = atomWithStorage<SkillsData[]>(
 
 export const LinkInfoAtom = atomWithStorage<LinkData[]>(
   "link-data", 
-  LinkDataInfo 
+  linkDataInfo 
 );
 
 
@@ -64,7 +64,7 @@ export interface ExtendedUser {
 
 export interface UserData {
   data: UserLogin;
-  message: string;
+  // message: string;
 }
 
 export interface UserLogin {
@@ -115,7 +115,7 @@ export interface UserLogin {
   applicantId?:number;
 }
 
-export const userAtom = atomWithStorage<UserData | undefined | null>(
+export const userAtom = atomWithStorage<UserLogin | undefined | null>(
   "blinkers-web&site#",
   JSON.parse(localStorage.getItem("blinkers-web&site#")!) ?? undefined
 );
