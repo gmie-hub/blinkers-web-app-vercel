@@ -1,6 +1,6 @@
 import styles from "./relatedBusiness.module.scss";
 import { Image } from "antd";
-import {  useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import LocationIcon from "../../../assets/locationrelated.svg";
 import CallIcon from "../../../assets/callrelated.svg";
 import { useQueries } from "@tanstack/react-query";
@@ -14,13 +14,12 @@ interface Props {
   showHeading?: boolean;
 }
 const RelatedBusinesses = ({ showHeading = true, limit }: Props) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
 
-  // const handleNavigateToNotClaim = () => {
-  //   navigate(`/directory-details/{id}`);
-  //   window.scrollTo(0, 0);
-  // };
+  const handleNavigateDirectory = (id: number) => {
+    navigate(`/directory-details/${id}`);
+  };
 
   const [getBusinessDetailsQuery] = useQueries({
     queries: [
@@ -68,13 +67,13 @@ const RelatedBusinesses = ({ showHeading = true, limit }: Props) => {
             {relatedBusinessData &&
               relatedBusinessData?.length > 0 &&
               relatedBusinessData?.map((item: any, index: number) => (
-                <div className={styles.promoImage} key={index}>
+                <div onClick={() => handleNavigateDirectory(item?.id)} className={styles.promoImage} key={index}>
                   <img className={styles.proImage} src={item?.logo} alt="" />
                   <div className={styles.productList}>
                     <p className={styles.title}>
                         {/* {item?.name} */}
-                        {item?.name && item?.name?.length > 25
-                          ? item?.name?.slice(0, 25) + "..."
+                        {item?.name && item?.name?.length > 20
+                          ? item?.name?.slice(0, 20) + "..."
                           : item?.name}
                     </p>
                     <div className={styles.info}>

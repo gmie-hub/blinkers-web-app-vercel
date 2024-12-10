@@ -106,7 +106,7 @@ const NotClaim = () => {
               <div className={styles.leftSection}>
                 <div className={styles.card}>
                   <div className={styles.justifyCenter}>
-                    <img src={businessDetailsData?.logo} alt="ProductIcon" />
+                    <img className={styles.imageSize} src={businessDetailsData?.logo} alt="ProductIcon" />
 
                     <div className={styles.detailsflex}>
                       <p className={styles.name}>{businessDetailsData?.name}</p>

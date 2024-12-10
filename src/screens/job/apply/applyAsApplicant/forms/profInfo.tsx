@@ -279,7 +279,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       );
       formData.append(`employment_history[${index}][location]`, item?.location);
       formData.append(
-        `employment_history[${index}][work_arrangement]`,
+        `employment_history[${index}].employment_type]`,
         item?.WorkArrangement
       );
       formData.append(
@@ -288,7 +288,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       );
       formData.append(`employment_history[${index}][end_date]`, item?.end_date);
       formData.append(
-        `employment_history[${index}][work_summary]`,
+        `employment_history[${index}][summary]`,
         item?.WorkSummary
       );
       formData.append(
@@ -309,7 +309,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(`education[${index}][start_date]`, item?.start_date);
       formData.append(`education[${index}][end_date]`, item?.end_date);
       formData.append(
-        `education[${index}][still_studying]`,
+        `education[${index}][studying]`,
         item?.stillStudying?.toString()
       );
     });
@@ -354,106 +354,89 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     }
   };
 
-  const UpdateProfInfoApi = async (payload: FormData) => {
+  const UpdateProfInfoApi = async (payload: any) => {
     return (
       await api.patch(`/applicants/${applicantDetailsData?.id}`, payload, {
-        headers: { "Content-Type": "multipart/form-data" },
+        // headers: { "Content-Type": "multipart/form-data" },
       })
     )?.data;
   };
+
 
   const EditProfInfoMutation = useMutation({
     mutationFn: UpdateProfInfoApi,
     mutationKey: ["update-info"],
   });
 
-  const updateInfoHandler = async (
-    values: FormikValues,
 
-    resetForm: () => void
-  ) => {
-    const formData = new FormData();
 
-    // Append simple fields
-    const id = user?.id;
-    if (id) {
-      formData.append("user_id", id?.toString()); // Convert id to string and append
+  const updateInfoHandler = async (values: FormikValues, resetForm: () => void) => {
+    // Create a plain object to store the data
+    const payload: Record<string, any> = {
+      specialization: values?.specialization,
+      employment_history: [],
+      education: [],
+      skills: [],
+      links: [],
+      id: user?.id || null,
+      name: user?.name || null,
+    };
+  
+    // Append employment history
+    empHistoryInfoData?.forEach((item: EmploymentHistory) => {
+      payload.employment_history.push({
+        job_title: item?.job_title,
+        job_type: item?.job_type,
+        company_name: item?.company_name,
+        location: item?.location,
+        employment_type: item?.WorkArrangement,
+        start_date: item?.start_date,
+        end_date: item?.end_date,
+        summary: item?.WorkSummary,
+        current_work: item?.currentWork,
+      });
+    });
+  
+    // Append education history
+    educationInfoData?.forEach((item: Education) => {
+      payload.education.push({
+        institution: item?.institution,
+        degree: item?.degree,
+        field_of_study: item?.field_of_study,
+        grade: item?.Grade,
+        start_date: item?.start_date,
+        end_date: item?.end_date,
+        studying: item?.stillStudying,
+      });
+    });
+  
+    // Append skills
+    skillsData?.forEach((item: any) => {
+      const skills = item?.skills || item;
+      payload.skills.push(skills);
+    });
+  
+    // Append links
+    linksData?.forEach((item: LinkData) => {
+      payload.links.push({
+        type: item?.type,
+        url: item?.url,
+      });
+    });
+  
+    // Add uploaded files if available
+    if (upload) {
+      payload.cv = upload;
     }
-    if(upload){
-      formData.append("cv", upload as File);
-
-    }
-    // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
-
+  
     if (uploadedCoverLetter) {
-      formData.append("cover_letter", uploadedCoverLetter);
+      payload.cover_letter = uploadedCoverLetter;
     }
-
-    formData.append("specialization", values?.specialization);
-
-    empHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
-      formData.append(
-        `employment_history[${index}][job_title]`,
-        item?.job_title
-      );
-      formData.append(`employment_history[${index}][job_type]`, item?.job_type);
-      formData.append(
-        `employment_history[${index}][company_name]`,
-        item?.company_name
-      );
-      formData.append(`employment_history[${index}][location]`, item?.location);
-      formData.append(
-        `employment_history[${index}][work_arrangement]`,
-        item?.WorkArrangement
-      );
-      formData.append(
-        `employment_history[${index}][start_date]`,
-        item?.start_date
-      );
-      formData.append(`employment_history[${index}][end_date]`, item?.end_date);
-      formData.append(
-        `employment_history[${index}][work_summary]`,
-        item?.WorkSummary
-      );
-      formData.append(
-        `employment_history[${index}][current_work]`,
-        item?.currentWork?.toString()
-      );
-    });
-
-    // Append education history as an array
-    educationInfoData?.forEach((item: Education, index: number) => {
-      formData.append(`education[${index}][institution]`, item?.institution);
-      formData.append(`education[${index}][degree]`, item?.degree);
-      formData.append(
-        `education[${index}][field_of_study]`,
-        item?.field_of_study
-      );
-      formData.append(`education[${index}][grade]`, item?.Grade);
-      formData.append(`education[${index}][start_date]`, item?.start_date);
-      formData.append(`education[${index}][end_date]`, item?.end_date);
-      formData.append(
-        `education[${index}][still_studying]`,
-        item?.stillStudying?.toString()
-      );
-    });
-
-    // Append skills as an array
-    skillsData?.forEach((item:any, index: number) => {
-      const skills  =  item?.skills ? item?.skills : item
-      formData.append(`skills[${index}]`, skills );
-    
-    });
-
-    // Append links as an array
-    linksData?.forEach((item: LinkData, index: number) => {
-      formData.append(`links[${index}][type]`, item?.type);
-      formData.append(`links[${index}][url]`, item?.url);
-    });
-    if (applicantDetailsData === null) return;
-
+  
+    if (!applicantDetailsData) return;
+  
     try {
-      await EditProfInfoMutation.mutateAsync(formData, {
+      await EditProfInfoMutation.mutateAsync(payload, {
         onSuccess: (data) => {
           notification.success({
             message: "Success",
@@ -463,8 +446,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           queryClient.refetchQueries({
             queryKey: ["get-applicant"],
           });
-          // setOpenSucce ss(true);
-          // clearLocalStorageData();
         },
       });
     } catch (error: any) {
@@ -474,7 +455,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       });
     }
   };
-
+  
   const handleSucessPost = () => {
     setOpenSuccess(false);
     navigate(routes?.job?.job);
@@ -504,7 +485,8 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           onSubmit={(values, { resetForm }) => {
             applicantDetailsData !== null ?
                updateInfoHandler(values, resetForm)
-              : ProfInfoHandler(values, resetForm);
+              : 
+              ProfInfoHandler(values, resetForm);
           }}
           validationSchema={validationSchema}
         >
@@ -742,15 +724,15 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                   variant="green"
                   type="submit"
                   text={
-                    applicantDetailsData !== null
-                      ? createProfInfoMutation?.isPending
+                   (applicantDetailsData &&( applicantDetailsData !== null || applicantDetailsData  !== undefined))
+                      ? EditProfInfoMutation?.isPending
                         ? "Updating"
                         : "Update"
                       : createProfInfoMutation?.isPending
                       ? "Saving"
                       : "Save"
                   }
-                  disabled={createProfInfoMutation?.isPending}
+                  disabled={createProfInfoMutation?.isPending || EditProfInfoMutation?.isPending}
                   className={styles.btn}
                 />
               </section>

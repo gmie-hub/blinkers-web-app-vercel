@@ -44,12 +44,35 @@ export const getAllBusiness = async (search: number | string, page?: number) => 
 };
 
 
-export const getAllMarket = async (page: number,search?: string | number) => {
+// export const getAllMarket = async (page: number,search?: string | number) => {
 
-  let url = `/ads?search=${search}`;
+//   let url = `/ads`;
+//   if (search !== '') {
+//     url += `&search=${page}`;
+//   }
+
+//   if (page !== undefined) {
+//     url += `?page=${page}`;
+//   }
+
+//   return (await api.get(url))?.data as AllProductaResponse;
+// };
+
+export const getAllMarket = async (page?: number, search?: string | number) => {
+  let url = `/ads`;
+
+  const queryParams: string[] = [];
 
   if (page !== undefined) {
-    url += `&page=${page}`;
+    queryParams.push(`page=${page}`);
+  }
+
+  if (search !== undefined && search !== '') {
+    queryParams.push(`search=${search}`);
+  }
+
+  if (queryParams.length > 0) {
+    url += `?${queryParams.join('&')}`;
   }
 
   return (await api.get(url))?.data as AllProductaResponse;
@@ -68,6 +91,14 @@ export const createBusiness = async (payload: FormData) => {
   )?.data;
 };
 
+export const ClaimBusinessApi = async (payload: FormData) => {
+  return (
+    await api.post('/business/claims', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  )?.data;
+};
+
 export const ProfInfoApi = async (payload: FormData) => {
   return (
     await api.post('/applicants', payload, {
@@ -76,13 +107,6 @@ export const ProfInfoApi = async (payload: FormData) => {
   )?.data;
 };
 
-export const UpdateProfInfoApi = async (payload: FormData,id:number) => {
-  return (
-    await api.patch(`/applicants/${id}`, payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-  )?.data;
-};
 
 export const getApplicantsbyId = async (id: number) => {
   return (await api.get(`/users/profile?user_id=${id}`))?.data as UserDataResponse;

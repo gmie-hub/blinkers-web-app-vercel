@@ -32,7 +32,7 @@ const Directory = () => {
     console.log("Search Term Sent:", searchTerm);
   };
 
-  const handleNavigateToNotClaim = (id: number) => {
+  const handleNavigateDirectory = (id: number) => {
     navigate(`/directory-details/${id}`);
   };
 
@@ -120,7 +120,7 @@ const Directory = () => {
                   <div
                     className={styles.promoImage}
                     key={index}
-                    onClick={() => handleNavigateToNotClaim(item?.id)}
+                    onClick={() => handleNavigateDirectory(item?.id)}
                   >
                     <img
                       src={item?.logo}

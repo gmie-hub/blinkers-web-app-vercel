@@ -10,8 +10,8 @@
   flex-wrap: wrap; /* Allow cards to wrap to the next line when necessary */
   // justify-content: space-between; /* Distribute items with equal spacing */
   gap: 4.4rem; /* Space between cards */
-  padding: 0; /* Remove padding */
-  margin: 0; /* Remove margin */
+  padding: 0;
+  margin: 0; 
   width: 100%; 
   @media (max-width: 540px) {
 flex-direction: column;
@@ -24,10 +24,10 @@ flex-direction: column;
 
 
 .promoImage {
-  flex: 1 1 calc(25% - 4.4rem); /* Allow 4 items per row with spacing */
-  max-width: calc(25% - 3.4rem); /* Ensure consistent max width */
+  flex: 1 1 calc(25% - 4.4rem); 
+  max-width: calc(25% - 4.4rem); 
   display: flex;
-  flex-direction: column; /* Stack content vertically */
+  flex-direction: column; 
   box-sizing: border-box;
   justify-content: start;
   box-shadow: 0px 4px 40px 0px #00990012;

@@ -130,7 +130,7 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            {/* {!user?.is_applicant && ( */}
+            {!user?.is_applicant && (
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}
@@ -138,7 +138,7 @@ const Jobs = () => {
                 variant="white"
                 onClick={handleNavigateRegisterAsAnApplicant}
               />
-            {/* )} */}
+             )} 
                       </div>
         </div>
         <JobLists searchTerm={appliedSearchTerm} resetSearchTerm={resetSearchTerm} />

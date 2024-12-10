@@ -1,19 +1,23 @@
 .promoImageContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem; // Adjust the gap between images if necessary
+  gap: 4.4rem; // Adjust the gap between images if necessary
   width: 100%; // Ensure the container takes the full width of the screen
   box-sizing: border-box;
-  justify-content: space-between; // Ensure images spread across the row
+  // justify-content: space-between; // Ensure images spread across the row
   padding-block-end: 6.4rem;
+  padding: 0;
+  margin: 0; 
 }
 
 
 
 .promoImage {
-  flex: 1 1 calc(25% - 1rem); // 4 items per row, minus the gap
-  max-width: 25%; // Keep the width constant for 4 per row
-  box-sizing: border-box;
+  flex: 1 1 calc(25% - 4.4rem);
+  max-width: calc(25% - 4.4rem);
+    box-sizing: border-box;
+  box-shadow: 0px 4px 40px 0px #00990012;
+
   img {
     object-fit: cover;
     height: 26rem;
@@ -62,7 +66,7 @@
   text-align: start;
   border-radius: 0 0 1rem 1rem;
   box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid #00990012;
+  // border: solid #00990012;
 
   cursor: pointer;
   & > p {

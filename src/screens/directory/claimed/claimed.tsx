@@ -3,7 +3,7 @@ import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import {  useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { Image, Modal, } from "antd";
+import { App, Image, Modal, } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
@@ -24,13 +24,14 @@ import WebICon from "../../../assets/webicon.svg";
 import MailIcon from "../../../assets/mailicon.svg";
 import Reviews from "../../home/market/productDetails/tabs/review";
 import Images from "./image/image";
-import { handleCopyLink } from "../../request";
+import { ClaimBusinessApi, handleCopyLink } from "../../request";
+import { useMutation } from "@tanstack/react-query";
+import { FormikValues } from "formik";
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const Claimed = () => {
   const navigate = useNavigate();
-  const [showContent] = useState(true); // Manage review form visibility
-  // const [showWriteReview, setShowWriteReview] = useState(false); // Manage card visibility
-
+  const [showContent] = useState(true); 
+  const { notification } = App.useApp();
   const [openShare, setOpenShare] = useState(false);
 
   //   const hasReviews = reviewData?.lenght;
@@ -60,6 +61,46 @@ const Claimed = () => {
     navigate(`/images`);
     window.scrollTo(0, 0);
   };
+
+  const createBusinessMutation = useMutation({
+    mutationFn: ClaimBusinessApi,
+  });
+
+  // const createBusinessHandler = async (
+  //   values: FormikValues,
+  //   resetForm: () => void
+  // ) => {
+  //   const formData = new FormData();
+  //   formData.append("user_id", values?.BusinessName);
+  //   formData.append("address", values?.BusinessAddress);
+  //   if (upload) {
+  //     formData.append("doc", upload);
+  //   }
+  //   formData.append("email", values?.email);
+  //   formData.append("category_id", values?.category);
+  //   formData.append("about", values?.aboutBusiness);
+
+
+  //   try {
+  //     await createBusinessMutation.mutateAsync(formData, {
+  //       onSuccess: () => {
+  //         // notification.success({
+  //         //   message: 'Success',
+  //         //   description: data?.message,
+  //         // });
+  //         resetForm();
+  //         clearFile()
+  //         setOpenSuccess(true);
+  //       },
+  //     });
+  //   } catch (error: any) {
+  //     notification.error({
+  //       message: "Error",
+  //       description: error?.response?.data?.message,
+  //     });
+  //   }
+  // };
+
 
   return (
     <>

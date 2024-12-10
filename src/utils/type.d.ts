@@ -5,7 +5,7 @@ interface Education {
   // Instituition: string;
   // Degree: string;
   // FieldStudy: string;
-  Grade: string;
+    Grade: string;
   // StartDate:string;
   // EndDate:string;
   stillStudying:boolean;

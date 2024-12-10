@@ -58,7 +58,6 @@ const AddBusiness = () => {
     setFieldValue("imageLogo", selectedFile);
     setUpload(selectedFile);
   };
-  console.log(upload);
 
   const createBusinessMutation = useMutation({
     mutationFn: createBusiness,
