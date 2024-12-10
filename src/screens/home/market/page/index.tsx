@@ -76,12 +76,18 @@ const allItemsWithTitles = [
   { title: "Computer Items", items: computerItems },
 ];
 
-const Main = () => {
+interface Props {
+  appliedSearchTerm: string;
+}
+
+
+const Main =  ({ appliedSearchTerm }: Props) => {
   // Track the currently open section
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
 
+  console.log(appliedSearchTerm,"appliedSearchTerm")
   // Adjust isFilterVisible based on screen size
   useEffect(() => {
     const handleResize = () => {
@@ -214,11 +220,12 @@ const Main = () => {
             )}
           </div>
 
-          <div>
+        
             <div className={styles.rightSide}>
-              <ProductList />
+              {/* <ProductList  /> */}
+              <ProductList appliedSearchTerm={appliedSearchTerm} />
+
             </div>
-          </div>
         </div>
       </Form>
     </Formik>

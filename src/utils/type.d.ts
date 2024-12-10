@@ -1,11 +1,64 @@
 import { UploadFile } from "antd";
 
-interface BasicInfo {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
+interface Education {
+  id:number;
+  // Instituition: string;
+  // Degree: string;
+  // FieldStudy: string;
+    Grade: string;
+  // StartDate:string;
+  // EndDate:string;
+  stillStudying:boolean;
+
+
+  institution:string;
+  start_date:string;
+  field_of_study:string;
+  end_date:string;
+  degree:string;
 }
+interface EmploymentHistory {
+  id:number;
+  // JobTitle: string;
+  // JobType: string;
+  // CompanyName: string;
+  // Location: string;
+  WorkArrangement:string;
+  // StartDate:string;
+  // EndDate:string;
+  WorkSummary:string
+  currentWork:boolean
+
+
+  company_name:string;
+  end_date:string;
+  job_title:string;
+  job_type:string;
+  location:string;
+  start_date:string
+
+}
+interface CoverLetter {
+  id:number;
+  CoverLetter: string;
+  UploadCoverLetter: FIle | any;
+}
+interface SkillsData {
+  id:number;
+  skills: string;
+
+}
+
+
+interface LinkData {
+  id:number;
+  type: string;
+  url: string;
+
+
+}
+
+
 interface SocialInfo {
   facebook: string;
   instagram: string;
@@ -23,6 +76,6 @@ interface RoutesPart {
   [x: string]: {
     route: string;
     name: string;
-    params: string;
+    params?: string;
   };
 }

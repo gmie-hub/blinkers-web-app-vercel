@@ -32,6 +32,7 @@
   flex-direction: column; /* Stack content vertically */
   gap: 1.2rem; /* Space between card elements */
   max-width: calc(25% - 2.4rem);
+  cursor: pointer;
   @media (max-width: 1024px) {
     flex: 1 1 calc(50% - 2.4rem); /* 2 cards per row on medium screens */
   }
@@ -111,7 +112,7 @@
     align-items: center;
     gap:1rem;
     cursor: pointer;
-    padding-block-end: 2.4rem;
+    padding-block: 2.4rem;
     & > p{
         font-size: 2rem;
         font-weight: 600;

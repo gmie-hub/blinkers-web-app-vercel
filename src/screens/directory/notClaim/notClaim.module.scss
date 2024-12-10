@@ -103,7 +103,7 @@
   color: var(--color-header-text);
   font-weight: 600;
   font-size: 2rem;
-  padding-block: 0.5rem;
+  padding-block: 2rem;
 }
 
 @media (max-width: 768px) {
@@ -274,4 +274,16 @@
   @media screen and (max-width: 768px) {
     width: 10% !important;
   }
+}
+.justifyCenter{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.imageSize{
+  width: 80%;
+  height: 20rem;
+  // position: ;
+  object-fit:cover
 }

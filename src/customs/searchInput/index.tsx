@@ -1,25 +1,50 @@
+
+import { useState, ReactNode } from "react";
 import { InputHTMLAttributes } from "react";
 import { Image } from "antd";
 import SearchIcon from "../../assets/Search.svg";
 import styles from "./index.module.scss";
-import Button from "../button/button";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   width?: string;
-  isBtn?: boolean; // Add `isBtn` to show the button conditionally
+  onButtonClick?: (value: string) => void; // Callback for the button click
+  children?: ReactNode; // To allow passing custom buttons or other elements
 }
 
 const SearchInput: React.FC<Props> = ({
   placeholder,
   width,
-  isBtn,
+  onButtonClick,
+  onChange,
+  children,
   ...rest
 }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    // Call onChange if provided
+    onChange?.(e);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (onButtonClick) {
+      onButtonClick(inputValue);
+    } else {
+      console.log("User input:", inputValue);
+    }
+  };
+
   return (
-    <form className={styles.searchContainer}>
-      {/* Search Icon on the left */}
-      <button className={styles.searchIcon} type="button">
+    <form
+      className={styles.searchContainer}
+      onSubmit={handleSubmit}
+      style={{ width }}
+    >
+      {/* Search Icon */}
+      <button className={styles.searchIcon} type="submit">
         <Image width={12} src={SearchIcon} alt="SearchIcon" preview={false} />
       </button>
 
@@ -28,19 +53,13 @@ const SearchInput: React.FC<Props> = ({
         type="text"
         className={styles.searchInput}
         placeholder={placeholder || "Search"}
-        // style={{ width: width }}
+        value={inputValue}
+        onChange={handleInputChange}
         {...rest}
       />
 
-      {/* Conditionally render the button inside the input */}
-      {isBtn && (
-        <Button
-          type="button"
-          variant="green"
-          text="Search"
-          className={styles.searchBtn}
-        />
-      )}
+      {/* Render Children (Optional Button or Other Content) */}
+      {children}
     </form>
   );
 };

@@ -12,13 +12,15 @@
     border: 1px solid var(--color-grey);
     border-radius: 1rem;
     background-color: white;
-    padding-inline-start: 1.6rem;
-    padding-inline-end: 2rem;
+    padding-inline:  1.6rem;
+    // padding-inline-end: 2rem;
     padding-block: 1rem;
     font-size: 1.4rem;
   
     &::placeholder {
       color: #828282;
+      // padding: 1.6rem;
+// 
     }
   
     @media screen and (min-width: 768px) {
@@ -57,7 +59,7 @@
     white-space: nowrap;
     width: 25%;
     display: flex;
-    padding-block-end: 0.8rem;
+    padding-block-start: 1.8rem;
   
     @media screen and (min-width: 768px) {
       font-size: 1.6rem;

@@ -88,7 +88,8 @@ a {
 p {
   color: var(--color-header-tex);
   font-family: "Lato", sans-serif !important;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  font-weight: 400;
 }
 
 *,
@@ -165,19 +166,15 @@ a:visited {
 .ant-steps-item-finish .ant-steps-item-tail::after,
 .ant-steps-item-process .ant-steps-item-tail::after {
   background: green !important; /* Change this to any color you like */
-
 }
 
 .ant-steps .ant-steps-item-tail {
   top: 21px; /* Override top value */
-  
-
 }
 
- .ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+.ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
   /* Add any additional styles here */
   padding: 0px;
-
 }
 
 .ant-steps-item-tail::after {
@@ -371,4 +368,20 @@ a:visited {
   color: var(
     --color-primary-white
   ) !important; /* Text color inside the active page */
+}
+.spin-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.noDataContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.noDataContainer p {
+  font-size: 18px;
+  color: #555;
 }

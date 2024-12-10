@@ -26,8 +26,10 @@ const ApplyAsApplicant = () => {
   
 
   return (
+    <div className="wrapper">
+    <RouteIndicator showBack={true} />
+
     <div className={styles.wrapper}>
-      <RouteIndicator  />
       <Card style={styles.card}>
         <section className={styles.textContainer}>
           <div>
@@ -83,6 +85,7 @@ const ApplyAsApplicant = () => {
 
         {!displayForm ? <BasicInfoForm handleNext={next} /> : <ProfInfoForm onPrev={prev} />}
       </Card>
+    </div>
     </div>
   );
 };

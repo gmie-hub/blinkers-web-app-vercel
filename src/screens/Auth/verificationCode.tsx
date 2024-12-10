@@ -3,9 +3,15 @@ import styles from "./index.module.scss";
 import Card from "../../customs/card/card";
 import LoginIcon from "../../assets/Featured icon.svg";
 import BlinkersLogo from "../../assets/Frame 1618868702.svg";
-import { Image } from "antd";
+import { App, Image } from "antd";
 import { useEffect, useRef, useState } from "react";
 import Button from "../../customs/button/button";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { userVerifyOtp, ResendOptCall } from "./request";
+import { errorMessage } from "../../utils/errorMessage";
+import { useParams } from "react-router-dom";
+import BackIcon from "../../assets/back.svg";
 
 interface FormValues {
   code: string[];
@@ -13,20 +19,23 @@ interface FormValues {
 
 const VerificationCode = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [timeLeft, setTimeLeft] = useState(85); // 1:25 in seconds
+  const [timeLeft, setTimeLeft] = useState(5); // 1:25 in seconds
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const { notification } = App.useApp();
+  const navigate = useNavigate();
+  const { email } = useParams<{ email: string }>(); // Define the type of id
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime: number) => {
         if (prevTime <= 1) {
           clearInterval(timer);
-          setIsResendDisabled(false); // Enable the "Resend Code" button
+          setIsResendDisabled(false); // Enable the "Resend Code" button when timer reaches 0
           return 0;
         }
         return prevTime - 1;
       });
-    }, 1000);
+    }, 1000); // Update every second
 
     return () => clearInterval(timer); // Cleanup interval on component unmount
   }, []);
@@ -40,15 +49,45 @@ const VerificationCode = () => {
     )}`;
   };
 
+  // const   handleResendClick = () => {
+  //   if (!isResendDisabled) {
+  //     setTimeLeft(85); // Reset timer to 1:25
+  //     setIsResendDisabled(true); // Disable the button again
+  //   }
+  //   resendOtpHandler();
+
+  // };
+
   const handleResendClick = () => {
     if (!isResendDisabled) {
-      setTimeLeft(85); // Reset timer to 1:25
+      setTimeLeft(5); // Reset timer to 1:25
       setIsResendDisabled(true); // Disable the button again
+  
+      // Start counting down again from 85 seconds
+      setTimeout(() => {
+        const timer = setInterval(() => {
+          setTimeLeft((prevTime: number) => {
+            if (prevTime <= 1) {
+              clearInterval(timer); // Stop the countdown when it reaches 0
+              setIsResendDisabled(false); // Enable the "Resend Code" button when timer reaches 0
+              return 0;
+            }
+            return prevTime - 1;
+          });
+        }, 1000); // Update every second
+  
+        // Cleanup the interval when the component is unmounted
+        return () => clearInterval(timer);
+      }, 0);
     }
+  
+    // Call the resend OTP handler function to send the OTP
+    resendOtpHandler();
   };
+  
 
   const initialValues: FormValues = {
-    code: ["", "", "", "", "", ""], // 6 fields for example
+    code: ["", "", "", ""], // 4 fields instead of 6
   };
 
   useEffect(() => {
@@ -127,9 +166,72 @@ const VerificationCode = () => {
     }
   };
 
+  const resendOptMutation = useMutation({
+    mutationFn: ResendOptCall,
+    mutationKey: ["verify-otp"],
+  });
+
+  const resendOtpHandler = async () => {
+    const payload: resendOtp = {
+      type: "Email",
+      value: email!!,
+      from_page: "Signup",
+    };
+  if(timeLeft > 0) return;  
+
+    try {
+      await resendOptMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
+
+
+  const verifyOptMutation = useMutation({
+    mutationFn: userVerifyOtp,
+    mutationKey: ["verify-otp"],
+  });
+
+  const verifyOtpHandler = async (values: FormValues) => {
+    const payload: UserVerifyOtp = {
+      otp: parseInt(values.code.join("")), // Join the OTP code array to form the full OTP
+    };
+    if(values?.code.join('')?.length !==4 ) return;
+
+    try {
+      await verifyOptMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+          navigate('/login')
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
+
+
   return (
     <section className={styles.container}>
-      <div className={styles.smallScreen}>
+      <div  onClick={() => {
+          navigate("/");
+        }} className={styles.smallScreen}>
         <Image src={BlinkersLogo} alt={BlinkersLogo} preview={false} />
       </div>
 
@@ -139,13 +241,13 @@ const VerificationCode = () => {
         <p className={styles.welcome}>Verification Code</p>
         <small>
           We sent an OTP code to the email address associated with your account.
-          Enter the OTP code to be able to reset your password.
+          Enter the OTP code to be able to verify your account.
         </small>
 
         <Formik
           initialValues={initialValues}
           onSubmit={(values) => {
-            // Handle form submission
+            verifyOtpHandler(values);
             console.log("Submitted values:", values);
           }}
         >
@@ -154,9 +256,9 @@ const VerificationCode = () => {
               <div
                 style={
                   {
-                    //   display: "flex",
-                    //   gap: "4px",
-                    //   justifyContent: "center",
+                      display: "flex",
+                      gap: "4px",
+                      justifyContent: "center",
                   }
                 }
               >
@@ -188,7 +290,7 @@ const VerificationCode = () => {
                 ))}
               </div>
 
-              <Button  type="submit" text="Verify" className={styles.button} />
+              <Button disabled={verifyOptMutation?.isPending} type="submit" text={verifyOptMutation?.isPending ? "loading" :  "Verify"} className={styles.button} />
 
               <div className={styles.footer}>
                 <p>
@@ -196,19 +298,24 @@ const VerificationCode = () => {
                   <span style={{ color: "red" }}>{formatTime(timeLeft)}</span>{" "}
                   mins
                 </p>
-               
               </div>
               <p
-                  className={`${styles.resend} ${
-                    isResendDisabled ? styles.disabled : ""
-                  }`}
-                  onClick={handleResendClick}
-                  style={{
-                    cursor: isResendDisabled ? "not-allowed" : "pointer",
-                  }}
-                >
-                  Resend Code
-                </p>
+                className={`${styles.resend} ${
+                  isResendDisabled ? styles.disabled : ""
+                }`}
+                onClick={handleResendClick}
+                style={{
+                  cursor: isResendDisabled ? "not-allowed" : "pointer", display:'flex',justifyContent:'center'
+                }}
+              >
+                Resend Code
+              </p>
+              <div onClick={()=>navigate(-1)} style={{display:'flex', paddingBlockStart:'3rem', gap:'1rem', cursor:'pointer'}}>
+              <Image src={BackIcon} alt={BackIcon} preview={false} />
+
+
+                <p>Back to Register</p>
+              </div>
             </Form>
           )}
         </Formik>

@@ -1,105 +1,145 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "../styles.module.scss";
 import { FC, useState } from "react";
-// import * as Yup from "yup";
-import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
 import Upload from "../../../../../../customs/upload/upload";
 import Folder from "../../../../../../assets/folder.svg";
+import { CoverLetter } from "../../../../../../utils/type";
+import { useAtom, useSetAtom } from "jotai";
+import { CoverLetterInfoAtom } from "../../../../../../utils/store";
+import { notification } from "antd";
+import * as Yup from "yup";
 
 interface ComponentProps {
   handleClose: () => void;
+  indexData: CoverLetter; // Allow null for new entries
+  onUpload: any;
+  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
+
 }
 
-const CoverLetter: FC<ComponentProps> = ({ handleClose }) => {
+const CoverLetterPage: FC<ComponentProps> = ({
+  handleClose,
+  indexData,
+  onUpload,
+  handleSubmit
+}) => {
   const [upload, setUpload] = useState<File | null>(null);
+  
+  const [coverLetterData] = useAtom(CoverLetterInfoAtom);
+  const setCoverLetterData = useSetAtom(CoverLetterInfoAtom);
 
   const clearFile = () => {
     setUpload(null);
   };
 
+  console.log(upload, coverLetterData?.UploadCoverLetter, ".mupdjdj");
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
     if (!e.target?.files) return;
     const selectedFile = e.target?.files[0];
+
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/svg+xml",
+    ];
+    if (!validImageTypes.includes(selectedFile.type)) {
+      notification.error({
+        message: "Invalid File Type",
+        description: "Please upload a valid image (JPEG, PNG, GIF,SVG).",
+      });
+      return;
+    }
     setUpload(selectedFile);
-    setFieldValue("imageLogo", selectedFile); // Set the file in Formik
+    setFieldValue("UploadCoverLetter", selectedFile); // Set the file in Formik
+    onUpload(selectedFile);
   };
+
+  const validationSchema = Yup.object().shape({
+    UploadCoverLetter: Yup.mixed().required("Cover letter is required"),
+  });
+
   return (
     <section>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          email: "",
+          // CoverLetter: coverLetterData?.CoverLetter || "", // Existing cover letter or empty
+          UploadCoverLetter: indexData?.UploadCoverLetter || '',
         }}
-        onSubmit={(values) => {
-          console.log(values);
-          handleClose();
+        enableReinitialize={true}
+        onSubmit={async (values,{resetForm}) => {
+          const updatedData = {
+            ...coverLetterData,
+            UploadCoverLetter: values.UploadCoverLetter, // Use base64 or existing data
+          };
+
+          setCoverLetterData(updatedData);
+          handleSubmit(values, resetForm);
+          resetForm();
+
+
+          handleClose(); 
+          resetForm();
+
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
-        {({ setFieldValue }) => {
-          return (
-            <Form>
-              <div className={styles.inputContainer}>
-                <div>
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <img src={Folder} alt="Folder" />
+        {({ setFieldValue }) => (
+          <Form>
+            <div className={styles.inputContainer}>
+              <div>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <img src={Folder} alt="Folder" />
+                  <p className="label">Upload Cover Letter (Optional)</p>
+                </div>
+                <br />
+                {upload ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "2rem",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <p>{upload.name}</p>
 
-                    <p className="label">Upload CV</p>
+                    <span onClick={clearFile}>X</span>
                   </div>
-
-                  <br />
-
-                  {upload ? (
-                    <div className="small-gap">
-                      {/* <Image /> */}
-                      <span>{upload.name}</span>
-                      <Button onClick={clearFile} variant="white" text="x" />
-                    </div>
-                  ) : (
-                    <Upload
-                      name="imageLogo"
-                      // label="Upload CV"
-                      onChange={(e) => handleFileChange(e, setFieldValue)}
-                    />
-                  )}
-                </div>
-
-                <Input
-                  name="Cover Letter (Optional)"
-                  label="Cover Letter (Optional)"
-                  placeholder="Write Cover Letter"
-                  type="textarea"
-                />
-
-                <div className={styles.buttonGroup}>
-                  <Button
-                    variant="white"
-                    type="submit"
-                    disabled={false}
-                    text="Cancel"
-                    className={styles.btn}
+                ) : (
+                  <Upload
+                    name="UploadCoverLetter"
+                    onChange={(e) => handleFileChange(e, setFieldValue)}
                   />
-                  <Button
-                    variant="green"
-                    type="submit"
-                    disabled={false}
-                    text="Save"
-                    className={styles.btn}
-                  />
-                </div>
+                )}
               </div>
-            </Form>
-          );
-        }}
+
+          
+
+              <div className={styles.buttonGroup}>
+                <Button
+                  variant="white"
+                  type="button"
+                  text="Cancel"
+                  className={styles.btn}
+                  onClick={handleClose}
+                />
+                <Button
+                  variant="green"
+                  type="submit"
+                  text="Save"
+                  className={styles.btn}
+                />
+              </div>
+            </div>
+          </Form>
+        )}
       </Formik>
     </section>
   );
 };
 
-export default CoverLetter;
+export default CoverLetterPage;

@@ -1,5 +1,3 @@
-
-
 .container {
   display: flex;
   justify-content: space-between;
@@ -23,7 +21,6 @@
 .rightNav {
   display: flex;
   align-items: center;
-  
 }
 
 a {
@@ -71,12 +68,12 @@ a {
   .container {
     padding-inline: 1rem;
     padding-inline: 2.4rem;
-    
   }
-  // .logo{
-  //   width: 2.9rem !important;
-  //   height: 1.5rem !important;
-  // }
+  .logo {
+    // width: 2.9rem !important;
+    // height: 1.5rem !important;
+    cursor: pointer;
+  }
 
   .middleNav {
     display: none;
@@ -113,7 +110,6 @@ a {
   }
 }
 
-
 /* Add this to your CSS */
 .mobileButtonWrapper {
   display: none; // Hide by default
@@ -123,7 +119,6 @@ a {
   .container {
     padding-inline: 1rem;
     padding-inline: 2.4rem;
-
   }
 
   .middleNav {
@@ -144,7 +139,6 @@ a {
   .middleNav.showMenu {
     display: flex;
     padding-inline: 2.4rem;
-
   }
 
   .menuButton {
@@ -163,7 +157,6 @@ a {
   }
 }
 
-
 .icon {
   width: 16px; /* Adjust size as needed */
   height: 16px; /* Adjust size as needed */
@@ -172,4 +165,20 @@ a {
 
 .rotate {
   transform: rotate(180deg); /* Rotates the icon upside down */
+}
+.loggedInIcons {
+  display: flex;
+  gap: 2.4rem;
+  align-items: center;
+}
+.profileIcon {
+  width: 5rem;
+  height: 5rem;
+  cursor: pointer;
+}
+
+.chatIcon{
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
 }

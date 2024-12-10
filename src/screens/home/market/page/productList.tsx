@@ -1,124 +1,159 @@
 import styles from "./index.module.scss";
-import { Image, Pagination } from "antd";
+import { Image, Pagination, PaginationProps } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
-import Product2 from "../../../../assets/Image.svg";
 import Product3 from "../../../../assets/Image (1).svg";
-import {  useState } from "react";
+import { useState } from "react";
 import favorite from "../../../../assets/Icon + container.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { countUpTo } from "../../trend";
+import { useQueries } from "@tanstack/react-query";
+import { getAllMarket } from "../../../request";
+import { AxiosError } from "axios";
+import LocationIcon from "../../../../assets/locationrelated.svg";
+import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use react-icons for the back icon
+import Button from "../../../../customs/button/button";
+import CustomSpin from "../../../../customs/spin";
 
-// Data array
-const cardData = [
-  {
-    id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 1,
-  },
-  {
-    id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 2,
-  },
-  {
-    id: 3,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-    title: "Female Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 3,
-  },
-  {
-    id: 4,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 5,
-  },
-  {
-    id: 5,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
-  },
-];
+interface ProductListProps {
+  appliedSearchTerm: string;
+}
 
-const RightSide = () => {
+const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Set the number of items per page
   const navigate = useNavigate();
+  let { search } = useParams();
 
-  // Calculate the data to display for the current page
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentCards = cardData.slice(indexOfFirst, indexOfLast);
-
-  // Handle page change
-  const onPageChange = (page: any) => {
+  const onChange: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
   };
+  const [getAllMarketQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-all-market", currentPage, appliedSearchTerm],
+        queryFn: () => getAllMarket(currentPage, appliedSearchTerm || search || ''),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+    ],
+  });
 
-  const handleNavigateToProductDetails =
-    (id: number) => {
-      navigate(`/product-details/${id}`);
-    }
+  const marketData = getAllMarketQuery?.data?.data?.data || [];
+  const marketError = getAllMarketQuery?.error as AxiosError;
+  const marketErrorMessage =
+    marketError?.message || "An error occurred. Please try again later.";
+
+  const handleNavigateToProductDetails = (id: number) => {
+    navigate(`/product-details/${id}`);
+    window.scrollTo(0, 0);
+  };
+
+  const handleBack = () => {
+    appliedSearchTerm="";
+    search = ""; 
+    setCurrentPage(1); 
+    navigate("/market"); 
+    getAllMarketQuery.refetch(); 
+  };
 
   return (
-    <div>
-      {/* Display the promo images */}
-      <section className={styles.promoImageContainer}>
-        {currentCards?.map((card) => (
-          <div className={styles.promoImage} key={card.id} onClick={() => handleNavigateToProductDetails(card.id)}>
-            <div className={styles.favoriteIcon}>
-              <Image width={30} src={favorite} alt="Favorite" preview={false} />
-            </div>
-            {card.icon}
-            <div className={styles.productList}>
-                <p>{card.title}</p>
-                <p>{card.location}</p>
-                <p>{card.amount}</p>
-                <div className={styles.starWrapper}>
-                  {countUpTo(
-                    card?.rating || 0,
-                    <Image
-                      width={20}
-                      src={StarYellow}
-                      alt="StarYellow"
-                      preview={false}
-                    />,
-                    <Image width={20} src={Star} alt="Star" preview={false} />
-                  )} <span>(20)</span>
+    <>
+      {getAllMarketQuery?.isLoading ? (
+         <CustomSpin />
+      ) : getAllMarketQuery?.isError ? (
+        <h1 className="error">{marketErrorMessage}</h1>
+      ) : (
+        <div>
+          <section className={styles.promoImageContainer}>
+            {marketData && marketData?.length > 0 ? (
+              marketData?.map((item, index) => (
+                <div
+                  className={styles.promoImage}
+                  key={index}
+                  onClick={() => handleNavigateToProductDetails(item?.id)}
+                >
+                  <div className={styles.favoriteIcon}>
+                    <img width={30} src={favorite} alt="Favorite" />
+                  </div>
+                  {/* Image for the product */}
+                  <img
+                    className={styles.proImage}
+                    src={item?.add_images[0]?.add_image || Product3}
+                    alt="Product"
+                  />
+                  <div className={styles.productList}>
+                    <p style={{ color: "#4F4F4F" }}>
+                      {item?.title && item?.title?.length > 20
+                        ? `${item?.title?.slice(0, 20)}...`
+                        : item?.title}
+                    </p>
+                    <div className={styles.info}>
+                      <Image src={LocationIcon} alt="LocationIcon" />
+                      <p>
+                        <span>
+                          {item?.local_govt?.local_government_area &&
+                            item?.local_govt?.local_government_area + ", "}
+                        </span>
+                        <span>{item?.state?.state_name}</span>
+                      </p>
+                    </div>
+                    <p style={{ color: "#222222", fontWeight: "600" }}>
+                      ₦{item?.price}
+                    </p>
+                    <div className={styles.starWrapper}>
+                      {countUpTo(
+                        0,
+                        <Image
+                          width={20}
+                          src={StarYellow}
+                          alt="StarYellow"
+                          preview={false}
+                        />,
+                        <Image
+                          width={20}
+                          src={Star}
+                          alt="Star"
+                          preview={false}
+                        />
+                      )}
+                      <span>(20)</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-          </div>
-        ))}
-      </section>
+              ))
+            ) : (
+              <section style={{ width: "100%" }}>
+                <div className={styles.noDataContainer}>
+                  <p>No data available</p>
+                  <Button
+                    type="button"
+                    className="buttonStyle"
+                    onClick={handleBack}
+                    text="view all Markets"
+                    icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
+                  />
+                </div>
+              </section>
+            )}
+          </section>
 
-      <Pagination
-        current={currentPage}
-        total={cardData.length} // Total number of items
-        pageSize={itemsPerPage} // Number of items per page
-        onChange={onPageChange} // Handle page change
-        showSizeChanger={false} // Hide the option to change the page size
-        style={{
-          marginTop: "20px",
-          textAlign: "center", // Center the pagination
-          display: "flex",
-          justifyContent: "center", // Ensure the pagination is centered
-        }}
-      />
-    </div>
+          <Pagination
+            current={currentPage}
+            total={getAllMarketQuery?.data?.data?.total} // Total number of items
+            pageSize={20} // Number of items per page
+            onChange={onChange} // Handle page change
+            showSizeChanger={false} // Hide the option to change the page size
+            style={{
+              marginTop: "20px",
+              textAlign: "center", // Center the pagination
+              display: "flex",
+              justifyContent: "center", // Ensure the pagination is centered
+            }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
-export default RightSide;
+export default ProductList;
