@@ -2,7 +2,7 @@ import Icon from "/Container.svg";
 import styles from "./sellersProfile.module.scss";
 import Reviews from "../market/productDetails/tabs/review";
 import Button from "../../../customs/button/button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { Image } from "antd";
 import ProductIcon from "../../../assets/Ellipse 840.svg";
@@ -20,13 +20,13 @@ import WebICon from "../../../assets/webicon.svg";
 import MailIcon from "../../../assets/mailicon.svg";
 import StarG from "../../../assets/starger.svg";
 import RouteIndicator from "../../../customs/routeIndicator";
-import { useQueries } from "@tanstack/react-query";
-import { getBusinessById } from "../../request";
-import { AxiosError } from "axios";
+// import { useQueries } from "@tanstack/react-query";
+// import { getBusinessById } from "../../request";
+// import { AxiosError } from "axios";
 
 const SellerProfile = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  // const { id } = useParams();
   
   // const hasReviews = reviewData?.lenght;
   // console.log(hasReviews, "hasReviews");
@@ -46,17 +46,17 @@ const SellerProfile = () => {
     window.scrollTo(0, 0);
   };
 
-  const [getBusinessDetailsQuery] = useQueries({
-    queries: [
-      {
-        queryKey: ["get-business-details", id],
-        queryFn: () => getBusinessById(parseInt(id!)),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!id,
-      },
-    ],
-  });
+  // const [getBusinessDetailsQuery] = useQueries({
+  //   queries: [
+  //     {
+  //       queryKey: ["get-business-details", id],
+  //       queryFn: () => getBusinessById(parseInt(id!)),
+  //       retry: 0,
+  //       refetchOnWindowFocus: true,
+  //       enabled: !!id,
+  //     },
+  //   ],
+  // });
 
   // const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   // const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
