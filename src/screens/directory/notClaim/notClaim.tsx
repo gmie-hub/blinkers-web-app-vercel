@@ -67,10 +67,10 @@ const NotClaim = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleNavigateToRelatedBusiness = () => {
-    navigate(`/related-businesses/${id}`);
-    window.scrollTo(0, 0);
-  };
+  // const handleNavigateToRelatedBusiness = () => {
+  //   navigate(`/related-businesses/${id}`);
+  //   window.scrollTo(0, 0);
+  // };
 
   const handleNavigateToSubPlan = () => {
     navigate(`/subscription-pricing/${id}`);

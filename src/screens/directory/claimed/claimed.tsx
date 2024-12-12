@@ -3,7 +3,7 @@ import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { App, Image, Modal } from "antd";
+import {  Image, Modal } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";

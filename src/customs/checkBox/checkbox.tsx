@@ -25,7 +25,7 @@
 
 
 
-import { Field, useField } from "formik";
+import {  useField } from "formik";
 import styles from "./checkbox.module.scss";
 
 interface CheckboxProps {

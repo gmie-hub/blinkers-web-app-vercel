@@ -90,7 +90,7 @@ const EducationModal: FC<ComponentProps> = ({
         }}
         validationSchema={validationSchema} // Attach validation schema
       >
-        {({ setFieldValue, values }) => (
+        {({  values }) => (
           <Form>
             <div className={styles.inputContainer}>
               <Input

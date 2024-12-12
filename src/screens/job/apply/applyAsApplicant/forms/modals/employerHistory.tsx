@@ -123,7 +123,7 @@ const EmpHistory: FC<ComponentProps> = ({
         }}
         validationSchema={validationSchema}
       >
-        {({ values, setFieldValue, handleChange }) => {
+        {({ values,  handleChange }) => {
           return (
             <Form>
               <div className={styles.inputContainer}>

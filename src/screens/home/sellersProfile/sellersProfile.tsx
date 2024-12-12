@@ -31,10 +31,10 @@ const SellerProfile = () => {
   // const hasReviews = reviewData?.lenght;
   // console.log(hasReviews, "hasReviews");
 
-  const handleNavigateToReview = () => {
-    navigate(`/review`);
-    window.scrollTo(0, 0);
-  };
+  // const handleNavigateToReview = () => {
+  //   navigate(`/review`);
+  //   window.scrollTo(0, 0);
+  // };
 
   const handleNavigateToSellersAds = () => {
     navigate(`/sellers-posted-ads`);
@@ -58,13 +58,13 @@ const SellerProfile = () => {
     ],
   });
 
-  const businessDetailsData = getBusinessDetailsQuery?.data?.data;
-  const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
-  const businessDetailsErrorMessage =
-    businessDetailsError?.message ||
-    "An error occurred. Please try again later.";
+  // const businessDetailsData = getBusinessDetailsQuery?.data?.data;
+  // const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
+  // const businessDetailsErrorMessage =
+  //   businessDetailsError?.message ||
+  //   "An error occurred. Please try again later.";
 
-    console.log(businessDetailsData,'businessDetailsData')
+  //   console.log(businessDetailsData,'businessDetailsData')
 
   return (
     <>
