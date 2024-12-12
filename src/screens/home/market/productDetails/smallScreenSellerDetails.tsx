@@ -39,9 +39,6 @@ const safetyTips = [
   },
 ];
 
-
-
-
 interface Props {
   productDetailsData?: ProductDatum;
 }
@@ -53,7 +50,6 @@ const SmallScreen = ({ productDetailsData }: Props) => {
   const [flagSeller, setFlagSeller] = useState(false);
   const { id } = useParams();
   const [isNumberVisible, setIsNumberVisible] = useState(false);
-
 
   const items: TabsProps["items"] = [
     {
@@ -86,9 +82,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
   const handleShowNumber = (textToCopy: string) => {
     setIsNumberVisible(true);
     if (isNumberVisible) {
-      handleCopyLink(textToCopy)
-      };
-    
+      handleCopyLink(textToCopy);
+    }
   };
 
   return (
@@ -100,17 +95,28 @@ const SmallScreen = ({ productDetailsData }: Props) => {
               <h2 style={{ display: "flex" }}>{productDetailsData?.title}</h2>
               <p className={styles.fashion}>Fashion Accessories</p>{" "}
               <div className={styles.accessories}>
-                <h2 className={styles.payment}>₦{productDetailsData?.discount_price}</h2>
+                <h2 className={styles.payment}>
+                  ₦{productDetailsData?.discount_price}
+                </h2>
                 <div className={styles.eye}>
                   <Image src={TimeIcon} alt={TimeIcon} preview={false} />
-                  <p> Posted {getTimeAgo(productDetailsData?.created_at || '')}</p>
+                  <p>
+                    {" "}
+                    Posted {getTimeAgo(productDetailsData?.created_at || "")}
+                  </p>
                 </div>
                 <div className={styles.eye}>
                   <Image src={EyeIcon} alt={EyeIcon} preview={false} />
-                  <p>{productDetailsData?.views} {productDetailsData?.views && productDetailsData?.views < 2 ? 'View':'Views'}</p>
-                  </div>
+                  <p>
+                    {productDetailsData?.views}{" "}
+                    {productDetailsData?.views && productDetailsData?.views < 2
+                      ? "View"
+                      : "Views"}
+                  </p>
+                </div>
                 <p className={styles.payment}>
-                  <span className={styles.title}>State:</span> {productDetailsData?.state?.state_name}
+                  <span className={styles.title}>State:</span>{" "}
+                  {productDetailsData?.state?.state_name}
                 </p>
                 <p>
                   <span className={styles.title}>Local Government Area:</span>{" "}
@@ -121,12 +127,12 @@ const SmallScreen = ({ productDetailsData }: Props) => {
 
             <div className={styles.leftContainer}>
               <div className={styles.firstSideLeft}>
-                {productDetailsData?.add_images?.map((dress)=> (
+                {productDetailsData?.add_images?.map((dress) => (
                   <div key={dress.id} className={styles.dressCard}>
                     <div>
                       <Image
-                          width={"5.3rem"}
-                          height={"4.4rem"}
+                        width={"5.3rem"}
+                        height={"4.4rem"}
                         src={dress.add_image}
                         alt={dress.add_image}
                         preview={true}
@@ -157,7 +163,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                   <Image
                     width={"100%"}
                     //   maxWidth={10}
-                    src={productDetailsData?.add_images[0]?.add_image}                    alt="Product2"
+                    src={productDetailsData?.add_images[0]?.add_image}
+                    alt="Product2"
                     preview={false}
                     // alt={"my-product"}
                     className={styles.productImage}
@@ -211,7 +218,9 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                       preview={false}
                     />
                     <div>
-                      <p className={styles.name}>{productDetailsData?.user?.name}</p>
+                      <p className={styles.name}>
+                        {productDetailsData?.user?.name}
+                      </p>
                       <div className={styles.starWrapper}>
                         <span className={styles.star}>
                           <Image
@@ -220,8 +229,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                             alt="StarYellow"
                             preview={false}
                           />
-                          ({productDetailsData?.averageRating } ratings)
-                          </span>
+                          ({productDetailsData?.averageRating} ratings)
+                        </span>
                         <span className={styles.dot}>.</span>{" "}
                         <span>10 Followers</span>
                       </div>
@@ -264,8 +273,9 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                       <Image src={CallLogo} alt="CallLogo" preview={false} />
                     }
                     text="Click To Show Number"
-                    onClick={()=>handleShowNumber(productDetailsData?.user?.number || '')}
-
+                    onClick={() =>
+                      handleShowNumber(productDetailsData?.user?.number || "")
+                    }
                   />
 
                   <div className={styles.flag}>
@@ -289,8 +299,9 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                     }
                     text="Copy URL"
                     variant="noBg"
-                    onClick={()=>{handleCopyLink(productDetailsData?.url  ||'')}}
-
+                    onClick={() => {
+                      handleCopyLink(productDetailsData?.url || "");
+                    }}
                   />
 
                   <div className={styles.chatCart}>
