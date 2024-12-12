@@ -36,58 +36,55 @@ const Jobs = () => {
   const handleNavigateRegisterAsAnApplicant = () => {
     if (!user) {
       notification.error({
-        message: 'Log in required',
-        description: 'You need to log in to access this page!',
-        placement: 'top',
-        duration: 4, 
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
         onClose: () => {
           navigate(`/login?redirect=${currentPath}`);
         },
       });
+    } else {
+      navigate("/job/register-as-applicant");
     }
-      else{
-    navigate("/job/register-as-applicant");
-      }
     window.scrollTo(0, 0);
   };
 
 
- 
+
+
   const handleNavigateAddBusiness = () => {
-  
     if (!user) {
       notification.error({
-        message: 'Log in required',
-        description: 'You need to log in to access this page!',
-        placement: 'top',
-        duration: 4, 
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
         onClose: () => {
           navigate(`/login?redirect=${currentPath}`);
         },
       });
     } else if (
       user?.claim_status === null ||
-      user?.claim_status?.toString() === '2' ||
-      user?.claim_status?.toLowerCase() === 'rejected'
+      user?.claim_status?.toString() === "2" ||
+      user?.claim_status?.toLowerCase() === "rejected"
     ) {
       setOpenAddBusiness(true);
     } else {
       navigate(routes.job.postJob);
     }
-  
+
     window.scrollTo(0, 0);
   };
-  
-  
+
   const handleCloseBusinessModal = () => {
     setOpenAddBusiness(false);
     navigate(routes.job.AddBusiness);
   };
 
-
   const resetSearchTerm = () => {
     setSearchTerm(""); // Clear the search term
-    console.log(searchTerm,'olak')
+    console.log(searchTerm, "olak");
     setAppliedSearchTerm(""); // Clear applied search term
   };
 
@@ -116,8 +113,7 @@ const Jobs = () => {
                   variant="green"
                   text="Search"
                   className={styles.searchBtn}
-                  onClick={handleSearch} 
-                 
+                  onClick={handleSearch}
                 />
               </SearchInput>
             </div>
@@ -131,7 +127,7 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            {user?.is_applicant && (
+            {user &&  !user?.is_applicant && (
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}
@@ -139,10 +135,23 @@ const Jobs = () => {
                 variant="white"
                 onClick={handleNavigateRegisterAsAnApplicant}
               />
-             )} 
-                      </div>
+            )}
+             {!user && (
+              <Button
+                icon={<Image src={job2} alt={job2} preview={false} />}
+                className={styles.WhiteButtonStyle}
+                text="Register as An Applicant"
+                variant="white"
+                onClick={handleNavigateRegisterAsAnApplicant}
+              />
+            )} 
+
+          </div>
         </div>
-        <JobLists searchTerm={appliedSearchTerm} resetSearchTerm={resetSearchTerm} />
+        <JobLists
+          searchTerm={appliedSearchTerm}
+          resetSearchTerm={resetSearchTerm}
+        />
       </div>
 
       <ModalContent
