@@ -1,52 +1,92 @@
 import styles from "./job.module.scss";
-import { Image, Pagination } from "antd";
+import { Image, notification } from "antd";
 import { useState } from "react";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
 import Button from "../../customs/button/button";
 import job1 from "../../assets/job1.svg";
 import job2 from "../../assets/job2.svg";
-import { cardData } from "./data";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ModalContent from "../../partials/successModal/modalContent";
 import warn from "../../assets/warning-circle-svgrepo-com 2.svg";
-import Section2 from "./cards/cards";
+import JobLists from "./cards/cards";
+import { userAtom } from "../../utils/store";
+import { useAtomValue } from "jotai";
+import { routes } from "../../routes";
 
 const Jobs = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
   const navigate = useNavigate();
-  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openAddBusiness, setOpenAddBusiness] = useState(false);
+  let { search } = useParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
+  const user = useAtomValue(userAtom);
+  const currentPath = location.pathname;
 
-  // Calculate the data to display for the current page
-  //   const indexOfLast = currentPage * itemsPerPage;
-  //   const indexOfFirst = indexOfLast - itemsPerPage;
-  //   const currentCards = cardData.slice(indexOfFirst, indexOfLast);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // Update the search query state
+  };
 
-  // Handle page change
-  const onPageChange = (page: any) => {
-    setCurrentPage(page);
+  const handleSearch = () => {
+    setAppliedSearchTerm(searchTerm);
+    console.log("Search Term Sent:", searchTerm);
+    search = "";
   };
 
   const handleNavigateRegisterAsAnApplicant = () => {
-    navigate("/job/register-as-applicant");
+    if (!user) {
+      notification.error({
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else {
+      navigate("/job/register-as-applicant");
+    }
     window.scrollTo(0, 0);
   };
 
-  
-  const handleNavigateAddBusiness= () => {
-    // navigate("/job/add-business"); 
-       navigate("/post-job");
 
+
+
+  const handleNavigateAddBusiness = () => {
+    if (!user) {
+      notification.error({
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else if (
+      user?.claim_status === null ||
+      user?.claim_status?.toString() === "2" ||
+      user?.claim_status?.toLowerCase() === "rejected"
+    ) {
+      setOpenAddBusiness(true);
+    } else {
+      navigate(routes.job.postJob);
+    }
 
     window.scrollTo(0, 0);
   };
 
-  // const handleNavigatePostJob = () => {
-  //   navigate("/post-job");
-  //   window.scrollTo(0, 0);
-  // };
+  const handleCloseBusinessModal = () => {
+    setOpenAddBusiness(false);
+    navigate(routes.job.AddBusiness);
+  };
 
+  const resetSearchTerm = () => {
+    setSearchTerm(""); // Clear the search term
+    console.log(searchTerm, "olak");
+    setAppliedSearchTerm(""); // Clear applied search term
+  };
 
   return (
     <div className="wrapper">
@@ -63,10 +103,19 @@ const Jobs = () => {
           <div>
             <div className={styles.searchWrapper}>
               <SearchInput
-                placeholder="Search businesses..."
+                placeholder="Search for a Job..."
                 // width="40rem"
-                isBtn={true}
-              />
+                // isBtn={true}
+                onChange={handleInputChange}
+              >
+                <Button
+                  type="button"
+                  variant="green"
+                  text="Search"
+                  className={styles.searchBtn}
+                  onClick={handleSearch}
+                />
+              </SearchInput>
             </div>
           </div>
           <div className={styles.btnFlex}>
@@ -75,49 +124,55 @@ const Jobs = () => {
               className={styles.buttonStyle}
               text="Post a Job"
               variant="white"
-              // onClick={() => setOpenSuccess(true)}
               onClick={handleNavigateAddBusiness}
             />
 
-            <Button
-              icon={<Image src={job2} alt={job2} preview={false} />}
-              className={styles.WhiteButtonStyle}
-              text="Register as An Applicant"
-              variant="white"
-              onClick={handleNavigateRegisterAsAnApplicant}
-            />
+            {user &&  !user?.is_applicant && (
+              <Button
+                icon={<Image src={job2} alt={job2} preview={false} />}
+                className={styles.WhiteButtonStyle}
+                text="Register as An Applicant"
+                variant="white"
+                onClick={handleNavigateRegisterAsAnApplicant}
+              />
+            )}
+             {!user && (
+              <Button
+                icon={<Image src={job2} alt={job2} preview={false} />}
+                className={styles.WhiteButtonStyle}
+                text="Register as An Applicant"
+                variant="white"
+                onClick={handleNavigateRegisterAsAnApplicant}
+              />
+            )} 
+
           </div>
         </div>
-        <Section2 />
+        <JobLists
+          searchTerm={appliedSearchTerm}
+          resetSearchTerm={resetSearchTerm}
+        />
       </div>
-
-      <Pagination
-        current={currentPage}
-        total={cardData.length} // Total number of items
-        pageSize={itemsPerPage} // Number of items per page
-        onChange={onPageChange} // Handle page change
-        showSizeChanger={false} // Hide the option to change the page size
-        style={{
-          marginTop: "20px",
-          textAlign: "center", // Center the pagination
-          display: "flex",
-          justifyContent: "center", // Ensure the pagination is centered
-        }}
-      />
 
       <ModalContent
         icon={<img src={warn} alt="warn" />}
-        open={openSuccess}
-        handleCancel={() => setOpenSuccess(false)}
-        handleClick={() => {
-          setOpenSuccess(false);
-        }}
-        BtnText='Add Business To Directory'
+        open={openAddBusiness}
+        handleCancel={() => setOpenAddBusiness(false)}
+        handleClick={handleCloseBusinessModal}
+        BtnText="Add Business To Directory"
         heading="Business Not Added To Directory"
         text={
           "It looks like your business has not been registered in our directory, Add your business to the directory now to be able to post jobs."
         }
       />
+      {/* <ModalContent
+        icon={<img src={warn} alt="warn" />}
+        open={loginModal}
+        handleCancel={() => setOpenLoginModal(false)}
+        handleClick={handleNavigateToLogin}
+        BtnText="Login"
+        heading="Please Login to continue"
+      /> */}
     </div>
   );
 };

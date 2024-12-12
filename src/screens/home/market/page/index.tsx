@@ -76,12 +76,18 @@ const allItemsWithTitles = [
   { title: "Computer Items", items: computerItems },
 ];
 
-const Main = () => {
+interface Props {
+  appliedSearchTerm: string;
+}
+
+
+const Main =  ({ appliedSearchTerm }: Props) => {
   // Track the currently open section
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
 
+  console.log(appliedSearchTerm,"appliedSearchTerm")
   // Adjust isFilterVisible based on screen size
   useEffect(() => {
     const handleResize = () => {
@@ -134,7 +140,7 @@ const Main = () => {
                     preview={false}
                   />
                 </div>
-                <Checkbox label="Nearby Me" name="nearby_me" />
+                <Checkbox label="Nearby Me" name="nearby_me"     isChecked={false}/>
 
                 <p className={styles.subjectBg}>CATEGORIES</p>
                 {allItemsWithTitles.map((category, index) => (
@@ -153,6 +159,7 @@ const Main = () => {
                         {category.items.map((item) => (
                           <li key={item.key}>
                             <Checkbox
+                               isChecked={false}
                               label={item.value}
                               name={`selectedItems.${category.title}.${item.key}`}
                             />
@@ -184,6 +191,7 @@ const Main = () => {
                         <Checkbox
                           label={option.value}
                           name={`selectedPrices.${option.key}`}
+                          isChecked={false}
                         />
                       </li>
                     ))}
@@ -214,11 +222,12 @@ const Main = () => {
             )}
           </div>
 
-          <div>
+        
             <div className={styles.rightSide}>
-              <ProductList />
+              {/* <ProductList  /> */}
+              <ProductList appliedSearchTerm={appliedSearchTerm} />
+
             </div>
-          </div>
         </div>
       </Form>
     </Formik>

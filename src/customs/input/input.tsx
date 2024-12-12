@@ -56,7 +56,7 @@
 //             {type !== 'textarea' ? (
 //               <div className={styles.inputContainer}>
 //                 {deleteIcon && <span className={styles.iconRight}>{deleteIcon}</span>}
-                
+
 //                 <input
 //                   {...field}
 //                   type={isShowPassword && type === 'password' ? 'text' : type}
@@ -65,7 +65,7 @@
 //                   value={value}
 //                   className={classNames(styles.input, className)}
 //                 />
-//                 {icon && <span className={styles.iconRight}>{icon}</span>} 
+//                 {icon && <span className={styles.iconRight}>{icon}</span>}
 //                 {type === 'password' && (
 //                   <span
 //                     className={styles.showToggle}
@@ -91,11 +91,10 @@
 
 // export default Input;
 
-
-import { Field, FieldProps } from 'formik';
-import React, { useState } from 'react';
-import styles from './input.module.scss';
-import classNames from 'classnames';
+import { Field, FieldProps } from "formik";
+import React, { useState } from "react";
+import styles from "./input.module.scss";
+import classNames from "classnames";
 
 interface ComponentProps {
   maxLength?: number;
@@ -146,26 +145,30 @@ const Input: React.FC<ComponentProps> = (props) => {
           </label>
 
           <div className={styles.wrapper}>
-            {type !== 'textarea' ? (
+            {type !== "textarea" ? (
               <div className={styles.inputContainer}>
-                {deleteIcon && <span className={styles.iconRight}>{deleteIcon}</span>}
-                
+                {deleteIcon && (
+                  <span className={styles.iconRight}>{deleteIcon}</span>
+                )}
+
                 <input
                   {...field} // This binds the input to Formik
-                  type={isShowPassword && type === 'password' ? 'text' : type}
+                  type={isShowPassword && type === "password" ? "text" : type}
                   placeholder={placeholder}
                   disabled={disabled}
                   className={classNames(styles.input, className)}
                 />
                 {icon && <span className={styles.iconRight}>{icon}</span>}
-                {type === 'password' && (
+                {type === "password" && (
                   <span
                     className={styles.showToggle}
                     onClick={showPasswordHandle}
                     role="button"
-                    aria-label={isShowPassword ? 'Hide password' : 'Show password'}
+                    aria-label={
+                      isShowPassword ? "Hide password" : "Show password"
+                    }
                   >
-                    {isShowPassword ? '👁️' : '👁️‍🗨️'}
+                    {isShowPassword ? "👁️" : "👁️‍🗨️"}
                   </span>
                 )}
               </div>
@@ -179,7 +182,9 @@ const Input: React.FC<ComponentProps> = (props) => {
               />
             )}
 
-            {meta.touched && meta.error && <div className={styles.error}>{meta.error}</div>}
+            {meta.touched && meta.error && (
+              <div className={styles.error}>{meta.error}</div>
+            )}
           </div>
         </div>
       )}

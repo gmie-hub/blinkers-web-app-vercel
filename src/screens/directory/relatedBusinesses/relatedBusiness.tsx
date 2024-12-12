@@ -1,87 +1,89 @@
 import styles from "./relatedBusiness.module.scss";
 import { Image } from "antd";
-import Product2 from "../../../assets/Image.svg";
-import Product3 from "../../../assets/Image (1).svg";
-import BackIncon from "../../../assets/back.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LocationIcon from "../../../assets/locationrelated.svg";
 import CallIcon from "../../../assets/callrelated.svg";
+import { useQueries } from "@tanstack/react-query";
+import { getBusinessById } from "../../request";
+import { AxiosError } from "axios";
+import RouteIndicator from "../../../customs/routeIndicator";
+import CustomSpin from "../../../customs/spin";
+import ArrowIcon from "../../../assets/arrow-right-green.svg";
 
-// Data array
-const cardData = [
-  {
-    id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    phone:"09012345678",
-    rating: 1,
-  },
-  {
-    id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 2,
-    phone:"09012345678",
-
-  },
-  {
-    id: 3,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-    title: "Female Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 3,
-    phone:"09012345678",
-
-  },
-  {
-    id: 4,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 5,
-    phone:"09012345678",
-
-  },
-  {
-    id: 5,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Male Packing Shirt",
-    location: "Lekki, Lagos",
-    amount: "₦40,000",
-    rating: 4,
-    phone:"09012345678",
-
-  },
-  // Add more data as needed...
-];
-
-// Main component with `limit` prop to control how many data to display
-const RelatedBusinesses = ({
-  limit = cardData.length,
-  showHeading = true,
-}: {
+interface Props {
   limit?: number;
   showHeading?: boolean;
-}) => {
+  showSeeAll?: boolean;
+}
+const RelatedBusinesses = ({
+  showHeading = true,
+  limit,
+  showSeeAll = false,
+}: Props) => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const handleNavigateToNotClaim = () => {
-    navigate(`/not-claim/1`);
+  const handleNavigateDirectory = (id: number) => {
+    navigate(`/directory-details/${id}`);
+  };
+
+  const [getBusinessDetailsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-business-details", id],
+        queryFn: () => getBusinessById(parseInt(id!)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!id,
+      },
+    ],
+  });
+
+  const businessDetailsData = getBusinessDetailsQuery?.data?.data;
+  const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
+  const businessDetailsErrorMessage =
+    businessDetailsError?.message ||
+    "An error occurred. Please try again later.";
+
+  const relatedBusiness = businessDetailsData?.related_businesses;
+  const relatedBusinessLenght = businessDetailsData?.related_businesses?.length;
+
+  console.log(relatedBusinessLenght,'relatedBusinessLenght')
+
+  const relatedBusinessData =
+    relatedBusiness && relatedBusiness?.length > 0
+      ? relatedBusiness?.slice(0, limit)
+      : relatedBusiness;
+
+  console.log(relatedBusinessData, "relatedBusinessolajum");
+
+  const handleNavigateToRelatedBusiness = () => {
+    navigate(`/related-businesses/${id}`);
     window.scrollTo(0, 0);
-  }
+  };
 
   return (
     <div className="wrapper">
-      {showHeading && (
-        <div onClick={() => handleNavigateToNotClaim()} className={styles.back}>
-          <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
-          <p>Back</p>
+      {showHeading && <RouteIndicator showBack />}
+
+      {showSeeAll &&  relatedBusinessLenght > 0 &&(
+        <div>
+          <div className={styles.reviewbtn}>
+            <p className={styles.title}> Related Businesses</p>
+
+            <div
+              onClick={handleNavigateToRelatedBusiness}
+              className={styles.btnWrapper}
+            >
+              <p className={styles.btn}>See All</p>
+              <Image
+                width={20}
+                src={ArrowIcon}
+                alt="ArrowIcon"
+                preview={false}
+              />
+            </div>
+          </div>
         </div>
       )}
 
@@ -91,33 +93,58 @@ const RelatedBusinesses = ({
             <p>Related Businesses</p>
           </div>
         )}
+        {getBusinessDetailsQuery?.isLoading ? (
+          <CustomSpin />
+        ) : getBusinessDetailsQuery?.isError ? (
+          <h1 className="error">{businessDetailsErrorMessage}</h1>
+        ) : (
+          <section className={styles.promoImageContainer}>
+            {relatedBusinessData &&
+              relatedBusinessData?.length > 0 &&
+              relatedBusinessData?.map((item: any, index: number) => (
+                <div
+                  onClick={() => handleNavigateDirectory(item?.id)}
+                  className={styles.promoImage}
+                  key={index}
+                >
+                  <img className={styles.proImage} src={item?.logo} alt="" />
+                  <div className={styles.productList}>
+                    <p className={styles.title}>
+                      {/* {item?.name} */}
+                      {item?.name && item?.name?.length > 20
+                        ? item?.name?.slice(0, 20) + "..."
+                        : item?.name}
+                    </p>
+                    <div className={styles.info}>
+                      <Image
+                        src={LocationIcon}
+                        alt="LocationIcon"
+                        preview={false}
+                      />
 
-        {/* Display the promo images with the limit applied */}
-        <section className={styles.promoImageContainer}>
-          {cardData.slice(0, limit).map((card) => (
-            <div className={styles.promoImage} key={card.id}>
-              {card.icon}
-              <div className={styles.productList}>
+                      <p>
+                        {item?.address && item?.address?.length > 20
+                          ? `${item?.address?.slice(0, 20)}...`
+                          : item?.address}
+                      </p>
+                    </div>
+                    <div className={styles.info}>
+                      <Image
+                        width={20}
+                        height={20}
+                        src={CallIcon}
+                        alt="CallIcon"
+                        preview={false}
+                      />
 
-                <p className={styles.title}>{card.title}</p>
-                <div className={styles.info}>
-                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
-
-                <p>{card.location}</p>
-
+                      <p>{item.phone}</p>
+                    </div>
+                    <p className={styles.subjectBg}>Fashion Accessories</p>
+                  </div>
                 </div>
-                <div className={styles.info}>
-                <Image width={20} height={20} src={CallIcon} alt="CallIcon" preview={false} />
-
-                <p>{card.phone}</p>
-
-                </div>
-                <p className={styles.subjectBg}>Fashion Accessories</p>
-
-              </div>
-            </div>
-          ))}
-        </section>
+              ))}
+          </section>
+        )}
       </div>
     </div>
   );

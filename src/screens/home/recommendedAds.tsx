@@ -1,62 +1,45 @@
 import styles from "./index.module.scss";
-import { Image } from "antd";
+import { Image,  } from "antd";
 import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
-import Product1 from "../../assets/Product.svg";
-import Product2 from "../../assets/Image.svg";
-import Product3 from "../../assets/Image (1).svg";
 import { useState } from "react";
-
-// Data array
-const cardData = [
-  {
-    id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 3,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 4,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 5,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 6,
-    icon: <Image width="100%" src={Product1} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 7,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 8,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-  },
-  {
-    id: 9,
-    icon: <Image width="100%" src={Product1} alt="cardIcon" preview={false} />,
-  },
-];
+import { useQueries } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { getPromotedAds, } from "../request";
+import CustomSpin from "../../customs/spin";
 
 // Main component
 const RecommendedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4; // Number of items to display per page
-  const totalPages = Math.ceil(cardData.length / pageSize);
+
+  const [getRecommededAdsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-Recommeded-ads"],
+        queryFn: getPromotedAds,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+    ],
+  });
+
+  const recommededData = getRecommededAdsQuery?.data?.data?.data || [];
+  const recommededError = getRecommededAdsQuery?.error as AxiosError;
+  const recommededErrorMessage =
+    recommededError?.message || "An error occurred. Please try again later.";
+
+  console.log(recommededData, "recommededData Data");
+
+  const totalPages = Math.ceil(recommededData.length / pageSize);
 
   // Calculate the slice of data to display based on the current page
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentData = cardData.slice(startIndex, endIndex);
+  const currentData =
+    recommededData &&
+    recommededData?.length > 0 &&
+    recommededData?.slice(startIndex, endIndex);
 
   // Handle left button click (Previous)
   const handlePrev = () => {
@@ -73,7 +56,7 @@ const RecommendedAds = () => {
   };
 
   // Handle dot click to jump to the respective page
-  const handleDotClick = (page: any) => {
+  const handleDotClick = (page: number) => {
     setCurrentPage(page);
   };
 
@@ -105,29 +88,52 @@ const RecommendedAds = () => {
           </div>
         </div>
       </div>
+      {getRecommededAdsQuery?.isLoading ? (
+         <CustomSpin />
+      ) : getRecommededAdsQuery?.isError ? (
+        <h1 className="error">{recommededErrorMessage}</h1>
+      ) : (
+        <>
+          {/* Display the promo images */}
+          <section className={styles.promoImageContainer}>
+            {currentData &&
+              currentData?.length > 0 &&
+              currentData?.map((item: any, index: number) => (
+                <div className={styles.promoImage} key={index}>
+                  <div style={{height:'26rem'}}>
+                  <img
+                    src={item?.image}
+                    alt={item?.title}
+                    // className={styles.trendingProductImage}
+                  />
+                  </div>
+               
 
-      {/* Display the promo images */}
-      <section className={styles.promoImageContainer}>
-        {currentData.map((card) => (
-          <div className={styles.recommendedImage} key={card.id}>
-            {card.icon}
-            <p style={{padding:'2rem', display:'flex'}}>Male Packing Shirt</p>
+                  <div className={styles.productList}>
+                    <p style={{ color: "#4F4F4F" }}>
+                      {item?.title && item?.title?.length > 20
+                        ? `${item?.title?.slice(0, 20)}...`
+                        : item?.title}
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </section>
+
+          {/* Dot-style pagination */}
+          <div className={styles.dotPagination}>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <span
+                key={index}
+                className={`${styles.dot} ${
+                  currentPage === index + 1 ? styles.activeDot : ""
+                }`}
+                onClick={() => handleDotClick(index + 1)}
+              ></span>
+            ))}
           </div>
-        ))}
-      </section>
-
-      {/* Dot-style pagination */}
-      <div className={styles.dotPagination}>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <span
-            key={index}
-            className={`${styles.dot} ${
-              currentPage === index + 1 ? styles.activeDot : ""
-            }`}
-            onClick={() => handleDotClick(index + 1)}
-          ></span>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 };

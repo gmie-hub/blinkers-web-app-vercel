@@ -1,49 +1,49 @@
 import styles from "./review.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
 import { Image } from "antd";
 import BackIncon from "../../../../assets/back.svg";
+import { AxiosError } from "axios";
+import { getAllReviews } from "../../../request";
+import { useQueries } from "@tanstack/react-query";
+import { convertDate } from "../../../../utils/formatTime";
+import CustomSpin from "../../../../customs/spin";
 
-// Dummy array for business reviews
-const dummyBusinessReviewData = [
-  {
-    updated_at: "2024-11-10", // Date of the review
-    rating: 4, // Rating (out of 5)
-    review:
-      "Good customer service and fast delivery. I’m glad I shopped from Shop with Rinsy",
-    reviewer: "Olajumoke",
-  },
-  {
-    updated_at: "2024-11-08",
-    rating: 5,
-    review: "Exceptional experience!",
-    reviewer: "John Doe",
-  },
-  {
-    updated_at: "2024-11-05",
-    rating: 3,
-    review: "Good, but room for improvement.",
-    reviewer: "Jane Smith",
-  },
-];
 
-export default function Reviews() {
+export default function AllReviews() {
   const navigate = useNavigate();
-  // Use dummy data for business reviews
-  const businessReviewData = dummyBusinessReviewData;
-  const businessReviewError = false; // Dummy error handling
-  const businessReviewErrorMessage = "Failed to load reviews";
+  const { id } = useParams();
 
-  const handleNavigateToProductDetails = 
+  const handleNavigateToBack = 
     () => {
       navigate(-1);
       window.scrollTo(0, 0);
     }
 
+
+    const [getAllReviewQuery] = useQueries({
+      queries: [
+        {
+          queryKey: ["get-all-review", id],
+          queryFn: () => getAllReviews(id!),
+          retry: 0,
+          refetchOnWindowFocus: false,
+        },
+      ],
+    });
+  
+    const reviewData = getAllReviewQuery?.data?.data?.data || [];
+    const reviewError = getAllReviewQuery?.error as AxiosError;
+    const reviewErrorMessage =
+      reviewError?.message || "An error occurred. Please try again later.";
+  
+  
+      
+
   return (
     <div className="wrapper">
-        <div onClick={() => handleNavigateToProductDetails()} className={styles.back}>
+        <div onClick={handleNavigateToBack} className={styles.back}>
           <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
           <p >Back</p>
         </div>
@@ -52,17 +52,22 @@ export default function Reviews() {
         <div className={styles.promoHead}>
             <p>Reviews</p>
           </div>
+          {getAllReviewQuery?.isLoading ? (
+         <CustomSpin />
+      ) : getAllReviewQuery?.isError ? (
+        <h1 className="error">{reviewErrorMessage}</h1>
+      ) : (
           <div className={styles.wrappers}>
-            {businessReviewData.length > 0 ? (
-              businessReviewData.map((item, index) => (
+            {reviewData && reviewData?.length > 0 ? (
+              reviewData?.map((item, index) => (
                 <div className={styles.card} key={index}>
                   <div className={styles.dateTimeWrapper}>
                     <div>
-                      <span>{item?.updated_at || ""}</span>
+                      <span>{convertDate(item?.created_at) || ""}</span>
                       <div></div>
-                      <span>{item?.updated_at || ""}</span>
+                      <span>{convertDate(item?.created_at) || ""}</span>
                     </div>
-                    <span>{item?.reviewer || ""}</span>
+                    <span>{item?.review || ""}</span>
                   </div>
                   <div className={styles.starWrapper}>
                     {countUpTo(
@@ -87,8 +92,8 @@ export default function Reviews() {
             ) : (
               <p>No reviews available.</p>
             )}
-            {businessReviewError && <p>{businessReviewErrorMessage}</p>}
           </div>
+      )}
         </div>
     </div>
   );
@@ -103,3 +108,4 @@ function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
   }
   return result; // Return the array
 }
+

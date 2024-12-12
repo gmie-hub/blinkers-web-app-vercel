@@ -1,61 +1,93 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "../styles.module.scss";
 import { FC } from "react";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
+import { useSetAtom } from "jotai";
+import { SkilsInfoAtom } from "../../../../../../utils/store";
+import { SkillsData } from "../../../../../../utils/type";
 
 interface ComponentProps {
   handleClose: () => void;
+  indexData: string;
+  handleSubmit: (values: FormikValues, data: Payload) => void;
+  index:number
 }
 
-const Skill: FC<ComponentProps> = ({ handleClose }) => {
+const Skill: FC<ComponentProps> = ({
+  indexData,
+  handleClose,
+  handleSubmit,
+  index,
+}) => {
+  const skilsInfoAtomdata = useSetAtom(SkilsInfoAtom);
+
+  const validationSchema = Yup.object().shape({
+    skills: Yup.string().required("Skill is required"),
+  });
+
   return (
     <section>
       <Formik
         initialValues={{
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          email: "",
+          skills: indexData || "",
         }}
-        onSubmit={(values) => {
-          console.log(values);
+        enableReinitialize={true}
+        onSubmit={(values, { resetForm }) => {
+          // Retrieve the current skill data from localStorage
+          const currentSkillInfo = JSON.parse(
+            localStorage.getItem("skill-data") ?? "[]"
+          );
+
+          let updatedSkillInfo: SkillsData[];
+          if (indexData) {
+            // Update the existing skill
+            updatedSkillInfo = currentSkillInfo?.map((item: any, currIndex:number) =>
+              currIndex === index ? values.skills : item
+            );
+          } else {
+            // Add a new skill
+            updatedSkillInfo = [...currentSkillInfo, values.skills];
+          }
+
+          skilsInfoAtomdata(updatedSkillInfo);
+
+          handleSubmit(values, { skills: updatedSkillInfo });
+
+          resetForm();
           handleClose();
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
-        {() => {
-          return (
-            <Form>
-              <div className={styles.inputContainer}>
-                <Input
-                  name="skill"
-                  label="Skill"
-                  placeholder="Enter your skill"
-                  type="text"
-                />
+        {() => (
+          <Form>
+            <div className={styles.inputContainer}>
+              <Input
+                name="skills"
+                label="Skill"
+                placeholder="Enter your skill"
+                type="text"
+              />
 
-                <section className={styles.buttonGroup}>
-                  <Button
-                    variant="white"
-                    type="submit"
-                    disabled={false}
-                    text="Cancel"
-                    className={styles.btn}
-                  />
-                  <Button
-                    variant="green"
-                    type="submit"
-                    disabled={false}
-                    text="Save"
-                    className={styles.btn}
-                  />
-                </section>
-              </div>
-            </Form>
-          );
-        }}
+              <section className={styles.buttonGroup}>
+                <Button
+                  variant="white"
+                  type="button"
+                  text="Cancel"
+                  className={styles.btn}
+                  onClick={handleClose}
+                />
+                <Button
+                  variant="green"
+                  type="submit"
+                  text="Save"
+                  className={styles.btn}
+                />
+              </section>
+            </div>
+          </Form>
+        )}
       </Formik>
     </section>
   );

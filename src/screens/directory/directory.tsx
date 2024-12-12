@@ -1,123 +1,66 @@
 import styles from "./directory.module.scss";
-import { Image, Pagination } from "antd";
-import Product2 from "../../assets/Image.svg";
-import Product3 from "../../assets/Image (1).svg";
-import {useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Image, Pagination, PaginationProps } from "antd";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
-import CallIcon from "../../assets/callrelated.svg"
+import CallIcon from "../../assets/callrelated.svg";
 import LocationIcon from "../../assets/locationrelated.svg";
-
-// Data array
-const cardData = [
-  {
-    id: 1,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 2,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 3,
-    icon: <Image width="100%" src={Product3} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 4,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 5,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 6,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 7,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 8,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 9,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 10,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 11,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-  {
-    id: 12,
-    icon: <Image width="100%" src={Product2} alt="cardIcon" preview={false} />,
-    title: "Shop With Rinsy",
-    location: "4, blinkers street, Lekki, Nigeria",
-    phone: "09012345678",
-  },
-];
+import { useQueries } from "@tanstack/react-query";
+import { getAllBusiness } from "../request";
+import { AxiosError } from "axios";
+import Button from "../../customs/button/button";
+import CustomSpin from "../../customs/spin";
+import FaArrowLeft from "../../assets/backArrow.svg";
 
 const Directory = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // Set the number of items per page
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  let { search } = useParams();
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
 
-  // Calculate the data to display for the current page
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentCards = cardData.slice(indexOfFirst, indexOfLast);
-
-  // Handle page change
-  const onPageChange = (page: any) => {
+  const onChange: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
   };
 
-  const handleNavigateToNotClaim = 
-    (id: number) => {
-      navigate(`/not-claim/${id}`);
-    }
-  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // Update the search query state
+  };
+  const handleSearch = () => {
+    setAppliedSearchTerm(searchTerm);
+    console.log("Search Term Sent:", searchTerm);
+  };
 
+  const handleNavigateDirectory = (id: number) => {
+    navigate(`/directory-details/${id}`);
+  };
+
+  const [getAllDirectoryQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-all-directory", appliedSearchTerm, currentPage],
+        queryFn: () => getAllBusiness(appliedSearchTerm, currentPage),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+    ],
+  });
+
+  const directoryData = getAllDirectoryQuery?.data?.data?.data || [];
+  const directoryError = getAllDirectoryQuery?.error as AxiosError;
+  const directoryErrorMessage =
+    directoryError?.message || "An error occurred. Please try again later.";
+
+  const handleBack = () => {
+    setAppliedSearchTerm("");
+    setSearchTerm("");
+    setCurrentPage(1);
+    navigate("/directory");
+    getAllDirectoryQuery.refetch();
+  };
+
+  console.log(searchTerm, appliedSearchTerm, "JobData");
   return (
     <div className="wrapper">
       <div className={styles.container}>
@@ -131,82 +74,123 @@ const Directory = () => {
             <p className={styles.picHead}>Directory</p>
             <p className={styles.picPara}>Explore various business listings</p>
           </div>
-          <div>
-            <div className={styles.searchWrapper}>
-              {/* <Select
-                name="employment_type"
-                placeholder="Category"
-                options={[]}
-              /> */}
-
-              <SearchInput
-                placeholder="Search businesses..."
-                // width="40rem"
-                isBtn={true}
+          <div className={styles.searchWrapper}>
+            <SearchInput
+              placeholder="Search Businesses..."
+              // width="40rem"
+              // isBtn={true}
+              value={searchTerm}
+              onChange={handleInputChange}
+            >
+              <Button
+                type="button"
+                variant="green"
+                text="Search"
+                className={styles.searchBtn}
+                onClick={handleSearch}
               />
-            </div>
+            </SearchInput>
           </div>
         </div>
       </div>
+      <div className={styles.whyWrapper}>
+        {getAllDirectoryQuery?.isLoading ? (
+          <CustomSpin />
+        ) : getAllDirectoryQuery?.isError ? (
+          <h1 className="error">{directoryErrorMessage}</h1>
+        ) : (
+          <>
+            {appliedSearchTerm?.length > 0 && directoryData?.length > 0 && (
+              <div>
+                <Button
+                  type="button"
+                  className="buttonStyle"
+                  onClick={handleBack}
+                  text="view all jobs"
+                  icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
+                />
+                <br />
+                <br />
+              </div>
+            )}
 
-      <section className={styles.promoImageContainer}>
-        {currentCards?.map((card: any) => (
-          <div
-            className={styles.promoImage}
-            key={card.id}
-            onClick={() => handleNavigateToNotClaim(card.id)}
-          >
-            {/* <div className={styles.favoriteIcon}>
-              <Image width={30} src={favorite} alt="Favorite" preview={false} />
-            </div> */}
-            {card.icon}
-            <div className={styles.productList}>
-              <p className={styles.title}>{card.title}</p>
+            <section className={styles.promoImageContainer}>
+              {directoryData && directoryData?.length > 0 ? (
+                directoryData?.map((item: any, index: number) => (
+                  <div
+                    className={styles.promoImage}
+                    key={index}
+                    onClick={() => handleNavigateDirectory(item?.id)}
+                  >
+                    <img
+                      src={item?.logo}
+                      alt="Image2"
+                      className={styles.proImage}
+                    />
+                    <div className={styles.productList}>
+                      <p className={styles.title}>
+                        {/* {item?.name} */}
+                        {item?.name && item?.name?.length > 20
+                          ? item?.name?.slice(0, 20) + "..."
+                          : item?.name}
+                      </p>
+                      {item?.address && (
+                        <div className={styles.info}>
+                          <Image
+                            width={20}
+                            src={LocationIcon}
+                            alt="LocationIcon"
+                          />
+                          <p>
+                            {item?.address && item?.address?.length > 20
+                              ? item?.address?.slice(0, 20) + "..."
+                              : item?.address}
+                          </p>
+                        </div>
+                      )}
+                      <div className={styles.info}>
+                        <Image width={20} src={CallIcon} alt="CallIcon" />
 
-              <div className={styles.info}>
-                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
+                        <p>{item?.phone}</p>
+                      </div>{" "}
+                      <div className={styles.subjectBg}>
+                        {item?.category?.title}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <section style={{ width: "100%" }}>
+                  <div className="noDataContainer">
+                    <p>No data available</p>
+                    <Button
+                      type="button"
+                      className="buttonStyle"
+                      onClick={handleBack}
+                      text="view all jobs"
+                      icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
+                    />
+                  </div>
+                </section>
+              )}
+            </section>
 
-                <p>{card.location}</p>
-
-                </div>
-                <div className={styles.info}>
-                <Image  src={CallIcon} alt="CallIcon" preview={false} />
-
-                <p>{card.phone}</p>
-
-
-                </div>              <div className={styles.subjectBg}>Fashion Accessories</div>
-              {/* <div className={styles.starWrapper}>
-                {countUpTo(
-                  card?.rating || 0,
-                  <Image
-                    width={20}
-                    src={StarYellow}
-                    alt="StarYellow"
-                    preview={false}
-                  />,
-                  <Image width={20} src={Star} alt="Star" preview={false} />
-                )}{" "}
-                <span>(20)</span>
-              </div> */}
-            </div>
-          </div>
-        ))}
-      </section>
-
-      <Pagination
-        current={currentPage}
-        total={cardData.length} // Total number of items
-        pageSize={itemsPerPage} // Number of items per page
-        onChange={onPageChange} // Handle page change
-        showSizeChanger={false} // Hide the option to change the page size
-        style={{
-          marginTop: "20px",
-          textAlign: "center", // Center the pagination
-          display: "flex",
-          justifyContent: "center", // Ensure the pagination is centered
-        }}
-      />
+            <Pagination
+              current={currentPage}
+              total={directoryData?.data?.data?.total} // Total number of items
+              pageSize={20} // Number of items per page
+              onChange={onChange} // Handle page change
+              showSizeChanger={false} // Hide the option to change the page size
+              style={{
+                marginTop: "20px",
+                textAlign: "center", // Center the pagination
+                display: "flex",
+                justifyContent: "center", // Ensure the pagination is centered
+              }}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };

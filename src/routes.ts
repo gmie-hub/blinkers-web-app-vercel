@@ -1,64 +1,61 @@
-
 export const routes = {
   // home: "/",
   page: {
     home: "/",
     market: "/market",
     productDetails: "/product-details/:id",
-    relatedAds: "/related-ads",
-    review: "/review",
-    sellersProfile: "/sellers-profile",
+    relatedAds: "/related-ads/:id",
+    review: "/review/:id",
+    productReview: "/product-review/:id",
+    sellersProfile: "/sellers-profile/:id",
     posetedAdsBySeller: "/sellers-posted-ads",
-    writeReview: "/write-review",
+    writeReview: "/write-review/:id",
     ContactUs: "/contact-us",
     AboutUS: "/about-us",
     faq: "/faq",
-   
+    homeMarket: "/market/:search",
   },
-  job:{
+  job: {
     job: "/jobs",
-    jobDetails: "/job-details",
-    JobLikeThis: "/job/more-jobs-like-this",
+    homeJob: "/jobs/:search",
+    jobDetails: "/job-details/:id",
+    JobLikeThis: "/job/more-jobs-like-this/:id",
     images: "/images",
     videos: "/videos",
     RegAsApplicant: "/job/register-as-applicant",
     AddBusiness: "/job/add-business",
-    applyForJob:"/job/apply",
-    postJob:"/post-job",
-
-
+    applyForJob: "/job/apply/:id",
+    postJob: "/post-job",
   },
 
-  directory:{
+  directory: {
     directory: "/directory",
-    NotClaimed: "/not-claim/:id",
-    relatedBusinesses: "/related-businesses",
+    homeDirectory: "/directory/:search",
+    NotClaimed: "/directory-details/:id",
+    relatedBusinesses: "/related-businesses/:id",
     Subscription: "/subscription",
-    SubscriptionPricing: "/subscription-pricing",
+    SubscriptionPricing: "/subscription-pricing/:id",
     ClaimedBusiness: "/claimed-business",
-    ClaimBusiness: "/claim-business",
+    ClaimBusiness: "/claim-business/:id",
     SubmittedSuccessfully: "/submittedsuccessfully",
-  
   },
 
   auth: {
     signUp: "/sign-up",
     login: "/login",
     forgotPassword: "/forgot-password",
-    resetPassword: "/reset-password",
+    resetPassword: "/reset-password/:email",
     passwordResetSuccessful: "/password-reset-successful",
-    VerificationCode: "/verification-code",
+    VerificationCode: "/verification-code/:email",
+    ResetVerificationCode: "/reset-password-verification-code/:email/",
   },
 };
-
-
-
 
 export const routeParts = {
   [routes.page.market]: {
     route: routes.page.home,
-    name: 'All Business',
-    params: '',
+    name: "All Business",
+    params: "",
     isRoot: true,
   },
   // [routes.directory.viewBusiness]: {

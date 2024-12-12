@@ -73,12 +73,13 @@
       flex-direction: column; // Stack the input and button on smaller screens
       gap: 1rem;
       align-items: start;
+     
     }
   
     .searchInput {
       font-size: 1rem; // Smaller font size for mobile devices
-      // width: 100%; // Make input full-width on mobile
-      padding-block: 0.8rem;
+      width: 100%; // Make input full-width on mobile
+      padding-block: 1.8rem;
       padding-inline-start: 3rem; // Adjust padding for icon
     }
   
@@ -88,7 +89,7 @@
   
     .searchIcon {
       left: 1rem;
-      top: 1rem;
+      top: 2rem;
     }
   }
   

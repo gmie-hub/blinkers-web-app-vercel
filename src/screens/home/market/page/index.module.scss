@@ -6,7 +6,6 @@
   padding-block: 4rem; // Add padding to the entire container for internal spacing
   @media screen and (max-width: 768px) {
     margin-block: 2.4rem;
-
   }
 }
 
@@ -90,39 +89,40 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end; // Align content to the right
+  // align-items: flex-end; // Align content to the right
   text-align: start;
 }
-.promoImageContainer {
-  display: flex;
-  flex-wrap: wrap; /* Allow the images to wrap to the next line when necessary */
-  justify-content: flex-start; /* Align images to the left side */
-  gap: 3rem; /* Space between the images */
-  row-gap: 4rem;
-  @media (max-width: 640px) {
-    row-gap: 2.8rem;
+// .promoImageContainer {
+//   display: flex;
+//   flex-wrap: wrap; /* Allow the images to wrap to the next line when necessary */
+//   justify-content: flex-start; /* Align images to the left side */
+//   gap: 3rem; /* Space between the images */
+//   row-gap: 4rem;
+//   @media (max-width: 640px) {
+//     row-gap: 2.8rem;
 
-  }
-}
+//   }
+// }
 
 .promoImage {
+  box-shadow: 0px 4px 40px 0px #00990012;
   position: relative;
   width: calc(
     33.33% - 2rem
   ); /* Keep each image at 33.33% width with some margin for gaps */
   box-sizing: border-box;
   flex-grow: 0; /* Prevent images from growing beyond 33.33% */
-//   margin-bottom: 2rem; /* Add space between rows */
+  //   margin-bottom: 2rem; /* Add space between rows */
   overflow: hidden; /* This ensures that the border-radius affects the content inside */
-  border-radius: 1rem; /* Apply rounded corners to all images */
+  border-radius: 0.8rem; /* Apply rounded corners to all images */
 }
 
 .promoImage img {
   width: 100%;
-      height: auto;
-      object-fit: contain;
-      border-top-left-radius: 1rem;
-      border-top-right-radius: 1rem;
+  height: auto;
+  object-fit: contain;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .promoImage:last-child {
@@ -137,7 +137,7 @@
 
 @media (max-width: 640px) {
   .promoImage {
-    width: 100%; /* On mobile, show 1 image per row */
+    width: 100% !important; /* On mobile, show 1 image per row */
   }
 }
 
@@ -154,10 +154,6 @@
 
   .rightSide {
     width: 100%; /* Right side takes full width */
-  }
-
-  .promoImage {
-    width: calc(50% - 1.5rem); /* On smaller screens, show 2 images per row */
   }
 }
 
@@ -183,9 +179,9 @@
   display: flex;
   flex-direction: column;
   text-align: start;
-  border-radius: 0 0 1rem 1rem; 
+  border-radius: 0 0 1rem 1rem;
   box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid  #00990012;
+  border: solid #00990012;
 
   cursor: pointer;
   & > p {
@@ -194,8 +190,85 @@
 }
 
 .starWrapper {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    padding-block: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-block: 0.8rem;
+}
+.info {
+  display: flex;
+  padding-block-start: 0.8rem;
+  align-items: center;
+  gap: 0.4rem;
+  color: #6e6e6e;
+}
+
+.proImage {
+  height: 26rem !important;
+}
+
+.promoImageContainer {
+  display: grid; /* Use grid for a more controlled layout */
+  grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+  gap: 3rem; /* Space between the items */
+  row-gap: 4rem;
+  justify-items: center; /* Align items in the center of each grid cell */
+}
+
+.promoImage {
+  display: flex;
+  flex-direction: column;
+  // height: 26rem; /* Set fixed height for each item */
+  width: 100%; /* Ensure it fills the available space */
+  justify-content: space-between; /* Ensure the image and product list have equal space */
+  background: #fff; /* Optional: add a background */
+  border-radius: 8px; /* Optional: add rounded corners */
+  overflow: hidden; /* Ensure no overflow */
+  // box-shadow: 0px 4px 40px 0px #00990012;
+
+}
+
+.promoImage img {
+  object-fit: cover; /* Ensure images cover the available space while maintaining their aspect ratio */
+  // height: 14rem; /* Set fixed height for the image */
+  width: 100%; /* Ensure the image fills the width */
+}
+
+.productList {
+  // height: 12rem; /* Ensure the product list takes the remaining height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem; /* Add padding to the product list */
+}
+
+.productList p {
+  margin: 0; /* Remove margins for consistent spacing */
+}
+
+@media (max-width: 640px) {
+  .promoImageContainer {
+    grid-template-columns: repeat(
+      1,
+      1fr
+    ); /* 2 items per row on smaller screens */
+    gap: 2rem; /* Adjust the gap for smaller screens */
   }
+
+  .promoImage {
+    height: auto; /* Allow the height to be dynamic on smaller screens */
+  }
+}
+
+
+.noDataContainer {
+  text-align: center;
+  margin-top: 20px;
+
+}
+
+.noDataContainer p {
+  font-size: 18px;
+  color: #555;
+}
+

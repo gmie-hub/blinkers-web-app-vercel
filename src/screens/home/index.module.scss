@@ -59,6 +59,10 @@
   flex-direction: column;
   text-align: start;
   padding-inline-start: 0.5rem;
+  padding-block: 6.4rem;
+  @media (max-width: 768px) {
+    padding-block: 2.4rem;
+  }
 }
 .head h1 {
   font-weight: 500;
@@ -98,6 +102,11 @@
   width: 100%; /* Container takes full width */
   box-sizing: border-box; /* Padding and border don't affect width calculation */
   justify-content: space-between; /* Ensures images are evenly spaced across the row */
+  height: 26rem;
+  align-items: center;
+  @media (max-width: 640px) {
+    height: auto; /* Allow the height to be dynamic on smaller screens */
+  }
 }
 
 .promoImage {
@@ -118,9 +127,7 @@
 @media (max-width: 1024px) {
   .promoImage {
     flex: 1 1 calc(25% - 1rem); /* 4 images per row, accounting for the gap */
-    max-width: calc(
-      25% - 1rem
-    ); 
+    max-width: calc(25% - 1rem);
   }
 }
 
@@ -241,7 +248,7 @@
 @media (max-width: 1024px) {
   .recommendedImage {
     flex: 1 1 calc(24% - 1rem); // 4 images per row, accounting for the gap
-    max-width: calc(24% - 1rem); 
+    max-width: calc(24% - 1rem);
   }
 }
 
@@ -274,11 +281,10 @@
   }
 }
 
-.accessWrapper{
+.accessWrapper {
   margin-block: 6.4rem;
   @media (max-width: 768px) {
     margin-block: 2.4rem;
-
   }
 }
 .leftSection,
@@ -391,6 +397,7 @@
   font-weight: 500;
   color: var(--color-header-text);
   font-size: 4rem;
+  text-align: center;
 }
 // .trendContainer {
 //   display: grid;
@@ -424,6 +431,16 @@
 //   }
 // }
 
+.trendingProductImage {
+  height: 26rem;
+  width: 33rem;
+  object-fit: cover;
+  @media (max-width: 768px) {
+    width: 100%;
+    height: fit-content;
+  }
+}
+
 .trendContainer {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr; /* Three columns for left, middle, right */
@@ -453,7 +470,6 @@
   @media (max-width: 600px) {
     margin-block-end: 2rem;
   }
-
 }
 
 .trendImage {
@@ -463,7 +479,7 @@
   height: auto; /* Maintain aspect ratio */
   object-fit: contain; /* Ensure image fits without stretching */
   max-width: 100%; /* Ensure image doesn't overflow container */
-
+  cursor: pointer;
   @media (max-width: 600px) {
     width: 100%; /* Full width on small screens */
     height: auto; /* Maintain aspect ratio */
@@ -506,7 +522,6 @@
   @media (max-width: 600px) {
     margin-block-end: 2rem;
   }
-
 }
 
 .buttonStyle {
@@ -584,12 +599,36 @@
   display: flex;
   flex-direction: column;
   text-align: start;
-  border-radius: 0 0 1rem 1rem; 
+  border-radius: 0 0 1rem 1rem;
   box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid  #00990012;
+  // border: solid  #00990012;
 
   cursor: pointer;
   & > p {
     padding-block-start: 0.5rem !important;
+  }
+}
+
+.canceledText {
+  text-decoration: line-through;
+  color: red; /* Optional: Use a muted color for canceled text */
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #6e6e6e;
+}
+.trendingdiscount {
+  color: #222222;
+  width: 600;
+}
+
+.dirTitle {
+  font-weight: 600;
+  font-size: 3.2rem;
+  @media (max-width: 640px) {
+    font-size: 2rem;
   }
 }

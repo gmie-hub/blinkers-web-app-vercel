@@ -1,9 +1,9 @@
 import styles from "./styles.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import {  useState } from "react";
+import { useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { Image, Modal, message } from "antd";
+import {  Image, Modal } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
@@ -24,12 +24,11 @@ import WebICon from "../../../assets/webicon.svg";
 import MailIcon from "../../../assets/mailicon.svg";
 import Reviews from "../../home/market/productDetails/tabs/review";
 import Images from "./image/image";
+import { handleCopyLink } from "../../request";
 // import SellersAds from "./postedAds/adsPostedbySeller";
 const Claimed = () => {
   const navigate = useNavigate();
-  const [showContent] = useState(true); // Manage review form visibility
-  // const [showWriteReview, setShowWriteReview] = useState(false); // Manage card visibility
-
+  const [showContent] = useState(true);
   const [openShare, setOpenShare] = useState(false);
 
   //   const hasReviews = reviewData?.lenght;
@@ -37,34 +36,21 @@ const Claimed = () => {
 
   const textToCopy = "blinkers/ shopwithrinsyaccderb/e";
 
-  const handleCopyLink = () => {
-    navigator.clipboard
-      .writeText(textToCopy)
-      .then(() => {
-        message.success("Link copied to clipboard!");
-      })
-      .catch(() => {
-        message.error("Failed to copy link. Please try again.");
-      });
-  }
-
-
-
-  const handleNavigateReview =() => {
+  const handleNavigateReview = () => {
     navigate(`/review`);
     window.scrollTo(0, 0);
-  }
+  };
 
   const handleNavigateToRelatedBusiness = () => {
     navigate(`/related-businesses`);
     window.scrollTo(0, 0);
-  }
+  };
 
-  const handleNavigateToVideo =() => {
+  const handleNavigateToVideo = () => {
     navigate(`/videos`);
     window.scrollTo(0, 0);
   };
-  const handleNavigateToImages =() => {
+  const handleNavigateToImages = () => {
     navigate(`/images`);
     window.scrollTo(0, 0);
   };
@@ -317,7 +303,7 @@ const Claimed = () => {
             <p>blinkers/ shopwithrinsyaccderb/e</p>
 
             <Button
-              onClick={handleCopyLink}
+              onClick={() => handleCopyLink(textToCopy)}
               icon={<Image src={copyIcon} alt={copyIcon} preview={false} />}
               className={styles.buttonStyle}
               text="Copy Link"
