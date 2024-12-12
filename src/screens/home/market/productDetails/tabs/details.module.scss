@@ -159,3 +159,29 @@ align-items: center;
     height: auto;
   }
 }
+
+.reviewbtn {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 2.4rem;
+  align-items: center;
+  margin-block-start: 4rem;
+  & > h1 {
+    font-size: 2.4rem;
+    font-weight: 600;
+  }
+}
+.title {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--color-header-text);
+}
+.btn {
+  color: var(--color-primary-green);
+  font-size: 2rem;
+  cursor: pointer;
+}
+.btnWrapper {
+  display: flex;
+  align-items: center;
+}

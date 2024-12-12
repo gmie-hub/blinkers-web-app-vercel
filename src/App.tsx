@@ -7,12 +7,13 @@ import Directory from "./screens/directory/directory";
 import SubscriptionPricing from "./screens/directory/subscriptionPlan/subPlan";
 import NotClaim from "./screens/directory/notClaim/notClaim";
 import ClaimBusiness from "./screens/directory/claimBusiness/claimBus";
-import ClaimedBusiness from "./screens/directory/claimed/claimed";
+// import ClaimedBusiness from "./screens/directory/claimed/claimed";
 import RelatedBusinesses from "./screens/directory/relatedBusinesses/relatedBusiness";
 import Market from "./screens/home/market/market";
 import ProductDetails from "./screens/home/market/productDetails/productDetailsToDisplay";
 import RelatedAds from "../src/partials/relatedAds/index";
 import Review from "./screens/home/market/review/review";
+import ProductReview from "./screens/home/market/review/productReview";
 import SellersProfile from "./screens/home/sellersProfile/sellersProfile";
 import SellersPostedAds from "./screens/home/sellersProfile/postedAds/adsPostedbySeller";
 import WriteReview from "./screens/home/market/writeReview/writeReview";
@@ -49,6 +50,8 @@ function App() {
     { path: routes.page.productDetails, element: <ProductDetails /> },
     { path: routes.page.relatedAds, element: <RelatedAds /> },
     { path: routes.page.review, element: <Review /> },
+    { path: routes.page.productReview, element: <ProductReview /> },
+
     { path: routes.page.sellersProfile, element: <SellersProfile /> },
     { path: routes.page.posetedAdsBySeller, element: <SellersPostedAds /> },
     { path: routes.page.writeReview, element: <WriteReview /> },
@@ -62,7 +65,7 @@ function App() {
     { path: routes.directory.relatedBusinesses, element: <RelatedBusinesses /> },
     { path: routes.directory.SubscriptionPricing, element: <SubscriptionPricing /> },
     { path: routes.directory.ClaimBusiness, element: <ClaimBusiness /> },
-    { path: routes.directory.ClaimedBusiness, element: <ClaimedBusiness /> },
+    // { path: routes.directory.ClaimedBusiness, element: <ClaimedBusiness /> },
     {
       path: routes.directory.SubmittedSuccessfully,
       element: <SubmittedSuccessfully />,

@@ -1,8 +1,12 @@
 import { message } from "antd";
 import api from "../utils/apiClient";
 
+export const getAllReviews = async (id: string) => {
+  return (await api.get(`business/reviews?business_id=${id}`))
+    ?.data as ReviewResponse;
+};
+
 export const getAllJobs = async (page: number, search?: string | number) => {
-  // return (await api.get(`jobs?page=${page}&/search=${search}`))?.data as JobResponse;
   return (await api.get(`jobs?page=${page}&search=${search}`))
     ?.data as JobResponse;
 };
@@ -44,20 +48,6 @@ export const getAllBusiness = async (search: number | string, page?: number) => 
 };
 
 
-// export const getAllMarket = async (page: number,search?: string | number) => {
-
-//   let url = `/ads`;
-//   if (search !== '') {
-//     url += `&search=${page}`;
-//   }
-
-//   if (page !== undefined) {
-//     url += `?page=${page}`;
-//   }
-
-//   return (await api.get(url))?.data as AllProductaResponse;
-// };
-
 export const getAllMarket = async (page?: number, search?: string | number) => {
   let url = `/ads`;
 
@@ -80,6 +70,15 @@ export const getAllMarket = async (page?: number, search?: string | number) => {
 
 export const CreateJob = async (payload: Partial<JobDatum>) => {
   return (await api.post('jobs', payload, {}))?.data as any;
+};
+
+
+export const FollowBusiness = async (payload: Partial<FollowBusiness>) => {
+  return (await api.post('business/followers/toggle', payload, {}))?.data as any;
+};
+
+export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
+  return (await api.post('business/reviews', payload, {}))?.data as any;
 };
 
 

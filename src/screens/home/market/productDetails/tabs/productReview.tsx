@@ -12,7 +12,7 @@ import { convertDate, getTimeFromDate } from "../../../../../utils/formatTime";
 import CustomSpin from "../../../../../customs/spin";
 
 // Reviews Component
-export default function Reviews({
+export default function ProductReviews({
   canSeeAllBtn = true,
   limit,
 }: {
@@ -47,13 +47,9 @@ export default function Reviews({
     reviewData?.slice(0, calculatedLimit);
 
   console.log(businessReviewData, "businessReviewData");
-  const handleNavigateToReview = () => {
-    navigate(`/review`);
-    window.scrollTo(0, 0);
-  };
 
-  const handleNavigateReview = () => {
-    navigate(`/review/${id}`);
+  const handleNavigateProductReview = () => {
+    navigate(`/product-review/${id}`);
     window.scrollTo(0, 0);
   };
 
@@ -66,23 +62,7 @@ export default function Reviews({
         <h1 className="error">{reviewErrorMessage}</h1>
       ) : (
         <div className={styles.wrapper}>
-          <div style={{width:'100%'}}>
-          <div   onClick={handleNavigateReview}  className={styles.reviewbtn}>
-            <h1>Reviews</h1>
-
-            { reviewData?.length > 0 && <div  className={styles.btnWrapper}>
-              <p className={styles.btn}>See All</p>
-              <Image
-                width={20}
-                src={ArrowIcon}
-                alt="ArrowIcon"
-                preview={false}
-              />
-            </div>}
-
-          </div>
-        
-          </div>
+         
           {businessReviewData && businessReviewData?.length > 0 ? (
             businessReviewData?.map((item, index) => (
               <ReviewCard key={index} item={item} />
@@ -104,7 +84,7 @@ export default function Reviews({
                   text="See All Reviews"
                   variant="transparent"
                   className="buttonStyle"
-                  onClick={handleNavigateToReview}
+                  onClick={handleNavigateProductReview}
                   AfterTexticon={
                     <Image
                       width={20}

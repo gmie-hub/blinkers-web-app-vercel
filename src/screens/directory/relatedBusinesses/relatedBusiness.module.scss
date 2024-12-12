@@ -14,9 +14,10 @@
 
 .promoImage {
   flex: 1 1 calc(25% - 4.4rem);
-  max-width: calc(25% - 4.4rem);
+  max-width: calc(25% - 3.5rem);
     box-sizing: border-box;
   box-shadow: 0px 4px 40px 0px #00990012;
+  cursor: pointer;
 
   img {
     object-fit: cover;
@@ -24,6 +25,7 @@
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     width: 100%;
+  
   }
 }
 
@@ -113,4 +115,31 @@
   color: #222222;
   font-weight: 700;
   font-size: 1.8rem;
+}
+
+
+.reviewbtn {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 2.4rem;
+  align-items: center;
+  margin-block-start: 4rem;
+  & > h1 {
+    font-size: 2.4rem;
+    font-weight: 600;
+  }
+}
+.title {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--color-header-text);
+}
+.btn {
+  color: var(--color-primary-green);
+  font-size: 2rem;
+  cursor: pointer;
+}
+.btnWrapper {
+  display: flex;
+  align-items: center;
 }

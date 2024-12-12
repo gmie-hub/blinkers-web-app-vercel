@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image, Modal, Tabs, TabsProps } from "antd";
+import { App, Image, Modal, Tabs, TabsProps } from "antd";
 import LocationIcon from "../../../../assets/location.svg";
 import ProductIcon from "../../../../assets/Ellipse 840.svg";
 import Button from "../../../../customs/button/button";
@@ -17,7 +17,7 @@ import RelatedAds from "../../../../partials/relatedAds";
 import StarIcon from "../../../../assets/Vector.svg";
 import favorite from "../../../../assets/Icon + container.svg";
 import Details from "./tabs/details";
-import Reviews from "./tabs/review";
+import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
@@ -28,7 +28,11 @@ import FlagSeller from "../flagSeller/flagSeller";
 import SmallScreen from "./smallScreenSellerDetails";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
 import { getTimeAgo } from "../../../../utils/formatTime";
-import { handleCopyLink } from "../../../request";
+import { FollowBusiness, handleCopyLink } from "../../../request";
+import { useMutation } from "@tanstack/react-query";
+import { userAtom } from "../../../../utils/store";
+import { useAtomValue } from "jotai";
+import { errorMessage } from "../../../../utils/errorMessage";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -52,6 +56,10 @@ const BigScreen = ({ productDetailsData }: Props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
   const { id } = useParams();
   const [isNumberVisible, setIsNumberVisible] = useState(false);
+  const { notification } = App.useApp();
+  const user = useAtomValue(userAtom);
+  const currentPath = location.pathname;
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -77,7 +85,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
   };
 
   const handleNavigateToSellersProfile = () => {
-    navigate(`/sellers-profile`);
+    navigate(`/sellers-profile/${14}`);
     window.scrollTo(0, 0);
   };
 
@@ -102,15 +110,62 @@ const BigScreen = ({ productDetailsData }: Props) => {
     },
   ];
 
-   const handleShowNumber = (textToCopy: string) => {
+  const handleShowNumber = (textToCopy: string) => {
     setIsNumberVisible(true);
     if (isNumberVisible) {
-      handleCopyLink(textToCopy)
-      };
-    
+      handleCopyLink(textToCopy);
+    }
   };
 
-   
+  const followBusinessMutation = useMutation({
+    mutationFn: FollowBusiness,
+    mutationKey: ["follow-business"],
+  });
+
+  const followBusinessHandler = async () => {
+    const payload: Partial<FollowBusiness> = {
+      business_id: productDetailsData?.business_id || 0,
+      user_id: user?.id,
+      action: "follow",
+    };
+
+    try {
+      await followBusinessMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+          // queryClient.refetchQueries({
+          //   queryKey: ["get-business-details"],
+          // });
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error),
+      });
+    }
+  };
+  const handleFollowBusiness = () => {
+    if (!user) {
+      notification.error({
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else {
+      followBusinessHandler();
+    }
+  };
+
+
+
   return (
     <main>
       <div className="wrapper">
@@ -128,7 +183,12 @@ const BigScreen = ({ productDetailsData }: Props) => {
               </div>
               <div className={styles.eye}>
                 <Image src={EyeIcon} alt={EyeIcon} preview={false} />
-                <p>{productDetailsData?.views} {productDetailsData?.views && productDetailsData?.views < 2 ? 'View':'Views'}</p>
+                <p>
+                  {productDetailsData?.views}{" "}
+                  {productDetailsData?.views && productDetailsData?.views < 2
+                    ? "View"
+                    : "Views"}
+                </p>
               </div>
             </div>
 
@@ -200,7 +260,9 @@ const BigScreen = ({ productDetailsData }: Props) => {
                 <div className={styles.card}>
                   <h2 className={styles.payment}>
                     {" "}
-                    ₦{productDetailsData?.discount_price}
+                    ₦
+                    {productDetailsData?.discount_price ||
+                      productDetailsData?.price}
                   </h2>
                   <div className={styles.location}>
                     <Image
@@ -239,9 +301,13 @@ const BigScreen = ({ productDetailsData }: Props) => {
                             alt="StarYellow"
                             preview={false}
                           />
-{productDetailsData?.averageRating && parseInt(productDetailsData?.averageRating) > 2
-  ? `${productDetailsData?.averageRating} ratings`
-  : `${productDetailsData?.averageRating || "No"} rating`}                        </span>
+                          {productDetailsData?.averageRating &&
+                          parseInt(productDetailsData?.averageRating) > 2
+                            ? `${productDetailsData?.averageRating} ratings`
+                            : `${
+                                productDetailsData?.averageRating || "No"
+                              } rating`}{" "}
+                        </span>
                         <span className={styles.dot}>.</span>{" "}
                         <span>10 Followers</span>
                       </div>
@@ -258,7 +324,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
                       text="View Profile"
                     />
 
-                    <Button text="Follow" variant="white" />
+                    <Button onClick={handleFollowBusiness} text="Follow" variant="white" />
                   </div>
                   <div className={styles.social}>
                     <Image
@@ -284,10 +350,12 @@ const BigScreen = ({ productDetailsData }: Props) => {
                     icon={<img src={CallLogo} alt="success" />}
                     text={
                       isNumberVisible
-                        ? productDetailsData?.user?.number
+                        ? productDetailsData?.user?.number || "No phone number"
                         : "Click To Show Number"
                     }
-                    onClick={()=>handleShowNumber(productDetailsData?.user?.number || '')}
+                    onClick={() =>
+                      handleShowNumber(productDetailsData?.user?.number || "")
+                    }
                   />
 
                   <div className={styles.flag}>
@@ -311,7 +379,9 @@ const BigScreen = ({ productDetailsData }: Props) => {
                     }
                     text="Copy URL"
                     variant="noBg"
-                    onClick={()=>{handleCopyLink(productDetailsData?.url  ||'')}}
+                    onClick={() => {
+                      handleCopyLink(productDetailsData?.url || "");
+                    }}
                   />
 
                   <div className={styles.chatCart}>

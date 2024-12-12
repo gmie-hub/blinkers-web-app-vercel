@@ -11,18 +11,18 @@ import { createBusiness, getAllCategory } from "../../../request";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { App } from "antd";
 import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect";
+import * as Yup from 'yup';
 
 const AddBusiness = () => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
   const { notification } = App.useApp();
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   const handleSearchChange = (value: string) => {
-    console.log('Search Query:', value); // Access the search query value here
+    console.log("Search Query:", value); // Access the search query value here
     setSearchValue(value);
   };
-
 
   const clearFile = () => {
     setUpload(null);
@@ -91,7 +91,7 @@ const AddBusiness = () => {
           //   description: data?.message,
           // });
           resetForm();
-          clearFile()
+          clearFile();
           setOpenSuccess(true);
         },
       });
@@ -103,17 +103,15 @@ const AddBusiness = () => {
     }
   };
 
-  const { data, } = useQuery({
-    queryKey: ["get-all-category",searchValue],
-    queryFn:()=> getAllCategory(searchValue),
+  const { data } = useQuery({
+    queryKey: ["get-all-category", searchValue],
+    queryFn: () => getAllCategory(searchValue),
   });
 
   const categoryData = data?.data?.data ?? [];
 
-
-
   const categoryOptions: { value: number; label: string }[] = [
-    { value: 0, label: 'Select Business' }, // Default option
+    { value: 0, label: "Select Business" }, // Default option
     ...(categoryData && categoryData?.length > 0
       ? categoryData?.map((item: CategoryDatum) => ({
           value: item?.id,
@@ -121,6 +119,15 @@ const AddBusiness = () => {
         }))
       : []),
   ];
+
+  const validationSchema = Yup.object().shape({
+    BusinessName: Yup.string().required('required'),
+    BusinessAddress: Yup.date().required('required'),
+    email: Yup.string().required('required'),
+    imageLogo: Yup.string().required('required'),
+    category: Yup.date().required('required')
+  });
+
 
   return (
     <div className="wrapper">
@@ -151,13 +158,12 @@ const AddBusiness = () => {
               }}
               onSubmit={(values, { resetForm }) => {
                 createBusinessHandler(values, resetForm);
-                console.log(values);
               }}
               enableReinitialize={true}
 
-              // validationSchema={validationSchema}
+              validationSchema={validationSchema}
             >
-              {({ setFieldValue, }) => {
+              {({ setFieldValue }) => {
                 return (
                   <Form>
                     <div className={styles.inputContainer}>
@@ -168,21 +174,13 @@ const AddBusiness = () => {
                         type="text"
                       />
 
-                      {/* <Select
+                      <SearchableSelect
                         name="category"
                         label="Category"
-                        placeholder="Category"
                         options={categoryOptions}
-                        onChange={handleChange}
-                      /> */}
-                      
-                    <SearchableSelect
-                      name="category"
-                      label="Category"
-                      options={categoryOptions}
-                      placeholder="Select Company Name"
-                      onSearchChange={handleSearchChange}
-                    />
+                        placeholder="Select Company Name"
+                        onSearchChange={handleSearchChange}
+                      />
 
                       <Input
                         name="BusinessAddress"

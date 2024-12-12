@@ -16,7 +16,7 @@ import RelatedAds from "../../../../partials/relatedAds";
 import StarIcon from "../../../../assets/Vector.svg";
 import favorite from "../../../../assets/Icon + container.svg";
 import Details from "./tabs/details";
-import Reviews from "./tabs/review";
+import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
@@ -95,9 +95,7 @@ const SmallScreen = ({ productDetailsData }: Props) => {
               <h2 style={{ display: "flex" }}>{productDetailsData?.title}</h2>
               <p className={styles.fashion}>Fashion Accessories</p>{" "}
               <div className={styles.accessories}>
-                <h2 className={styles.payment}>
-                  ₦{productDetailsData?.discount_price}
-                </h2>
+                <h2 className={styles.payment}>₦{productDetailsData?.discount_price || productDetailsData?.price}</h2>
                 <div className={styles.eye}>
                   <Image src={TimeIcon} alt={TimeIcon} preview={false} />
                   <p>
@@ -272,10 +270,13 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                     icon={
                       <Image src={CallLogo} alt="CallLogo" preview={false} />
                     }
-                    text="Click To Show Number"
-                    onClick={() =>
-                      handleShowNumber(productDetailsData?.user?.number || "")
+                    text={
+                      isNumberVisible
+                        ? productDetailsData?.user?.number || 'No phone number'
+                        : "Click To Show Number"
                     }
+                    onClick={()=>handleShowNumber(productDetailsData?.user?.number || '')}
+
                   />
 
                   <div className={styles.flag}>

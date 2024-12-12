@@ -1,6 +1,6 @@
 import styles from "./relatedBusiness.module.scss";
 import { Image } from "antd";
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LocationIcon from "../../../assets/locationrelated.svg";
 import CallIcon from "../../../assets/callrelated.svg";
 import { useQueries } from "@tanstack/react-query";
@@ -8,12 +8,18 @@ import { getBusinessById } from "../../request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../../customs/routeIndicator";
 import CustomSpin from "../../../customs/spin";
+import ArrowIcon from "../../../assets/arrow-right-green.svg";
 
 interface Props {
   limit?: number;
   showHeading?: boolean;
+  showSeeAll?: boolean;
 }
-const RelatedBusinesses = ({ showHeading = true, limit }: Props) => {
+const RelatedBusinesses = ({
+  showHeading = true,
+  limit,
+  showSeeAll = false,
+}: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -40,6 +46,9 @@ const RelatedBusinesses = ({ showHeading = true, limit }: Props) => {
     "An error occurred. Please try again later.";
 
   const relatedBusiness = businessDetailsData?.related_businesses;
+  const relatedBusinessLenght = businessDetailsData?.related_businesses?.length;
+
+  console.log(relatedBusinessLenght,'relatedBusinessLenght')
 
   const relatedBusinessData =
     relatedBusiness && relatedBusiness?.length > 0
@@ -48,9 +57,35 @@ const RelatedBusinesses = ({ showHeading = true, limit }: Props) => {
 
   console.log(relatedBusinessData, "relatedBusinessolajum");
 
+  const handleNavigateToRelatedBusiness = () => {
+    navigate(`/related-businesses/${id}`);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="wrapper">
       {showHeading && <RouteIndicator showBack />}
+
+      {showSeeAll &&  relatedBusinessLenght > 0 &&(
+        <div>
+          <div className={styles.reviewbtn}>
+            <p className={styles.title}> Related Businesses</p>
+
+            <div
+              onClick={handleNavigateToRelatedBusiness}
+              className={styles.btnWrapper}
+            >
+              <p className={styles.btn}>See All</p>
+              <Image
+                width={20}
+                src={ArrowIcon}
+                alt="ArrowIcon"
+                preview={false}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div>
         {showHeading && (
@@ -67,14 +102,18 @@ const RelatedBusinesses = ({ showHeading = true, limit }: Props) => {
             {relatedBusinessData &&
               relatedBusinessData?.length > 0 &&
               relatedBusinessData?.map((item: any, index: number) => (
-                <div onClick={() => handleNavigateDirectory(item?.id)} className={styles.promoImage} key={index}>
+                <div
+                  onClick={() => handleNavigateDirectory(item?.id)}
+                  className={styles.promoImage}
+                  key={index}
+                >
                   <img className={styles.proImage} src={item?.logo} alt="" />
                   <div className={styles.productList}>
                     <p className={styles.title}>
-                        {/* {item?.name} */}
-                        {item?.name && item?.name?.length > 20
-                          ? item?.name?.slice(0, 20) + "..."
-                          : item?.name}
+                      {/* {item?.name} */}
+                      {item?.name && item?.name?.length > 20
+                        ? item?.name?.slice(0, 20) + "..."
+                        : item?.name}
                     </p>
                     <div className={styles.info}>
                       <Image
