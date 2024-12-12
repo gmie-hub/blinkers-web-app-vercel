@@ -26,7 +26,7 @@
 
 
 import {  useField } from "formik";
-import styles from "./checkbox.module.scss";
+import styles from "./checkBox.module.scss";
 
 interface CheckboxProps {
   label: string;
