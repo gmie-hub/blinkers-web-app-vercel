@@ -140,7 +140,7 @@ const Main =  ({ appliedSearchTerm }: Props) => {
                     preview={false}
                   />
                 </div>
-                <Checkbox label="Nearby Me" name="nearby_me" />
+                <Checkbox label="Nearby Me" name="nearby_me"     isChecked={false}/>
 
                 <p className={styles.subjectBg}>CATEGORIES</p>
                 {allItemsWithTitles.map((category, index) => (
@@ -159,6 +159,7 @@ const Main =  ({ appliedSearchTerm }: Props) => {
                         {category.items.map((item) => (
                           <li key={item.key}>
                             <Checkbox
+                               isChecked={false}
                               label={item.value}
                               name={`selectedItems.${category.title}.${item.key}`}
                             />
@@ -190,6 +191,7 @@ const Main =  ({ appliedSearchTerm }: Props) => {
                         <Checkbox
                           label={option.value}
                           name={`selectedPrices.${option.key}`}
+                          isChecked={false}
                         />
                       </li>
                     ))}

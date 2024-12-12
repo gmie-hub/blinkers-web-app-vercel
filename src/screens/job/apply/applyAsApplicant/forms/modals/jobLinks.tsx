@@ -11,13 +11,15 @@ import { LinkData } from "../../../../../../utils/type";
 interface ComponentProps {
   handleClose: () => void;
   indexData: LinkData;
-  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
+  handleSubmit: (values: FormikValues, data: Payload) => void;
+  index:number
 }
 
 const JobLinks: FC<ComponentProps> = ({
   indexData,
   handleClose,
   handleSubmit,
+  index,
 }) => {
   const linkAtomdata = useSetAtom(LinkInfoAtom);
 
@@ -39,9 +41,10 @@ const JobLinks: FC<ComponentProps> = ({
           const currentLinkInfo = JSON.parse(
             localStorage.getItem("link-data") ?? "[]"
           );
+          let updatedLinkInfo: LinkData[];
           if (indexData) {
-            const updatedLinkInfo = currentLinkInfo?.map((item: LinkData) =>
-              item?.id === indexData?.id ? { ...item, ...values } : item
+            updatedLinkInfo = currentLinkInfo?.map((item: LinkData,currIndex: number) =>
+              currIndex === index ? { ...item, ...values } : item
             );
             linkAtomdata(updatedLinkInfo);
           } else {
@@ -49,12 +52,13 @@ const JobLinks: FC<ComponentProps> = ({
               ...values,
               id: currentLinkInfo.length + 1,
             };
-            const updatedLinkInfo = [...currentLinkInfo, newData];
+            updatedLinkInfo = [...currentLinkInfo, newData];
             linkAtomdata(updatedLinkInfo);
-            
-          }
+          } 
 
-          handleSubmit(values, resetForm);
+          // handleSubmit(values, resetForm);
+          handleSubmit(values, { jobLink: updatedLinkInfo });
+
           resetForm();
 
           handleClose();
@@ -82,7 +86,6 @@ const JobLinks: FC<ComponentProps> = ({
                     text="Cancel"
                     className={styles.btn}
                     onClick={handleClose}
-
                   />
                   <Button
                     variant="green"

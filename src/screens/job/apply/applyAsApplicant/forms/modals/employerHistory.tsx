@@ -6,7 +6,7 @@ import Input from "../../../../../../customs/input/input";
 import Button from "../../../../../../customs/button/button";
 import Checkbox from "../../../../../../customs/checkBox/checkbox";
 import { EmploymentHistory } from "../../../../../../utils/type";
-import { useAtom, useSetAtom } from "jotai";
+import {useSetAtom } from "jotai";
 import { EmploymentHistoryInfoAtom } from "../../../../../../utils/store";
 import { convertDate } from "../../../../../../utils/formatTime";
 import { employmentTypeData, JobTypeData } from "../../../../../request";
@@ -15,41 +15,42 @@ import Select from "../../../../../../customs/select/select";
 interface ComponentProps {
   handleClose: () => void;
   indexData: EmploymentHistory;
-  handleSubmit: (values: FormikValues, resetForm: () => void) => void;
+  handleSubmit: (values: FormikValues, data: Payload) => void;
+  index: number;
+
 }
 
 const EmpHistory: FC<ComponentProps> = ({
   handleClose,
   indexData,
+  index,
   handleSubmit,
 }) => {
   const employementHistoryData = useSetAtom(EmploymentHistoryInfoAtom);
-  const [empData] = useAtom(EmploymentHistoryInfoAtom);
 
-  console.log(empData, "indexDataindexDataindexDataindexData");
 
   const validationSchema = Yup.object().shape({
     job_title: Yup.string().required("Job Title is required"),
     job_type: Yup.string().required("Job Type is required"),
     company_name: Yup.string().required("Company Name is required"),
     location: Yup.string().required("Location is required"),
-    WorkArrangement: Yup.string().required("Work Arrangement is required"),
+    employment_type: Yup.string().required("Work Arrangement is required"),
     start_date: Yup.date()
       .required("Start Date is required")
       .max(new Date(), "Start Date cannot be in the future"),
     // end_date: Yup.date()
     //   .nullable()
-    //   .when("currentWork", {
-    //     is: false, // Only validate `end_date` if `currentWork` is false
+    //   .when("current_work", {
+    //     is: false, // Only validate `end_date` if `current_work` is false
     //     then: Yup.date()
     //       .required("End Date is required")
     //       .min(Yup.ref("start_date"), "End Date must be after Start Date"),
     //   }),
-    WorkSummary: Yup.string()
+    summary: Yup.string()
       .required("Work Summary is required")
       .max(2000, "Work Summary cannot exceed 2000 characters"),
 
-    currentWork: Yup.boolean(),
+      current_work: Yup.boolean(),
   });
 
   const JobTypeOptions: any =
@@ -70,10 +71,12 @@ const EmpHistory: FC<ComponentProps> = ({
       </option>
     ));
 
+    console.log(indexData?.summary,'indexData?.summary')
   return (
     <section>
       <Formik
         initialValues={{
+          
           id: indexData?.id || 0,
           job_title: indexData?.job_title || "",
           job_type: indexData?.job_type || "",
@@ -81,31 +84,38 @@ const EmpHistory: FC<ComponentProps> = ({
           location: indexData?.location || "",
           start_date: convertDate(indexData?.start_date) || "",
           end_date: convertDate(indexData?.end_date) || "",
-          WorkSummary: indexData?.WorkSummary || "",
-          currentWork: indexData?.currentWork || "",
-          WorkArrangement: indexData?.WorkArrangement || "",
+          employment_type: indexData?.employment_type || "",
+          summary:indexData?.summary  && indexData?.summary || "jj",
+          current_work:
+            indexData?.current_work && indexData?.current_work?.toString() === "1"
+              ? true
+              : false,
         }}
         enableReinitialize={true}
         onSubmit={(values, { resetForm }) => {
           const currentEmpHistoryInfo = JSON.parse(
             localStorage.getItem("employment-History") ?? "[]"
           );
+          let updatedEmpInfo;
+
           if (indexData) {
-            const updatedEmpHisInfo = currentEmpHistoryInfo?.map(
-              (item: EmploymentHistory) =>
-                item?.id === indexData?.id ? { ...item, ...values } : item
+            updatedEmpInfo = currentEmpHistoryInfo?.map(
+              (item: EmploymentHistory,currIndex: number) =>
+                currIndex === index
+                  ? { ...item, ...values }
+                  : item
             );
-            employementHistoryData(updatedEmpHisInfo);
+            employementHistoryData(updatedEmpInfo);
           } else {
             const newdata = {
               ...values,
               id: currentEmpHistoryInfo.length + 1,
             };
-            const updatedEmpInfo = [...currentEmpHistoryInfo, newdata];
+             updatedEmpInfo = [...currentEmpHistoryInfo, newdata];
             employementHistoryData(updatedEmpInfo);
           }
 
-          handleSubmit(values, resetForm);
+          handleSubmit(values, { EmpHistory: updatedEmpInfo });
           resetForm();
 
           handleClose();
@@ -152,7 +162,7 @@ const EmpHistory: FC<ComponentProps> = ({
                 />
 
                 <Select
-                  name="WorkArrangement"
+                  name="employment_type"
                   label="Work Arrangement"
                   placeholder=" Select Work Arrangement"
                   options={employmentTypeOptions}
@@ -161,7 +171,7 @@ const EmpHistory: FC<ComponentProps> = ({
                 {/* <Input
                   label="Work Arrangement"
                   placeholder="Work Arrangement"
-                  name="WorkArrangement"
+                  name="employment_type"
                   type="text"
                 /> */}
 
@@ -179,7 +189,7 @@ const EmpHistory: FC<ComponentProps> = ({
                 />
 
                 <Input
-                  name="WorkSummary"
+                  name="summary"
                   label="Work Summary"
                   type="textarea"
                   placeholder="Write your day to day activities"
@@ -188,14 +198,12 @@ const EmpHistory: FC<ComponentProps> = ({
                   <p>0/2000</p>
                 </div>
 
+             
+
                 <Checkbox
-                  label="I currently work here"
-                  name="currentWork"
-                  checked={values.currentWork} // Bind `checked` to Formik's `values`
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    console.log(values?.currentWork);
-                    setFieldValue("currentWork", e.target.checked); // Update Formik's state
-                  }}
+                  label="Current work"
+                  name="current_work"
+                  isChecked={values.current_work}
                 />
 
                 <section className={styles.buttonGroup}>

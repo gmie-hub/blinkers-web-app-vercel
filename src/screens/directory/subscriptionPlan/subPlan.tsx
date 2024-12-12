@@ -3,7 +3,8 @@ import styles from "./subPlan.module.scss";
 import BillingIcon from "../../..//assets/billing 1.svg";
 import { Image } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import RouteIndicator from "../../../customs/routeIndicator";
 
 const items = [
   "Permit business name",
@@ -17,8 +18,11 @@ const items = [
 
 const SubPlan = () => {
   const navigate =useNavigate()
+  const { id } = useParams();
+
   return (
     <div className="wrapper">
+      <RouteIndicator showBack/>
       {/* Header Section */}
 
       {/* Card Section */}
@@ -49,7 +53,7 @@ const SubPlan = () => {
             ))}
           </ul>
           <div className={styles.subBtn}>
-            <Button onClick={()=>{navigate('/claim-business')}} text="Subscribe Now" />
+            <Button onClick={()=>{navigate(`/claim-business/${id}`)}} text="Subscribe Now" />
           
           </div>
         </div>

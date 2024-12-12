@@ -5,7 +5,6 @@
 
   @media screen and (max-width: 768px) {
     margin-block: 2.4rem;
-
   }
   // height: 100%; // Full height within the wrapper
 }
@@ -19,6 +18,7 @@
   background-size: cover;
   background-position: center;
   transition: background-image 0.5s ease-in-out;
+  margin-block-end: 4rem;
 }
 
 .home {
@@ -76,10 +76,12 @@
   justify-content: center;
   gap: 1.6rem;
   margin-block: 1.6rem;
+  width:100%;
 }
 .chatBtn {
   margin-block-start: 1rem;
   margin-block-end: 1.6rem;
+  width: 100%;
 }
 .social {
   display: flex;
@@ -96,6 +98,9 @@
   padding-inline: 4rem;
   border: #eeeeee solid 1px;
   padding-block: 2.4rem;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .info {
   display: flex;
@@ -172,8 +177,6 @@
     margin-inline: 1.6rem; /* Smaller margin for mobile */
     gap: 2rem; /* Adjust gap for smaller screens */
     padding-block: 2.4rem;
-
-  
   }
   .infos {
     padding-block: 1rem;
@@ -212,7 +215,6 @@
     margin-block: 0.8rem;
   }
 
- 
   .card {
     padding-inline: 2rem;
     padding-block: 1.6rem;
@@ -234,4 +236,12 @@
     gap: 0.4rem;
     padding-block-end: 0.4rem;
   }
+}
+
+.passport{
+  display: flex ;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

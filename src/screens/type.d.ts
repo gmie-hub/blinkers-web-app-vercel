@@ -65,7 +65,20 @@ interface JobDetailsResponse extends Response {
   data: JobDatum;
 }
 
-
+interface ReviewDatum {
+  business_id: string;
+  user_id: number;
+  rating: number;
+  review: string;
+  created_at:stringg
+}
+interface ReviewData {
+  data: ReviewDatum[];
+  total: number;
+}
+interface ReviewResponse extends Response {
+  data: ReviewData;
+}
 
 interface AllBusinessesResponse extends Response {
   data: AllBusinessesData;
@@ -87,18 +100,13 @@ interface FlagJob {
   applicant_id: stirng;
   action: string;
   reason: string;
-
 }
-
 
 interface FlagJob {
   job_id: string;
   applicant_id: stirng;
   message: string;
-
 }
-
-
 
 interface AllBusinessesData {
   current_page: number;
@@ -147,10 +155,10 @@ interface AllBusinessesDatum {
   business_hours: hour[];
   gallery: gallery[];
   logo: string;
-  total_followers:number;
-  average_rating:number;
-  instagram:string;
-  related_businesses:any
+  total_followers: number;
+  average_rating: number;
+  instagram: string;
+  related_businesses: any;
 }
 
 interface AllProductData {
@@ -197,15 +205,13 @@ interface ProductDatum {
   updated_at: string;
   url?: string | null;
   user_id: number;
-  local_govt:local_govt;
-  state:state;
-  add_images:add_imagesDatum[];
-  related_ads:RelatedProduct[];
-  user:UserData;
-  views:number;
-  averageRating:string;
-  
-
+  local_govt: local_govt;
+  state: state;
+  add_images: add_imagesDatum[];
+  related_ads: RelatedProduct[];
+  user: UserData;
+  views: number;
+  averageRating: string;
 }
 
 interface RelatedProduct {
@@ -216,32 +222,30 @@ interface RelatedProduct {
   discount_price: number;
   add_images: add_imagesDatum[];
   created_at: string;
-  local_govt?: local_govt
-  state?: state; 
+  local_govt?: local_govt;
+  state?: state;
 }
 
-interface local_govt{
-  id:number;
-  local_government_area:string
+interface local_govt {
+  id: number;
+  local_government_area: string;
 }
-interface state{
-  id:number;
-  state_name:string;
+interface state {
+  id: number;
+  state_name: string;
 }
 
 interface add_imagesDatum {
-  add_image:string;
-  add_id:number;
-  id:number;
-  is_featured:number;
+  add_image: string;
+  add_id: number;
+  id: number;
+  is_featured: number;
 }
-
-
 
 interface ProffessionDetails {
   specialization: string;
-  cv_url:string;
-  cover_letter_url:string;
+  cv_url: string;
+  cover_letter_url: string;
   // employment_history: EmploymentHistory[];
   // education: Education[];
   // skill: string[];
@@ -251,8 +255,6 @@ interface ProffessionDetails {
 interface applicantDetailsResponse extends Response {
   data: ProffessionDetails;
 }
-
-
 
 interface Applicant {
   id: number;
@@ -265,7 +267,7 @@ interface Applicant {
   links?: Link[];
   created_at: string;
   updated_at: string;
-  skills
+  skills;
 }
 
 // interface Education {
@@ -274,7 +276,6 @@ interface Applicant {
 //   start_date: string;
 //   end_date: string;
 // }
-
 
 // interface Link {
 //   url: string;
@@ -326,17 +327,12 @@ interface UserData {
   updated_at: string;
   website_address: string | null;
   applicant?: Applicant;
-
-
 }
-
 
 interface UserDataResponse extends Response {
   data: UserData;
-  message:string;
+  message: string;
 }
-
-
 
 interface Banner {
   brand_url: string;
@@ -353,7 +349,6 @@ interface Banner {
   title: string;
   updated_at: string;
 }
-
 
 interface PromotedAdsResponse {
   current_page: number;
@@ -399,4 +394,21 @@ interface CategoryDatum {
   resize_image: string;
   created_at: string;
   updated_at: string;
+}
+
+interface Payload {
+  skills?:SkillsData[],
+  jobLink?:LinkData[],
+  Education?:Education[],
+  EmpHistory?:EmploymentHistory[],
+  coverLetter?:any,
+}
+
+
+
+interface FollowBusiness {
+  business_id:number,
+  user_id:number,
+  action:string,
+
 }

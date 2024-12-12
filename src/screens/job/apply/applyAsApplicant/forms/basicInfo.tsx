@@ -14,7 +14,6 @@ interface ComponentProps {
 const BasicInfoForm: FC<ComponentProps> = ({ handleNext }) => {
   // const basicInfoFormData = useSetAtom(EducationInfoAtom);
   const user = useAtomValue(userAtom);
-  console.log(user, 'userd jum')
 
   return (
     <section>

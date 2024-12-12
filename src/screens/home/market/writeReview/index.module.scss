@@ -31,11 +31,12 @@
     font-weight: 600;
     font-size: 1.8rem;
     border-bottom: #d9d9d9 1px solid;
+    padding-block-end: 1.6rem;
   }
 }
 
 .adding {
-  padding-block-start: 2.3rem;
+  padding-block-start: 2.3rem !important;
 }
 .reviewInput {
   margin-block-end: 6.4rem;
@@ -81,7 +82,7 @@
   text-align: start;
   border: solid 1px var(--color-grey);
   margin-block-end: 2rem;
-  padding-block: 2.4rem;
+  padding-block: 2.4rem !important;
 }
 
 .submittedCard {

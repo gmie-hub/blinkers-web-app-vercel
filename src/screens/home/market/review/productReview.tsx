@@ -11,7 +11,7 @@ import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";
 
 
-export default function AllReviews() {
+export default function AllProductReviews() {
   const navigate = useNavigate();
   const { id } = useParams();
 

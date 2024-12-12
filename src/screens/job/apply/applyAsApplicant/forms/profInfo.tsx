@@ -24,10 +24,7 @@ import {
 } from "../../../../../utils/store";
 import { useAtom } from "jotai";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import {
-  getApplicantsbyId,
-  ProfInfoApi,
-} from "../../../../request";
+import { getApplicantsbyId, ProfInfoApi } from "../../../../request";
 import {
   Education,
   EmploymentHistory,
@@ -41,16 +38,26 @@ import { useNavigate } from "react-router-dom";
 import CustomSpin from "../../../../../customs/spin";
 import api from "../../../../../utils/apiClient";
 
+interface Payload {
+  skills?: SkillsData[];
+  jobLink?: LinkData[];
+  Education?: Education[];
+  EmpHistory?: EmploymentHistory[];
+  coverLetter?: any;
+}
 
 const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openModals, setOpenModals] = useState<{ [key: string]: boolean }>({});
   const [indexData, setIndexData] = useState<any>(null);
+  const [index, setIndex] = useState<number>(0);
   const [openSuccess, setOpenSuccess] = useState(false);
-  const [educationInfoData,setEducationInfoData] = useAtom(EducationInfoAtom);
-  const [empHistoryInfoData,setEmpHistoryInfoData] = useAtom(EmploymentHistoryInfoAtom);
+  const [educationInfoData, setEducationInfoData] = useAtom(EducationInfoAtom);
+  const [empHistoryInfoData, setEmpHistoryInfoData] = useAtom(
+    EmploymentHistoryInfoAtom
+  );
   const [skillsData, setSkillsData] = useAtom(SkilsInfoAtom);
-  const [linksData,setLinkData] = useAtom(LinkInfoAtom);
+  const [linksData, setLinkData] = useAtom(LinkInfoAtom);
   const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
   const [showAllSkills, setShowAllSkills] = useState(false);
@@ -65,7 +72,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     string | null
   >(null);
 
-  const queryClient =useQueryClient()
+  const queryClient = useQueryClient();
   // const [emp, setEmp] = useState([] as EmploymentHistory[]);
 
   const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
@@ -74,7 +81,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const handleCoverLetterUpload = (file: any) => {
     setUploadedCoverLetter(file);
   };
-
 
   const clearLocalStorageData = () => {
     const keysToClear = [
@@ -132,9 +138,10 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     }
   }, [uploadedCoverLetter]);
 
-  const handleEdit = (data: any, sectionKey: string) => {
+  const handleEdit = (data: any, sectionKey: string, index: number) => {
     setIndexData(data);
     setOpenModals((prev) => ({ ...prev, [sectionKey]: true }));
+    setIndex(index);
   };
 
   const handleCloseEdit = (sectionKey: string) => {
@@ -153,23 +160,32 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     ],
   });
 
-  useEffect(()=>{
-  if(user?.is_applicant && getApplicantQuery?.isFetched){
-    setLinkData(applicantDetailsData?.links || [])
-    setSkillsData(applicantDetailsData?.skills || [])
-    setEducationInfoData(applicantDetailsData?.education || [])
-    setEmpHistoryInfoData(applicantDetailsData?.employment_history || [])
-  }
-},[user?.is_applicant , getApplicantQuery?.isFetched,   ])
-
-
   const applicantDetailsData = getApplicantQuery?.data?.data?.applicant;
   const applicantDetailsError = getApplicantQuery?.error as AxiosError;
   const applicantDetailsErrorMessage =
     applicantDetailsError?.message ||
     "An error occurred. Please try again later.";
 
-  console.log(applicantDetailsData, "applicantDetailsData");
+  useEffect(() => {
+    // if (
+    //   (user?.is_applicant && getApplicantQuery?.isFetched) ||
+    //   (user?.is_applicant && getApplicantQuery?.isSuccess)
+    // ) {
+      if (
+        user?.is_applicant &&
+        (getApplicantQuery?.isFetched && getApplicantQuery?.isSuccess)
+      ) {
+      setLinkData(applicantDetailsData?.links || []);
+      setSkillsData(applicantDetailsData?.skills || []);
+      setEducationInfoData(applicantDetailsData?.education || []);
+      setEmpHistoryInfoData(applicantDetailsData?.employment_history || []);
+    }
+  }, [
+    user?.is_applicant,
+    getApplicantQuery?.isFetched,
+    getApplicantQuery?.isSuccess,
+    applicantDetailsData,
+  ]);
 
   const emphistoryToDisplay =
     empHistoryInfoData?.length === 0
@@ -280,7 +296,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(`employment_history[${index}][location]`, item?.location);
       formData.append(
         `employment_history[${index}].employment_type]`,
-        item?.WorkArrangement
+        item?.employment_type
       );
       formData.append(
         `employment_history[${index}][start_date]`,
@@ -289,11 +305,11 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(`employment_history[${index}][end_date]`, item?.end_date);
       formData.append(
         `employment_history[${index}][summary]`,
-        item?.WorkSummary
+        item?.summary
       );
       formData.append(
         `employment_history[${index}][current_work]`,
-        item?.currentWork?.toString()
+        item?.current_work?.toString()
       );
     });
 
@@ -310,7 +326,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(`education[${index}][end_date]`, item?.end_date);
       formData.append(
         `education[${index}][studying]`,
-        item?.stillStudying?.toString()
+        item?.studying?.toString()
       );
     });
 
@@ -328,8 +344,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     try {
       await createProfInfoMutation.mutateAsync(formData, {
         onSuccess: () => {
-      
-          
           resetForm();
           setOpenSuccess(true);
           clearLocalStorageData();
@@ -356,22 +370,22 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
   const UpdateProfInfoApi = async (payload: any) => {
     return (
-      await api.patch(`/applicants/${applicantDetailsData?.id}`, payload, {
-        // headers: { "Content-Type": "multipart/form-data" },
+      await api.post(`/applicants/${applicantDetailsData?.id}`, payload, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
     )?.data;
   };
-
 
   const EditProfInfoMutation = useMutation({
     mutationFn: UpdateProfInfoApi,
     mutationKey: ["update-info"],
   });
 
-
-
-  const updateInfoHandler = async (values: FormikValues, resetForm: () => void) => {
+  const updateInfoHandler = async (values: FormikValues, data: Payload) => {
     // Create a plain object to store the data
+
+    console.log(values);
+
     const payload: Record<string, any> = {
       specialization: values?.specialization,
       employment_history: [],
@@ -380,25 +394,26 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       links: [],
       id: user?.id || null,
       name: user?.name || null,
+      _method: "patch",
     };
-  
+
     // Append employment history
-    empHistoryInfoData?.forEach((item: EmploymentHistory) => {
+    data?.EmpHistory?.forEach((item: EmploymentHistory) => {
       payload.employment_history.push({
         job_title: item?.job_title,
         job_type: item?.job_type,
         company_name: item?.company_name,
         location: item?.location,
-        employment_type: item?.WorkArrangement,
+        employment_type: item?.employment_type,
         start_date: item?.start_date,
         end_date: item?.end_date,
-        summary: item?.WorkSummary,
-        current_work: item?.currentWork,
+        summary: item?.summary,
+        current_work: item?.current_work  ? 1 : 0,
       });
     });
-  
+
     // Append education history
-    educationInfoData?.forEach((item: Education) => {
+    data?.Education?.forEach((item: Education) => {
       payload.education.push({
         institution: item?.institution,
         degree: item?.degree,
@@ -406,35 +421,35 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         grade: item?.Grade,
         start_date: item?.start_date,
         end_date: item?.end_date,
-        studying: item?.stillStudying,
+        studying: item?.studying ? 1 : 0,
       });
     });
-  
+
     // Append skills
-    skillsData?.forEach((item: any) => {
+    data?.skills?.forEach((item: any) => {
       const skills = item?.skills || item;
       payload.skills.push(skills);
     });
-  
+
     // Append links
-    linksData?.forEach((item: LinkData) => {
+    data?.jobLink?.forEach((item: LinkData) => {
       payload.links.push({
         type: item?.type,
         url: item?.url,
       });
     });
-  
+
     // Add uploaded files if available
     if (upload) {
       payload.cv = upload;
     }
-  
+
     if (uploadedCoverLetter) {
       payload.cover_letter = uploadedCoverLetter;
     }
-  
+
     if (!applicantDetailsData) return;
-  
+
     try {
       await EditProfInfoMutation.mutateAsync(payload, {
         onSuccess: (data) => {
@@ -442,7 +457,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
             message: "Success",
             description: data?.message,
           });
-          resetForm();
+          // clearLocalStorageData()
           queryClient.refetchQueries({
             queryKey: ["get-applicant"],
           });
@@ -455,7 +470,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       });
     }
   };
-  
+
   const handleSucessPost = () => {
     setOpenSuccess(false);
     navigate(routes?.job?.job);
@@ -463,10 +478,8 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
   const validationSchema = Yup.object().shape({
     cv: Yup.mixed().required("Cover letter is required"),
-    specialization: Yup.string()
-    .required("required") 
+    specialization: Yup.string().required("required"),
   });
-
 
   return (
     <section>
@@ -479,14 +492,12 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           initialValues={{
             cv: applicantDetailsData?.cv_url || "",
             specialization: applicantDetailsData?.specialization || "",
-       
           }}
           enableReinitialize={true}
           onSubmit={(values, { resetForm }) => {
-            applicantDetailsData !== null ?
-               updateInfoHandler(values, resetForm)
-              : 
-              ProfInfoHandler(values, resetForm);
+            applicantDetailsData !== null
+              ? updateInfoHandler(values, {})
+              : ProfInfoHandler(values, resetForm);
           }}
           validationSchema={validationSchema}
         >
@@ -571,7 +582,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                         />
                       </div>
                     </div>
-                    {applicantDetailsData === null && <p>{section.description}</p>}{" "}
+                    {applicantDetailsData === null && (
+                      <p>{section.description}</p>
+                    )}{" "}
                     {section.key === "employment" &&
                       emphistoryToDisplay &&
                       emphistoryToDisplay?.length > 0 && (
@@ -586,7 +599,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                                 src={edit}
                                 alt="edit"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => handleEdit(item, section.key)}
+                                onClick={() =>
+                                  handleEdit(item, section.key, idx)
+                                }
                               />
                             </div>
                           ))}
@@ -624,7 +639,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                                 src={edit}
                                 alt="edit"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => handleEdit(item, section.key)}
+                                onClick={() =>
+                                  handleEdit(item, section.key, idx)
+                                }
                               />
                             </div>
                           ))}
@@ -663,7 +680,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                                 src={edit}
                                 alt="edit"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => handleEdit(item, section.key)}
+                                onClick={() =>
+                                  handleEdit(item, section.key, index)
+                                }
                               />
                             </div>
                           ))}
@@ -689,7 +708,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                                 src={edit}
                                 alt="edit"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => handleEdit(item, section.key)}
+                                onClick={() =>
+                                  handleEdit(item, section.key, idx)
+                                }
                               />
                             </div>
                           ))}
@@ -705,6 +726,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                       <section.ModalContent
                         handleClose={() => handleCloseEdit(section.key)}
                         indexData={indexData}
+                        index={index}
                         onUpload={handleCoverLetterUpload}
                         handleSubmit={updateInfoHandler}
                       />
@@ -724,7 +746,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                   variant="green"
                   type="submit"
                   text={
-                   (applicantDetailsData &&( applicantDetailsData !== null || applicantDetailsData  !== undefined))
+                    applicantDetailsData &&
+                    (applicantDetailsData !== null ||
+                      applicantDetailsData !== undefined)
                       ? EditProfInfoMutation?.isPending
                         ? "Updating"
                         : "Update"
@@ -732,7 +756,10 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                       ? "Saving"
                       : "Save"
                   }
-                  disabled={createProfInfoMutation?.isPending || EditProfInfoMutation?.isPending}
+                  disabled={
+                    createProfInfoMutation?.isPending ||
+                    EditProfInfoMutation?.isPending
+                  }
                   className={styles.btn}
                 />
               </section>

@@ -9,18 +9,15 @@ import Image8 from "../../assets/cat1.svg";
 import NotyIcon from "../../assets/notyIcon.svg";
 import ChatIcon from "../../assets/chatyicon.svg";
 import ProfileIcon from "../../assets/Avatarprofile.svg";
-
-import { useAtomValue } from "jotai";
 import { userAtom } from "../../utils/store";
-import { useSetAtom } from "jotai/react";
+import { useAtom, } from "jotai";
 
 const Header = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const user = useAtomValue(userAtom);
-  const setUser = useSetAtom(userAtom); // To update the user state
+  const [user,setUser] = useAtom(userAtom);
 
   console.log(user?.email, "emd");
 

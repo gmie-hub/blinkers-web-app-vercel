@@ -247,7 +247,7 @@ const ProfInfoFormStrive: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   //     formData.append(`employment_history[${index}][location]`, item?.location);
   //     formData.append(
   //       `employment_history[${index}][work_arrangement]`,
-  //       item?.WorkArrangement
+  //       item?.employment_type
   //     );
   //     formData.append(
   //       `employment_history[${index}][start_date]`,
@@ -277,7 +277,7 @@ const ProfInfoFormStrive: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   //     formData.append(`education[${index}][end_date]`, item?.end_date);
   //     formData.append(
   //       `education[${index}][still_studying]`,
-  //       item?.stillStudying.toString()
+  //       item?.studying.toString()
   //     );
   //   });
 

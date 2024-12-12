@@ -8,7 +8,7 @@ interface Education {
     Grade: string;
   // StartDate:string;
   // EndDate:string;
-  stillStudying:boolean;
+  studying:string;
 
 
   institution:string;
@@ -23,11 +23,11 @@ interface EmploymentHistory {
   // JobType: string;
   // CompanyName: string;
   // Location: string;
-  WorkArrangement:string;
+  employment_type:string;
   // StartDate:string;
   // EndDate:string;
-  WorkSummary:string
-  currentWork:boolean
+  summary:string
+  current_work:string
 
 
   company_name:string;

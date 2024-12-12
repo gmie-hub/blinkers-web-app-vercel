@@ -67,7 +67,8 @@ const Jobs = () => {
       });
     } else if (
       user?.claim_status === null ||
-      user?.claim_status?.toString() === '2'
+      user?.claim_status?.toString() === '2' ||
+      user?.claim_status?.toLowerCase() === 'rejected'
     ) {
       setOpenAddBusiness(true);
     } else {
@@ -130,7 +131,7 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            {!user?.is_applicant && (
+            {user?.is_applicant && (
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}

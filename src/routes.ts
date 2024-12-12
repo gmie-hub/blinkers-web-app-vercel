@@ -1,4 +1,3 @@
-
 export const routes = {
   // home: "/",
   page: {
@@ -6,18 +5,17 @@ export const routes = {
     market: "/market",
     productDetails: "/product-details/:id",
     relatedAds: "/related-ads/:id",
-    review: "/review",
-    sellersProfile: "/sellers-profile",
+    review: "/review/:id",
+    productReview: "/product-review/:id",
+    sellersProfile: "/sellers-profile/:id",
     posetedAdsBySeller: "/sellers-posted-ads",
-    writeReview: "/write-review",
+    writeReview: "/write-review/:id",
     ContactUs: "/contact-us",
     AboutUS: "/about-us",
     faq: "/faq",
     homeMarket: "/market/:search",
-
-   
   },
-  job:{
+  job: {
     job: "/jobs",
     homeJob: "/jobs/:search",
     jobDetails: "/job-details/:id",
@@ -26,23 +24,20 @@ export const routes = {
     videos: "/videos",
     RegAsApplicant: "/job/register-as-applicant",
     AddBusiness: "/job/add-business",
-    applyForJob:"/job/apply/:id",
-    postJob:"/post-job",
-
-
+    applyForJob: "/job/apply/:id",
+    postJob: "/post-job",
   },
 
-  directory:{
+  directory: {
     directory: "/directory",
     homeDirectory: "/directory/:search",
     NotClaimed: "/directory-details/:id",
     relatedBusinesses: "/related-businesses/:id",
     Subscription: "/subscription",
-    SubscriptionPricing: "/subscription-pricing",
+    SubscriptionPricing: "/subscription-pricing/:id",
     ClaimedBusiness: "/claimed-business",
-    ClaimBusiness: "/claim-business",
+    ClaimBusiness: "/claim-business/:id",
     SubmittedSuccessfully: "/submittedsuccessfully",
-  
   },
 
   auth: {
@@ -53,18 +48,14 @@ export const routes = {
     passwordResetSuccessful: "/password-reset-successful",
     VerificationCode: "/verification-code/:email",
     ResetVerificationCode: "/reset-password-verification-code/:email/",
-
   },
 };
-
-
-
 
 export const routeParts = {
   [routes.page.market]: {
     route: routes.page.home,
-    name: 'All Business',
-    params: '',
+    name: "All Business",
+    params: "",
     isRoot: true,
   },
   // [routes.directory.viewBusiness]: {

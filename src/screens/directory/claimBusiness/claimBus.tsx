@@ -1,9 +1,9 @@
 import styles from "./claimBus.module.scss";
 import Button from "../../../customs/button/button";
-import { useNavigate } from "react-router-dom";
-import {useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { Image } from "antd";
+import { App, Image } from "antd";
 import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
@@ -12,7 +12,6 @@ import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
 import DoneIcon from "../../../assets/Done.svg";
 import { countUpTo } from "../../home/trend";
 import HeadIcon from "../../../assets/Ehead.svg";
-// import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
 import Upload from "../../../customs/upload/upload";
 import { Form, FormikProvider, FormikValues, useFormik } from "formik";
@@ -20,30 +19,25 @@ import Input from "../../../customs/input/input";
 import TimeIcon from "../../../assets/time42.svg";
 import LocationIcon from "../../../assets/locationnot.svg";
 import CallIcon from "../../../assets/callclaim.svg";
+import { ClaimBusinessApi } from "../../request";
+import { useMutation } from "@tanstack/react-query";
+import { userAtom } from "../../../utils/store";
+import { useAtomValue } from "jotai";
+import RouteIndicator from "../../../customs/routeIndicator";
+import * as Yup from "yup";
 
-// import SellersAds from "./postedAds/adsPostedbySeller";
 const ClaimBusiness = () => {
   const navigate = useNavigate();
   const [showContent, setShowContent] = useState(true); // Manage review form visibility
   const [showCard, setShowCard] = useState(false); // Manage card visibility
-  const [uploadLogo, setUploadLogo] = useState<File | null>(null);
+  const [upload, setUpload] = useState<File | null>(null);
+  const { notification } = App.useApp();
+  const user = useAtomValue(userAtom);
+  const { id } = useParams();
 
   //   const hasReviews = reviewData?.lenght;
   //   console.log(hasReviews , "hasReviews")
 
-  const clearFileLogo = () => {
-    setUploadLogo(null);
-  };
-
-  const handleFileChangeLogo = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setFieldValue: Function
-  ) => {
-    if (!e.target?.files) return;
-    const selectedFile = e.target?.files[0];
-    setUploadLogo(selectedFile);
-    setFieldValue("imageLogo", selectedFile); // Set the file in Formik
-  };
   const handleClaim = () => {
     setShowContent(false); // Hide the review form
     setShowCard(true); // Show the card
@@ -58,18 +52,102 @@ const ClaimBusiness = () => {
   const handleNavigateToSubPlan = () => {
     navigate(`/claimed-business`);
     window.scrollTo(0, 0);
-  }
+  };
 
-  const formik = useFormik<FormikValues>({
+  const createBusinessMutation = useMutation({
+    mutationFn: ClaimBusinessApi,
+  });
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: Function
+  ) => {
+    if (!e.target?.files) return;
+    const selectedFile = e.target?.files[0];
+
+    // Define valid file types
+    const validFileTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
+      "application/msword", // doc
+      "application/vnd.ms-powerpoint", // ppt
+    ];
+
+    // Validate if the file type is valid
+    if (!validFileTypes.includes(selectedFile.type)) {
+      notification.error({
+        message: "Invalid File Type",
+        description:
+          "The logo field must be a file of type: jpg, jpeg, png, gif, docx, doc, ppt.",
+      });
+      return;
+    }
+    setFieldValue("imageFile", selectedFile);
+    setUpload(selectedFile);
+  };
+
+  const clearFile = () => {
+    setUpload(null);
+  };
+  const claimBusinessHandler = async (
+    values: FormikValues,
+    resetForm: () => void
+  ) => {
+    const formData = new FormData();
+    const user_id = user?.id;
+    // const business_id = user?.a
+    if (user_id) {
+      formData.append("user_id", user_id?.toString());
+    }
+    if (id) {
+      formData.append("business_id", id?.toString());
+    }
+    if (upload) {
+      formData.append("doc", upload);
+    }
+    formData.append("message", values?.message);
+
+    try {
+      await createBusinessMutation.mutateAsync(formData, {
+        onSuccess: () => {
+          // notification.success({
+          //   message: 'Success',
+          //   description: data?.message,
+          // });
+          resetForm();
+          clearFile();
+          handleClaim();
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: error?.response?.data?.message,
+      });
+    }
+  };
+
+  const validationSchema = Yup.object().shape({
+    message: Yup.string().required("required"),
+  });
+
+  const formik = useFormik({
     initialValues: {
       message: "",
-      file: "",
+      imageFile: "",
     },
-    onSubmit: () => {},
+    validationSchema: validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      claimBusinessHandler(values, resetForm);
+    },
   });
 
   return (
     <div className={styles.wrapper}>
+     <RouteIndicator showBack/>
       {showContent && (
         <div className={styles.claimWrapper}>
           <div className={styles.top}>
@@ -123,7 +201,11 @@ const ClaimBusiness = () => {
                     </div>
                   </div>
                   <div className={styles.info}>
-                    <Image src={LocationIcon} alt="LocationIcon" preview={false} />
+                    <Image
+                      src={LocationIcon}
+                      alt="LocationIcon"
+                      preview={false}
+                    />
                     4, blinkers street, Lekki, Nigeria
                   </div>
                   <div className={styles.info}>
@@ -156,7 +238,7 @@ const ClaimBusiness = () => {
             </div>
             <div className={styles.rightSection}>
               <FormikProvider value={formik}>
-                <Form>
+                <Form onSubmit={formik.handleSubmit}>
                   <div className={styles.info}>
                     <Image src={HeadIcon} alt="HeadIcon" preview={false} />
 
@@ -168,35 +250,38 @@ const ClaimBusiness = () => {
 
                   <div className={styles.inputContainer}>
                     <div>
-                      <p>Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)</p>
+                      <p>
+                        Upload a document to prove that you’re the owner of this
+                        business (CAC, Business letterhead etc.)
+                      </p>
                       <br />
 
-                    {uploadLogo ? (
-                      <div className="small-gap">
-                        <Image />
-                        <span>{uploadLogo.name}</span>
-                        <Button
-                          onClick={clearFileLogo}
-                          variant="white"
-                          text="x"
-                        />
-                      </div>
-                    ) : (
-                      <Upload
-                        name="imageLogo"
-                        // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
-                        onChange={(e) =>
-                          handleFileChangeLogo(e, formik?.setFieldValue)
-                        }
-                      />
-                    )}
+                      {upload ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "2rem",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <p>{upload.name}</p>
 
+                          <span onClick={clearFile}>X</span>
+                        </div>
+                      ) : (
+                        <Upload
+                          name="imageFile"
+                          // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
+                          onChange={(e) =>
+                            handleFileChange(e, formik?.setFieldValue)
+                          }
+                        />
+                      )}
                     </div>
-                
 
                     <div className={styles.inputCon}>
                       <Input
-                        name="review"
+                        name="message"
                         placeholder="Write a message"
                         type="textarea"
                         label="Additional Message (Optional)"
@@ -204,7 +289,7 @@ const ClaimBusiness = () => {
                     </div>
                   </div>
 
-                  <Button onClick={() => handleClaim()} text="Submit Form" />
+                  <Button disabled={createBusinessMutation?.isPending} type="submit" text={createBusinessMutation?.isPending ? "Loading" : "Submit Form"} />
                 </Form>
               </FormikProvider>
             </div>
@@ -245,10 +330,8 @@ const ClaimBusiness = () => {
               contact you via email.
             </p>
             <Button
-              onClick={() => {
-                handleNavigateToSubPlan();
-              }} // Show review form when "Okay" is clicked
-              text="Okay"
+             text="Okay"
+             onClick={handleNavigateToSubPlan}
             />
           </div>
         </div>
