@@ -197,7 +197,7 @@ const CategoriesCard = ({ handleClose }: Props) => {
       },
       {
         queryKey: ["get-sub-category"],
-        queryFn: () => getSubCategory(),
+        queryFn: () => getSubCategory(1),
         retry: 0,
         refetchOnWindowFocus: true,
       },
