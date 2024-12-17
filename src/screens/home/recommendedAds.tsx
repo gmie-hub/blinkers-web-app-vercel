@@ -5,7 +5,7 @@ import RightIcon from "../../assets/arrow-right.svg";
 import { useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { getPromotedAds, getRecommededAds } from "../request";
+import {  getRecommededAds } from "../request";
 import CustomSpin from "../../customs/spin";
 
 // Main component

@@ -121,7 +121,7 @@ const EmpHistory: FC<ComponentProps> = ({
           handleClose();
           resetForm();
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
         {({ values,  handleChange }) => {
           return (

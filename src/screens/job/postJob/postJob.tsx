@@ -25,21 +25,17 @@ export default function PostJobs() {
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
   const { id } = useParams();
-  const [searchValue, setSearchValue] = useState('');
 
-  const handleSearchChange = (value: string) => {
-    console.log('Search Query:', value); // Access the search query value here
-    setSearchValue(value);
-  };
+ 
 
-  const [getAllBusinessQuery,] = useQueries({
-    queries: [
-      {
-        queryKey: ['get-all-business', searchValue],
-        queryFn: () => getAllBusiness(searchValue),
-        retry: 0,
-        refetchOnWindowFocus: false,
-      },
+  // const [getAllBusinessQuery,] = useQueries({
+  //   queries: [
+      // {
+      //   queryKey: ['get-all-business',],
+      //   queryFn: () => getAllBusiness,
+      //   retry: 0,
+      //   refetchOnWindowFocus: false,
+      // },
       // {
       //   queryKey: ['get-jobs-details'],
       //   queryFn: () => getJobDetails(parseInt(id!)),
@@ -47,23 +43,12 @@ export default function PostJobs() {
       //   refetchOnWindowFocus: false,
       //   enabled: !!id,
       // },
-    ],
-  });
+  //   ],
+  // });
 
   // const JobDetailsData = getJobDetailsQuery?.data?.data;
 // 
-  const businessData = getAllBusinessQuery?.data?.data?.data || [];
 
-  const allBusinessOptions: { value: number; label: string }[] =
-    businessData?.length > 0
-      ? businessData.map((item: AllBusinessesDatum) => ({
-          value: item?.id,
-          label: item?.name,
-        }))
-      : [];
-
-
-  
 
   const createJobMutation = useMutation({
     mutationFn: CreateJob,

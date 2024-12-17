@@ -7,7 +7,6 @@ import { useQueries } from "@tanstack/react-query";
 import { getBusinessById } from "../../request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../../customs/routeIndicator";
-import CustomSpin from "../../../customs/spin";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 
 interface Props {

@@ -80,7 +80,7 @@ const Editor = ({ label, name, onChange, initialData }: EditorProps) => {
             "bulletedList",
           ],
         }}
-        onChange={(event, editor) => {
+        onChange={( editor) => {
           if (onChange && name) {
             onChange(name, editor); // Pass editor instance for use
           }

@@ -46,7 +46,7 @@ interface CheckboxProps {
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ label, name, isChecked, onChange, ...props }) => {
-  const [field, meta, helpers] = useField({ name, type: "checkbox" });
+  const [field, meta, ] = useField({ name, type: "checkbox" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e); // Call Formik's internal onChange

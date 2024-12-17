@@ -1,5 +1,5 @@
 import styles from "./directory.module.scss";
-import { Image, Pagination, PaginationProps } from "antd";
+import { Image, Pagination, } from "antd";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Icon from "/Container.svg";

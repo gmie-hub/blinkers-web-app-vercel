@@ -18,7 +18,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [user,setUser] = useAtom(userAtom);
+  const [user] = useAtom(userAtom);
 
   console.log(user?.email, "emd");
 
@@ -34,12 +34,7 @@ const Header = () => {
     navigate("/profile");
   };
 
-  // const handleLogout = () => {
-  //   // Clear user state and localStorage on logout
-  //   localStorage.removeItem("blinkers-web&site#");
-  //   setUser(null); // Reset the user state
-  //   navigate("/");
-  // };
+
   const handleCategoryClick = () => {
     setIsCardVisible(!isCardVisible);
     setIsOpen(!isOpen);
