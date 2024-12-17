@@ -93,9 +93,7 @@ const RelatedBusinesses = ({
             <p>Related Businesses</p>
           </div>
         )}
-        {getBusinessDetailsQuery?.isLoading ? (
-          <CustomSpin />
-        ) : getBusinessDetailsQuery?.isError ? (
+        { getBusinessDetailsQuery?.isError ? (
           <h1 className="error">{businessDetailsErrorMessage}</h1>
         ) : (
           <section className={styles.promoImageContainer}>

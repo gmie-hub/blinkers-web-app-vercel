@@ -2,18 +2,20 @@ import styles from "./review.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
-import { Image } from "antd";
+import { Image, Pagination } from "antd";
 import BackIncon from "../../../../assets/back.svg";
 import { AxiosError } from "axios";
 import { getAllReviews } from "../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";
+import usePagination from "../../../../hooks/usePagnation";
 
 
 export default function AllReviews() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { currentPage, setCurrentPage, onChange } = usePagination();
 
   const handleNavigateToBack = 
     () => {
@@ -25,8 +27,8 @@ export default function AllReviews() {
     const [getAllReviewQuery] = useQueries({
       queries: [
         {
-          queryKey: ["get-all-review", id],
-          queryFn: () => getAllReviews(id!),
+          queryKey: ["get-all-review", id,currentPage],
+          queryFn: () => getAllReviews(id!,currentPage),
           retry: 0,
           refetchOnWindowFocus: false,
         },
@@ -95,6 +97,22 @@ export default function AllReviews() {
           </div>
       )}
         </div>
+        <Pagination
+              current={currentPage}
+              total={getAllReviewQuery?.data?.data?.total}
+              pageSize={20} // Items per page
+              onChange={(page) => {
+                setCurrentPage(page);
+                onChange(page);
+              }}
+              showSizeChanger={false}
+              style={{
+                marginTop: "20px",
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            />
     </div>
   );
 }

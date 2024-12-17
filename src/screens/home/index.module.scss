@@ -101,8 +101,8 @@
   gap: 1rem; /* Adds a gap between the images */
   width: 100%; /* Container takes full width */
   box-sizing: border-box; /* Padding and border don't affect width calculation */
-  justify-content: space-between; /* Ensures images are evenly spaced across the row */
-  height: 26rem;
+  // justify-content: space-between; /* Ensures images are evenly spaced across the row */
+  // height: 26rem;
   align-items: center;
   @media (max-width: 640px) {
     height: auto; /* Allow the height to be dynamic on smaller screens */
@@ -117,11 +117,13 @@
   box-sizing: border-box; /* Includes padding and border in width calculations */
 
   img {
-    border-radius: 1rem;
-    width: 100%; /* Ensures the image fills the container */
-    height: auto; /* Maintains the image's aspect ratio */
-    object-fit: contain; /* Ensures the image fits within the container without distortion */
+    object-fit: cover; 
+    // height: 14rem;
+    width: 100%;
   }
+}
+.proImage {
+  height: 26rem !important;
 }
 
 @media (max-width: 1024px) {

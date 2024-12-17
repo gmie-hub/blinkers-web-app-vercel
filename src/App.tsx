@@ -5,7 +5,7 @@ import { routes } from "./routes";
 import Layout from "./layouts/pageLayout";
 import Directory from "./screens/directory/directory";
 import SubscriptionPricing from "./screens/directory/subscriptionPlan/subPlan";
-import NotClaim from "./screens/directory/notClaim/notClaim";
+import NotClaim from "./screens/directory/notClaim/directoryDetails";
 import ClaimBusiness from "./screens/directory/claimBusiness/claimBus";
 // import ClaimedBusiness from "./screens/directory/claimed/claimed";
 import RelatedBusinesses from "./screens/directory/relatedBusinesses/relatedBusiness";
@@ -16,7 +16,7 @@ import Review from "./screens/home/market/review/review";
 import ProductReview from "./screens/home/market/review/productReview";
 import SellersProfile from "./screens/home/sellersProfile/sellersProfile";
 import SellersPostedAds from "./screens/home/sellersProfile/postedAds/adsPostedbySeller";
-import WriteReview from "./screens/home/market/writeReview/writeReview";
+import WriteReview from "./screens/home/market/writeReview/reviewBusiness";
 import SubmittedSuccessfully from "./customs/detailsubmitted";
 import Login from "./screens/Auth/login";
 import SignUp from "./screens/Auth/signUp";
@@ -40,6 +40,7 @@ import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
 
 import Images from "./screens/directory/gallery/image";
 import Videos from "./screens/directory/gallery/video";
+import Profile from "./screens/profile/profile";
 
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
 
     { path: routes.page.sellersProfile, element: <SellersProfile /> },
     { path: routes.page.posetedAdsBySeller, element: <SellersPostedAds /> },
-    { path: routes.page.writeReview, element: <WriteReview /> },
+    { path: routes.page.writeReviewForBusiness, element: <WriteReview /> },
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },
@@ -82,6 +83,8 @@ function App() {
     { path: routes.job.AddBusiness, element: <AddBusiness /> },
     { path: routes.job.applyForJob, element: <ApplyForJob /> },
     { path: routes.job.postJob, element: <PostJob /> },
+
+    { path: routes.profile.profile, element: <Profile /> },
 
 
  

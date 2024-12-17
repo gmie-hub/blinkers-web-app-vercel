@@ -1,15 +1,29 @@
 import { message } from "antd";
 import api from "../utils/apiClient";
 
-export const getAllReviews = async (id: string) => {
-  return (await api.get(`business/reviews?business_id=${id}`))
-    ?.data as ReviewResponse;
+// export const getAllReviews = async (id: string,page?:number) => {
+//   return (await api.get(`business/reviews?business_id=${id}&page=${page}`))
+//     ?.data as ReviewResponse;
+// };
+
+export const getAllReviews = async (id: string, page?: number) => {
+  const url = page 
+    ? `business/reviews?business_id=${id}&page=${page}`
+    : `business/reviews?business_id=${id}`;
+    
+  return (await api.get(url))?.data as ReviewResponse;
 };
 
 export const getAllJobs = async (page: number, search?: string | number) => {
   return (await api.get(`jobs?page=${page}&search=${search}`))
     ?.data as JobResponse;
 };
+
+// export const getAllJobs = async (page: number, search?: string | number) => {
+//   const url = search ? `jobs?page=${page}&search=${search}` : `jobs?page=${page}`;
+//   return (await api.get(url))?.data as JobResponse;
+// };
+
 
 
 export const getJobDetails = async (id: number) => {
@@ -20,15 +34,19 @@ export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };
 
-export const getAllCategory = async (search:string | number) => {
-  return (await api.get(`categories?search=${search}`))?.data as CategoryResponse;
+export const getSubCategory = async (id: number) => {
+  return (await api.get(`categories/sub?category_id=${id}`))?.data as CategoryResponse;
+};
+export const getAllCategory = async (search?: string | number) => {
+  const url = search ? `categories?search=${search}&per_page=${100}` : `categories?per_page=${100}`;
+  return (await api.get(url))?.data as CategoryResponse;
 };
 
 export const getTrendingAds = async () => {
   return (await api.get(`ads/trending`))?.data as any;
 };
 export const getRecommededAds = async () => {
-  return (await api.get(`/recommended?type=${'ads'}`))?.data as any;
+  return (await api.get(`/recommendations?type=${'ads'}`))?.data as any;
 };
 
 
@@ -114,6 +132,14 @@ export const getApplicantsbyId = async (id: number) => {
 export const getBusinessById = async (id: number) => {
   return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;
 };
+export const getFollowersByUser_id = async (user_id: number) => {
+  return (await api.get(`business/followers?user_id=${user_id}`))?.data as BusinessFollowersResponse;
+};
+export const getFollowersByBusiness_id = async (business_id: number) => {
+  return (await api.get(`business/followers?business_id=${business_id}`))?.data as BusinessFollowersResponse;
+};
+
+
 
 
 

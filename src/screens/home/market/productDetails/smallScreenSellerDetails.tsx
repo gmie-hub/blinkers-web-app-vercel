@@ -1,6 +1,5 @@
 import styles from "./smallscreen.module.scss";
 import { Image, Modal, Tabs, TabsProps } from "antd";
-import ProductIcon from "../../../../assets/Ellipse 840.svg";
 import Button from "../../../../customs/button/button";
 import WhatsappLogo from "../../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../../assets/instagram.svg";
@@ -25,9 +24,10 @@ import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
-import { getTimeAgo } from "../../../../utils/formatTime";
+import { formatDateToMonthYear, getTimeAgo } from "../../../../utils/formatTime";
 import { handleCopyLink } from "../../../request";
-
+import { userAtom } from "../../../../utils/store";
+import { useAtomValue } from "jotai";
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
   { key: 2, text: "Try to meet at a safe, public location." },
@@ -39,21 +39,30 @@ const safetyTips = [
   },
 ];
 
-
-
-
 interface Props {
   productDetailsData?: ProductDatum;
+  handleFollowBusiness?: () => void;
+  followBusinessMutation?: boolean;
+  userExists?:boolean;
+  businessDetailsData?:AllBusinessesDatum
+  
 }
 
-const SmallScreen = ({ productDetailsData }: Props) => {
+const SmallScreen = ({
+  productDetailsData,
+  handleFollowBusiness,
+  followBusinessMutation,
+  businessDetailsData,
+  userExists,
+}: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
   const navigate = useNavigate();
   const [flagSeller, setFlagSeller] = useState(false);
   const { id } = useParams();
   const [isNumberVisible, setIsNumberVisible] = useState(false);
-
+  const user = useAtomValue(userAtom);
+  const currenthref = location.href;
 
   const items: TabsProps["items"] = [
     {
@@ -86,9 +95,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
   const handleShowNumber = (textToCopy: string) => {
     setIsNumberVisible(true);
     if (isNumberVisible) {
-      handleCopyLink(textToCopy)
-      };
-    
+      handleCopyLink(textToCopy);
+    }
   };
 
   return (
@@ -100,17 +108,30 @@ const SmallScreen = ({ productDetailsData }: Props) => {
               <h2 style={{ display: "flex" }}>{productDetailsData?.title}</h2>
               <p className={styles.fashion}>Fashion Accessories</p>{" "}
               <div className={styles.accessories}>
-                <h2 className={styles.payment}>₦{productDetailsData?.discount_price || productDetailsData?.price}</h2>
+                <h2 className={styles.payment}>
+                  ₦
+                  {productDetailsData?.discount_price ||
+                    productDetailsData?.price}
+                </h2>
                 <div className={styles.eye}>
                   <Image src={TimeIcon} alt={TimeIcon} preview={false} />
-                  <p> Posted {getTimeAgo(productDetailsData?.created_at || '')}</p>
+                  <p>
+                    {" "}
+                    Posted {getTimeAgo(productDetailsData?.created_at || "")}
+                  </p>
                 </div>
                 <div className={styles.eye}>
                   <Image src={EyeIcon} alt={EyeIcon} preview={false} />
-                  <p>{productDetailsData?.views} {productDetailsData?.views && productDetailsData?.views < 2 ? 'View':'Views'}</p>
-                  </div>
+                  <p>
+                    {productDetailsData?.views}{" "}
+                    {productDetailsData?.views && productDetailsData?.views < 2
+                      ? "View"
+                      : "Views"}
+                  </p>
+                </div>
                 <p className={styles.payment}>
-                  <span className={styles.title}>State:</span> {productDetailsData?.state?.state_name}
+                  <span className={styles.title}>State:</span>{" "}
+                  {productDetailsData?.state?.state_name}
                 </p>
                 <p>
                   <span className={styles.title}>Local Government Area:</span>{" "}
@@ -121,12 +142,12 @@ const SmallScreen = ({ productDetailsData }: Props) => {
 
             <div className={styles.leftContainer}>
               <div className={styles.firstSideLeft}>
-                {productDetailsData?.add_images?.map((dress)=> (
+                {productDetailsData?.add_images?.map((dress) => (
                   <div key={dress.id} className={styles.dressCard}>
                     <div>
                       <Image
-                          width={"5.3rem"}
-                          height={"4.4rem"}
+                        width={"5.3rem"}
+                        height={"4.4rem"}
                         src={dress.add_image}
                         alt={dress.add_image}
                         preview={true}
@@ -157,7 +178,8 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                   <Image
                     width={"100%"}
                     //   maxWidth={10}
-                    src={productDetailsData?.add_images[0]?.add_image}                    alt="Product2"
+                    src={productDetailsData?.add_images[0]?.add_image}
+                    alt="Product2"
                     preview={false}
                     // alt={"my-product"}
                     className={styles.productImage}
@@ -204,14 +226,16 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                 <div className={styles.card}>
                   <p className={styles.seller}>Seller’s Information </p>
                   <div className={styles.flexSeller}>
-                    <Image
-                      src={ProductIcon}
+                    <img
+                      src={businessDetailsData?.logo}
                       width={"2rem"}
                       alt="ProductIcon"
-                      preview={false}
+                      className={styles.sellerLogo}
                     />
                     <div>
-                      <p className={styles.name}>{productDetailsData?.user?.name}</p>
+                      <p className={styles.name}>
+                      {businessDetailsData?.name}
+                      </p>
                       <div className={styles.starWrapper}>
                         <span className={styles.star}>
                           <Image
@@ -220,14 +244,19 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                             alt="StarYellow"
                             preview={false}
                           />
-                          ({productDetailsData?.averageRating } ratings)
-                          </span>
+                         ( {businessDetailsData?.total_rating}{" "}
+                          {businessDetailsData &&
+                          businessDetailsData?.total_rating > 1
+                            ? "ratings"
+                            : "rating"}
+                          )
+                        </span>
                         <span className={styles.dot}>.</span>{" "}
-                        <span>10 Followers</span>
+                        <span>{businessDetailsData?.total_followers}{businessDetailsData && businessDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span>
                       </div>
                     </div>
-                    <p className={styles.member}>Member Since Sept 2024</p>
-                  </div>
+                    <p>Member Since {formatDateToMonthYear(businessDetailsData?.created_at || '')}</p>
+                    </div>
 
                   <div className={styles.social}>
                     <Image
@@ -255,8 +284,23 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                       text="View Profile"
                     />
                     <br />
+                    { user?.id !== businessDetailsData?.user_id &&
 
-                    <Button text="Follow" variant="white" />
+                    <Button
+                      variant="white"
+                      onClick={handleFollowBusiness}
+                      disabled={followBusinessMutation}
+                      text={
+                        userExists
+                          ? followBusinessMutation
+                            ? "Unfollowing"
+                            : "Unfollow"
+                          : followBusinessMutation
+                          ? "Following"
+                          : "Follow"
+                      }
+                    />
+}
                   </div>
 
                   <Button
@@ -265,11 +309,12 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                     }
                     text={
                       isNumberVisible
-                        ? productDetailsData?.user?.number || 'No phone number'
+                        ? productDetailsData?.user?.number || "No phone number"
                         : "Click To Show Number"
                     }
-                    onClick={()=>handleShowNumber(productDetailsData?.user?.number || '')}
-
+                    onClick={() =>
+                      handleShowNumber(productDetailsData?.user?.number || "")
+                    }
                   />
 
                   <div className={styles.flag}>
@@ -293,8 +338,9 @@ const SmallScreen = ({ productDetailsData }: Props) => {
                     }
                     text="Copy URL"
                     variant="noBg"
-                    onClick={()=>{handleCopyLink(productDetailsData?.url  ||'')}}
-
+                    onClick={() => {
+                      handleCopyLink(currenthref || "");
+                    }}
                   />
 
                   <div className={styles.chatCart}>

@@ -189,12 +189,15 @@ const Login = () => {
                     <Field name="phoneNumber">
                       {({ field, form }: FieldProps) => (
                         <PhoneInput
-                          country={"us"} // Default country
+                          country={"ng"} // Default country
                           value={field.value} // Directly use Formik field's value
                           onChange={(phoneNumber) =>
                             form.setFieldValue("phoneNumber", phoneNumber)
                           } // Update Formik state
                           inputStyle={{ width: "100%" }}
+                          preferredCountries={["ng", "gb", "gh", "cm"]} 
+                          onlyCountries={["ng", "gb", "gh", "cm"]} 
+                          placeholder="Enter phone numer"
                         />
                       )}
                     </Field>

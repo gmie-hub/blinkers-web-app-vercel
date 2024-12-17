@@ -119,14 +119,7 @@
   align-items: center;
 }
 
-// .detailsflex{
-//     display: flex;
-//     flex-direction: column;
-//     & > span{
-//         padding-inline: 3.2rem !important;
-//     }
 
-// }
 
 .name {
   color: var(--color-header-text);
@@ -244,4 +237,10 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.sellerLogo{
+  border-radius: 50%;
+  width: 8rem;
+  height: 8rem;
 }

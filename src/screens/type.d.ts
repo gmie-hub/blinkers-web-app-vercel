@@ -101,6 +101,20 @@ interface FlagJob {
   action: string;
   reason: string;
 }
+interface FollowBusinessDatum{
+business_id: number
+created_at:  string
+id: number
+updated_at : string
+user_id : number
+}
+
+interface BusinessFollowersResponse extends Response {
+  data: BusinessFollowersData;
+}
+interface BusinessFollowersData {
+  data:FollowBusinessDatum[]
+}
 
 interface FlagJob {
   job_id: string;
@@ -212,6 +226,7 @@ interface ProductDatum {
   user: UserData;
   views: number;
   averageRating: string;
+  user_id:number;
 }
 
 interface RelatedProduct {

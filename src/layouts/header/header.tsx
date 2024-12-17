@@ -11,6 +11,7 @@ import ChatIcon from "../../assets/chatyicon.svg";
 import ProfileIcon from "../../assets/Avatarprofile.svg";
 import { userAtom } from "../../utils/store";
 import { useAtom, } from "jotai";
+import { logout } from "../../utils/logout";
 
 const Header = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
@@ -33,12 +34,12 @@ const Header = () => {
     navigate("/profile");
   };
 
-  const handleLogout = () => {
-    // Clear user state and localStorage on logout
-    localStorage.removeItem("blinkers-web&site#");
-    setUser(null); // Reset the user state
-    navigate("/");
-  };
+  // const handleLogout = () => {
+  //   // Clear user state and localStorage on logout
+  //   localStorage.removeItem("blinkers-web&site#");
+  //   setUser(null); // Reset the user state
+  //   navigate("/");
+  // };
   const handleCategoryClick = () => {
     setIsCardVisible(!isCardVisible);
     setIsOpen(!isOpen);
@@ -53,7 +54,7 @@ const Header = () => {
       <Menu.Item key="1" onClick={handleNavigateToProfile}>
         View Profile
       </Menu.Item>
-      <Menu.Item key="2" onClick={handleLogout}>
+      <Menu.Item key="2" onClick={logout}>
         Logout
       </Menu.Item>
     </Menu>

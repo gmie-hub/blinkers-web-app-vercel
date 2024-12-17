@@ -16,11 +16,13 @@ const ApplyAsApplicant = () => {
   const next = useCallback(() => {
     setCurrent(current + 1);
     setDisplayForm((prevState) => !prevState);
+    window.scroll(0,0)
   }, [current]);
 
   const prev = useCallback(() => {
     setCurrent(current - 1);
     setDisplayForm((prevState) => !prevState);
+    window.scroll(0,0)
   }, [current]);
 
   

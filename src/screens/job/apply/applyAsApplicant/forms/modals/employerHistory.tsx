@@ -85,7 +85,7 @@ const EmpHistory: FC<ComponentProps> = ({
           start_date: convertDate(indexData?.start_date) || "",
           end_date: convertDate(indexData?.end_date) || "",
           employment_type: indexData?.employment_type || "",
-          summary:indexData?.summary  && indexData?.summary || "jj",
+          summary:indexData?.summary  && indexData?.summary || "",
           current_work:
             indexData?.current_work && indexData?.current_work?.toString() === "1"
               ? true
@@ -121,7 +121,7 @@ const EmpHistory: FC<ComponentProps> = ({
           handleClose();
           resetForm();
         }}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
       >
         {({ values,  handleChange }) => {
           return (

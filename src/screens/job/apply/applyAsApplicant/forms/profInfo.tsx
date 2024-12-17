@@ -301,15 +301,17 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(
         `employment_history[${index}][start_date]`,
         item?.start_date
-      );
+      );if(item?.end_date){
       formData.append(`employment_history[${index}][end_date]`, item?.end_date);
+      }
       formData.append(
         `employment_history[${index}][summary]`,
         item?.summary
       );
+    
       formData.append(
         `employment_history[${index}][current_work]`,
-        item?.current_work?.toString()
+        item && item?.current_work ? '1' : '0'
       );
     });
 
@@ -323,16 +325,18 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       );
       formData.append(`education[${index}][grade]`, item?.Grade);
       formData.append(`education[${index}][start_date]`, item?.start_date);
+      if(item?.end_date){
       formData.append(`education[${index}][end_date]`, item?.end_date);
+      }
       formData.append(
         `education[${index}][studying]`,
-        item?.studying?.toString()
+        item?.studying ? '1' : '0'
       );
     });
 
     // Append skills as an array
-    skillsData?.forEach((item: SkillsData, index: number) => {
-      formData.append(`skills[${index}]`, item?.skills);
+    skillsData?.forEach((item: any, index: number) => {
+      formData.append(`skills[${index}]`, item );
     });
 
     // Append links as an array
@@ -361,10 +365,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         message: "Error",
         description: "An error occurred while submitting your information.",
       });
-      setUser((prevUser: any) => ({
-        ...prevUser,
-        is_applicant: false,
-      }));
+      
     }
   };
 
@@ -406,10 +407,12 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         location: item?.location,
         employment_type: item?.employment_type,
         start_date: item?.start_date,
-        end_date: item?.end_date,
+        // end_date:item?.end_date,
         summary: item?.summary,
-        current_work: item?.current_work  ? 1 : 0,
+        ...(item?.end_date && { end_date: item?.end_date }), 
+        current_work: item?.current_work  ? '1' : '0',
       });
+      
     });
 
     // Append education history
@@ -420,14 +423,15 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         field_of_study: item?.field_of_study,
         grade: item?.Grade,
         start_date: item?.start_date,
-        end_date: item?.end_date,
-        studying: item?.studying ? 1 : 0,
+        // end_date: item?.end_date ,
+        studying: item?.studying ? '1' : '0',
+        ...(item?.end_date && { end_date: item?.end_date }),
       });
     });
 
     // Append skills
     data?.skills?.forEach((item: any) => {
-      const skills = item?.skills || item;
+      const skills =  item;
       payload.skills.push(skills);
     });
 
@@ -461,6 +465,10 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           queryClient.refetchQueries({
             queryKey: ["get-applicant"],
           });
+          setUser((prevUser: any) => ({
+            ...prevUser,
+            is_applicant: true,
+          }));
         },
       });
     } catch (error: any) {
@@ -477,7 +485,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    cv: Yup.mixed().required("Cover letter is required"),
+    // cv: Yup.mixed().required("Cover letter is required"),
     specialization: Yup.string().required("required"),
   });
 
@@ -497,9 +505,10 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           onSubmit={(values, { resetForm }) => {
             applicantDetailsData !== null
               ? updateInfoHandler(values, {})
-              : ProfInfoHandler(values, resetForm);
+              : 
+              ProfInfoHandler(values, resetForm);
           }}
-          validationSchema={validationSchema}
+           validationSchema={validationSchema}
         >
           {({ setFieldValue }) => (
             <Form>

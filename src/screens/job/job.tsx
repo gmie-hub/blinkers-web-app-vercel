@@ -70,7 +70,15 @@ const Jobs = () => {
       user?.claim_status?.toLowerCase() === "rejected"
     ) {
       setOpenAddBusiness(true);
-    } else {
+    } else if ( user?.claim_status?.toLowerCase() === "pending"){
+      notification.error({
+        message: "Error",
+        description:"You are not allowed to post a job. Your business is still pending verification.",
+      });
+
+    }
+    else
+    {
       navigate(routes.job.postJob);
     }
 
@@ -107,6 +115,7 @@ const Jobs = () => {
                 // width="40rem"
                 // isBtn={true}
                 onChange={handleInputChange}
+                value={searchTerm}
               >
                 <Button
                   type="button"
@@ -127,7 +136,7 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            {user &&  !user?.is_applicant && (
+            {((user &&  !user?.is_applicant) || !user) && (
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}
@@ -136,15 +145,7 @@ const Jobs = () => {
                 onClick={handleNavigateRegisterAsAnApplicant}
               />
             )}
-             {!user && (
-              <Button
-                icon={<Image src={job2} alt={job2} preview={false} />}
-                className={styles.WhiteButtonStyle}
-                text="Register as An Applicant"
-                variant="white"
-                onClick={handleNavigateRegisterAsAnApplicant}
-              />
-            )} 
+          
 
           </div>
         </div>

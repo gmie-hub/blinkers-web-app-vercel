@@ -12,14 +12,15 @@ import Button from '../../../customs/button/button';
 import ModalContent from '../../../partials/successModal/modalContent';
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { CreateJob, employmentTypeData, getAllBusiness, JobTypeData, LevelData } from '../../request';
-import SearchableSelect from '../../../customs/searchableSelect/searchableSelect';
 import Editor from '../../../customs/editor/editor';
 import RouteIndicator from '../../../customs/routeIndicator';
+import { userAtom } from '../../../utils/store';
+import { useAtomValue } from 'jotai';
 
 export default function PostJobs() {
   const navigate = useNavigate();
   const [openSuccess, setOpenSuccess] = useState(false);
-  // const [editSuccess, setEditSuccess] = useState(false);
+  const user = useAtomValue(userAtom);
 
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
@@ -71,7 +72,8 @@ export default function PostJobs() {
   const CreateJobHandler = async (values: FormikValues, resetForm: () => void) => {
     const payload: Partial<JobDatum> = {
       title: values?.title,
-      business_id: values?.business_id,
+      // business_id: values?.business_id,
+      business_id: user?.business?.id,
       status: values?.status,
       employment_type: values?.employment_type,
       job_type: values?.job_type,
@@ -112,10 +114,16 @@ export default function PostJobs() {
     }
   };
 
+  const today = new Date();
+today.setHours(0, 0, 0, 0);
+
   const validationSchema = Yup.object().shape({
     // business_id: Yup.string().required('Company is required'),
     title: Yup.string().required('Job title is required'),
-    start_date: Yup.date().required('required'),
+    // start_date: Yup.date().required('required'),
+    start_date: Yup.date()
+    .required('Start date is required')
+    .min(today, 'Start date cannot be in the past'),
     employment_type: Yup.string().required('Employment type is required'),
     job_type: Yup.string().required('Job type is required'),
     level: Yup.string().required('Job level is required'),
@@ -228,13 +236,13 @@ export default function PostJobs() {
                       onChange={handleChange}
                     />
 
-                    <SearchableSelect
+                    {/* <SearchableSelect
                       name="business_id"
                       label="Company's Name"
                       options={allBusinessOptions}
                       placeholder="Select Company Name"
                       onSearchChange={handleSearchChange}
-                    />
+                    /> */}
                     <Input
                       name="industry"
                       label="industry"
@@ -304,20 +312,20 @@ export default function PostJobs() {
                     <Editor
                       name="responsibilities"
                       label="Key Responsibilities"
-                      initialData={values.responsibilities}
+                      initialData={values?.responsibilities}
                       onChange={(_, editor) => {
                         const data = editor.getData();
                         setFieldValue('responsibilities', data);
                       }}
                     />
-
+        
                 
                     <Editor
                       name="qualifications"
                       label="Qualifications"
-                      initialData={values.qualifications}
+                      initialData={values?.qualifications}
                       onChange={(_, editor) => {
-                        const data = editor.getData();
+                        const data = editor?.getData();
                         setFieldValue('qualifications', data);
                       }}
                     />

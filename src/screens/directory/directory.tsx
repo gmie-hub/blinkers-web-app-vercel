@@ -12,24 +12,22 @@ import { AxiosError } from "axios";
 import Button from "../../customs/button/button";
 import CustomSpin from "../../customs/spin";
 import FaArrowLeft from "../../assets/backArrow.svg";
+import usePagination from "../../hooks/usePagnation";
 
 const Directory = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   let { search } = useParams();
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
+  const { currentPage, setCurrentPage, onChange } = usePagination();
 
-  const onChange: PaginationProps["onChange"] = (page) => {
-    setCurrentPage(page);
-  };
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
   };
   const handleSearch = () => {
     setAppliedSearchTerm(searchTerm);
-    console.log("Search Term Sent:", searchTerm);
   };
 
   const handleNavigateDirectory = (id: number) => {
@@ -57,8 +55,9 @@ const Directory = () => {
     setSearchTerm("");
     setCurrentPage(1);
     navigate("/directory");
-    getAllDirectoryQuery.refetch();
+    getAllDirectoryQuery?.refetch();
   };
+
 
   console.log(searchTerm, appliedSearchTerm, "JobData");
   return (
@@ -79,7 +78,7 @@ const Directory = () => {
               placeholder="Search Businesses..."
               // width="40rem"
               // isBtn={true}
-              value={searchTerm}
+            
               onChange={handleInputChange}
             >
               <Button
@@ -106,7 +105,7 @@ const Directory = () => {
                   type="button"
                   className="buttonStyle"
                   onClick={handleBack}
-                  text="view all jobs"
+                  text="view all"
                   icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
                 />
                 <br />
