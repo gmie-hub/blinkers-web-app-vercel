@@ -42,6 +42,7 @@ import Images from "./screens/directory/gallery/image";
 import Videos from "./screens/directory/gallery/video";
 import Profile from "./screens/profile/profile";
 import EditBusiness from "./screens/profile/editBusiness/editBusiness";
+import ViewJobDetails from "./screens/profile/businessInformation/postedJob/viewJobDetails/viewJob";
 
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
     { path: routes.profile.profile, element: <Profile /> },
 
     { path: routes.profile.editBusiness, element: <EditBusiness /> },
+    { path: routes.profile.viewJobDetails, element: <ViewJobDetails /> },
 
  
   ];

@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import { useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import MyBusinesses from "./myBusinesses";
-import BasicInformation from "./businessInformation/basicInfomation/basicInfo";
+
 
 const Profile = () => {
   const [activeKey, setActiveKey] = useState("1");
@@ -23,7 +23,7 @@ console.log(activeKey)
     {
       key: "3",
       label: "My Subscription",
-      children: <BasicInformation />,
+    //   children: <BasicInformation />,
     },
     {
       key: "4",

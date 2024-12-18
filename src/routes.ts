@@ -44,6 +44,7 @@ export const routes = {
   profile: {
     profile: "/profile",
     editBusiness: "/edit-business",
+    viewJobDetails: "/view-job-details/:id",
 
 
   },

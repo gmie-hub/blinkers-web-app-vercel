@@ -150,19 +150,27 @@ export const FlagJobApi = async (payload: Partial<FlagJob>) => {
 export const ApplyForJobApi = async (payload: Partial<FlagJob>) => {
   return (await api.post("/jobs/application", payload))?.data as Response;
 };
-export const CreateBusinessHourApi = async (payload: Partial<BusinessHourDatum>) => {
-  return (await api.post('businesses/hours', payload, {}))?.data as Response;
+export const CreateBusinessHourApi = async (
+  payload: Partial<BusinessHourDatum>
+) => {
+  return (await api.post("businesses/hours", payload, {}))?.data as Response;
 };
 
 export const uploadGallery = async (payload: FormData) => {
   return (
-    await api.post('businesses/gallery', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    await api.post("businesses/gallery", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
 };
 
-export const deleteGalarybyId = async ({ business_id, ids }: { business_id: number | string; ids: number[] }) => {
+export const deleteGalarybyId = async ({
+  business_id,
+  ids,
+}: {
+  business_id: number | string;
+  ids: number[];
+}) => {
   return (
     await api.delete(`businesses/gallery`, {
       data: {
@@ -172,7 +180,6 @@ export const deleteGalarybyId = async ({ business_id, ids }: { business_id: numb
     })
   )?.data as any;
 };
-
 
 export const employmentTypeData = [
   {
@@ -247,4 +254,9 @@ export const handleCopyLink = (textToCopy: string) => {
     .catch(() => {
       message.error("Failed to copy . Please try again.");
     });
+};
+
+
+export const getJobBYBusinessId = async (id: number) => {
+  return (await api.get(`jobs?business_id=${id}`))?.data as JobResponse;
 };
