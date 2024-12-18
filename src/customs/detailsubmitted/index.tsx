@@ -11,7 +11,7 @@ const SubmittedSuccessfully = () => {
     <Card style={styles.headerContainer}>
       <img src={success} alt="success" />
 
-      <h3>Details Submitted Suucessfully</h3>
+      <h3>Details Submitted Successfully</h3>
 
       <p>
         We’ve received your details and once we verify it, you will be able to{" "}
