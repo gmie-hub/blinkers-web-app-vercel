@@ -73,6 +73,7 @@ const MyBusinesses = () => {
               </div>
               <div style={{ marginBlockStart: "2.4rem" }}>
                 <Button
+                disabled={businessDetailsData?.business_status?.toString() !== "2"}
                   onClick={() => setShowBusinessInfo(true)}
                   className={
                     businessDetailsData?.business_status?.toString() !== "2"
