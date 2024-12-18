@@ -31,6 +31,7 @@ import {
 import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
+
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
   { key: 2, text: "Try to meet at a safe, public location." },
@@ -89,6 +90,7 @@ const SmallScreen = ({
     navigate(`/sellers-profile`);
     window.scrollTo(0, 0);
   };
+
   const relatedAdsData = productDetailsData?.related_ads;
 
   const handleNavigateToRelatedAds = () => {
@@ -110,7 +112,9 @@ const SmallScreen = ({
           <div className={styles.leftSide}>
             <div style={{ marginInlineStart: "1rem" }}>
               <h2 style={{ display: "flex" }}>{productDetailsData?.title}</h2>
-              <p className={styles.fashion}>{productDetailsData?.category?.title}</p>{" "}
+              <p className={styles.fashion}>
+                {productDetailsData?.category?.title}
+              </p>{" "}
               <div className={styles.accessories}>
                 <h2 className={styles.payment}>
                   ₦
@@ -160,6 +164,7 @@ const SmallScreen = ({
                   </div>
                 ))}
               </div>
+
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
                   <div className={styles.favoriteIcon}>
@@ -191,6 +196,7 @@ const SmallScreen = ({
                 </div>
               </div>
             </div>
+            
             <div className={styles.tabs}>
               {/* <Tabs defaultActiveKey="1" items={items} /> */}
               <Tabs
@@ -228,266 +234,288 @@ const SmallScreen = ({
                   </ul>
                 </div>
                 {/* //BusinessProfile */}
-                { businessDetailsData && businessDetailsData ?
-                <div className={styles.card}>
-                  <p className={styles.seller}>Seller’s Information </p>
-                  <div className={styles.flexSeller}>
-                    <img
-                      src={businessDetailsData?.logo}
-                      width={"2rem"}
-                      alt="ProductIcon"
-                      className={styles.sellerLogo}
-                    />
-                    <div>
-                      <p className={styles.name}>{businessDetailsData?.name}</p>
-                      <div className={styles.starWrapper}>
-                        <span className={styles.star}>
-                          <Image
-                            width={20}
-                            src={StarYellow}
-                            alt="StarYellow"
-                            preview={false}
-                          />
-                          ( {businessDetailsData?.total_rating}{" "}
-                          {businessDetailsData &&
-                          businessDetailsData?.total_rating > 1
-                            ? "ratings"
-                            : "rating"}
-                          )
-                        </span>
-                        <span className={styles.dot}>.</span>{" "}
-                        <span>
-                          {businessDetailsData?.total_followers}
-                          {businessDetailsData &&
-                          businessDetailsData?.total_followers > 1
-                            ? " Followers"
-                            : " Follower"}
-                        </span>
-                      </div>
-                    </div>
-                    <p>
-                      Member Since{" "}
-                      {formatDateToMonthYear(
-                        businessDetailsData?.created_at || ""
-                      )}
-                    </p>
-                  </div>
-
-                  <div className={styles.social}>
-                    <Image
-                      src={WhatsappLogo}
-                      alt="WhatsappLogo"
-                      preview={false}
-                    />
-                    <Image
-                      src={InstagramIcon}
-                      alt="InstagramIcon"
-                      preview={false}
-                    />
-                    <Image
-                      src={FaceBookStoreIcon}
-                      alt="FaceBookStoreIcon"
-                      preview={false}
-                      height={32}
-                    />
-                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
-                  </div>
-
-                  <div className={styles.flexViewProfile}>
-                    <Button
-                      onClick={() => handleNavigateToSellersProfile()}
-                      text="View Profile"
-                    />
-                    <br />
-                    {user?.id !== businessDetailsData?.user_id && (
-                      <Button
-                        variant="white"
-                        onClick={handleFollowBusiness}
-                        disabled={followBusinessMutation}
-                        text={
-                          userExists
-                            ? followBusinessMutation
-                              ? "Unfollowing"
-                              : "Unfollow"
-                            : followBusinessMutation
-                            ? "Following"
-                            : "Follow"
-                        }
+                {businessDetailsData && businessDetailsData ? (
+                  <div className={styles.card}>
+                    <p className={styles.seller}>Seller’s Information </p>
+                    <div className={styles.flexSeller}>
+                      <img
+                        src={businessDetailsData?.logo}
+                        width={"2rem"}
+                        alt="ProductIcon"
+                        className={styles.sellerLogo}
                       />
-                    )}
-                  </div>
+                      <div>
+                        <p className={styles.name}>
+                          {businessDetailsData?.name}
+                        </p>
+                        <div className={styles.starWrapper}>
+                          <span className={styles.star}>
+                            <Image
+                              width={20}
+                              src={StarYellow}
+                              alt="StarYellow"
+                              preview={false}
+                            />
+                            ( {businessDetailsData?.total_rating}{" "}
+                            {businessDetailsData &&
+                            businessDetailsData?.total_rating > 1
+                              ? "ratings"
+                              : "rating"}
+                            )
+                          </span>
+                          <span className={styles.dot}>.</span>{" "}
+                          <span>
+                            {businessDetailsData?.total_followers}
+                            {businessDetailsData &&
+                            businessDetailsData?.total_followers > 1
+                              ? " Followers"
+                              : " Follower"}
+                          </span>
+                        </div>
+                      </div>
+                      <p>
+                        Member Since{" "}
+                        {formatDateToMonthYear(
+                          businessDetailsData?.created_at || ""
+                        )}
+                      </p>
+                    </div>
 
-                  <Button
-                    icon={
-                      <Image src={CallLogo} alt="CallLogo" preview={false} />
-                    }
-                    text={
-                      isNumberVisible
-                        ? productDetailsData?.user?.number || "No phone number"
-                        : "Click To Show Number"
-                    }
-                    onClick={() =>
-                      handleShowNumber(productDetailsData?.user?.number || "")
-                    }
-                  />
+                    <div className={styles.social}>
+                      <Image
+                        src={WhatsappLogo}
+                        alt="WhatsappLogo"
+                        preview={false}
+                      />
+                      <Image
+                        src={InstagramIcon}
+                        alt="InstagramIcon"
+                        preview={false}
+                      />
+                      <Image
+                        src={FaceBookStoreIcon}
+                        alt="FaceBookStoreIcon"
+                        preview={false}
+                        height={32}
+                      />
+                      <Image
+                        src={BrowseLogo}
+                        alt="BrowseLogo"
+                        preview={false}
+                      />
+                    </div>
 
-                  <div className={styles.flag}>
+                    <div className={styles.flexViewProfile}>
+                      <Button
+                        onClick={() => handleNavigateToSellersProfile()}
+                        text="View Profile"
+                      />
+                      <br />
+                      {user?.id !== businessDetailsData?.user_id && (
+                        <Button
+                          variant="white"
+                          onClick={handleFollowBusiness}
+                          disabled={followBusinessMutation}
+                          text={
+                            userExists
+                              ? followBusinessMutation
+                                ? "Unfollowing"
+                                : "Unfollow"
+                              : followBusinessMutation
+                              ? "Following"
+                              : "Follow"
+                          }
+                        />
+                      )}
+                    </div>
+
                     <Button
                       icon={
-                        <Image src={FlagLogo} alt="FlagLogo" preview={false} />
+                        <Image src={CallLogo} alt="CallLogo" preview={false} />
                       }
-                      text="Flag Seller"
-                      variant="redOutline"
+                      text={
+                        isNumberVisible
+                          ? productDetailsData?.user?.number ||
+                            "No phone number"
+                          : "Click To Show Number"
+                      }
+                      onClick={() =>
+                        handleShowNumber(productDetailsData?.user?.number || "")
+                      }
+                    />
+
+                    <div className={styles.flag}>
+                      <Button
+                        icon={
+                          <Image
+                            src={FlagLogo}
+                            alt="FlagLogo"
+                            preview={false}
+                          />
+                        }
+                        text="Flag Seller"
+                        variant="redOutline"
+                        onClick={() => {
+                          setFlagSeller(true);
+                        }}
+                      />
+                    </div>
+
+                    <div></div>
+                    <Button
+                      className={styles.green}
+                      icon={
+                        <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                      }
+                      text="Copy URL"
+                      variant="noBg"
                       onClick={() => {
-                        setFlagSeller(true);
+                        handleCopyLink(currenthref || "");
                       }}
                     />
                   </div>
-
-                  <div></div>
-                  <Button
-                    className={styles.green}
-                    icon={
-                      <Image src={CopyIcon} alt="CopyIcon" preview={false} />
-                    }
-                    text="Copy URL"
-                    variant="noBg"
-                    onClick={() => {
-                      handleCopyLink(currenthref || "");
-                    }}
-                  />
-                </div>
-                :
-                // sellersprofile 
-                <div className={styles.card}>
-                <p className={styles.seller}>Seller’s Information </p>
-                <div className={styles.flexSeller}>
-                  <img
-                    src={profileDetailsData?.profile_image!}
-                    width={"2rem"}
-                    alt="sellerslogo"
-                    className={styles.sellerLogo}
-                  />
-                  <div>
-                    <p className={styles.name}>{profileDetailsData?.store_name || ''}</p>
-                    <div className={styles.starWrapper}>
-                      <span className={styles.star}>
-                        <Image
-                          width={20}
-                          src={StarYellow}
-                          alt="StarYellow"
-                          preview={false}
-                        />
-                        {/* ( {profileDetailsData?.total_rating}{" "}
+                ) : (
+                  // sellersprofile
+                  <div className={styles.card}>
+                    <p className={styles.seller}>Seller’s Information </p>
+                    <div className={styles.flexSeller}>
+                      <img
+                        src={profileDetailsData?.profile_image ?? ""}
+                        width={"2rem"}
+                        alt="sellerslogo"
+                        className={styles.sellerLogo}
+                      />
+                      <div>
+                        <p className={styles.name}>
+                          {profileDetailsData?.store_name || ""}
+                        </p>
+                        <div className={styles.starWrapper}>
+                          <span className={styles.star}>
+                            <Image
+                              width={20}
+                              src={StarYellow}
+                              alt="StarYellow"
+                              preview={false}
+                            />
+                            {/* ( {profileDetailsData?.total_rating}{" "}
                         {profileDetailsData &&
                         profileDetailsData?.total_rating > 1
                           ? "ratings"
                           : "rating"}
                         ) */}
-                      </span>
-                      <span className={styles.dot}>.</span>{" "}
-                      <span>
-                        {/* {profileDetailsData?.total_followers}
+                          </span>
+                          <span className={styles.dot}>.</span>{" "}
+                          <span>
+                            {/* {profileDetailsData?.total_followers}
                         {profileDetailsData &&
                         profileDetailsData?.total_followers > 1
                           ? " Followers"
                           : " Follower"} */}
-                      </span>
+                          </span>
+                        </div>
+                      </div>
+                      <p>
+                        Member Since{" "}
+                        {formatDateToMonthYear(
+                          profileDetailsData?.created_at || ""
+                        )}
+                      </p>
                     </div>
-                  </div>
-                  <p>
-                    Member Since{" "}
-                    {formatDateToMonthYear(
-                      profileDetailsData?.created_at || ""
-                    )}
-                  </p>
-                </div>
 
-                <div className={styles.social}>
-                  <Image
-                    src={WhatsappLogo}
-                    alt="WhatsappLogo"
-                    preview={false}
-                  />
-                  <Image
-                    src={InstagramIcon}
-                    alt="InstagramIcon"
-                    preview={false}
-                  />
-                  <Image
-                    src={FaceBookStoreIcon}
-                    alt="FaceBookStoreIcon"
-                    preview={false}
-                    height={32}
-                  />
-                  <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
-                </div>
+                    <div className={styles.social}>
+                      <Image
+                        src={WhatsappLogo}
+                        alt="WhatsappLogo"
+                        preview={false}
+                      />
+                      <Image
+                        src={InstagramIcon}
+                        alt="InstagramIcon"
+                        preview={false}
+                      />
+                      <Image
+                        src={FaceBookStoreIcon}
+                        alt="FaceBookStoreIcon"
+                        preview={false}
+                        height={32}
+                      />
+                      <Image
+                        src={BrowseLogo}
+                        alt="BrowseLogo"
+                        preview={false}
+                      />
+                    </div>
 
-                <div className={styles.flexViewProfile}>
-                  <Button
-                    onClick={() => handleNavigateToSellersProfile()}
-                    text="View Profile"
-                  />
-                  <br />
-                  {user?.id !== profileDetailsData?.id && (
+                    <div className={styles.flexViewProfile}>
+                      <Button
+                        onClick={() => handleNavigateToSellersProfile()}
+                        text="View Profile"
+                      />
+                      <br />
+                      {user?.id !== profileDetailsData?.id && (
+                        <Button
+                          variant="white"
+                          onClick={handleFollowBusiness}
+                          disabled={followBusinessMutation}
+                          text={
+                            userExists
+                              ? followBusinessMutation
+                                ? "Unfollowing"
+                                : "Unfollow"
+                              : followBusinessMutation
+                              ? "Following"
+                              : "Follow"
+                          }
+                        />
+                      )}
+                    </div>
+
                     <Button
-                      variant="white"
-                      onClick={handleFollowBusiness}
-                      disabled={followBusinessMutation}
+                      icon={
+                        <Image src={CallLogo} alt="CallLogo" preview={false} />
+                      }
                       text={
-                        userExists
-                          ? followBusinessMutation
-                            ? "Unfollowing"
-                            : "Unfollow"
-                          : followBusinessMutation
-                          ? "Following"
-                          : "Follow"
+                        isNumberVisible
+                          ? productDetailsData?.user?.number ||
+                            "No phone number"
+                          : "Click To Show Number"
+                      }
+                      onClick={() =>
+                        handleShowNumber(productDetailsData?.user?.number || "")
                       }
                     />
-                  )}
-                </div>
 
-                <Button
-                  icon={
-                    <Image src={CallLogo} alt="CallLogo" preview={false} />
-                  }
-                  text={
-                    isNumberVisible
-                      ? productDetailsData?.user?.number || "No phone number"
-                      : "Click To Show Number"
-                  }
-                  onClick={() =>
-                    handleShowNumber(productDetailsData?.user?.number || "")
-                  }
-                />
+                    <div className={styles.flag}>
+                      <Button
+                        icon={
+                          <Image
+                            src={FlagLogo}
+                            alt="FlagLogo"
+                            preview={false}
+                          />
+                        }
+                        text="Flag Seller"
+                        variant="redOutline"
+                        onClick={() => {
+                          setFlagSeller(true);
+                        }}
+                      />
+                    </div>
 
-                <div className={styles.flag}>
-                  <Button
-                    icon={
-                      <Image src={FlagLogo} alt="FlagLogo" preview={false} />
-                    }
-                    text="Flag Seller"
-                    variant="redOutline"
-                    onClick={() => {
-                      setFlagSeller(true);
-                    }}
-                  />
-                </div>
-
-                <div></div>
-                <Button
-                  className={styles.green}
-                  icon={
-                    <Image src={CopyIcon} alt="CopyIcon" preview={false} />
-                  }
-                  text="Copy URL"
-                  variant="noBg"
-                  onClick={() => {
-                    handleCopyLink(currenthref || "");
-                  }}
-                />
-              </div>
-                }
+                    <div></div>
+                    <Button
+                      className={styles.green}
+                      icon={
+                        <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                      }
+                      text="Copy URL"
+                      variant="noBg"
+                      onClick={() => {
+                        handleCopyLink(currenthref || "");
+                      }}
+                    />
+                  </div>
+                )}
                 <div className={styles.chatCart}>
                   <p className={styles.seller}>Chat with seller</p>
 
