@@ -1,11 +1,10 @@
 import styles from "./index.module.scss";
-import { Image, Pagination, PaginationProps } from "antd";
+import { Image, Pagination } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
-import { useState } from "react";
 import favorite from "../../../../assets/Icon + container.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { countUpTo } from "../../trend";
 import { useQueries } from "@tanstack/react-query";
 import { getAllMarket } from "../../../request";
@@ -14,24 +13,28 @@ import LocationIcon from "../../../../assets/locationrelated.svg";
 import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use react-icons for the back icon
 import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
+import usePagination from "../../../../hooks/usePagnation";
 
 interface ProductListProps {
   appliedSearchTerm: string;
+  setAppliedSearchTerm:any;
 }
 
-const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm }) => {
+  // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-  let { search } = useParams();
+  // let { search } = useParams();
+  const { currentPage, setCurrentPage, onChange } = usePagination()
 
-  const onChange: PaginationProps["onChange"] = (page) => {
-    setCurrentPage(page);
-  };
+  // const onChange: PaginationProps["onChange"] = (page) => {
+  //   setCurrentPage(page);
+  //   window.scroll(0,0)
+  // };
   const [getAllMarketQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-all-market", currentPage, appliedSearchTerm],
-        queryFn: () => getAllMarket(currentPage, appliedSearchTerm || search || ''),
+        queryFn: () => getAllMarket(currentPage, appliedSearchTerm ),
         retry: 0,
         refetchOnWindowFocus: false,
       },
@@ -50,11 +53,13 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
 
   const handleBack = () => {
     appliedSearchTerm="";
-    search = ""; 
+    setAppliedSearchTerm('')
+    // search = ""; 
     setCurrentPage(1); 
     navigate("/market"); 
-    getAllMarketQuery.refetch(); 
+    getAllMarketQuery?.refetch(); 
   };
+
 
   return (
     <>
@@ -64,6 +69,19 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm }) => {
         <h1 className="error">{marketErrorMessage}</h1>
       ) : (
         <div>
+           {appliedSearchTerm?.length > 0 && marketData?.length > 0 && (
+              <div>
+                <Button
+                  type="button"
+                  className="buttonStyle"
+                  onClick={handleBack}
+                  text="view all"
+                  icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
+                />
+                <br />
+                <br />
+              </div>
+            )}
           <section className={styles.promoImageContainer}>
             {marketData && marketData?.length > 0 ? (
               marketData?.map((item, index) => (

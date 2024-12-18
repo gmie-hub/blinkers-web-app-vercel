@@ -79,3 +79,13 @@ interface RoutesPart {
     params?: string;
   };
 }
+
+interface BasicInfo {
+  businessName: string;
+  businessAddress: string;
+  category: strng | number;
+  phoneNumber: string;
+  email: string;
+  website: string;
+  aboutBusiness: string;
+}

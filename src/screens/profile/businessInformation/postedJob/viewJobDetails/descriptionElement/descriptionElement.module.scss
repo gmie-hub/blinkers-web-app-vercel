@@ -1,0 +1,36 @@
+.wrapper {
+    & > h4 {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 27px;
+      letter-spacing: -0.02em;
+      columns: rgba(34, 34, 34, 1);
+      padding-bottom: 0.8rem;
+    }
+  }
+  
+  .list,
+  .list1 {
+    & > li {
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 2.4rem;
+      letter-spacing: -0.02em;
+      color: rgba(130, 130, 130, 1);
+    }
+  }
+  
+  .list {
+    list-style-type: '';
+  }
+  
+  .list1 {
+    list-style-position: outside;
+    list-style-type: '•';
+  
+    padding-left: 10px;
+    & > li {
+      padding-left: 10px; /* Adds extra space between the marker and the list item text */
+    }
+  }
+  

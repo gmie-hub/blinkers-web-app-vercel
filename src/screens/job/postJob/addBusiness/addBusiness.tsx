@@ -122,10 +122,10 @@ const AddBusiness = () => {
 
   const validationSchema = Yup.object().shape({
     BusinessName: Yup.string().required('required'),
-    BusinessAddress: Yup.date().required('required'),
+    BusinessAddress: Yup.string().required('required'),
     email: Yup.string().required('required'),
     imageLogo: Yup.string().required('required'),
-    category: Yup.date().required('required')
+    category: Yup.string().required('required')
   });
 
 

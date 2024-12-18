@@ -4,10 +4,12 @@ import SearchInput from "../../../customs/searchInput";
 import Button from "../../../customs/button/button";
 import { useState } from "react";
 import ProductSection from "./page";
+import { useParams } from "react-router-dom";
 
 const Market = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [appliedSearchTerm, setAppliedSearchTerm] = useState(""); 
+  let { search } = useParams();
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
@@ -15,10 +17,9 @@ const Market = () => {
 
   const handleSearch = () => {
     setAppliedSearchTerm(searchTerm); // Update appliedSearchTerm only on button click
-    console.log("Search Term Sent:", searchTerm);
+    setSearchTerm('')
   };
-
-  
+  console.log("Search Term Sent:", searchTerm,appliedSearchTerm);
 
   return (
     <div className={styles.container}>
@@ -42,10 +43,11 @@ const Market = () => {
 
           <div className={styles.searchWrapper}>
             <SearchInput
-            placeholder="What are you looking for?"
-            // width="40rem"
+              placeholder="What are you looking for?"
+              // width="40rem"
               // isBtn={true}
               onChange={handleInputChange}
+              value={searchTerm} 
             >
               <Button
                 type="button"
@@ -59,7 +61,10 @@ const Market = () => {
         </div>
       </div>
 
-      <ProductSection appliedSearchTerm={appliedSearchTerm}/>
+      <ProductSection
+        appliedSearchTerm={appliedSearchTerm}
+        setAppliedSearchTerm={setAppliedSearchTerm}
+      />
     </div>
   );
 };

@@ -95,8 +95,6 @@
   }
 }
 
-
-
 .verifyInput {
   width: 6.4rem; /* Wider box */
   height: 6.4rem; /* Uniform width and height */
@@ -109,7 +107,7 @@
   margin-block-start: 2.6rem;
   transition: all 0.2s ease; /* Smooth transition for effects */
   font-weight: 500;
-  margin-inline-end: 1rem
+  margin-inline-end: 1rem;
 }
 
 .verifyInput::placeholder {
@@ -127,14 +125,12 @@
   box-shadow: none; /* Remove shadow */
 }
 
-
 @media screen and (max-width: 768px) {
   .verifyInput {
     width: 5rem; /* Adjust width for smaller screens */
     height: 5rem; /* Adjust height for smaller screens */
     font-size: 2rem; /* Adjust font size */
   }
-  
 }
 @media screen and (max-width: 320px) {
   .verifyInput {
@@ -142,23 +138,89 @@
     height: 2rem; /* Adjust height for smaller screens */
     font-size: 1rem; /* Adjust font size */
   }
-  
 }
 
-
-.resend{
-  color:var(--color-primary-green);
+.resend {
+  color: var(--color-primary-green);
   text-decoration: underline;
 }
 
 .signUpLink {
   font-weight: 700;
   padding-inline-start: 0.8rem;
-  color:var(--color-primary-green);
-  
-  
+  color: var(--color-primary-green);
 }
 
 .signUpLink:hover {
-  color: var(--color-hover-green); /* Replace this variable with your desired hover color */
+  color: var(
+    --color-hover-green
+  ); /* Replace this variable with your desired hover color */
+}
+
+
+// .input {
+//   width: 100%;
+//   box-sizing: border-box;
+//   border: 1px solid var(--color-grey);
+//   border-radius: 1rem;
+//   background-color: white;
+//   padding-inline:  1.6rem;
+//   // padding-inline-end: 2rem;
+//   padding-block: 1rem;
+//   font-size: 1.4rem;
+
+//   &::placeholder {
+//     color: #828282;
+//     // padding: 1.6rem;
+// // 
+//   }
+
+//   @media screen and (min-width: 768px) {
+//     padding-block: 1.5rem;
+//     width: 100%;
+//   }
+// }
+
+// .input:hover,
+// .input:focus,
+// .input:active,
+// input:focus-visible {
+//   border: 1px solid var(--color-grey);
+//   background-color: var(--color-white);
+// }
+
+
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--color-grey);
+  border-radius: 1rem;
+  background-color: white;
+  padding: 1rem;
+  font-size: 1.4rem;
+
+  // Override Ant Design input styles
+  .customInput {
+    width: 100%;
+    border: none; // Remove Ant Design border
+    outline: none; // Remove focus outline
+
+    .ant-input-group-addon {
+      background-color: transparent; // Ensure addon blends in
+      border: none; // Remove border
+    }
+
+    .ant-select {
+      width: auto; // Prevent width stretching
+      background-color: transparent; // Keep consistent look
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      box-shadow: none; // Remove default shadow
+      outline: none;
+    }
+  }
 }

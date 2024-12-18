@@ -1,7 +1,6 @@
 import styles from "./index.module.scss";
-import { App, Image, Modal, Tabs, TabsProps } from "antd";
+import { Image, Modal, Tabs, TabsProps } from "antd";
 import LocationIcon from "../../../../assets/location.svg";
-import ProductIcon from "../../../../assets/Ellipse 840.svg";
 import Button from "../../../../customs/button/button";
 import WhatsappLogo from "../../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../../assets/instagram.svg";
@@ -27,12 +26,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
 import SmallScreen from "./smallScreenSellerDetails";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
-import { getTimeAgo } from "../../../../utils/formatTime";
-import { FollowBusiness, handleCopyLink } from "../../../request";
-import { useMutation } from "@tanstack/react-query";
+import { formatDateToMonthYear, getTimeAgo } from "../../../../utils/formatTime";
+import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
-import { errorMessage } from "../../../../utils/errorMessage";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -47,8 +44,20 @@ const safetyTips = [
 
 interface Props {
   productDetailsData?: ProductDatum;
+  handleFollowBusiness?: () => void;
+  userExists?: boolean;
+  followBusinessMutation?: boolean;
+  businessDetailsData?: AllBusinessesDatum;
+  profileDetailsData?:UserData
 }
-const BigScreen = ({ productDetailsData }: Props) => {
+const BigScreen = ({
+  productDetailsData,
+  handleFollowBusiness,
+  followBusinessMutation,
+  userExists,
+  businessDetailsData,
+  profileDetailsData,
+}: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
   const navigate = useNavigate();
@@ -56,10 +65,10 @@ const BigScreen = ({ productDetailsData }: Props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
   const { id } = useParams();
   const [isNumberVisible, setIsNumberVisible] = useState(false);
-  const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
-  const currentPath = location.pathname;
+  const currenthref = location.href;
 
+  console.log(businessDetailsData, 'businessDetailsData')
 
   useEffect(() => {
     const handleResize = () => {
@@ -83,19 +92,26 @@ const BigScreen = ({ productDetailsData }: Props) => {
   const handleTabChange = (key: string) => {
     setActiveKey(key);
   };
+  console.log(businessDetailsData?.id ,'businessDetailsData?.id ')
 
   const handleNavigateToSellersProfile = () => {
-    navigate(`/sellers-profile/${14}`);
+    if(businessDetailsData && businessDetailsData?.id !==undefined){
+      navigate(`/directory-details/${businessDetailsData?.id }`);
+
+    }
+    else{
+      navigate(`/sellers-profile/${profileDetailsData?.id}`);
+
+    }
     window.scrollTo(0, 0);
   };
 
   const relatedAdsData = productDetailsData?.related_ads;
-  console.log(relatedAdsData, "relatedAdsDatarelatedAdsData");
 
   const handleNavigateToRelatedAds = () => {
     navigate(`/related-ads/${id}`);
     window.scrollTo(0, 0); // Scroll to the top of the page
-  };
+  };  
 
   const items: TabsProps["items"] = [
     {
@@ -117,54 +133,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
     }
   };
 
-  const followBusinessMutation = useMutation({
-    mutationFn: FollowBusiness,
-    mutationKey: ["follow-business"],
-  });
-
-  const followBusinessHandler = async () => {
-    const payload: Partial<FollowBusiness> = {
-      business_id: productDetailsData?.business_id || 0,
-      user_id: user?.id,
-      action: "follow",
-    };
-
-    try {
-      await followBusinessMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          // queryClient.refetchQueries({
-          //   queryKey: ["get-business-details"],
-          // });
-        },
-      });
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error),
-      });
-    }
-  };
-  const handleFollowBusiness = () => {
-    if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
-        placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
-      });
-    } else {
-      followBusinessHandler();
-    }
-  };
-
-
+  console.log('jum')
 
   return (
     <main>
@@ -173,7 +142,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
           <div className={styles.leftSide}>
             <h2>{productDetailsData?.title}</h2>
             <div className={styles.accessories}>
-              <p className={styles.subjectBg}>Fashion Accessories</p>{" "}
+              <p className={styles.subjectBg}>{productDetailsData?.category?.title}</p>{" "}
               <div className={styles.eye}>
                 <Image src={TimeIcon} alt={TimeIcon} preview={false} />
                 <p>
@@ -281,18 +250,18 @@ const BigScreen = ({ productDetailsData }: Props) => {
                     {productDetailsData?.local_govt?.local_government_area}
                   </p>
                 </div>
+                {/* business profile */}
+                {businessDetailsData && businessDetailsData ?
                 <div className={styles.card}>
                   <p className={styles.seller}>Seller’s Information </p>
                   <div className={styles.flex}>
-                    <Image
-                      src={ProductIcon}
-                      alt="ProductIcon"
-                      preview={false}
+                    <img
+                      src={businessDetailsData?.logo}
+                      alt="sellerslogo"
+                      className={styles.sellerLogo}
                     />
                     <div>
-                      <p className={styles.name}>
-                        {productDetailsData?.user?.name}
-                      </p>
+                      <p className={styles.name}>{businessDetailsData?.name}</p>
                       <div className={styles.starWrapper}>
                         <span className={styles.star}>
                           <Image
@@ -301,19 +270,19 @@ const BigScreen = ({ productDetailsData }: Props) => {
                             alt="StarYellow"
                             preview={false}
                           />
-                          {productDetailsData?.averageRating &&
-                          parseInt(productDetailsData?.averageRating) > 2
-                            ? `${productDetailsData?.averageRating} ratings`
-                            : `${
-                                productDetailsData?.averageRating || "No"
-                              } rating`}{" "}
+                          ( {businessDetailsData?.total_rating}{" "}
+                          {businessDetailsData &&
+                          businessDetailsData?.total_rating > 1
+                            ? "ratings"
+                            : "rating"}
+                          )
                         </span>
                         <span className={styles.dot}>.</span>{" "}
-                        <span>10 Followers</span>
+                        <span>{businessDetailsData?.total_followers}{businessDetailsData && businessDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span>
                       </div>
                     </div>
                   </div>
-                  <p>Member Since Sept 2024</p>
+                  <p>Member Since {formatDateToMonthYear(businessDetailsData?.created_at || '')}</p>
 
                   <div
                     style={{ paddingBlock: "2.4rem" }}
@@ -323,19 +292,46 @@ const BigScreen = ({ productDetailsData }: Props) => {
                       onClick={() => handleNavigateToSellersProfile()}
                       text="View Profile"
                     />
+                    { user?.id !== businessDetailsData?.user_id &&
 
-                    <Button onClick={handleFollowBusiness} text="Follow" variant="white" />
+                    <Button
+                      onClick={handleFollowBusiness}
+                      disabled={followBusinessMutation}
+                      text={
+                        userExists
+                          ? followBusinessMutation
+                            ? "Unfollowing"
+                            : "Unfollow"
+                          : followBusinessMutation
+                          ? "Following"
+                          : "Follow"
+                      }
+                      variant="white"
+                    />}
                   </div>
                   <div className={styles.social}>
                     <Image
                       src={WhatsappLogo}
                       alt="WhatsappLogo"
                       preview={false}
+                      onClick={() => {
+                        if (businessDetailsData?.whatsapp) {
+                          window.open(businessDetailsData.whatsapp, "_blank");
+                        }
+                      }}
                     />
                     <Image
                       src={InstagramIcon}
                       alt="InstagramIcon"
                       preview={false}
+                      onClick={() => {
+                        if (businessDetailsData?.instagram) {
+                          window.open(
+                            businessDetailsData.instagram,
+                            "_blank"
+                          );
+                        }
+                      }}
                     />
                     <Image
                       src={FaceBookStoreIcon}
@@ -343,8 +339,18 @@ const BigScreen = ({ productDetailsData }: Props) => {
                       preview={false}
                       // width={40}
                       height={32}
+                      onClick={() => {
+                        if (businessDetailsData?.facebook) {
+                          window.open(businessDetailsData.facebook, "_blank");
+                        }
+                      }}
                     />
-                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
+                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false}
+                    onClick={() => {
+                      if (businessDetailsData?.website) {
+                        window.open(businessDetailsData.website, "_blank");
+                      }
+                    }} />
                   </div>
                   <Button
                     icon={<img src={CallLogo} alt="success" />}
@@ -380,7 +386,7 @@ const BigScreen = ({ productDetailsData }: Props) => {
                     text="Copy URL"
                     variant="noBg"
                     onClick={() => {
-                      handleCopyLink(productDetailsData?.url || "");
+                      handleCopyLink(currenthref || "");
                     }}
                   />
 
@@ -404,10 +410,167 @@ const BigScreen = ({ productDetailsData }: Props) => {
                   </div>
                 </div>
 
+
+                :
+
+
+//SellersProfile\\
+                 <div className={styles.card}>
+                  <p className={styles.seller}>Seller’s Information </p>
+                  <div className={styles.flex}>
+                    <img
+                      src={profileDetailsData?.profile_image!}
+                      alt="sellerslogo"
+                      className={styles.sellerLogo}
+                    />
+                    <div>
+                      <p className={styles.name}>{profileDetailsData?.store_name || ''}</p>
+                      <div className={styles.starWrapper}>
+                        <span className={styles.star}>
+                          <Image
+                            width={20}
+                            src={StarYellow}
+                            alt="StarYellow"
+                            preview={false}
+                          />
+                          {/* ( {profileDetailsData?.total_rating }{" "}
+                          {profileDetailsData &&
+                          profileDetailsData?.total_rating > 1
+                            ? "ratings"
+                            : "rating"}
+                          ) */}
+                        </span>
+                        <span className={styles.dot}>.</span>{" "}
+                        {/* <span>{profileDetailsData?.total_followers}{profileDetailsData && profileDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span> */}
+                      </div>
+                    </div>
+                  </div>
+                  <p>Member Since {formatDateToMonthYear(profileDetailsData?.created_at || '')}</p>
+
+                  <div
+                    style={{ paddingBlock: "2.4rem" }}
+                    className={styles.flex}
+                  >
+                    <Button
+                      onClick={ handleNavigateToSellersProfile}
+                      text="View Profile"
+                    />
+                    { user?.id !== profileDetailsData?.id &&
+
+                    <Button
+                      onClick={handleFollowBusiness}
+                      disabled={followBusinessMutation}
+                      text={
+                        userExists
+                          ? followBusinessMutation
+                            ? "Unfollowing"
+                            : "Unfollow"
+                          : followBusinessMutation
+                          ? "Following"
+                          : "Follow"
+                      }
+                      variant="white"
+                    />}
+                  </div>
+                  <div className={styles.social}>
+                    <Image
+                      src={WhatsappLogo}
+                      alt="WhatsappLogo"
+                      preview={false}
+                     
+                    />
+                    <Image
+                      src={InstagramIcon}
+                      alt="InstagramIcon"
+                      preview={false}
+                      onClick={() => {
+                        if (profileDetailsData?.instagram_address) {
+                          window.open(profileDetailsData?.instagram_address, "_blank");
+                        }
+                      }}
+                    />
+                    <Image
+                      src={FaceBookStoreIcon}
+                      alt="FaceBookStoreIcon"
+                      preview={false}
+                      // width={40}
+                      height={32}
+                      onClick={() => {
+                        if (profileDetailsData?.facebook_address) {
+                          window.open(profileDetailsData.facebook_address, "_blank");
+                        }
+                      }}
+                    />
+                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false}
+                      onClick={() => {
+                        if (profileDetailsData?.website_address) {
+                          window.open(profileDetailsData.website_address, "_blank");
+                        }
+                      }} />
+                  </div>
+                  <Button
+                    icon={<img src={CallLogo} alt="success" />}
+                    text={
+                      isNumberVisible
+                        ? productDetailsData?.user?.number || "No phone number"
+                        : "Click To Show Number"
+                    }
+                    onClick={() =>
+                      handleShowNumber(productDetailsData?.user?.number || "")
+                    }
+                  />
+
+                  <div className={styles.flag}>
+                    <Button
+                      icon={
+                        <Image src={FlagLogo} alt="FlagLogo" preview={false} />
+                      }
+                      text="Flag Seller"
+                      variant="redOutline"
+                      onClick={() => {
+                        setFlagSeller(true);
+                      }}
+                    />
+                  </div>
+
+                  <div></div>
+                  <Button
+                    className={styles.green}
+                    icon={
+                      <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                    }
+                    text="Copy URL"
+                    variant="noBg"
+                    onClick={() => {
+                      handleCopyLink(currenthref || "");
+                    }}
+                  />
+
+                  <div className={styles.chatCart}>
+                    <p className={styles.seller}>Chat with seller</p>
+
+                    <div className={styles.starWrapper}>
+                      <p className={styles.message}>Is this available</p>
+                      <p className={styles.message}> Where is your location</p>
+                      <p className={styles.message}> More Enquiry</p>
+                    </div>
+
+                    <Input
+                      name="location"
+                      placeholder="Write your message here"
+                      type="textarea"
+                    />
+                    <div className={styles.startChat}>
+                      <Button text="Start Chat" />
+                    </div>
+                  </div>
+                </div> 
+                }
+
                 <div className={styles.card}>
                   <p className={styles.seller}>Safety Tips</p>
                   <ul>
-                    {safetyTips.map((tip) => (
+                    {safetyTips?.map((tip) => (
                       <li
                         key={tip.key}
                         style={{

@@ -92,9 +92,12 @@ export default function AllProductReviews() {
             ) : (
               <p>No reviews available.</p>
             )}
+
           </div>
+          
       )}
         </div>
+        
     </div>
   );
 }

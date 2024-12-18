@@ -1,11 +1,11 @@
 import styles from "./index.module.scss";
-import { Image,  } from "antd";
+import { Image } from "antd";
 import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
 import { useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { getPromotedAds, } from "../request";
+import {  getRecommededAds } from "../request";
 import CustomSpin from "../../customs/spin";
 
 // Main component
@@ -17,19 +17,19 @@ const RecommendedAds = () => {
     queries: [
       {
         queryKey: ["get-Recommeded-ads"],
-        queryFn: getPromotedAds,
+        queryFn: getRecommededAds,
         retry: 0,
         refetchOnWindowFocus: true,
       },
     ],
   });
 
-  const recommededData = getRecommededAdsQuery?.data?.data?.data || [];
+  const recommededData = getRecommededAdsQuery?.data?.data || [];
   const recommededError = getRecommededAdsQuery?.error as AxiosError;
   const recommededErrorMessage =
     recommededError?.message || "An error occurred. Please try again later.";
 
-  console.log(recommededData, "recommededData Data");
+  console.log(recommededData[0]?.recommendable?.title, "recommededData Data");
 
   const totalPages = Math.ceil(recommededData.length / pageSize);
 
@@ -40,6 +40,11 @@ const RecommendedAds = () => {
     recommededData &&
     recommededData?.length > 0 &&
     recommededData?.slice(startIndex, endIndex);
+
+  console.log(
+    currentData[0]?.recommendable?.add_images[0],
+    "currentDatacurrentData?.recommendable"
+  );
 
   // Handle left button click (Previous)
   const handlePrev = () => {
@@ -89,7 +94,7 @@ const RecommendedAds = () => {
         </div>
       </div>
       {getRecommededAdsQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getRecommededAdsQuery?.isError ? (
         <h1 className="error">{recommededErrorMessage}</h1>
       ) : (
@@ -100,20 +105,18 @@ const RecommendedAds = () => {
               currentData?.length > 0 &&
               currentData?.map((item: any, index: number) => (
                 <div className={styles.promoImage} key={index}>
-                  <div style={{height:'26rem'}}>
                   <img
-                    src={item?.image}
-                    alt={item?.title}
+                    src={item && item?.recommendable?.add_images[0]?.add_image}
+                    alt={"recommendedimg"}
                     // className={styles.trendingProductImage}
+                    className={styles.proImage}
                   />
-                  </div>
-               
 
                   <div className={styles.productList}>
                     <p style={{ color: "#4F4F4F" }}>
-                      {item?.title && item?.title?.length > 20
-                        ? `${item?.title?.slice(0, 20)}...`
-                        : item?.title}
+                      {item?.recommendable?.title && item?.recommendable?.title?.length > 20
+                        ? `${item?.recommendable?.title?.slice(0, 20)}...`
+                        : item?.recommendable?.title}
                     </p>
                   </div>
                 </div>
@@ -122,7 +125,7 @@ const RecommendedAds = () => {
 
           {/* Dot-style pagination */}
           <div className={styles.dotPagination}>
-            {Array.from({ length: totalPages }, (_, index) => (
+            {Array?.from({ length: totalPages }, (_, index) => (
               <span
                 key={index}
                 className={`${styles.dot} ${

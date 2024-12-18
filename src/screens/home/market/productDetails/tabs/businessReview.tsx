@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import StarYellow from "../../../../../assets/staryellow.svg";
 import StarIcon from "../../../../../assets/Vector.svg";
 import ArrowIcon from "../../../../../assets/arrow-right-green.svg";
-import { Image } from "antd";
+import { Image,  } from "antd";
 import Button from "../../../../../customs/button/button";
 import { getAllReviews } from "../../../../request";
 import { useQueries } from "@tanstack/react-query";
@@ -26,8 +26,8 @@ export default function Reviews({
   const [getAllReviewQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-review", id],
-        queryFn: () => getAllReviews(id!),
+        queryKey: ["get-all-review", id,],
+        queryFn: () => getAllReviews(id!,),
         retry: 0,
         refetchOnWindowFocus: false,
       },
@@ -66,22 +66,22 @@ export default function Reviews({
         <h1 className="error">{reviewErrorMessage}</h1>
       ) : (
         <div className={styles.wrapper}>
-          <div style={{width:'100%'}}>
-          <div   onClick={handleNavigateReview}  className={styles.reviewbtn}>
-            <h1>Reviews</h1>
+          <div style={{ width: "100%" }}>
+            <div onClick={handleNavigateReview} className={styles.reviewbtn}>
+              <h1>Reviews</h1>
 
-            { reviewData?.length > 0 && <div  className={styles.btnWrapper}>
-              <p className={styles.btn}>See All</p>
-              <Image
-                width={20}
-                src={ArrowIcon}
-                alt="ArrowIcon"
-                preview={false}
-              />
-            </div>}
-
-          </div>
-        
+              {reviewData?.length > 0 && (
+                <div className={styles.btnWrapper}>
+                  <p className={styles.btn}>See All</p>
+                  <Image
+                    width={20}
+                    src={ArrowIcon}
+                    alt="ArrowIcon"
+                    preview={false}
+                  />
+                </div>
+              )}
+            </div>
           </div>
           {businessReviewData && businessReviewData?.length > 0 ? (
             businessReviewData?.map((item, index) => (
@@ -95,6 +95,7 @@ export default function Reviews({
           )}
 
           {reviewError && <p>{reviewErrorMessage}</p>}
+     
 
           {canSeeAllBtn &&
             businessReviewData &&
@@ -147,6 +148,7 @@ function ReviewCard({ item }: { item: ReviewDatum }) {
         )}
       </div>
       <div className={styles.reviewContent}>{item.review}</div>
+      
     </div>
   );
 }

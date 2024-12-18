@@ -9,7 +9,7 @@ import { EmploymentHistory } from "../../../../../../utils/type";
 import {useSetAtom } from "jotai";
 import { EmploymentHistoryInfoAtom } from "../../../../../../utils/store";
 import { convertDate } from "../../../../../../utils/formatTime";
-import { employmentTypeData, JobTypeData } from "../../../../../request";
+import { employmentTypeData, jobTypeData } from "../../../../../request";
 import Select from "../../../../../../customs/select/select";
 
 interface ComponentProps {
@@ -53,10 +53,10 @@ const EmpHistory: FC<ComponentProps> = ({
       current_work: Yup.boolean(),
   });
 
-  const JobTypeOptions: any =
-    JobTypeData &&
-    JobTypeData?.length > 0 &&
-    JobTypeData?.map((item: any, index: number) => (
+  const jobTypeOptions: any =
+    jobTypeData &&
+    jobTypeData?.length > 0 &&
+    jobTypeData?.map((item: any, index: number) => (
       <option value={item?.value} key={index}>
         {item?.name}
       </option>
@@ -85,7 +85,7 @@ const EmpHistory: FC<ComponentProps> = ({
           start_date: convertDate(indexData?.start_date) || "",
           end_date: convertDate(indexData?.end_date) || "",
           employment_type: indexData?.employment_type || "",
-          summary:indexData?.summary  && indexData?.summary || "jj",
+          summary:indexData?.summary  && indexData?.summary || "",
           current_work:
             indexData?.current_work && indexData?.current_work?.toString() === "1"
               ? true
@@ -144,7 +144,7 @@ const EmpHistory: FC<ComponentProps> = ({
                   name="job_type"
                   label="Job Type"
                   placeholder="Select Job Type"
-                  options={JobTypeOptions}
+                  options={jobTypeOptions}
                   onChange={handleChange}
                 />
 
