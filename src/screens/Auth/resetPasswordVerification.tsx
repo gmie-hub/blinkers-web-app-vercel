@@ -127,6 +127,7 @@ const ResetPasswordVerificationCode = () => {
       }
     }
   };
+  
   const handlePaste = (
     e: React.ClipboardEvent<HTMLInputElement>,
     index: number,

@@ -2,27 +2,22 @@ import { useNavigate } from "react-router-dom";
 import styles from "./card.module.scss";
 import { useQueries } from "@tanstack/react-query";
 import { getAllJobs } from "../../request";
-import { useState } from "react";
 import { AxiosError } from "axios";
-import { Pagination, PaginationProps } from "antd";
+import { Pagination } from "antd";
 import { getTimeAgo } from "../../../utils/formatTime";
-import FaArrowLeft from "../../../assets/backArrow.svg"; 
+import FaArrowLeft from "../../../assets/backArrow.svg";
 import Button from "../../../customs/button/button";
 import CustomSpin from "../../../customs/spin";
+import usePagination from "../../../hooks/usePagnation";
 
 interface Props {
   searchTerm: string;
-  resetSearchTerm: () => void; 
-
+  resetSearchTerm: () => void;
 }
 
-const JobLists = ({ searchTerm,resetSearchTerm }: Props) => {
+const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const onChange: PaginationProps["onChange"] = (page) => {
-    setCurrentPage(page);
-  };
+  const { currentPage, setCurrentPage, onChange } = usePagination();
 
   const handleNavigateDetails = (id: number) => {
     navigate(`/job-details/${id}`);
@@ -47,21 +42,21 @@ const JobLists = ({ searchTerm,resetSearchTerm }: Props) => {
 
   const handleBack = () => {
     resetSearchTerm();
-    setCurrentPage(1); 
+    setCurrentPage(1);
     navigate("/jobs");
-    getAllJobQuery.refetch(); 
+    getAllJobQuery.refetch();
   };
 
   return (
     <div className={styles.whyWrapper}>
       {getAllJobQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getAllJobQuery?.isError ? (
         <h1 className="error">{jobErrorMessage}</h1>
       ) : (
         <>
           {/* <p>{searchTerm?.length > 0 && "Viewall"}</p> */}
-          {searchTerm?.length > 0 && JobData?.length > 0 &&(
+          {searchTerm?.length > 0 && JobData?.length > 0 && (
             <div>
               <Button
                 type="button"
@@ -124,7 +119,7 @@ const JobLists = ({ searchTerm,resetSearchTerm }: Props) => {
               ))
             ) : (
               <section style={{ width: "100%" }}>
-                <div className='noDataContainer'>
+                <div className="noDataContainer">
                   <p>No data available</p>
                   <Button
                     type="button"

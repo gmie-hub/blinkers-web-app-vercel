@@ -218,20 +218,20 @@
 .promoImage {
   display: flex;
   flex-direction: column;
-  // height: 26rem; /* Set fixed height for each item */
-  width: 100%; /* Ensure it fills the available space */
-  justify-content: space-between; /* Ensure the image and product list have equal space */
-  background: #fff; /* Optional: add a background */
-  border-radius: 8px; /* Optional: add rounded corners */
-  overflow: hidden; /* Ensure no overflow */
+  // height: 26rem; 
+  width: 100%; 
+  justify-content: space-between; 
+  background: #fff; 
+  border-radius: 8px; 
+  overflow: hidden;
   // box-shadow: 0px 4px 40px 0px #00990012;
 
 }
 
 .promoImage img {
-  object-fit: cover; /* Ensure images cover the available space while maintaining their aspect ratio */
-  // height: 14rem; /* Set fixed height for the image */
-  width: 100%; /* Ensure the image fills the width */
+  object-fit: cover;
+  // height: 14rem; 
+  width: 100%;
 }
 
 .productList {

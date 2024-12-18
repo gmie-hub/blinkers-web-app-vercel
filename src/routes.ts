@@ -1,3 +1,4 @@
+
 export const routes = {
   // home: "/",
   page: {
@@ -9,7 +10,8 @@ export const routes = {
     productReview: "/product-review/:id",
     sellersProfile: "/sellers-profile/:id",
     posetedAdsBySeller: "/sellers-posted-ads",
-    writeReview: "/write-review/:id",
+    // writeReview: "/write-review/:id",
+    writeReviewForBusiness: "/write-review/:id",
     ContactUs: "/contact-us",
     AboutUS: "/about-us",
     faq: "/faq",
@@ -38,6 +40,13 @@ export const routes = {
     ClaimedBusiness: "/claimed-business",
     ClaimBusiness: "/claim-business/:id",
     SubmittedSuccessfully: "/submittedsuccessfully",
+  },
+  profile: {
+    profile: "/profile",
+    editBusiness: "/edit-business",
+    viewJobDetails: "/view-job-details/:id",
+
+
   },
 
   auth: {

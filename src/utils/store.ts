@@ -1,6 +1,6 @@
 import { atomWithStorage } from "jotai/utils";
 import { routeParts } from "../routes";
-import { CoverLetter, Education, EmploymentHistory, LinkData, Route, RoutesPart, SkillsData, SocialInfo } from "./type";
+import { BasicInfo, CoverLetter, Education, EmploymentHistory, LinkData, Route, RoutesPart, SkillsData, SocialInfo } from "./type";
 
 
 const educationInfo = JSON.parse(localStorage.getItem("education-info") ?? "[]");
@@ -15,6 +15,7 @@ const routes = JSON.parse(localStorage.getItem("routes") ?? "[]");
 const routesParts = JSON.parse(
   localStorage.getItem("route-part") ?? JSON.stringify(routeParts)
 );
+const basicInfo = JSON.parse(localStorage.getItem('basic-info') ?? '{}');
 
 
 export const EducationInfoAtom = atomWithStorage<Education[]>(
@@ -42,6 +43,8 @@ export const LinkInfoAtom = atomWithStorage<LinkData[]>(
 );
 
 
+export const basicInfoAtom = atomWithStorage<BasicInfo>('basic-info', basicInfo);
+
 
 
 export const socialInfoAtom = atomWithStorage<SocialInfo>(
@@ -54,13 +57,21 @@ export const routesPartsAtom = atomWithStorage<RoutesPart>(
   routesParts
 );
 
-export interface ExtendedUser {
-  OrganizationId: string;
-  UserRole: string;
-  Email: string;
-  OrgName: string;
-  UserId: string;
-}
+export type BusinessClaim = {
+  approved_at: string | null;
+  approved_by: string | null;
+  business_id: number;
+  created_at: string;
+  doc_url: string;
+  id: number;
+  message: string;
+  rejection_reason: string | null;
+  secondary_doc_url: string | null;
+  status: string;
+  updated_at: string;
+  user_id: number;
+};
+
 
 export interface UserData {
   data: UserLogin;
@@ -72,7 +83,8 @@ export interface UserLogin {
   address_lat?: string;
   address_long?: string;
   apple_id?: string;
-  business_claim?: string;
+  business:AllBusinessesDatum
+  business_claim?: BusinessClaim;
   claim_status?: string;
   country_code: string;
   created_at: string;

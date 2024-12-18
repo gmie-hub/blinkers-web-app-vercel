@@ -1,9 +1,9 @@
-import styles from "./notClaim.module.scss";
+import styles from "./directoryDetails.module.scss";
 import Button from "../../../customs/button/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { App, Image, message, Modal } from "antd";
+import { App, Image, Modal } from "antd";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
@@ -18,7 +18,12 @@ import LocationIcon from "../../../assets//revielocation.svg";
 import CallIcon from "../../../assets/callclaim.svg";
 import copyIcon from "../../../assets/copywhite.svg";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import { FollowBusiness, getBusinessById } from "../../request";
+import {
+  FollowBusiness,
+  getBusinessById,
+    getFollowersByBusiness_id,
+    handleCopyLink,
+} from "../../request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../../customs/routeIndicator";
 import CustomSpin from "../../../customs/spin";
@@ -27,7 +32,7 @@ import WebICon from "../../../assets/webicon.svg";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import Images from "../claimed/image/image";
-import Reviews from "../../home/market/productDetails/tabs/review";
+import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import StarYellow from "../../../assets/staryellow.svg";
 import { errorMessage } from "../../../utils/errorMessage";
 
@@ -41,22 +46,11 @@ const NotClaim = () => {
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
   const currentPath = location.pathname;
+  const currentHref = location.href;
 
-  //   const hasReviews = reviewData?.lenght;
-  //   console.log(hasReviews , "hasReviews")
 
-  const textToCopy = "blinkers/ shopwithrinsyaccderb/e";
 
-  const handleCopyLink = () => {
-    navigator.clipboard
-      .writeText(textToCopy)
-      .then(() => {
-        message.success("Link copied to clipboard!");
-      })
-      .catch(() => {
-        message.error("Failed to copy link. Please try again.");
-      });
-  };
+
 
   //   const hasReviews = reviewData?.lenght;
   //   console.log(hasReviews , "hasReviews")
@@ -67,7 +61,6 @@ const NotClaim = () => {
     window.scrollTo(0, 0);
   };
 
-  // const handleNavigateToRelatedBusiness = () => {
   //   navigate(`/related-businesses/${id}`);
   //   window.scrollTo(0, 0);
   // };
@@ -77,22 +70,7 @@ const NotClaim = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleNavigateToWriteReview = () => {
-    if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
-        placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
-      });
-    } else {
-      navigate(`/write-review/${id}`);
-    }
-    window.scrollTo(0, 0);
-  };
+
   const handleNavigateToVideo = () => {
     navigate(`/videos`);
     window.scrollTo(0, 0);
@@ -102,7 +80,7 @@ const NotClaim = () => {
     window.scrollTo(0, 0);
   };
 
-  const [getBusinessDetailsQuery] = useQueries({
+  const [getBusinessDetailsQuery, getBusinessFollowersQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-business-details", id],
@@ -111,8 +89,18 @@ const NotClaim = () => {
         refetchOnWindowFocus: true,
         enabled: !!id,
       },
+      {
+        queryKey: ["get-business-followers", id],
+        queryFn: () => getFollowersByBusiness_id(parseInt(id!)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!id,
+      },
     ],
   });
+  const userExists = getBusinessFollowersQuery?.data?.data?.data?.some(
+    (item) => item?.user_id === user?.id
+  );
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
@@ -129,7 +117,7 @@ const NotClaim = () => {
     const payload: Partial<FollowBusiness> = {
       business_id: businessDetailsData?.id,
       user_id: user?.id,
-      action: "follow",
+      action: userExists ? "unfollow" : "follow",
     };
 
     try {
@@ -140,7 +128,7 @@ const NotClaim = () => {
             description: data?.message,
           });
           queryClient.refetchQueries({
-            queryKey: ["get-business-details"],
+            queryKey: ["get-business-followers"],
           });
         },
       });
@@ -165,6 +153,30 @@ const NotClaim = () => {
     } else {
       followBusinessHandler();
     }
+  };
+
+  
+  const handleNavigateToWriteReview = () => {
+    if (!user) {
+      notification.error({
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else if(businessDetailsData?.business_status?.toString() !== "2"){
+      notification.error({
+        message: "Error",
+        description: "This business is under approval",
+      });
+    }
+    else {
+      navigate(`/write-review/${id}`);
+    }
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -219,7 +231,7 @@ const NotClaim = () => {
                           </p>
                         ) : (
                           <p style={{ paddingBlockEnd: "1.4rem" }}>
-                            {businessDetailsData?.average_rating}.0 (
+                            {businessDetailsData?.average_rating} (
                             {businessDetailsData?.total_rating}{" "}
                             {businessDetailsData?.total_rating &&
                             businessDetailsData?.total_rating < 2
@@ -230,26 +242,30 @@ const NotClaim = () => {
                         )}
                         <p style={{ paddingBlockEnd: "0.4rem" }}>
                           {businessDetailsData?.total_followers}
-                        </p>
-                        <p>
+                       
                           {businessDetailsData?.total_followers &&
                           businessDetailsData?.total_followers > 1
-                            ? "Followers"
-                            : "Follower"}
+                            ? " Followers"
+                            : " Follower"}
                         </p>
                       </div>
+                      <p style={{ paddingBlock: "0.2rem" }}>
+                        Number of Ads Posted: <span> {businessDetailsData?.total_ads}</span>{" "}
+                      </p>
 
                       <div className={styles.starWrapper2}>
-                        {user?.id !== businessDetailsData?.user_id && (
-                          <div
-                            onClick={handleNavigateToWriteReview}
-                            className={styles.message}
-                          >
-                            <Image src={Star} alt="Star" preview={false} />
+                          {(user?.id !== businessDetailsData?.user_id) &&
+                          //  (user?.claim_status?.toLowerCase() !== 'successful') &&
+                           (
+                            <div
+                              onClick={handleNavigateToWriteReview}
+                              className={styles.message}
+                            >
+                              <Image src={Star} alt="Star" preview={false} />
 
-                            <p>Write a review</p>
-                          </div>
-                        )}
+                              <p>Write a review</p>
+                            </div>
+                         )} 
                         <div
                           onClick={() => {
                             setOpenShare(true);
@@ -264,18 +280,29 @@ const NotClaim = () => {
 
                           <p>Share</p>
                         </div>
-                        <div
+  
+                        { user?.id !== businessDetailsData?.user_id &&
+                        <Button
+                          icon={
+                            <Image
+                              src={linkIcon}
+                              alt="linkIcon"
+                              preview={false}
+                            />
+                          }
+                          disabled={followBusinessMutation?.isPending}
                           onClick={handleFollowBusiness}
-                          className={styles.message}
-                        >
-                          <Image
-                            src={linkIcon}
-                            alt="linkIcon"
-                            preview={false}
-                          />
-
-                          <p>Follow</p>
-                        </div>
+                          text={
+                            userExists
+                              ? followBusinessMutation?.isPending
+                                ? "Unfollowing"
+                                : "Unfollow"
+                              : followBusinessMutation?.isPending
+                              ? "Following"
+                              : "Follow"
+                          }
+                          variant="transparent"
+                        />}
                       </div>
                     </div>
 
@@ -298,7 +325,7 @@ const NotClaim = () => {
                         <p>{businessDetailsData?.phone || "N/A"}</p>
                       </div>
                     </div>
-                    {user?.claim_status?.toLowerCase() === "approved" && (
+                    {user?.claim_status?.toLowerCase() === "successful" && (
                       <>
                         <div className={styles.info}>
                           <Image
@@ -311,18 +338,20 @@ const NotClaim = () => {
                         </div>
 
                         <div className={styles.info}>
-                          <Image src={WebICon} alt="WebICon" preview={false} />
+                          <Image src={WebICon} alt="WebICon" preview={false}
+                           />
 
                           <p>{businessDetailsData?.website || "N/A"}</p>
                         </div>
                       </>
                     )}
 
-                    {user?.claim_status?.toLowerCase() !== "approved" && (
+                    { (user?.id ===  businessDetailsData?.user_id!)  && (user?.claim_status?.toLowerCase() !== "successful") && (
                       <div className={styles.chatBtn}>
                         <Button
                           onClick={() => handleClaim()}
-                          text="Claim This Business"
+                          text={user?.claim_status?.toLowerCase() === "pending" ? "Claim Business Status: 'PENDING'" :"Claim This Business"}
+                          disabled={user?.claim_status?.toLowerCase() === "pending"}
                         />
                       </div>
                     )}
@@ -373,7 +402,7 @@ const NotClaim = () => {
                   <h1>About {businessDetailsData?.name}</h1>
                   <p>{businessDetailsData?.about}</p>
 
-                  {/* {user?.claim_status?.toLowerCase() === "approved" ? (
+                  {/* {user?.claim_status?.toLowerCase() === "successful" ? (
                     <>
                       <div className={styles.photo}>
                         <h1>Photos</h1>
@@ -503,10 +532,10 @@ const NotClaim = () => {
             footer={null}
           >
             <div className={styles.share}>
-              <p>blinkers/ shopwithrinsyaccderb/e</p>
+              <p>{currentHref}</p>
 
               <Button
-                onClick={handleCopyLink}
+                onClick={()=>handleCopyLink(currentHref)}
                 icon={<Image src={copyIcon} alt={copyIcon} preview={false} />}
                 className={styles.buttonStyle}
                 text="Copy Link"

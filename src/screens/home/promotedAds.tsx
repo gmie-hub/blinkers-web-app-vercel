@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image,  } from "antd";
+import { Image } from "antd";
 import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
 import { useState } from "react";
@@ -10,7 +10,7 @@ import CustomSpin from "../../customs/spin";
 
 const PromotedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 4; 
+  const pageSize = 4;
 
   const [getPromotedAdsQuery] = useQueries({
     queries: [
@@ -89,7 +89,7 @@ const PromotedAds = () => {
         </div>
       </div>
       {getPromotedAdsQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getPromotedAdsQuery?.isError ? (
         <h1 className="error">{promotedErrorMessage}</h1>
       ) : (
@@ -98,13 +98,17 @@ const PromotedAds = () => {
           <section className={styles.promoImageContainer}>
             {currentData &&
               currentData?.length > 0 &&
-              currentData?.map((item:any,index:number) => (
-                <div style={{cursor:'pointer'}} onClick={() => window.open(item?.brand_url, "_blank")}  className={styles.promoImage} key={index }>
+              currentData?.map((item: any, index: number) => (
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => window.open(item?.brand_url, "_blank")}
+                  className={styles.promoImage}
+                  key={index}
+                >
                   <img
                     src={item?.image}
                     alt={item?.title}
-                    // className={styles.trendingProductImage}
-                    />
+                    className={styles.proImage}                   />
                 </div>
               ))}
           </section>

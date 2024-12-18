@@ -22,7 +22,7 @@ import LocationIcon from "../../../assets/locationnot.svg";
 import CallIcon from "../../../assets/callclaim.svg";
 import WebICon from "../../../assets/webicon.svg";
 import MailIcon from "../../../assets/mailicon.svg";
-import Reviews from "../../home/market/productDetails/tabs/review";
+import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import Images from "./image/image";
 import { handleCopyLink } from "../../request";
 // import SellersAds from "./postedAds/adsPostedbySeller";

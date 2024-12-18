@@ -1,134 +1,280 @@
-
 import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import Select from "../../../../customs/select/select";
 import { Form, Formik } from "formik";
 import Button from "../../../../customs/button/button";
 import Checkbox from "../../../../customs/checkBox/checkbox"; // Import the custom checkbox
 import ProductList from "./productList.tsx";
 import FilterIcon from "../../../../assets/setting-4.svg";
 import { Image } from "antd";
-
-// Define the structure for items
-interface Item {
-  key: number;
-  value: string;
-}
+import {
+  getAllCategory,
+  getAllState,
+  getLGAbyStateId,
+  getSubCategory,
+} from "../../../request.ts";
+import { useQueries } from "@tanstack/react-query";
+import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
 
 const PriceOptions = [
   { key: 1, value: "Low To High" },
   { key: 2, value: "High To Low" },
   { key: 3, value: "Discounted" },
 ];
-const farmItems: Item[] = [
-  { key: 1, value: "Agricultural Seeds" },
-  { key: 2, value: "Bamboo" },
-  { key: 3, value: "Coco" },
-  { key: 4, value: "Eggs" },
-  { key: 5, value: "Farm Chemicals" },
-  { key: 6, value: "Farm Equipment" },
-  { key: 7, value: "Farm Tools" },
-  { key: 8, value: "Fishing Equipments" },
-  { key: 9, value: "Grains" },
-  { key: 10, value: "Horticulture" },
-];
-
-const skincareItems: Item[] = [
-  { key: 1, value: "Body Cream" },
-  { key: 2, value: "Body Wash" },
-  { key: 3, value: "Diffusers" },
-  { key: 4, value: "Face Cream" },
-  { key: 5, value: "Hand Cream" },
-  { key: 6, value: "Perfumes" },
-  { key: 7, value: "Serums" },
-  { key: 8, value: "Sunscreen" },
-];
-
-const carBrands: Item[] = [
-  { key: 1, value: "Acura" },
-  { key: 2, value: "Audi" },
-  { key: 3, value: "BMW" },
-  { key: 4, value: "Chevrolet" },
-  { key: 5, value: "Ferrari" },
-  { key: 6, value: "Ford" },
-  { key: 7, value: "GMC" },
-  { key: 8, value: "Honda" },
-  { key: 9, value: "Hummer" },
-  { key: 10, value: "Hyundai" },
-];
-
-const computerItems: Item[] = [
-  { key: 1, value: "Computer Accessories" },
-  { key: 2, value: "CPU" },
-  { key: 3, value: "Hard Drive" },
-  { key: 4, value: "Headset" },
-  { key: 5, value: "Keyboard" },
-  { key: 6, value: "Laptops" },
-  { key: 7, value: "Mouse" },
-  { key: 8, value: "Monitor" },
-];
-
-// Combine items with titles
-const allItemsWithTitles = [
-  { title: "Farm Items", items: farmItems },
-  { title: "Skincare Items", items: skincareItems },
-  { title: "Car Brands", items: carBrands },
-  { title: "Computer Items", items: computerItems },
-];
 
 interface Props {
   appliedSearchTerm: string;
+  setAppliedSearchTerm: any;
 }
 
-
-const Main =  ({ appliedSearchTerm }: Props) => {
-  // Track the currently open section
+const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [categoryId, setCategoryId] = useState(0);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]); // Array of strings
+  const [stateId, setStateId] = useState("");
 
-  console.log(appliedSearchTerm,"appliedSearchTerm")
-  // Adjust isFilterVisible based on screen size
+  // const handleStateChange = (value: string) => {
+  //   console.log("Search Query:", value);
+  //   setStateId(value);
+  // };
+
+  const handleStateChange = (value: string) => {
+    console.log("Selected State ID:", value);
+    setStateId(value); 
+    // setFieldValue("lga", "")
+  };
+
+  console.log(stateId, "Selected Items");
+
+  useEffect(() => {
+    if (selectedItems.length > 0) {
+      setAppliedSearchTerm(selectedItems[selectedItems.length - 1]); // Get the last item
+    }
+  }, [selectedItems]);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    // On small screens, ensure isFilterVisible is false by default
     if (windowWidth < 1024) {
       setIsFilterVisible(false);
     } else {
-      setIsFilterVisible(true); // For large screens, always show the filter
+      setIsFilterVisible(true);
     }
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [windowWidth]);
 
   const toggleFilterVisibility = () => {
     setIsFilterVisible((prevState) => !prevState);
   };
 
-  // Toggle the visibility of the list
-  const toggleItems = (index: number) => {
-    // Close the currently open section if it's clicked again, or open a new section
+  const toggleItems = (index: number, id: number) => {
+    setCategoryId(id);
     setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const [getCategoryQuery, getSubCategoryQuery, getStateQuery,getLGAQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-all-category"],
+        queryFn: () => getAllCategory(),
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: ["get-sub-category", categoryId],
+        queryFn: () => getSubCategory(categoryId),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!categoryId,
+      },
+      {
+        queryKey: ["get-all-state"],
+        queryFn: getAllState,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: ["get-all-lga",stateId],
+        queryFn: () => getLGAbyStateId(parseInt(stateId!)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled:!!stateId
+      },
+    ],
+  });
+
+  const categoryData = getCategoryQuery?.data?.data?.data ?? [];
+  const subCategory = getSubCategoryQuery?.data?.data?.data;
+  const stateData = getStateQuery?.data?.data?.data ?? [];
+  const lgaData = getLGAQuery?.data?.data?.data ?? [];
+
+  const stateOptions: { value: number; label: string }[] = [
+    { value: 0, label: "Select State" }, // Default option
+    ...(stateData && stateData?.length > 0
+      ? stateData?.map((item: StateDatum) => ({
+          value: item?.id,
+          label: item?.state_name,
+        }))
+      : []),
+  ];
+
+  const lgaOptions: { value: number; label: string }[] = [
+    { value: 0, label: "Select Lga" }, // Default option
+    ...(lgaData && lgaData?.length > 0
+      ? lgaData?.map((item: LGADatum) => ({
+          value: item?.id,
+          label: item?.local_government_area,
+        }))
+      : []),
+  ];
+
+
+  // Updated handleCheckboxChange to save only subCategory titles
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    subCategoryTitle: string
+  ) => {
+    const { checked } = e.target;
+    setSelectedItems((prevState) => {
+      if (checked) {
+        return [...prevState, subCategoryTitle]; // Add selected sub-category title
+      } else {
+        return prevState.filter((item) => item !== subCategoryTitle); // Remove unselected sub-category title
+      }
+    });
+  };
+
+  // Updated isChecked to check against subCategory titles
+  const isChecked = (subCategoryTitle: string) => {
+    return selectedItems.includes(subCategoryTitle);
   };
 
   return (
     <Formik
-      initialValues={{ employment_type: "", selectedItems: [] }}
+      initialValues={{
+        state: "",
+        lga:"",
+        selectedItems: [],
+        nearby_me: false,
+        selectedPrices: {},
+      }}
       onSubmit={(values) => {
         console.log(values);
       }}
     >
-      <Form>
-        <div className={styles.container}>
-          <div className={styles.leftSide}>
-            {/* Show Filters only when isFilterVisible is true */}
-            {isFilterVisible && (
-              <>
+      {({ values }) => (
+        <Form>
+          <div className={styles.container}>
+            <div className={styles.leftSide}>
+              {isFilterVisible && (
+                <>
+                  <div className={styles.spaceBetween}>
+                    <p>Filters</p>
+                    <Image
+                      className={styles.filter}
+                      onClick={toggleFilterVisibility}
+                      width={30}
+                      src={FilterIcon}
+                      alt="FilterIcon"
+                      preview={false}
+                    />
+                  </div>
+                  <Checkbox
+                    label="Nearby Me"
+                    name="nearby_me"
+                    isChecked={values.nearby_me}
+                    onChange={(e: any) => handleCheckboxChange(e, "Nearby Me")}
+                  />
+
+                  <p className={styles.subjectBg}>CATEGORIES</p>
+
+                  {categoryData?.map((category: any, index: number) => (
+                    <div key={index}>
+                      <div
+                        className={styles.itemContainer}
+                        onClick={() => toggleItems(index, category?.id)}
+                      >
+                        <p>{category.title}</p>
+                        <p className={styles.plusSign}>
+                          {openIndex === index ? "-" : "+"}
+                        </p>
+                      </div>
+                      {openIndex === index && (
+                        <ul className={styles.itemList}>
+                          {subCategory?.map((sub: any) => (
+                            <li key={sub.id}>
+                              <Checkbox
+                                isChecked={isChecked(sub.title)} // Pass sub.title to isChecked
+                                label={sub.title}
+                                name={`selectedItems.${sub.id}`}
+                                onChange={
+                                  (e: any) => handleCheckboxChange(e, sub.title) // Pass sub.title to handleCheckboxChange
+                                }
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+
+                  <div>
+                    <p className={styles.subjectBg}>LOCATION</p>
+
+                    <SearchableSelect
+                      name="state"
+                      label="State"
+                      options={stateOptions}
+                      placeholder="Select State"
+                      // onSearchChange={handleStateChange}
+                      // onSearchChange={handleStateChange} // Updates stateId
+                      onChange={(value: any) => handleStateChange(value)} // Update stateId here
+
+
+                    />
+                    <br />
+
+                    <SearchableSelect
+                      name="lga"
+                      label="Lga"
+                      options={lgaOptions}
+                      placeholder="Select LGA"
+                      // onSearchChange={handleSearchChange}
+                    />
+                  </div>
+                  <div>
+                    <p className={styles.subjectBg}>Price</p>
+                    <ul className={styles.itemList}>
+                      {PriceOptions.map((option: any, index: number) => (
+                        <li key={index}>
+                          <Checkbox
+                            label={option.value}
+                            name={`selectedPrices.${option.key}`}
+                            isChecked={false}
+                            onChange={
+                              (e: any) => handleCheckboxChange(e, option.value) // Pass price option value
+                            }
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div style={{ marginBlockStart: "2rem" }}>
+                    <Button text="Apply Filter" />
+                    <br />
+                    <br />
+                    <Button variant="white" text="Reset Filter" />
+                  </div>
+                </>
+              )}
+
+              {!isFilterVisible && (
                 <div className={styles.spaceBetween}>
                   <p>Filters</p>
                   <Image
@@ -140,96 +286,18 @@ const Main =  ({ appliedSearchTerm }: Props) => {
                     preview={false}
                   />
                 </div>
-                <Checkbox label="Nearby Me" name="nearby_me"     isChecked={false}/>
-
-                <p className={styles.subjectBg}>CATEGORIES</p>
-                {allItemsWithTitles.map((category, index) => (
-                  <div key={index}>
-                    <div
-                      className={styles.itemContainer}
-                      onClick={() => toggleItems(index)}
-                    >
-                      <p>{category.title}</p>
-                      <p className={styles.plusSign}>
-                        {openIndex === index ? "-" : "+"}
-                      </p>
-                    </div>
-                    {openIndex === index && (
-                      <ul className={styles.itemList}>
-                        {category.items.map((item) => (
-                          <li key={item.key}>
-                            <Checkbox
-                               isChecked={false}
-                              label={item.value}
-                              name={`selectedItems.${category.title}.${item.key}`}
-                            />
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-                <div>
-                  <p className={styles.subjectBg}>LOCATION</p>
-                  <Select
-                    name="employment_type"
-                    placeholder="Select state"
-                    options={[]}
-                  />
-                  <br />
-                  <Select
-                    name="employment_type"
-                    placeholder="Select local government Area"
-                    options={[]}
-                  />
-                </div>
-                <div>
-                  <p className={styles.subjectBg}>Price</p>
-                  <ul className={styles.itemList}>
-                    {PriceOptions.map((option) => (
-                      <li key={option.key}>
-                        <Checkbox
-                          label={option.value}
-                          name={`selectedPrices.${option.key}`}
-                          isChecked={false}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div style={{ marginBlockStart: "2rem" }}>
-                  <Button text="Apply Filter" />
-                  <br />
-                  <br />
-                  <Button variant="white" text="Reset Filter" />
-                </div>
-              </>
-            )}
-
-            {/* Only show "Show all" on small screens */}
-            {!isFilterVisible && (
-              <div className={styles.spaceBetween}>
-                <p>Filters</p>
-                <Image
-                  className={styles.filter}
-                  onClick={toggleFilterVisibility}
-                  width={30}
-                  src={FilterIcon}
-                  alt="FilterIcon"
-                  preview={false}
-                />
-              </div>
-            )}
-          </div>
-
-        
-            <div className={styles.rightSide}>
-              {/* <ProductList  /> */}
-              <ProductList appliedSearchTerm={appliedSearchTerm} />
-
+              )}
             </div>
-        </div>
-      </Form>
+
+            <div className={styles.rightSide}>
+              <ProductList
+                appliedSearchTerm={appliedSearchTerm}
+                setAppliedSearchTerm={setAppliedSearchTerm}
+              />
+            </div>
+          </div>
+        </Form>
+      )}
     </Formik>
   );
 };
