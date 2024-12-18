@@ -70,7 +70,7 @@ interface ReviewDatum {
   user_id: number;
   rating: number;
   review: string;
-  created_at:stringg
+  created_at: stringg;
 }
 interface ReviewData {
   data: ReviewDatum[];
@@ -101,19 +101,19 @@ interface FlagJob {
   action: string;
   reason: string;
 }
-interface FollowBusinessDatum{
-business_id: number
-created_at:  string
-id: number
-updated_at : string
-user_id : number
+interface FollowBusinessDatum {
+  business_id: number;
+  created_at: string;
+  id: number;
+  updated_at: string;
+  user_id: number;
 }
 
 interface BusinessFollowersResponse extends Response {
   data: BusinessFollowersData;
 }
 interface BusinessFollowersData {
-  data:FollowBusinessDatum[]
+  data: FollowBusinessDatum[];
 }
 
 interface FlagJob {
@@ -173,6 +173,8 @@ interface AllBusinessesDatum {
   average_rating: number;
   instagram: string;
   related_businesses: any;
+  total_ads:number ;
+
 }
 
 interface AllProductData {
@@ -191,6 +193,7 @@ interface AllProductData {
   total: number;
 }
 interface ProductDatum {
+  category:CategoryDatum
   business_id?: number | null;
   category_id: number;
   cost_price?: string | null;
@@ -226,7 +229,7 @@ interface ProductDatum {
   user: UserData;
   views: number;
   averageRating: string;
-  user_id:number;
+  user_id: number;
 }
 
 interface RelatedProduct {
@@ -342,6 +345,7 @@ interface UserData {
   updated_at: string;
   website_address: string | null;
   applicant?: Applicant;
+  total_ads:number 
 }
 
 interface UserDataResponse extends Response {
@@ -410,20 +414,72 @@ interface CategoryDatum {
   created_at: string;
   updated_at: string;
 }
+interface StateDatum {
+  created_at: string;
+  id: number;
+  state_name: string;
+  updated_at: string;
+}
+interface StateData {
+  data: StateDatum[];
+  total: number;
+}
 
-interface Payload {
-  skills?:SkillsData[],
-  jobLink?:LinkData[],
-  Education?:Education[],
-  EmpHistory?:EmploymentHistory[],
-  coverLetter?:any,
+interface StateResponse extends Response {
+  data: StateData;
+}
+interface LGADatum {
+  id: 10;
+  state_id: 1;
+  local_government_area: string;
+  created_at: string;
+  updated_at: string;
+  state: StateDatum;
+}
+interface LGAData {
+  data: LGADatum[];
+  total: number;
 }
 
 
+interface LGAResponse extends Response {
+  data: LGAData;
+}
+
+interface Payload {
+  skills?: SkillsData[];
+  jobLink?: LinkData[];
+  Education?: Education[];
+  EmpHistory?: EmploymentHistory[];
+  coverLetter?: any;
+}
 
 interface FollowBusiness {
-  business_id:number,
-  user_id:number,
-  action:string,
+  business_id: number;
+  user_id: number;
+  action: string;
+}
 
+interface gallery {
+  business_id: number;
+  created_at: string;
+  id;
+  number;
+  type: string;
+  url: string;
+}
+
+interface BusinessHourDatum {
+  business_id?: number;
+  hours?: hour[];
+}
+
+interface BusinessStatResponse extends Response {
+  data: BusinessHourDatum;
+}
+interface hour {
+  day: string;
+  open_time: string;
+  close_time;
+  string;
 }

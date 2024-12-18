@@ -24,7 +24,10 @@ import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
-import { formatDateToMonthYear, getTimeAgo } from "../../../../utils/formatTime";
+import {
+  formatDateToMonthYear,
+  getTimeAgo,
+} from "../../../../utils/formatTime";
 import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
@@ -43,9 +46,9 @@ interface Props {
   productDetailsData?: ProductDatum;
   handleFollowBusiness?: () => void;
   followBusinessMutation?: boolean;
-  userExists?:boolean;
-  businessDetailsData?:AllBusinessesDatum
-  
+  userExists?: boolean;
+  businessDetailsData?: AllBusinessesDatum;
+  profileDetailsData?: UserData;
 }
 
 const SmallScreen = ({
@@ -54,6 +57,7 @@ const SmallScreen = ({
   followBusinessMutation,
   businessDetailsData,
   userExists,
+  profileDetailsData,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -106,7 +110,7 @@ const SmallScreen = ({
           <div className={styles.leftSide}>
             <div style={{ marginInlineStart: "1rem" }}>
               <h2 style={{ display: "flex" }}>{productDetailsData?.title}</h2>
-              <p className={styles.fashion}>Fashion Accessories</p>{" "}
+              <p className={styles.fashion}>{productDetailsData?.category?.title}</p>{" "}
               <div className={styles.accessories}>
                 <h2 className={styles.payment}>
                   ₦
@@ -223,6 +227,8 @@ const SmallScreen = ({
                     ))}
                   </ul>
                 </div>
+                {/* //BusinessProfile */}
+                { businessDetailsData && businessDetailsData ?
                 <div className={styles.card}>
                   <p className={styles.seller}>Seller’s Information </p>
                   <div className={styles.flexSeller}>
@@ -233,9 +239,7 @@ const SmallScreen = ({
                       className={styles.sellerLogo}
                     />
                     <div>
-                      <p className={styles.name}>
-                      {businessDetailsData?.name}
-                      </p>
+                      <p className={styles.name}>{businessDetailsData?.name}</p>
                       <div className={styles.starWrapper}>
                         <span className={styles.star}>
                           <Image
@@ -244,7 +248,7 @@ const SmallScreen = ({
                             alt="StarYellow"
                             preview={false}
                           />
-                         ( {businessDetailsData?.total_rating}{" "}
+                          ( {businessDetailsData?.total_rating}{" "}
                           {businessDetailsData &&
                           businessDetailsData?.total_rating > 1
                             ? "ratings"
@@ -252,11 +256,22 @@ const SmallScreen = ({
                           )
                         </span>
                         <span className={styles.dot}>.</span>{" "}
-                        <span>{businessDetailsData?.total_followers}{businessDetailsData && businessDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span>
+                        <span>
+                          {businessDetailsData?.total_followers}
+                          {businessDetailsData &&
+                          businessDetailsData?.total_followers > 1
+                            ? " Followers"
+                            : " Follower"}
+                        </span>
                       </div>
                     </div>
-                    <p>Member Since {formatDateToMonthYear(businessDetailsData?.created_at || '')}</p>
-                    </div>
+                    <p>
+                      Member Since{" "}
+                      {formatDateToMonthYear(
+                        businessDetailsData?.created_at || ""
+                      )}
+                    </p>
+                  </div>
 
                   <div className={styles.social}>
                     <Image
@@ -284,23 +299,22 @@ const SmallScreen = ({
                       text="View Profile"
                     />
                     <br />
-                    { user?.id !== businessDetailsData?.user_id &&
-
-                    <Button
-                      variant="white"
-                      onClick={handleFollowBusiness}
-                      disabled={followBusinessMutation}
-                      text={
-                        userExists
-                          ? followBusinessMutation
-                            ? "Unfollowing"
-                            : "Unfollow"
-                          : followBusinessMutation
-                          ? "Following"
-                          : "Follow"
-                      }
-                    />
-}
+                    {user?.id !== businessDetailsData?.user_id && (
+                      <Button
+                        variant="white"
+                        onClick={handleFollowBusiness}
+                        disabled={followBusinessMutation}
+                        text={
+                          userExists
+                            ? followBusinessMutation
+                              ? "Unfollowing"
+                              : "Unfollow"
+                            : followBusinessMutation
+                            ? "Following"
+                            : "Follow"
+                        }
+                      />
+                    )}
                   </div>
 
                   <Button
@@ -342,24 +356,154 @@ const SmallScreen = ({
                       handleCopyLink(currenthref || "");
                     }}
                   />
-
-                  <div className={styles.chatCart}>
-                    <p className={styles.seller}>Chat with seller</p>
-
+                </div>
+                :
+                // sellersprofile 
+                <div className={styles.card}>
+                <p className={styles.seller}>Seller’s Information </p>
+                <div className={styles.flexSeller}>
+                  <img
+                    src={profileDetailsData?.profile_image!}
+                    width={"2rem"}
+                    alt="sellerslogo"
+                    className={styles.sellerLogo}
+                  />
+                  <div>
+                    <p className={styles.name}>{profileDetailsData?.store_name || ''}</p>
                     <div className={styles.starWrapper}>
-                      <p className={styles.message}>Is this available</p>
-                      <p className={styles.message}> Where is your location</p>
-                      <p className={styles.message}> More Enquiry</p>
+                      <span className={styles.star}>
+                        <Image
+                          width={20}
+                          src={StarYellow}
+                          alt="StarYellow"
+                          preview={false}
+                        />
+                        {/* ( {profileDetailsData?.total_rating}{" "}
+                        {profileDetailsData &&
+                        profileDetailsData?.total_rating > 1
+                          ? "ratings"
+                          : "rating"}
+                        ) */}
+                      </span>
+                      <span className={styles.dot}>.</span>{" "}
+                      <span>
+                        {/* {profileDetailsData?.total_followers}
+                        {profileDetailsData &&
+                        profileDetailsData?.total_followers > 1
+                          ? " Followers"
+                          : " Follower"} */}
+                      </span>
                     </div>
+                  </div>
+                  <p>
+                    Member Since{" "}
+                    {formatDateToMonthYear(
+                      profileDetailsData?.created_at || ""
+                    )}
+                  </p>
+                </div>
 
-                    <Input
-                      name="location"
-                      placeholder="Write your message here"
-                      type="textarea"
+                <div className={styles.social}>
+                  <Image
+                    src={WhatsappLogo}
+                    alt="WhatsappLogo"
+                    preview={false}
+                  />
+                  <Image
+                    src={InstagramIcon}
+                    alt="InstagramIcon"
+                    preview={false}
+                  />
+                  <Image
+                    src={FaceBookStoreIcon}
+                    alt="FaceBookStoreIcon"
+                    preview={false}
+                    height={32}
+                  />
+                  <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
+                </div>
+
+                <div className={styles.flexViewProfile}>
+                  <Button
+                    onClick={() => handleNavigateToSellersProfile()}
+                    text="View Profile"
+                  />
+                  <br />
+                  {user?.id !== profileDetailsData?.id && (
+                    <Button
+                      variant="white"
+                      onClick={handleFollowBusiness}
+                      disabled={followBusinessMutation}
+                      text={
+                        userExists
+                          ? followBusinessMutation
+                            ? "Unfollowing"
+                            : "Unfollow"
+                          : followBusinessMutation
+                          ? "Following"
+                          : "Follow"
+                      }
                     />
-                    <div className={styles.startChat}>
-                      <Button text="Start Chat" />
-                    </div>
+                  )}
+                </div>
+
+                <Button
+                  icon={
+                    <Image src={CallLogo} alt="CallLogo" preview={false} />
+                  }
+                  text={
+                    isNumberVisible
+                      ? productDetailsData?.user?.number || "No phone number"
+                      : "Click To Show Number"
+                  }
+                  onClick={() =>
+                    handleShowNumber(productDetailsData?.user?.number || "")
+                  }
+                />
+
+                <div className={styles.flag}>
+                  <Button
+                    icon={
+                      <Image src={FlagLogo} alt="FlagLogo" preview={false} />
+                    }
+                    text="Flag Seller"
+                    variant="redOutline"
+                    onClick={() => {
+                      setFlagSeller(true);
+                    }}
+                  />
+                </div>
+
+                <div></div>
+                <Button
+                  className={styles.green}
+                  icon={
+                    <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                  }
+                  text="Copy URL"
+                  variant="noBg"
+                  onClick={() => {
+                    handleCopyLink(currenthref || "");
+                  }}
+                />
+              </div>
+                }
+                <div className={styles.chatCart}>
+                  <p className={styles.seller}>Chat with seller</p>
+
+                  <div className={styles.starWrapper}>
+                    <p className={styles.message}>Is this available</p>
+                    <p className={styles.message}> Where is your location</p>
+                    <p className={styles.message}> More Enquiry</p>
+                  </div>
+
+                  <Input
+                    name="location"
+                    placeholder="Write your message here"
+                    type="textarea"
+                  />
+                  <div className={styles.startChat}>
+                    <Button text="Start Chat" />
                   </div>
                 </div>
               </Form>

@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import Select from "../../../../customs/select/select";
 import { Form, Formik } from "formik";
 import Button from "../../../../customs/button/button";
 import Checkbox from "../../../../customs/checkBox/checkbox"; // Import the custom checkbox
 import ProductList from "./productList.tsx";
 import FilterIcon from "../../../../assets/setting-4.svg";
 import { Image } from "antd";
-import { getAllCategory, getSubCategory } from "../../../request.ts";
+import {
+  getAllCategory,
+  getAllState,
+  getLGAbyStateId,
+  getSubCategory,
+} from "../../../request.ts";
 import { useQueries } from "@tanstack/react-query";
-
-
+import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
 
 const PriceOptions = [
   { key: 1, value: "Low To High" },
@@ -29,8 +32,20 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [categoryId, setCategoryId] = useState(0);
   const [selectedItems, setSelectedItems] = useState<string[]>([]); // Array of strings
+  const [stateId, setStateId] = useState("");
 
-  console.log(selectedItems, "Selected Items");
+  // const handleStateChange = (value: string) => {
+  //   console.log("Search Query:", value);
+  //   setStateId(value);
+  // };
+
+  const handleStateChange = (value: string) => {
+    console.log("Selected State ID:", value);
+    setStateId(value); 
+    // setFieldValue("lga", "")
+  };
+
+  console.log(stateId, "Selected Items");
 
   useEffect(() => {
     if (selectedItems.length > 0) {
@@ -63,7 +78,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const [getCategoryQuery, getSubCategoryQuery] = useQueries({
+  const [getCategoryQuery, getSubCategoryQuery, getStateQuery,getLGAQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-all-category"],
@@ -78,11 +93,47 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         refetchOnWindowFocus: true,
         enabled: !!categoryId,
       },
+      {
+        queryKey: ["get-all-state"],
+        queryFn: getAllState,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: ["get-all-lga",stateId],
+        queryFn: () => getLGAbyStateId(parseInt(stateId!)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled:!!stateId
+      },
     ],
   });
 
   const categoryData = getCategoryQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data;
+  const stateData = getStateQuery?.data?.data?.data ?? [];
+  const lgaData = getLGAQuery?.data?.data?.data ?? [];
+
+  const stateOptions: { value: number; label: string }[] = [
+    { value: 0, label: "Select State" }, // Default option
+    ...(stateData && stateData?.length > 0
+      ? stateData?.map((item: StateDatum) => ({
+          value: item?.id,
+          label: item?.state_name,
+        }))
+      : []),
+  ];
+
+  const lgaOptions: { value: number; label: string }[] = [
+    { value: 0, label: "Select Lga" }, // Default option
+    ...(lgaData && lgaData?.length > 0
+      ? lgaData?.map((item: LGADatum) => ({
+          value: item?.id,
+          label: item?.local_government_area,
+        }))
+      : []),
+  ];
+
 
   // Updated handleCheckboxChange to save only subCategory titles
   const handleCheckboxChange = (
@@ -107,7 +158,8 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   return (
     <Formik
       initialValues={{
-        employment_type: "",
+        state: "",
+        lga:"",
         selectedItems: [],
         nearby_me: false,
         selectedPrices: {},
@@ -161,8 +213,8 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                                 isChecked={isChecked(sub.title)} // Pass sub.title to isChecked
                                 label={sub.title}
                                 name={`selectedItems.${sub.id}`}
-                                onChange={(e: any) =>
-                                  handleCheckboxChange(e, sub.title) // Pass sub.title to handleCheckboxChange
+                                onChange={
+                                  (e: any) => handleCheckboxChange(e, sub.title) // Pass sub.title to handleCheckboxChange
                                 }
                               />
                             </li>
@@ -174,16 +226,26 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
 
                   <div>
                     <p className={styles.subjectBg}>LOCATION</p>
-                    <Select
-                      name="employment_type"
-                      placeholder="Select state"
-                      options={[]}
+
+                    <SearchableSelect
+                      name="state"
+                      label="State"
+                      options={stateOptions}
+                      placeholder="Select State"
+                      // onSearchChange={handleStateChange}
+                      // onSearchChange={handleStateChange} // Updates stateId
+                      onChange={(value: any) => handleStateChange(value)} // Update stateId here
+
+
                     />
                     <br />
-                    <Select
-                      name="employment_type"
-                      placeholder="Select local government Area"
-                      options={[]}
+
+                    <SearchableSelect
+                      name="lga"
+                      label="Lga"
+                      options={lgaOptions}
+                      placeholder="Select LGA"
+                      // onSearchChange={handleSearchChange}
                     />
                   </div>
                   <div>
@@ -195,8 +257,8 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                             label={option.value}
                             name={`selectedPrices.${option.key}`}
                             isChecked={false}
-                            onChange={(e: any) =>
-                              handleCheckboxChange(e, option.value) // Pass price option value
+                            onChange={
+                              (e: any) => handleCheckboxChange(e, option.value) // Pass price option value
                             }
                           />
                         </li>

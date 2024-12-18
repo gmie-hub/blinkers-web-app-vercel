@@ -41,6 +41,7 @@ import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
 import Images from "./screens/directory/gallery/image";
 import Videos from "./screens/directory/gallery/video";
 import Profile from "./screens/profile/profile";
+import EditBusiness from "./screens/profile/editBusiness/editBusiness";
 
 
 function App() {
@@ -86,6 +87,7 @@ function App() {
 
     { path: routes.profile.profile, element: <Profile /> },
 
+    { path: routes.profile.editBusiness, element: <EditBusiness /> },
 
  
   ];

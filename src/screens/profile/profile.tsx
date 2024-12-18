@@ -8,8 +8,7 @@ import BasicInformation from "./businessInformation/basicInfomation/basicInfo";
 const Profile = () => {
   const [activeKey, setActiveKey] = useState("1");
 
-console.log(activeKey,'activeKey')
-
+console.log(activeKey)
   const items: TabsProps["items"] = [
     {
       key: "1",

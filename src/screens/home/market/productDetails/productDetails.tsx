@@ -48,6 +48,7 @@ interface Props {
   userExists?: boolean;
   followBusinessMutation?: boolean;
   businessDetailsData?: AllBusinessesDatum;
+  profileDetailsData?:UserData
 }
 const BigScreen = ({
   productDetailsData,
@@ -55,6 +56,7 @@ const BigScreen = ({
   followBusinessMutation,
   userExists,
   businessDetailsData,
+  profileDetailsData,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -65,6 +67,8 @@ const BigScreen = ({
   const [isNumberVisible, setIsNumberVisible] = useState(false);
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
+
+  console.log(businessDetailsData, 'businessDetailsData')
 
   useEffect(() => {
     const handleResize = () => {
@@ -88,9 +92,17 @@ const BigScreen = ({
   const handleTabChange = (key: string) => {
     setActiveKey(key);
   };
+  console.log(businessDetailsData?.id ,'businessDetailsData?.id ')
 
   const handleNavigateToSellersProfile = () => {
-    navigate(`/sellers-profile/${14}`);
+    if(businessDetailsData && businessDetailsData?.id !==undefined){
+      navigate(`/directory-details/${businessDetailsData?.id }`);
+
+    }
+    else{
+      navigate(`/sellers-profile/${profileDetailsData?.id}`);
+
+    }
     window.scrollTo(0, 0);
   };
 
@@ -130,7 +142,7 @@ const BigScreen = ({
           <div className={styles.leftSide}>
             <h2>{productDetailsData?.title}</h2>
             <div className={styles.accessories}>
-              <p className={styles.subjectBg}>Fashion Accessories</p>{" "}
+              <p className={styles.subjectBg}>{productDetailsData?.category?.title}</p>{" "}
               <div className={styles.eye}>
                 <Image src={TimeIcon} alt={TimeIcon} preview={false} />
                 <p>
@@ -238,6 +250,8 @@ const BigScreen = ({
                     {productDetailsData?.local_govt?.local_government_area}
                   </p>
                 </div>
+                {/* business profile */}
+                {businessDetailsData && businessDetailsData ?
                 <div className={styles.card}>
                   <p className={styles.seller}>Seller’s Information </p>
                   <div className={styles.flex}>
@@ -300,11 +314,24 @@ const BigScreen = ({
                       src={WhatsappLogo}
                       alt="WhatsappLogo"
                       preview={false}
+                      onClick={() => {
+                        if (businessDetailsData?.whatsapp) {
+                          window.open(businessDetailsData.whatsapp, "_blank");
+                        }
+                      }}
                     />
                     <Image
                       src={InstagramIcon}
                       alt="InstagramIcon"
                       preview={false}
+                      onClick={() => {
+                        if (businessDetailsData?.instagram) {
+                          window.open(
+                            businessDetailsData.instagram,
+                            "_blank"
+                          );
+                        }
+                      }}
                     />
                     <Image
                       src={FaceBookStoreIcon}
@@ -312,8 +339,18 @@ const BigScreen = ({
                       preview={false}
                       // width={40}
                       height={32}
+                      onClick={() => {
+                        if (businessDetailsData?.facebook) {
+                          window.open(businessDetailsData.facebook, "_blank");
+                        }
+                      }}
                     />
-                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false} />
+                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false}
+                    onClick={() => {
+                      if (businessDetailsData?.website) {
+                        window.open(businessDetailsData.website, "_blank");
+                      }
+                    }} />
                   </div>
                   <Button
                     icon={<img src={CallLogo} alt="success" />}
@@ -372,6 +409,163 @@ const BigScreen = ({
                     </div>
                   </div>
                 </div>
+
+
+                :
+
+
+//SellersProfile\\
+                 <div className={styles.card}>
+                  <p className={styles.seller}>Seller’s Information </p>
+                  <div className={styles.flex}>
+                    <img
+                      src={profileDetailsData?.profile_image!}
+                      alt="sellerslogo"
+                      className={styles.sellerLogo}
+                    />
+                    <div>
+                      <p className={styles.name}>{profileDetailsData?.store_name || ''}</p>
+                      <div className={styles.starWrapper}>
+                        <span className={styles.star}>
+                          <Image
+                            width={20}
+                            src={StarYellow}
+                            alt="StarYellow"
+                            preview={false}
+                          />
+                          {/* ( {profileDetailsData?.total_rating }{" "}
+                          {profileDetailsData &&
+                          profileDetailsData?.total_rating > 1
+                            ? "ratings"
+                            : "rating"}
+                          ) */}
+                        </span>
+                        <span className={styles.dot}>.</span>{" "}
+                        {/* <span>{profileDetailsData?.total_followers}{profileDetailsData && profileDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span> */}
+                      </div>
+                    </div>
+                  </div>
+                  <p>Member Since {formatDateToMonthYear(profileDetailsData?.created_at || '')}</p>
+
+                  <div
+                    style={{ paddingBlock: "2.4rem" }}
+                    className={styles.flex}
+                  >
+                    <Button
+                      onClick={ handleNavigateToSellersProfile}
+                      text="View Profile"
+                    />
+                    { user?.id !== profileDetailsData?.id &&
+
+                    <Button
+                      onClick={handleFollowBusiness}
+                      disabled={followBusinessMutation}
+                      text={
+                        userExists
+                          ? followBusinessMutation
+                            ? "Unfollowing"
+                            : "Unfollow"
+                          : followBusinessMutation
+                          ? "Following"
+                          : "Follow"
+                      }
+                      variant="white"
+                    />}
+                  </div>
+                  <div className={styles.social}>
+                    <Image
+                      src={WhatsappLogo}
+                      alt="WhatsappLogo"
+                      preview={false}
+                     
+                    />
+                    <Image
+                      src={InstagramIcon}
+                      alt="InstagramIcon"
+                      preview={false}
+                      onClick={() => {
+                        if (profileDetailsData?.instagram_address) {
+                          window.open(profileDetailsData?.instagram_address, "_blank");
+                        }
+                      }}
+                    />
+                    <Image
+                      src={FaceBookStoreIcon}
+                      alt="FaceBookStoreIcon"
+                      preview={false}
+                      // width={40}
+                      height={32}
+                      onClick={() => {
+                        if (profileDetailsData?.facebook_address) {
+                          window.open(profileDetailsData.facebook_address, "_blank");
+                        }
+                      }}
+                    />
+                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false}
+                      onClick={() => {
+                        if (profileDetailsData?.website_address) {
+                          window.open(profileDetailsData.website_address, "_blank");
+                        }
+                      }} />
+                  </div>
+                  <Button
+                    icon={<img src={CallLogo} alt="success" />}
+                    text={
+                      isNumberVisible
+                        ? productDetailsData?.user?.number || "No phone number"
+                        : "Click To Show Number"
+                    }
+                    onClick={() =>
+                      handleShowNumber(productDetailsData?.user?.number || "")
+                    }
+                  />
+
+                  <div className={styles.flag}>
+                    <Button
+                      icon={
+                        <Image src={FlagLogo} alt="FlagLogo" preview={false} />
+                      }
+                      text="Flag Seller"
+                      variant="redOutline"
+                      onClick={() => {
+                        setFlagSeller(true);
+                      }}
+                    />
+                  </div>
+
+                  <div></div>
+                  <Button
+                    className={styles.green}
+                    icon={
+                      <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                    }
+                    text="Copy URL"
+                    variant="noBg"
+                    onClick={() => {
+                      handleCopyLink(currenthref || "");
+                    }}
+                  />
+
+                  <div className={styles.chatCart}>
+                    <p className={styles.seller}>Chat with seller</p>
+
+                    <div className={styles.starWrapper}>
+                      <p className={styles.message}>Is this available</p>
+                      <p className={styles.message}> Where is your location</p>
+                      <p className={styles.message}> More Enquiry</p>
+                    </div>
+
+                    <Input
+                      name="location"
+                      placeholder="Write your message here"
+                      type="textarea"
+                    />
+                    <div className={styles.startChat}>
+                      <Button text="Start Chat" />
+                    </div>
+                  </div>
+                </div> 
+                }
 
                 <div className={styles.card}>
                   <p className={styles.seller}>Safety Tips</p>

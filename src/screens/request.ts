@@ -1,16 +1,11 @@
 import { message } from "antd";
 import api from "../utils/apiClient";
 
-// export const getAllReviews = async (id: string,page?:number) => {
-//   return (await api.get(`business/reviews?business_id=${id}&page=${page}`))
-//     ?.data as ReviewResponse;
-// };
-
 export const getAllReviews = async (id: string, page?: number) => {
-  const url = page 
+  const url = page
     ? `business/reviews?business_id=${id}&page=${page}`
     : `business/reviews?business_id=${id}`;
-    
+
   return (await api.get(url))?.data as ReviewResponse;
 };
 
@@ -18,13 +13,18 @@ export const getAllJobs = async (page: number, search?: string | number) => {
   return (await api.get(`jobs?page=${page}&search=${search}`))
     ?.data as JobResponse;
 };
+export const getAllState = async () => {
+  return (await api.get(`states?per_page=${40}`))?.data as StateResponse;
+};
+
+export const getLGAbyStateId = async (stateId: number) => {
+  return (await api.get(`local-govt?state_id=${stateId}`))?.data as LGAResponse;
+};
 
 // export const getAllJobs = async (page: number, search?: string | number) => {
 //   const url = search ? `jobs?page=${page}&search=${search}` : `jobs?page=${page}`;
 //   return (await api.get(url))?.data as JobResponse;
 // };
-
-
 
 export const getJobDetails = async (id: number) => {
   return (await api.get(`jobs/${id}`))?.data as JobDetailsResponse;
@@ -35,10 +35,13 @@ export const getProductDetails = async (id: number) => {
 };
 
 export const getSubCategory = async (id: number) => {
-  return (await api.get(`categories/sub?category_id=${id}`))?.data as CategoryResponse;
+  return (await api.get(`categories/sub?category_id=${id}`))
+    ?.data as CategoryResponse;
 };
 export const getAllCategory = async (search?: string | number) => {
-  const url = search ? `categories?search=${search}&per_page=${100}` : `categories?per_page=${100}`;
+  const url = search
+    ? `categories?search=${search}&per_page=${100}`
+    : `categories?per_page=${100}`;
   return (await api.get(url))?.data as CategoryResponse;
 };
 
@@ -46,16 +49,17 @@ export const getTrendingAds = async () => {
   return (await api.get(`ads/trending`))?.data as any;
 };
 export const getRecommededAds = async () => {
-  return (await api.get(`/recommendations?type=${'ads'}`))?.data as any;
+  return (await api.get(`/recommendations?type=${"ads"}`))?.data as any;
 };
-
 
 export const getPromotedAds = async () => {
   return (await api.get(`/banners`))?.data as any;
 };
 
-
-export const getAllBusiness = async (search: number | string, page?: number) => {
+export const getAllBusiness = async (
+  search: number | string,
+  page?: number
+) => {
   let url = `/businesses?search=${search}`;
 
   if (page !== undefined) {
@@ -64,7 +68,6 @@ export const getAllBusiness = async (search: number | string, page?: number) => 
 
   return (await api.get(url))?.data as any;
 };
-
 
 export const getAllMarket = async (page?: number, search?: string | number) => {
   let url = `/ads`;
@@ -75,74 +78,70 @@ export const getAllMarket = async (page?: number, search?: string | number) => {
     queryParams.push(`page=${page}`);
   }
 
-  if (search !== undefined && search !== '') {
+  if (search !== undefined && search !== "") {
     queryParams.push(`search=${search}`);
   }
 
   if (queryParams.length > 0) {
-    url += `?${queryParams.join('&')}`;
+    url += `?${queryParams.join("&")}`;
   }
 
   return (await api.get(url))?.data as AllProductaResponse;
 };
 
 export const CreateJob = async (payload: Partial<JobDatum>) => {
-  return (await api.post('jobs', payload, {}))?.data as any;
+  return (await api.post("jobs", payload, {}))?.data as any;
 };
 
-
 export const FollowBusiness = async (payload: Partial<FollowBusiness>) => {
-  return (await api.post('business/followers/toggle', payload, {}))?.data as any;
+  return (await api.post("business/followers/toggle", payload, {}))
+    ?.data as any;
 };
 
 export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
-  return (await api.post('business/reviews', payload, {}))?.data as any;
+  return (await api.post("business/reviews", payload, {}))?.data as any;
 };
-
 
 export const createBusiness = async (payload: FormData) => {
   return (
-    await api.post('/businesses', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    await api.post("/businesses", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
 };
 
 export const ClaimBusinessApi = async (payload: FormData) => {
   return (
-    await api.post('/business/claims', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    await api.post("/business/claims", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
 };
 
 export const ProfInfoApi = async (payload: FormData) => {
   return (
-    await api.post('/applicants', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    await api.post("/applicants", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
 };
 
-
 export const getApplicantsbyId = async (id: number) => {
-  return (await api.get(`/users/profile?user_id=${id}`))?.data as UserDataResponse;
+  return (await api.get(`/users/profile?user_id=${id}`))
+    ?.data as UserDataResponse;
 };
 
 export const getBusinessById = async (id: number) => {
   return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;
 };
 export const getFollowersByUser_id = async (user_id: number) => {
-  return (await api.get(`business/followers?user_id=${user_id}`))?.data as BusinessFollowersResponse;
+  return (await api.get(`business/followers?user_id=${user_id}`))
+    ?.data as BusinessFollowersResponse;
 };
 export const getFollowersByBusiness_id = async (business_id: number) => {
-  return (await api.get(`business/followers?business_id=${business_id}`))?.data as BusinessFollowersResponse;
+  return (await api.get(`business/followers?business_id=${business_id}`))
+    ?.data as BusinessFollowersResponse;
 };
-
-
-
-
-
 
 export const FlagJobApi = async (payload: Partial<FlagJob>) => {
   return (await api.post("/jobs/flag/toggle", payload))?.data as Response;
@@ -151,69 +150,91 @@ export const FlagJobApi = async (payload: Partial<FlagJob>) => {
 export const ApplyForJobApi = async (payload: Partial<FlagJob>) => {
   return (await api.post("/jobs/application", payload))?.data as Response;
 };
+export const CreateBusinessHourApi = async (payload: Partial<BusinessHourDatum>) => {
+  return (await api.post('businesses/hours', payload, {}))?.data as Response;
+};
+
+export const uploadGallery = async (payload: FormData) => {
+  return (
+    await api.post('businesses/gallery', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  )?.data;
+};
+
+export const deleteGalarybyId = async ({ business_id, ids }: { business_id: number | string; ids: number[] }) => {
+  return (
+    await api.delete(`businesses/gallery`, {
+      data: {
+        business_id, // Sending business_id and ids in the body
+        ids,
+      },
+    })
+  )?.data as any;
+};
 
 
 export const employmentTypeData = [
   {
-    name: 'full-time',
-    value: 'full-time',
+    name: "full-time",
+    value: "full-time",
   },
   {
-    name: 'part-time',
-    value: 'part-time',
+    name: "part-time",
+    value: "part-time",
   },
   {
-    name: 'contract',
-    value: 'contract',
+    name: "contract",
+    value: "contract",
   },
   {
-    name: 'other',
-    value: 'other',
+    name: "other",
+    value: "other",
   },
 ];
 
 export const LevelData = [
   {
-    name: 'intern',
-    value: 'intern',
+    name: "intern",
+    value: "intern",
   },
   {
-    name: 'beginner',
-    value: 'beginner',
+    name: "beginner",
+    value: "beginner",
   },
   {
-    name: 'junior',
-    value: 'junior',
+    name: "junior",
+    value: "junior",
   },
   {
-    name: 'mid-level',
-    value: 'mid-level',
+    name: "mid-level",
+    value: "mid-level",
   },
   {
-    name: 'senior',
-    value: 'senior',
+    name: "senior",
+    value: "senior",
   },
 ];
-export   const JobTypeData = [
+export const jobTypeData = [
   {
-    name: 'on-site',
-    value: 'on-site',
+    name: "on-site",
+    value: "on-site",
   },
   {
-    name: 'hybrid',
-    value: 'hybrid',
+    name: "hybrid",
+    value: "hybrid",
   },
   {
-    name: 'remote',
-    value: 'remote',
+    name: "remote",
+    value: "remote",
   },
   {
-    name: 'other',
-    value: 'other',
+    name: "other",
+    value: "other",
   },
 ];
 
-export const handleCopyLink = (textToCopy:string) => {
+export const handleCopyLink = (textToCopy: string) => {
   if (!textToCopy) {
     message.warning("No text to copy.");
     return;
@@ -226,4 +247,4 @@ export const handleCopyLink = (textToCopy:string) => {
     .catch(() => {
       message.error("Failed to copy . Please try again.");
     });
-}
+};

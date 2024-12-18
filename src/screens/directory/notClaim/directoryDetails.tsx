@@ -242,14 +242,16 @@ const NotClaim = () => {
                         )}
                         <p style={{ paddingBlockEnd: "0.4rem" }}>
                           {businessDetailsData?.total_followers}
-                        </p>
-                        <p>
+                       
                           {businessDetailsData?.total_followers &&
                           businessDetailsData?.total_followers > 1
-                            ? "Followers"
-                            : "Follower"}
+                            ? " Followers"
+                            : " Follower"}
                         </p>
                       </div>
+                      <p style={{ paddingBlock: "0.2rem" }}>
+                        Number of Ads Posted: <span> {businessDetailsData?.total_ads}</span>{" "}
+                      </p>
 
                       <div className={styles.starWrapper2}>
                           {(user?.id !== businessDetailsData?.user_id) &&
@@ -336,7 +338,8 @@ const NotClaim = () => {
                         </div>
 
                         <div className={styles.info}>
-                          <Image src={WebICon} alt="WebICon" preview={false} />
+                          <Image src={WebICon} alt="WebICon" preview={false}
+                           />
 
                           <p>{businessDetailsData?.website || "N/A"}</p>
                         </div>

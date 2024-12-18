@@ -6,6 +6,7 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
   FollowBusiness,
+  getApplicantsbyId,
   getBusinessById,
   getFollowersByUser_id,
   getProductDetails,
@@ -23,7 +24,7 @@ const Main = () => {
   const { notification } = App.useApp();
   const currentPath = location.pathname;
   const navigate = useNavigate();
-  const [businessId, setBusinessId] = useState(14);
+  const [businessId, setBusinessId] = useState<null | number>();
   const [sellerId, setSellerId] = useState<null | number>();
 
   console.log(sellerId,businessId, "sellerId");
@@ -41,6 +42,8 @@ const Main = () => {
     getProductDetailsQuery,
     getBusinessFollowersQuery,
     getBusinessDetailsQuery,
+    getUserDetailsQuery,
+
   ] = useQueries({
     queries: [
       {
@@ -55,22 +58,22 @@ const Main = () => {
         queryFn: () => getFollowersByUser_id(sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        // enabled: !!sellerId,
+        enabled: !!sellerId,
       },
       {
         queryKey: ["get-business-details",],
-        queryFn: () => getBusinessById(14),
+        queryFn: () => getBusinessById(businessId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        // enabled: !!businessId,
+        enabled: !!businessId,
       },
-      // {
-      //   queryKey: ["get-sellers-details", sellerId],
-      //   queryFn: () => getApplicantsbyId(sellerId!),
-      //   retry: 0,
-      //   refetchOnWindowFocus: true,
-      //   enabled: !!sellerId,
-      // },
+      {
+        queryKey: ["get-sellers-details", sellerId],
+        queryFn: () => getApplicantsbyId(1292!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!sellerId,
+      },
     ],
   });
   const userExists = getBusinessFollowersQuery?.data?.data?.data?.some(
@@ -84,8 +87,10 @@ const Main = () => {
     "An error occurred. Please try again later.";
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
+  const profileDetailsData = getUserDetailsQuery?.data?.data;
 
-  console.log(getBusinessDetailsQuery,'jum')
+
+  console.log(profileDetailsData,'jum')
   useEffect(() => {
     if (getProductDetailsQuery) {
       setBusinessId(productDetailsData?.business_id!);
@@ -167,6 +172,7 @@ const Main = () => {
               followBusinessMutation={followBusinessMutation?.isPending}
               userExists={userExists}
               businessDetailsData={businessDetailsData}
+              profileDetailsData={profileDetailsData}
             /> // Render SmallScreen on small screens
           ) : (
             <BigScreen
@@ -175,6 +181,7 @@ const Main = () => {
               followBusinessMutation={followBusinessMutation?.isPending}
               userExists={userExists}
               businessDetailsData={businessDetailsData}
+              profileDetailsData={profileDetailsData}
             /> // Render BigScreen on larger screens
           )}
         </div>

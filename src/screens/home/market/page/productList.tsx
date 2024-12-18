@@ -59,7 +59,6 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
     navigate("/market"); 
     getAllMarketQuery?.refetch(); 
   };
-  console.log( appliedSearchTerm, "JobData");
 
 
   return (

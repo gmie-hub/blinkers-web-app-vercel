@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { Steps } from 'antd';
-// import { Card, RouteIndicator } from '../../../../customs';
 import styles from './styles.module.scss';
 import Card from '../../../../customs/card/card';
 import RouteIndicator from '../../../../customs/routeIndicator';

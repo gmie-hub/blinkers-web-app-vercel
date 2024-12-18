@@ -22,7 +22,7 @@ import RouteIndicator from "../../../customs/routeIndicator";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
   FollowBusiness,
-  getBusinessById,
+  getApplicantsbyId,
   getFollowersByUser_id,
 } from "../../request";
 import { AxiosError } from "axios";
@@ -58,11 +58,18 @@ const SellerProfile = () => {
     window.scrollTo(0, 0);
   };
 
-  const [getBusinessDetailsQuery, getBusinessFollowersQuery] = useQueries({
+  const [getSellersDetailsQuery, getBusinessFollowersQuery] = useQueries({
     queries: [
+      // {
+      //   queryKey: ["get-business-details", id],
+      //   queryFn: () => getBusinessById(parseInt(id!)),
+      //   retry: 0,
+      //   refetchOnWindowFocus: true,
+      //   enabled: !!id,
+      // },
       {
-        queryKey: ["get-business-details", id],
-        queryFn: () => getBusinessById(parseInt(id!)),
+        queryKey: ["get-sellers-details", id],
+        queryFn: () => getApplicantsbyId(parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!id,
@@ -83,10 +90,10 @@ const SellerProfile = () => {
 
   console.log(userExists, "userExists");
 
-  const businessDetailsData = getBusinessDetailsQuery?.data?.data;
-  const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
-  const businessDetailsErrorMessage =
-    businessDetailsError?.message ||
+  const sellersDetailsData = getSellersDetailsQuery?.data?.data;
+  const sellersDetailsError = getSellersDetailsQuery?.error as AxiosError;
+  const sellersDetailsErrorMessage =
+  sellersDetailsError?.message ||
     "An error occurred. Please try again later.";
 
   const followBusinessMutation = useMutation({
@@ -96,7 +103,7 @@ const SellerProfile = () => {
 
   const followBusinessHandler = async () => {
     const payload: Partial<FollowBusiness> = {
-      business_id: businessDetailsData?.id,
+      business_id: sellersDetailsData?.id,
       user_id: user?.id,
       action: userExists ? "unfollow" : "follow",
     };
@@ -139,10 +146,10 @@ const SellerProfile = () => {
 
   return (
     <>
-      {getBusinessDetailsQuery?.isLoading ? (
+      {getSellersDetailsQuery?.isLoading ? (
         <CustomSpin />
-      ) : getBusinessDetailsQuery?.isError ? (
-        <h1 className="error">{businessDetailsErrorMessage}</h1>
+      ) : getSellersDetailsQuery?.isError ? (
+        <h1 className="error">{sellersDetailsErrorMessage}</h1>
       ) : (
         <div className="wrapper">
           <div className={styles.container}>
@@ -164,11 +171,11 @@ const SellerProfile = () => {
                 <div className={styles.card}>
                   <div>
                     <div className={styles.passport}>
-                      <img src={businessDetailsData?.logo} alt="ProductIcon" className={styles.sellerLogo} />
+                      <img src={sellersDetailsData?.profile_image!} alt="ProductIcon" className={styles.sellerLogo} />
 
                       <div className={styles.detailsflex}>
                         <p className={styles.name}>
-                          {businessDetailsData?.name}
+                          {sellersDetailsData?.store_name}
                         </p>
                         <div className={styles.starWrapper}>
                           <span className={styles.star}>
@@ -178,19 +185,19 @@ const SellerProfile = () => {
                               alt="StarYellow"
                               preview={false}
                             />
-                            ({businessDetailsData?.total_rating}
-                            {businessDetailsData &&
-                            businessDetailsData?.total_rating < 2
+                            {/* ({sellersDetailsData?.total_rating}
+                            {sellersDetailsData &&
+                            sellersDetailsData?.total_rating < 2
                               ? " rating"
                               : " ratings"}
-                            ){/* (18 ratings) */}
+                            ) */}
                             <span className={styles.dot}></span>{" "}
                             <span>
-                              {businessDetailsData?.total_followers}{" "}
-                              {businessDetailsData &&
-                              businessDetailsData?.total_followers < 2
+                              {/* {sellersDetailsData?.total_followers}{" "}
+                              {sellersDetailsData &&
+                              sellersDetailsData?.total_followers < 2
                                 ? "Follower"
-                                : "Followers"}
+                                : "Followers"} */}
                             </span>
                           </span>
                         </div>
@@ -199,16 +206,16 @@ const SellerProfile = () => {
                       <p>
                         Member Since{" "}
                         {formatDateToMonthYear(
-                          businessDetailsData?.created_at || ""
+                          sellersDetailsData?.created_at || ""
                         )}
                       </p>
                       <p style={{ paddingBlock: "0.2rem" }}>
-                        Number of Ads Posted: <span> 100</span>{" "}
+                        Number of Ads Posted: <span> {sellersDetailsData?.total_ads}</span>{" "}
                       </p>
                     </div>
                   </div>
                   <div className={styles.followBtn}>
-                    {user?.id !== businessDetailsData?.user_id && (
+                    {user?.id !== sellersDetailsData?.id && (
                       <Button
                         disabled={followBusinessMutation?.isPending}
                         onClick={handleFollowBusiness}
@@ -224,7 +231,7 @@ const SellerProfile = () => {
                         variant="green"
                       />
                     )}
-                    {user?.id !== businessDetailsData?.user_id && (
+                    {user?.id !== sellersDetailsData?.id && (
                       <Button
                         variant="white"
                         text="Write A Review"
@@ -240,12 +247,12 @@ const SellerProfile = () => {
                     <div className={styles.infos}>
                       <Image src={MailIcon} alt="MailIcon" preview={false} />
 
-                      <p>{businessDetailsData?.email}</p>
+                      <p>{sellersDetailsData?.email}</p>
                     </div>
                     <div className={styles.infos}>
                       <Image src={CallIcon} alt="CallIcon" preview={false} />
 
-                      <p>{businessDetailsData?.phone || "NA"}</p>
+                      <p>{sellersDetailsData?.number || "NA"}</p>
                     </div>
                     <div className={styles.infos}>
                       <Image
@@ -253,12 +260,12 @@ const SellerProfile = () => {
                         alt="LocationIcon"
                         preview={false}
                       />
-                      {businessDetailsData?.address}
+                      {sellersDetailsData?.address}
                     </div>{" "}
                     <div className={styles.infos}>
                       <Image src={WebICon} alt="WebICon" preview={false} />
 
-                      <p>{businessDetailsData?.website || "Na"}</p>
+                      <p>{sellersDetailsData?.website_address || "Na"}</p>
                     </div>{" "}
                   </div>
 
@@ -288,11 +295,7 @@ const SellerProfile = () => {
                       alt="WhatsappLogo"
                       preview={false}
                       style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        if (businessDetailsData?.whatsapp) {
-                          window.open(businessDetailsData.whatsapp, "_blank");
-                        }
-                      }}
+                      
                     />
                     <Image
                       src={InstagramIcon}
@@ -300,9 +303,9 @@ const SellerProfile = () => {
                       preview={false}
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        if (businessDetailsData?.instagram) {
+                        if (sellersDetailsData?.instagram_address) {
                           window.open(
-                            businessDetailsData.instagram,
+                            sellersDetailsData?.instagram_address,
                             "_blank"
                           );
                         }
@@ -316,8 +319,8 @@ const SellerProfile = () => {
                       height={32}
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        if (businessDetailsData?.facebook) {
-                          window.open(businessDetailsData.facebook, "_blank");
+                        if (sellersDetailsData?.facebook_address) {
+                          window.open(sellersDetailsData.facebook_address, "_blank");
                         }
                       }}
                     />
@@ -326,11 +329,11 @@ const SellerProfile = () => {
                       alt="BrowseLogo"
                       preview={false}
                       style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        if (businessDetailsData?.website) {
-                          window.open(businessDetailsData.website, "_blank");
-                        }
-                      }}
+                      // onClick={() => {
+                      //   if (sellersDetailsData?.website) {
+                      //     window.open(sellersDetailsData.website, "_blank");
+                      //   }
+                      // }}
                     />
                   </div>
                 </div>

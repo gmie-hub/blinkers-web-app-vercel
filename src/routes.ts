@@ -43,6 +43,8 @@ export const routes = {
   },
   profile: {
     profile: "/profile",
+    editBusiness: "/edit-business",
+
 
   },
 

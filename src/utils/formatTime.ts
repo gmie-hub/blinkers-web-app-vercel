@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow ,format, parseISO} from "date-fns";
 
 
 export const getTimeAgo = (postedDate: string | null | undefined): string => {
@@ -62,3 +62,17 @@ export function formatDateToMonthYear(dateString: string | null): string {
 
   return `${month} ${year}`;
 }
+
+export const formatDateOnly = (dateString: string | null) => {
+  if (!dateString) return ''; // Return an empty string or handle it as needed
+
+  const dateTimeObject = parseISO(dateString);
+
+  if (isNaN(dateTimeObject.getTime())) {
+    // Handle invalid date (parseISO returns Invalid Date)
+    return ''; // Return an empty string or handle it as needed
+  }
+
+  // return format(dateObject, "dd-MM-yyyy");
+  return format(dateTimeObject, 'dd-MMM-yyyy');
+};

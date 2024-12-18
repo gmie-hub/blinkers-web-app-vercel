@@ -11,7 +11,7 @@ import Select from '../../../customs/select/select';
 import Button from '../../../customs/button/button';
 import ModalContent from '../../../partials/successModal/modalContent';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CreateJob, employmentTypeData, JobTypeData, LevelData } from '../../request';
+import { CreateJob, employmentTypeData, jobTypeData, LevelData } from '../../request';
 import Editor from '../../../customs/editor/editor';
 import RouteIndicator from '../../../customs/routeIndicator';
 import { userAtom } from '../../../utils/store';
@@ -127,10 +127,10 @@ today.setHours(0, 0, 0, 0);
     ));
 
 
-  const JobTypeOptions: any =
-    JobTypeData &&
-    JobTypeData?.length > 0 &&
-    JobTypeData?.map((item: any, index: number) => (
+  const jobTypeOptions: any =
+    jobTypeData &&
+    jobTypeData?.length > 0 &&
+    jobTypeData?.map((item: any, index: number) => (
       <option value={item?.value} key={index}>
         {item?.name}
       </option>
@@ -263,7 +263,7 @@ today.setHours(0, 0, 0, 0);
                       name="job_type"
                       label="Job Type"
                       placeholder="Select Job Type"
-                      options={JobTypeOptions}
+                      options={jobTypeOptions}
                       onChange={handleChange}
                     />
 
