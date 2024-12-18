@@ -12,6 +12,8 @@ import api from '../../../../utils/apiClient';
 import Checkbox from '../../../../customs/checkBox/checkbox';
 import Button from '../../../../customs/button/button';
 import Input from '../../../../customs/input/input';
+import { useAtomValue } from 'jotai';
+import { basicInfoAtom } from '../../../../utils/store';
 
 interface ComponentProps {
   onPrev: () => void;
@@ -26,7 +28,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({ onPrev, handleNext, busines
   const [isAllDayChecked, setIsAllDayChecked] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
-//   const basicInfoData = useAtomValue(basicInfoAtom);
+  const basicInfoData = useAtomValue(basicInfoAtom);
 
   const { id } = useParams();
   const { notification } = App.useApp();
@@ -121,6 +123,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({ onPrev, handleNext, busines
   };
 
   const handleCheckboxChange = (event: any, setFieldValue: any) => {
+    console.log(setFieldValue)
     const { name, checked } = event.target;
 
     if (name === 'weekends') {
@@ -181,13 +184,13 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({ onPrev, handleNext, busines
 
   const createBusinessHandler = async (values: FormikValues) => {
     const formData = new FormData();
-    // formData.append('name', basicInfoData?.businessName);
-    // formData.append('category_id', basicInfoData?.category);
-    // formData.append('address', basicInfoData?.businessAddress);
-    // formData.append('phone', basicInfoData?.phoneNumber);
-    // formData.append('email', basicInfoData?.email);
-    // formData.append('website', basicInfoData?.website);
-    // formData.append('about', basicInfoData?.aboutBusiness);
+    formData.append('name', basicInfoData?.businessName);
+    formData.append('category_id', basicInfoData?.category);
+    formData.append('address', basicInfoData?.businessAddress);
+    formData.append('phone', basicInfoData?.phoneNumber);
+    formData.append('email', basicInfoData?.email);
+    formData.append('website', basicInfoData?.website);
+    formData.append('about', basicInfoData?.aboutBusiness);
     formData.append('facebook', values?.facebook);
     formData.append('instagram', values?.instagram);
     formData.append('whatsapp', values?.whatsapp);

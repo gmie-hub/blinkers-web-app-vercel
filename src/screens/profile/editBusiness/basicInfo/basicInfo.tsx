@@ -9,6 +9,8 @@ import { getAllCategory } from '../../../request';
 import Input from '../../../../customs/input/input';
 import SearchableSelect from '../../../../customs/searchableSelect/searchableSelect';
 import Button from '../../../../customs/button/button';
+import { useSetAtom } from 'jotai';
+import { basicInfoAtom } from '../../../../utils/store';
 
 interface ComponentProps {
   handleNext: () => void;
@@ -26,7 +28,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const BasicInfoForm: FC<ComponentProps> = ({ businessDetailsData, handleNext }) => {
-//   const basicInfoFormData = useSetAtom(basicInfoAtom);
+  const basicInfoFormData = useSetAtom(basicInfoAtom);
   const [searchValue, setSearchValue] = useState('');
 
   const { data,  } = useQuery({
@@ -65,9 +67,9 @@ const BasicInfoForm: FC<ComponentProps> = ({ businessDetailsData, handleNext }) 
           website: businessDetailsData?.website ?? '',
           aboutBusiness: businessDetailsData?.about ?? '',
         }}
-        onSubmit={() => {
-        //   basicInfoFormData({ ...values
-        //    });
+        onSubmit={(values) => {
+          basicInfoFormData({ ...values
+           });
 
           handleNext();
         }}

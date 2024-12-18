@@ -1,6 +1,6 @@
 import { atomWithStorage } from "jotai/utils";
 import { routeParts } from "../routes";
-import { CoverLetter, Education, EmploymentHistory, LinkData, Route, RoutesPart, SkillsData, SocialInfo } from "./type";
+import { BasicInfo, CoverLetter, Education, EmploymentHistory, LinkData, Route, RoutesPart, SkillsData, SocialInfo } from "./type";
 
 
 const educationInfo = JSON.parse(localStorage.getItem("education-info") ?? "[]");
@@ -15,6 +15,7 @@ const routes = JSON.parse(localStorage.getItem("routes") ?? "[]");
 const routesParts = JSON.parse(
   localStorage.getItem("route-part") ?? JSON.stringify(routeParts)
 );
+const basicInfo = JSON.parse(localStorage.getItem('basic-info') ?? '{}');
 
 
 export const EducationInfoAtom = atomWithStorage<Education[]>(
@@ -41,6 +42,8 @@ export const LinkInfoAtom = atomWithStorage<LinkData[]>(
   linkDataInfo 
 );
 
+
+export const basicInfoAtom = atomWithStorage<BasicInfo>('basic-info', basicInfo);
 
 
 
