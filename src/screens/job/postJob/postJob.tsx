@@ -1,60 +1,65 @@
-import { Form, Formik, FormikValues } from 'formik';
-import styles from './postJob.module.scss';
-import {  App, Switch } from 'antd';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import * as Yup from 'yup';
-import { routes } from '../../../routes';
-import Card from '../../../customs/card/card';
-import Input from '../../../customs/input/input';
-import Select from '../../../customs/select/select';
-import Button from '../../../customs/button/button';
-import ModalContent from '../../../partials/successModal/modalContent';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CreateJob, employmentTypeData, jobTypeData, LevelData } from '../../request';
-import Editor from '../../../customs/editor/editor';
-import RouteIndicator from '../../../customs/routeIndicator';
-import { userAtom } from '../../../utils/store';
-import { useAtomValue } from 'jotai';
+import { Form, Formik, FormikValues } from "formik";
+import styles from "./postJob.module.scss";
+import { App, Switch } from "antd";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
+import { routes } from "../../../routes";
+import Card from "../../../customs/card/card";
+import Input from "../../../customs/input/input";
+import Select from "../../../customs/select/select";
+import Button from "../../../customs/button/button";
+import ModalContent from "../../../partials/successModal/modalContent";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import {
+  CreateJob,
+  employmentTypeData,
+  getJobDetails,
+  jobTypeData,
+  LevelData,
+  UpdateJob,
+} from "../../request";
+import Editor from "../../../customs/editor/editor";
+import RouteIndicator from "../../../customs/routeIndicator";
+import { userAtom } from "../../../utils/store";
+import { useAtomValue } from "jotai";
 
 export default function PostJobs() {
   const navigate = useNavigate();
   const [openSuccess, setOpenSuccess] = useState(false);
   const user = useAtomValue(userAtom);
-
+  const [editSuccess, setEditSuccess] = useState(false);
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
   const { id } = useParams();
 
- 
+  const handleSucessEdit = () => {
+    setEditSuccess(false);
+    navigate(-1);
+  };
 
-  // const [getAllBusinessQuery,] = useQueries({
-  //   queries: [
-      // {
-      //   queryKey: ['get-all-business',],
-      //   queryFn: () => getAllBusiness,
-      //   retry: 0,
-      //   refetchOnWindowFocus: false,
-      // },
-      // {
-      //   queryKey: ['get-jobs-details'],
-      //   queryFn: () => getJobDetails(parseInt(id!)),
-      //   retry: 0,
-      //   refetchOnWindowFocus: false,
-      //   enabled: !!id,
-      // },
-  //   ],
-  // });
+  const [getJobDetailsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-jobs-details"],
+        queryFn: () => getJobDetails(parseInt(id!)),
+        retry: 0,
+        refetchOnWindowFocus: false,
+        enabled: !!id,
+      },
+    ],
+  });
 
-  // const JobDetailsData = getJobDetailsQuery?.data?.data;
-// 
-
+  const JobDetailsData = getJobDetailsQuery?.data?.data;
 
   const createJobMutation = useMutation({
     mutationFn: CreateJob,
-    mutationKey: ['create-jobs'],
+    mutationKey: ["create-jobs"],
   });
-  const CreateJobHandler = async (values: FormikValues, resetForm: () => void) => {
+  const CreateJobHandler = async (
+    values: FormikValues,
+    resetForm: () => void
+  ) => {
     const payload: Partial<JobDatum> = {
       title: values?.title,
       // business_id: values?.business_id,
@@ -70,8 +75,8 @@ export default function PostJobs() {
       responsibilities: values?.responsibilities,
       qualifications: values?.qualifications,
       benefits: values?.benefits,
-      start_date: values?.start_date || '',
-      end_date: values?.end_date || '',
+      start_date: values?.start_date || "",
+      end_date: values?.end_date || "",
       renumeration: values?.salary,
     };
 
@@ -83,9 +88,9 @@ export default function PostJobs() {
           //   description: data?.message,
           // });
           queryClient.refetchQueries({
-            queryKey: ['get-all-jobs'],
+            queryKey: ["get-all-jobs"],
           });
-          resetForm()
+          resetForm();
           setOpenSuccess(true);
           // resetForm();
           navigate(routes?.job.job);
@@ -93,29 +98,27 @@ export default function PostJobs() {
       });
     } catch (error: any) {
       notification.error({
-        message: 'Error',
-        description: 'An error occurred',
+        message: "Error",
+        description: "An error occurred",
       });
     }
   };
 
   const today = new Date();
-today.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   const validationSchema = Yup.object().shape({
-    // business_id: Yup.string().required('Company is required'),
-    title: Yup.string().required('Job title is required'),
-    // start_date: Yup.date().required('required'),
+    title: Yup.string().required("Job title is required"),
     start_date: Yup.date()
-    .required('Start date is required')
-    .min(today, 'Start date cannot be in the past'),
-    employment_type: Yup.string().required('Employment type is required'),
-    job_type: Yup.string().required('Job type is required'),
-    level: Yup.string().required('Job level is required'),
-    end_date: Yup.date().required('required').min(Yup.ref('start_date'), 'End Date cannot be before Start Date'),
+      .required("Start date is required")
+      .min(today, "Start date cannot be in the past"),
+    employment_type: Yup.string().required("Employment type is required"),
+    job_type: Yup.string().required("Job type is required"),
+    level: Yup.string().required("Job level is required"),
+    end_date: Yup.date()
+      .required("required")
+      .min(Yup.ref("start_date"), "End Date cannot be before Start Date"),
   });
-
-
 
   const employmentTypeOptions: any =
     employmentTypeData &&
@@ -126,7 +129,6 @@ today.setHours(0, 0, 0, 0);
       </option>
     ));
 
-
   const jobTypeOptions: any =
     jobTypeData &&
     jobTypeData?.length > 0 &&
@@ -135,8 +137,6 @@ today.setHours(0, 0, 0, 0);
         {item?.name}
       </option>
     ));
-
-
 
   const LevelOptions: any =
     LevelData &&
@@ -147,22 +147,64 @@ today.setHours(0, 0, 0, 0);
       </option>
     ));
 
-//   const handleSucessEdit = () => {
-//     setEditSuccess(false);
-//     navigate(routes?.jobs?.jobs);
-//   };
+  //   const handleSucessEdit = () => {
+  //     setEditSuccess(false);
+  //     navigate(routes?.jobs?.jobs);
+  //   };
   const handleSucessPost = () => {
     setOpenSuccess(false);
     navigate(routes?.job?.job);
   };
 
+  const editJobMutation = useMutation({
+    mutationFn: UpdateJob,
+    mutationKey: ["edit-jobs"],
+  });
+  const EditJobHandler = async (
+    values: FormikValues,
+  ) => {
+    const payload: Partial<JobDatum> = {
+      id: parseInt(id!) ?? 0,
+      title: values?.title,
+      business_id: values?.business_id,
+      status: values?.accepting_applications === false ? "0" : "1",
+      employment_type: values?.employment_type,
+      job_type: values?.job_type,
+      level: values?.level,
+      industry: values?.industry,
+      is_admin: values?.business_id === 0 ? true : false,
+      location: values?.location,
+      description: values?.description,
+      responsibilities: values?.responsibilities,
+      qualifications: values?.qualifications,
+      benefits: values?.benefits,
+      start_date: values?.start_date,
+      end_date: values?.end_date,
+      renumeration: values?.salary,
+    };
 
+    try {
+      await editJobMutation.mutateAsync(payload, {
+        onSuccess: () => {
+          queryClient.refetchQueries({
+            queryKey: ["get-all-jobs"],
+          });
+          setEditSuccess(true);
+          // navigate(routes?.jobs?.jobs);
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: "An error occurred",
+      });
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
       <RouteIndicator showBack={true} />
 
-  
       <Card style={styles.card}>
         <div className={styles.postJob}>
           {id ? (
@@ -176,25 +218,46 @@ today.setHours(0, 0, 0, 0);
         </div>
         <section>
           <Formik
+            // initialValues={{
+            //   business_id: '',
+            //   title:  '',
+            //   employment_type: '',
+            //   job_type:  '',
+            //   level: '',
+            //   industry:'',
+            //   location: '',
+            //   description: '',
+            //   responsibilities: '',
+            //   qualifications:  '',
+            //   benefits: '',
+            //   start_date: '',
+            //   end_date:  '',
+            //   salary:'',
+            //   accepting_applications: false, // <-- Ensures boolean value
+            // }}
+
             initialValues={{
-              business_id: '',
-              title:  '',
-              employment_type: '',
-              job_type:  '',
-              level: '',
-              industry:'',
-              location: '',
-              description: '',
-              responsibilities: '',
-              qualifications:  '',
-              benefits: '',
-              start_date: '',
-              end_date:  '',
-              salary:'',
-              accepting_applications: false, // <-- Ensures boolean value
+              business_id: JobDetailsData?.business_id,
+              title: JobDetailsData?.title || "",
+              employment_type: JobDetailsData?.employment_type || "",
+              job_type: JobDetailsData?.job_type || "",
+              level: JobDetailsData?.level || "",
+              industry: JobDetailsData?.industry || "",
+              location: JobDetailsData?.location || "",
+              description: JobDetailsData?.description || "",
+              responsibilities: JobDetailsData?.responsibilities || "",
+              qualifications: JobDetailsData?.qualifications || "",
+              benefits: JobDetailsData?.benefits || "",
+              start_date: JobDetailsData?.start_date || "",
+              end_date: JobDetailsData?.end_date || "",
+              salary: JobDetailsData?.renumeration || "",
+              accepting_applications:
+                JobDetailsData?.status?.toString() === "1" ? true : false, // <-- Ensures boolean value
             }}
-            onSubmit={(values,{resetForm}) => {
-            CreateJobHandler(values, resetForm);
+            onSubmit={(values, { resetForm }) => {
+              id
+                ? EditJobHandler(values)
+                : CreateJobHandler(values, resetForm);
             }}
             enableReinitialize={true}
             validationSchema={validationSchema}
@@ -208,7 +271,7 @@ today.setHours(0, 0, 0, 0);
                       label="Job Title"
                       placeholder="Customer Service"
                       type="text"
-                    //   value={values.title}
+                      //   value={values.title}
                       onChange={handleChange}
                     />
 
@@ -217,7 +280,7 @@ today.setHours(0, 0, 0, 0);
                       label="Location"
                       placeholder="Lagos. Nigeria"
                       type="text"
-                    //   value={values.location}
+                      //   value={values.location}
                       onChange={handleChange}
                     />
 
@@ -233,21 +296,21 @@ today.setHours(0, 0, 0, 0);
                       label="industry"
                       placeholder="industry"
                       type="text"
-                    //   value={values.industry}
+                      //   value={values.industry}
                       onChange={handleChange}
                     />
                     <Input
                       name="start_date"
                       label="Start Date"
                       type="date"
-                    //   value={values.start_date}
+                      //   value={values.start_date}
                       onChange={handleChange}
                     />
                     <Input
                       name="end_date"
                       label="End Date"
                       type="date"
-                    //   value={values.end_date}
+                      //   value={values.end_date}
                       onChange={handleChange}
                     />
 
@@ -280,38 +343,37 @@ today.setHours(0, 0, 0, 0);
                       label="Salary"
                       type="text"
                       placeholder="input Salary"
-                    //   value={values.salary}
+                      //   value={values.salary}
                       onChange={handleChange}
                     />
 
-                
                     <Editor
                       name="description"
                       label="Job Description"
                       initialData={values.description}
                       onChange={(_, editor) => {
                         const data = editor.getData();
-                        setFieldValue('description', data);
+                        setFieldValue("description", data);
                       }}
                     />
+
                     <Editor
                       name="responsibilities"
                       label="Key Responsibilities"
                       initialData={values?.responsibilities}
                       onChange={(_, editor) => {
                         const data = editor.getData();
-                        setFieldValue('responsibilities', data);
+                        setFieldValue("responsibilities", data);
                       }}
                     />
-        
-                
+
                     <Editor
                       name="qualifications"
                       label="Qualifications"
                       initialData={values?.qualifications}
                       onChange={(_, editor) => {
                         const data = editor?.getData();
-                        setFieldValue('qualifications', data);
+                        setFieldValue("qualifications", data);
                       }}
                     />
 
@@ -321,28 +383,48 @@ today.setHours(0, 0, 0, 0);
                       initialData={values.benefits}
                       onChange={(_, editor) => {
                         const data = editor.getData();
-                        setFieldValue('benefits', data);
+                        setFieldValue("benefits", data);
                       }}
                     />
 
-
                     <div className="switchWrapper">
-                      Accepting Applications{' '}
+                      Accepting Applications{" "}
                       <Switch
                         checked={values.accepting_applications}
-                        onChange={(checked) => setFieldValue('accepting_applications', checked)}
+                        onChange={(checked) =>
+                          setFieldValue("accepting_applications", checked)
+                        }
                       />
                     </div>
 
                     <section className={styles.buttonGroup}>
-                 
+                      {/* <Button
+                        variant="green"
+                        type="submit"
+                        disabled={createJobMutation?.isPending}
+                        text={"Post Job"}
+                        className={styles.btn}
+                      /> */}
+
                       <Button
                         variant="green"
                         type="submit"
-                        disabled={ createJobMutation?.isPending}
-                        
-                        text={ 'Post Job'}
+                        disabled={
+                          editJobMutation?.isPending ||
+                          createJobMutation?.isPending
+                        }
+                        // text={id ? "Save Changes" : "Post Job"}
                         className={styles.btn}
+
+                        text={
+                          id
+                            ? editJobMutation?.isPending
+                              ? "Updating..."
+                              : "Save Changes"
+                            : createJobMutation?.isPending
+                            ? "Submitting..."
+                            : "Post Job"
+                        }
                       />
                     </section>
                   </div>
@@ -358,16 +440,14 @@ today.setHours(0, 0, 0, 0);
         handleClick={() => {
           handleSucessPost();
         }}
-        heading={'Job Posted Successfully'}
+        heading={"Job Posted Successfully"}
       />
-      {/* <ModalContent
+      <ModalContent
         open={editSuccess}
-        handleCancel={() => handleSucessEdit()}
-        handleClick={() => {
-          handleSucessEdit();
-        }}
-        text={'Job Updates Successfully'}
-      /> */}
+        handleCancel={handleSucessEdit}
+        handleClick={handleSucessEdit}
+        text={"Job Updates Successfully"}
+      />
     </div>
   );
 }

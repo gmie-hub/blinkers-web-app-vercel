@@ -43,7 +43,8 @@ interface ResetPasswordPayload {
 interface resendOtp {
   type?: string;
   value:string;
-  from_page:string
+  from_page:string;
+  route:string;
 }
 interface UserVerifyOtp {
   otp?: number;

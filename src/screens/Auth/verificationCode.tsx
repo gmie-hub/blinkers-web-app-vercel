@@ -24,6 +24,7 @@ const VerificationCode = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const { email } = useParams<{ email: string }>(); // Define the type of id
+  const [route, setRoute] = useState('')
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -58,11 +59,12 @@ const VerificationCode = () => {
 
   // };
 
-  const handleResendClick = () => {
+  const handleResendClick = (route: string) => {
+    setRoute(route)
     if (!isResendDisabled) {
       setTimeLeft(5); // Reset timer to 1:25
       setIsResendDisabled(true); // Disable the button again
-  
+
       // Start counting down again from 85 seconds
       setTimeout(() => {
         const timer = setInterval(() => {
@@ -80,10 +82,14 @@ const VerificationCode = () => {
         return () => clearInterval(timer);
       }, 0);
     }
-  
-    // Call the resend OTP handler function to send the OTP
-    resendOtpHandler();
+
   };
+
+  useEffect(() => {
+    if (route) {
+      resendOtpHandler();
+    }
+  }, [route]);
   
 
   const initialValues: FormValues = {
@@ -174,10 +180,11 @@ const VerificationCode = () => {
   const resendOtpHandler = async () => {
     const payload: resendOtp = {
       type: "Email",
-      value: email!!,
+      value: email!,
       from_page: "Signup",
+      route: route
+
     };
-  if(timeLeft > 0) return;  
 
     try {
       await resendOptMutation.mutateAsync(payload, {
@@ -191,9 +198,10 @@ const VerificationCode = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: errorMessage(error) || "An error occurred",
+        description: "An error occurred",
       });
     }
+
   };
 
 
@@ -299,17 +307,36 @@ const VerificationCode = () => {
                   mins
                 </p>
               </div>
-              <p
-                className={`${styles.resend} ${
-                  isResendDisabled ? styles.disabled : ""
-                }`}
-                onClick={handleResendClick}
-                style={{
-                  cursor: isResendDisabled ? "not-allowed" : "pointer", display:'flex',justifyContent:'center'
-                }}
-              >
-                Resend Code
-              </p>
+
+              <Button
+                variant="transparent"
+                onClick={() => handleResendClick("Sms")}
+                disabled={resendOptMutation?.isPending || timeLeft > 0}
+                type="submit"
+                text={
+                  route === "Sms" && resendOptMutation?.isPending
+                    ? "loading..."
+                    : "Resend Code via sms"
+                }
+                className={styles.buttonOtp}
+              />
+
+              <Button
+                variant="transparent"
+                onClick={() => handleResendClick("Whatsapp")}
+                disabled={resendOptMutation?.isPending || timeLeft > 0}
+                type="submit"
+                className={styles.buttonOtp}
+                text={
+                  route === "Whatsapp" && resendOptMutation?.isPending
+                    ? "loading..."
+                    : "Resend Code via Whatsapp"
+                }
+              />
+
+
+
+             
               <div onClick={()=>navigate(-1)} style={{display:'flex', paddingBlockStart:'3rem', gap:'1rem', cursor:'pointer'}}>
               <Image src={BackIcon} alt={BackIcon} preview={false} />
 

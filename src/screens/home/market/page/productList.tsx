@@ -18,9 +18,10 @@ import usePagination from "../../../../hooks/usePagnation";
 interface ProductListProps {
   appliedSearchTerm: string;
   setAppliedSearchTerm:any;
+  selectedItems:number[]
 }
 
-const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm }) => {
+const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm,selectedItems }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   // let { search } = useParams();
@@ -33,8 +34,8 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
   const [getAllMarketQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-market", currentPage, appliedSearchTerm],
-        queryFn: () => getAllMarket(currentPage, appliedSearchTerm ),
+        queryKey: ["get-all-market", currentPage, appliedSearchTerm,],
+        queryFn: () => getAllMarket(currentPage, appliedSearchTerm, ),
         retry: 0,
         refetchOnWindowFocus: false,
       },

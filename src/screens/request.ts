@@ -81,6 +81,9 @@ export const getAllMarket = async (page?: number, search?: string | number) => {
   if (search !== undefined && search !== "") {
     queryParams.push(`search=${search}`);
   }
+  // if(sub_category_id !==undefined && sub_category_id.length !== 0){
+  //   queryParams.push(`sub_category_id=${sub_category_id}`);
+  // }
 
   if (queryParams.length > 0) {
     url += `?${queryParams.join("&")}`;
@@ -259,4 +262,23 @@ export const handleCopyLink = (textToCopy: string) => {
 
 export const getJobBYBusinessId = async (id: number) => {
   return (await api.get(`jobs?business_id=${id}`))?.data as JobResponse;
+};
+
+export const deleteJob = async ({ id }: { id: number }) => {
+  return (await api.delete(`jobs/${id}`))?.data as JobDatum;
+};
+export const UpdateJob = async (payload: Partial<JobDatum>) => {
+  return (await api.patch(`jobs/${payload.id}`, payload, {}))?.data as Response;
+};
+
+export const getAllApplication = async (page: number,job_id:number) => {
+  return (await api.get(`jobs/application?page=${page}&job_id=${job_id}`))?.data as any;
+};
+export const getApplicationDetails = async (id: number) => {
+  return (await api.get(`jobs/application/${id}`))?.data as ApplicantResponse;
+};
+
+export const updateApplicationStatus = async (payload: ApplicationStatusPayload, id: number) => {
+  const response = await api.patch(`jobs/application/${id}`, payload);
+  return response.data;
 };

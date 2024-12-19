@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styles from "./basicInfo.module.scss";
 import { Tabs, TabsProps } from "antd";
-import job1 from "../../../../assets/job1.svg";
+import postIcon from "../../../../assets/plusgreen.svg";
 import Button from "../../../../customs/button/button";
-import edit from "../../../../assets/edit-2.svg";
+import edit from "../../../../assets/editgreen.svg";
 import { getBusinessById } from "../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { userAtom } from "../../../../utils/store";
@@ -102,7 +102,7 @@ export default function Index({}: BasicInformationProps) {
                   onClick={handleNavigateToEditBusiness}
               />
               <Button
-                icon={<img src={job1} alt={job1} />}
+                icon={<img src={postIcon} alt={postIcon} />}
                 className="buttonStyle"
                 text="Post a Job"
                 variant="white"

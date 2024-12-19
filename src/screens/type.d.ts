@@ -25,6 +25,7 @@ interface JobDatum {
   business: Business;
   total_feedbacks: number;
   related_jobs: RelatedJobData[];
+  
 }
 
 interface RelatedJobData {
@@ -286,6 +287,7 @@ interface Applicant {
   created_at: string;
   updated_at: string;
   skills;
+  user?: UserLogin;
 }
 
 // interface Education {
@@ -482,4 +484,43 @@ interface hour {
   open_time: string;
   close_time;
   string;
+}
+
+interface ApplicantResponse {
+  message: string;
+  status: boolean;
+  data: JobApplicationData;
+}
+
+interface JobApplicationData {
+  current_page: number;
+  data: JobApplication[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: PaginationLink[];
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+  applicant:Applicant,
+}
+
+interface JobApplication {
+  id: number;
+  job_id: number;
+  applicant_id: number;
+  business_id: number;
+  status: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  applicant: Applicant;
+}
+
+interface ApplicationStatusPayload {
+  status: string; 
 }

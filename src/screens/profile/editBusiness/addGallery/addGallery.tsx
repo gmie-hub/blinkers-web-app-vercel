@@ -7,7 +7,10 @@ import Button from "../../../../customs/button/button";
 import { errorMessage } from "../../../../utils/errorMessage";
 import { deleteGalarybyId, uploadGallery } from "../../../request";
 import ModalContent from "../../../../partials/successModal/modalContent";
-import linkIcon from "../../../../assets/link-2.svg";
+// import linkIcon from "../../../../assets/link-2.svg";
+import fileIcon from "../../../../assets/filegreen.svg";
+import removeGreen from "../../../../assets/removegreen.svg";
+
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai/react";
 
@@ -181,7 +184,7 @@ const busId =user?.business?.id
                     type="button"
                     text="Upload Photos"
                     className={styles.buttonStyle}
-                    icon={<img src={linkIcon} alt="linkIcon" />}
+                    icon={<img src={fileIcon} alt="fileIcon" />}
                     onClick={handleUploadClick}
                     isLoading={UploadGalleryMutation?.isPending}
                   />
@@ -211,8 +214,8 @@ const busId =user?.business?.id
                           disabled={deleteGalaryMutation.isPending}
                         >
                           <img
-                            src={linkIcon}
-                            alt="linkIcon"
+                            src={removeGreen}
+                            alt="removeGreen"
                             className={styles.removeIcon}
                             onClick={() => DeleteGalaryHandler([item.id])}
                           />
@@ -232,7 +235,7 @@ const busId =user?.business?.id
                     type="button"
                     text="Upload Videos"
                     className={styles.buttonStyle}
-                    icon={<img src={linkIcon} alt="linkIcon" />}
+                    icon={<img src={fileIcon} alt="fileIcon" />}
                     onClick={handleUploadClick}
                     isLoading={UploadGalleryMutation?.isPending}
                   />
@@ -262,8 +265,8 @@ const busId =user?.business?.id
                         >
                           {
                             <img
-                              src={linkIcon}
-                              alt="linkIcon"
+                              src={removeGreen}
+                              alt="removeGreen"
                               className={styles.removeIcon}
                               onClick={() => DeleteGalaryHandler(item.id)}
                             />

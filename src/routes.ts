@@ -1,4 +1,3 @@
-
 export const routes = {
   // home: "/",
   page: {
@@ -28,6 +27,7 @@ export const routes = {
     AddBusiness: "/job/add-business",
     applyForJob: "/job/apply/:id",
     postJob: "/post-job",
+    editJob: "/edit-job/:id",
   },
 
   directory: {
@@ -45,8 +45,8 @@ export const routes = {
     profile: "/profile",
     editBusiness: "/edit-business",
     viewJobDetails: "/view-job-details/:id",
-
-
+    applicants: "/applicants/:id",
+    viewApplicant: "/jobs/view-applicant/:id",
   },
 
   auth: {

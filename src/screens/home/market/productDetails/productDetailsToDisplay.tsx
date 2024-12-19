@@ -11,10 +11,11 @@ import {
   getFollowersByUser_id,
   getProductDetails,
 } from "../../../request";
-import { App, Spin } from "antd";
+import { App } from "antd";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
+import CustomSpin from "../../../../customs/spin";
 
 const Main = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
@@ -158,7 +159,7 @@ const Main = () => {
       </div>
 
       {getProductDetailsQuery?.isLoading ? (
-        <Spin style={{ display: "flex", justifyContent: "center" }} />
+        <CustomSpin />
       ) : getProductDetailsQuery?.isError ? (
         <h1 style={{ textAlign: "center" }} className="error">
           {productDetailsErrorMessage}

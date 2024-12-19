@@ -35,6 +35,7 @@ import JobLikeThis from "./screens/job/jobLikeThis/jobsLikeThis";
 import RegisterAsApplicant from "./screens/job/apply/applyAsApplicant/index";
 import ApplyForJob from "./screens/job/applytoStrive/index";
 import PostJob from "./screens/job/postJob/postJob";
+import EditJob from "./screens/job/postJob/postJob";
 
 import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
 
@@ -43,6 +44,8 @@ import Videos from "./screens/directory/gallery/video";
 import Profile from "./screens/profile/profile";
 import EditBusiness from "./screens/profile/editBusiness/editBusiness";
 import ViewJobDetails from "./screens/profile/businessInformation/postedJob/viewJobDetails/viewJob";
+import Applicants from "./screens/profile/businessInformation/postedJob/applicants/applicant";
+import ViewApplicant from "./screens/profile/businessInformation/postedJob/applicants/viewApplicantDetails/viewApplicant";
 
 
 function App() {
@@ -85,11 +88,14 @@ function App() {
     { path: routes.job.AddBusiness, element: <AddBusiness /> },
     { path: routes.job.applyForJob, element: <ApplyForJob /> },
     { path: routes.job.postJob, element: <PostJob /> },
+    { path: routes.job.editJob, element: <EditJob/> },
 
     { path: routes.profile.profile, element: <Profile /> },
 
     { path: routes.profile.editBusiness, element: <EditBusiness /> },
     { path: routes.profile.viewJobDetails, element: <ViewJobDetails /> },
+    { path: routes.profile.applicants, element: <Applicants /> },
+    { path: routes.profile.viewApplicant, element: <ViewApplicant /> },
 
  
   ];

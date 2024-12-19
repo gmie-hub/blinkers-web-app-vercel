@@ -24,7 +24,7 @@ const ResetPasswordVerificationCode = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const { email } = useParams<{ email: string }>(); // Define the type of id
-
+  const [route, setRoute] = useState("");
   const handleNavigateToResetPassword = (email: string) => {
     navigate(`/reset-password/${email}`);
   };
@@ -53,7 +53,11 @@ const ResetPasswordVerificationCode = () => {
     )}`;
   };
 
-  const handleResendClick = () => {
+  console.log(route,'roy');
+
+  const handleResendClick = (route: string) => {
+    setRoute(route);
+
     if (!isResendDisabled) {
       setTimeLeft(5); // Reset timer to 1:25
       setIsResendDisabled(true); // Disable the button again
@@ -76,9 +80,14 @@ const ResetPasswordVerificationCode = () => {
       }, 0);
     }
 
-    // Call the resend OTP handler function to send the OTP
-    resendOtpHandler();
+
   };
+
+  useEffect(() => {
+    if (route) {
+      resendOtpHandler();
+    }
+  }, [route]);
 
   const initialValues: FormValues = {
     code: ["", "", "", ""], // 4 fields instead of 6
@@ -127,7 +136,7 @@ const ResetPasswordVerificationCode = () => {
       }
     }
   };
-  
+
   const handlePaste = (
     e: React.ClipboardEvent<HTMLInputElement>,
     index: number,
@@ -170,9 +179,9 @@ const ResetPasswordVerificationCode = () => {
     const payload: resendOtp = {
       type: "Email",
       value: email!,
-      from_page: "Signup",
+      from_page: "Forgot",
+      route: route,
     };
-    if (timeLeft > 0) return;
 
     try {
       await resendOptMutation.mutateAsync(payload, {
@@ -186,7 +195,7 @@ const ResetPasswordVerificationCode = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: errorMessage(error) || "An error occurred",
+        description: "An error occurred",
       });
     }
   };
@@ -216,7 +225,6 @@ const ResetPasswordVerificationCode = () => {
         },
       });
     } catch (error: any) {
-
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",
@@ -291,7 +299,7 @@ const ResetPasswordVerificationCode = () => {
               <Button
                 disabled={verifyOptMutation?.isPending}
                 type="submit"
-                text={verifyOptMutation?.isPending ?  "loading..." : "Verify"}
+                text={verifyOptMutation?.isPending ? "loading..." : "Verify"}
                 className={styles.button}
               />
 
@@ -302,19 +310,34 @@ const ResetPasswordVerificationCode = () => {
                   mins
                 </p>
               </div>
-              <p
-                className={`${styles.resend} ${
-                  isResendDisabled ? styles.disabled : ""
-                }`}
-                onClick={handleResendClick}
-                style={{
-                  cursor: isResendDisabled ? "not-allowed" : "pointer",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                Resend Code
-              </p>
+              
+              <Button
+                variant="transparent"
+                onClick={() => handleResendClick("Sms")}
+                disabled={resendOptMutation?.isPending || timeLeft > 0}
+                type="submit"
+                text={
+                  route === "Sms" && resendOptMutation?.isPending
+                    ? "loading..."
+                    : "Resend Code via sms"
+                }
+                className={styles.buttonOtp}
+              />
+
+              <Button
+                variant="transparent"
+                onClick={() => handleResendClick("Whatsapp")}
+                disabled={resendOptMutation?.isPending || timeLeft > 0}
+                type="submit"
+                className={styles.buttonOtp}
+                text={
+                  route === "Whatsapp" && resendOptMutation?.isPending
+                    ? "loading..."
+                    : "Resend Code via Whatsapp"
+                }
+              />
+
+
               <div
                 onClick={() => navigate(-1)}
                 style={{

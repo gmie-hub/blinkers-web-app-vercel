@@ -31,7 +31,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [categoryId, setCategoryId] = useState(0);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]); // Array of strings
+  const [selectedItems, setSelectedItems] = useState<number[]>([]); // Array of strings
   const [stateId, setStateId] = useState("");
 
   // const handleStateChange = (value: string) => {
@@ -45,13 +45,13 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     // setFieldValue("lga", "")
   };
 
-  console.log(stateId, "Selected Items");
+  console.log(selectedItems, "Selected Items");
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setAppliedSearchTerm(selectedItems[selectedItems.length - 1]); // Get the last item
-    }
-  }, [selectedItems]);
+  // useEffect(() => {
+  //   if (selectedItems.length > 0) {
+  //     setAppliedSearchTerm(selectedItems); // Get the last item
+  //   }
+  // }, [selectedItems]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -138,7 +138,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   // Updated handleCheckboxChange to save only subCategory titles
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    subCategoryTitle: string
+    subCategoryTitle: number
   ) => {
     const { checked } = e.target;
     setSelectedItems((prevState) => {
@@ -151,7 +151,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   };
 
   // Updated isChecked to check against subCategory titles
-  const isChecked = (subCategoryTitle: string) => {
+  const isChecked = (subCategoryTitle: number) => {
     return selectedItems.includes(subCategoryTitle);
   };
 
@@ -189,7 +189,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                     label="Nearby Me"
                     name="nearby_me"
                     isChecked={values.nearby_me}
-                    onChange={(e: any) => handleCheckboxChange(e, "Nearby Me")}
+                    // onChange={(e: any) => handleCheckboxChange(e, "Nearby Me")}
                   />
 
                   <p className={styles.subjectBg}>CATEGORIES</p>
@@ -214,7 +214,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                                 label={sub.title}
                                 name={`selectedItems.${sub.id}`}
                                 onChange={
-                                  (e: any) => handleCheckboxChange(e, sub.title) // Pass sub.title to handleCheckboxChange
+                                  (e: any) => handleCheckboxChange(e, sub.id) // Pass sub.title to handleCheckboxChange
                                 }
                               />
                             </li>
@@ -293,6 +293,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
               <ProductList
                 appliedSearchTerm={appliedSearchTerm}
                 setAppliedSearchTerm={setAppliedSearchTerm}
+                selectedItems={selectedItems}
               />
             </div>
           </div>
