@@ -18,10 +18,10 @@ import usePagination from "../../../../hooks/usePagnation";
 interface ProductListProps {
   appliedSearchTerm: string;
   setAppliedSearchTerm:any;
-  selectedItems:number[]
+  // selectedItems:number[]
 }
 
-const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm,selectedItems }) => {
+const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm, }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   // let { search } = useParams();

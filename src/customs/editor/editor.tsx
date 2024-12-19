@@ -31,6 +31,7 @@ const Editor = ({ label, name, onChange, initialData }: EditorProps) => {
           ],
         }}
         onChange={(event, editor) => {
+          console.log(event)
           if (onChange && name) {
             onChange(name, editor); // Pass editor instance for use
           }
