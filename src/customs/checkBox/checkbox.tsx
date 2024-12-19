@@ -1,5 +1,3 @@
-
-
 // import {  useField } from "formik";
 // import styles from "./checkbox.module.scss";
 
@@ -34,9 +32,8 @@
 
 // export default Checkbox;
 
-
 import { useField } from "formik";
-import styles from "./checkbox.module.scss";
+import styles from "./checkBox.module.scss";
 
 interface CheckboxProps {
   label: string;
@@ -45,8 +42,14 @@ interface CheckboxProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Optional onChange prop
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ label, name, isChecked, onChange, ...props }) => {
-  const [field, meta, ] = useField({ name, type: "checkbox" });
+const Checkbox: React.FC<CheckboxProps> = ({
+  label,
+  name,
+  isChecked,
+  onChange,
+  ...props
+}) => {
+  const [field, meta] = useField({ name, type: "checkbox" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e); // Call Formik's internal onChange
