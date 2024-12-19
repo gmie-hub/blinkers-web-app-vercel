@@ -9,7 +9,6 @@ import Button from "../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { userVerifyOtp, ResendOptCall } from "./request";
-import { errorMessage } from "../../utils/errorMessage";
 import { useParams } from "react-router-dom";
 import BackIcon from "../../assets/back.svg";
 
