@@ -229,7 +229,7 @@ const VerificationCode = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: errorMessage(error) || "An error occurred",
+        description:  "An error occurred",
       });
     }
   };

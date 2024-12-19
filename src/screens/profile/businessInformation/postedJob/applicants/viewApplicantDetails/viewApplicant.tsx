@@ -317,23 +317,4 @@ export default function ApplicantDetails({}: BasicInformationProps) {
 }
 /* eslint-disable no-empty-pattern */
 
-export const cardsData = [
-  {
-    title: "Product Designer at Blinkers",
-    description: "November 2022 - Present (9 months)",
-    contract: "Contract",
-    location: "Lagos, Nigeria, Remote",
-  },
-  {
-    title: "Frontend Developer at XYZ",
-    description: "November 2022 - Present (9 months)",
-    contract: "Contract",
-    location: "Lagos, Nigeria, Remote",
-  },
-  {
-    title: "UI/UX Designer at ABC",
-    description: "November 2022 - Present (9 months)",
-    contract: "Contract",
-    location: "Lagos, Nigeria, Remote",
-  },
-];
+

@@ -47,11 +47,11 @@ const Applicants = () => {
     },
     {
       title: 'Status',
-      dataIndex: 'status',
+      dataIndex: 'status',  
       key: 'status',
       render: (_, { status }) => (
         <StatusBadge
-          status={status === '0' ? 'InActive' : status === '1' ? 'Active' : status === '2' ? 'Approved' : 'Rejected'}
+          status={status === '0' ? 'InActive' : status === '1' ? 'Pending' : status === '2' ? 'Approved' : 'Rejected'}
         />
       ),
     },
