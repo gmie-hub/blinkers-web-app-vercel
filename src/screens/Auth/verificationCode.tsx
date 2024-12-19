@@ -9,7 +9,6 @@ import Button from "../../customs/button/button";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { userVerifyOtp, ResendOptCall } from "./request";
-import { errorMessage } from "../../utils/errorMessage";
 import { useParams } from "react-router-dom";
 import BackIcon from "../../assets/back.svg";
 
@@ -24,7 +23,7 @@ const VerificationCode = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const { email } = useParams<{ email: string }>(); // Define the type of id
-  const [route, setRoute] = useState('')
+  const [route, setRoute] = useState("");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,7 +59,7 @@ const VerificationCode = () => {
   // };
 
   const handleResendClick = (route: string) => {
-    setRoute(route)
+    setRoute(route);
     if (!isResendDisabled) {
       setTimeLeft(5); // Reset timer to 1:25
       setIsResendDisabled(true); // Disable the button again
@@ -77,20 +76,12 @@ const VerificationCode = () => {
             return prevTime - 1;
           });
         }, 1000); // Update every second
-  
+
         // Cleanup the interval when the component is unmounted
         return () => clearInterval(timer);
       }, 0);
     }
-
   };
-
-  useEffect(() => {
-    if (route) {
-      resendOtpHandler();
-    }
-  }, [route]);
-  
 
   const initialValues: FormValues = {
     code: ["", "", "", ""], // 4 fields instead of 6
@@ -182,8 +173,7 @@ const VerificationCode = () => {
       type: "Email",
       value: email!,
       from_page: "Signup",
-      route: route
-
+      route: route,
     };
 
     try {
@@ -201,9 +191,14 @@ const VerificationCode = () => {
         description: "An error occurred",
       });
     }
-
   };
 
+  useEffect(() => {
+    if (route) {
+      resendOtpHandler();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]);
 
   const verifyOptMutation = useMutation({
     mutationFn: userVerifyOtp,
@@ -214,7 +209,7 @@ const VerificationCode = () => {
     const payload: UserVerifyOtp = {
       otp: parseInt(values.code.join("")), // Join the OTP code array to form the full OTP
     };
-    if(values?.code.join('')?.length !==4 ) return;
+    if (values?.code.join("")?.length !== 4) return;
 
     try {
       await verifyOptMutation.mutateAsync(payload, {
@@ -223,23 +218,25 @@ const VerificationCode = () => {
             message: "Success",
             description: data?.message,
           });
-          navigate('/login')
+          navigate("/login");
         },
       });
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description:  "An error occurred",
+        description: "An error occurred",
       });
     }
   };
 
-
   return (
     <section className={styles.container}>
-      <div  onClick={() => {
+      <div
+        onClick={() => {
           navigate("/");
-        }} className={styles.smallScreen}>
+        }}
+        className={styles.smallScreen}
+      >
         <Image src={BlinkersLogo} alt={BlinkersLogo} preview={false} />
       </div>
 
@@ -262,13 +259,11 @@ const VerificationCode = () => {
           {({ setFieldValue }) => (
             <Form>
               <div
-                style={
-                  {
-                      display: "flex",
-                      gap: "4px",
-                      justifyContent: "center",
-                  }
-                }
+                style={{
+                  display: "flex",
+                  gap: "4px",
+                  justifyContent: "center",
+                }}
               >
                 {initialValues.code.map((_, index) => (
                   <Field
@@ -298,7 +293,12 @@ const VerificationCode = () => {
                 ))}
               </div>
 
-              <Button disabled={verifyOptMutation?.isPending} type="submit" text={verifyOptMutation?.isPending ? "loading" :  "Verify"} className={styles.button} />
+              <Button
+                disabled={verifyOptMutation?.isPending}
+                type="submit"
+                text={verifyOptMutation?.isPending ? "loading" : "Verify"}
+                className={styles.button}
+              />
 
               <div className={styles.footer}>
                 <p>
@@ -334,12 +334,16 @@ const VerificationCode = () => {
                 }
               />
 
-
-
-             
-              <div onClick={()=>navigate(-1)} style={{display:'flex', paddingBlockStart:'3rem', gap:'1rem', cursor:'pointer'}}>
-              <Image src={BackIcon} alt={BackIcon} preview={false} />
-
+              <div
+                onClick={() => navigate(-1)}
+                style={{
+                  display: "flex",
+                  paddingBlockStart: "3rem",
+                  gap: "1rem",
+                  cursor: "pointer",
+                }}
+              >
+                <Image src={BackIcon} alt={BackIcon} preview={false} />
 
                 <p>Back to Register</p>
               </div>
