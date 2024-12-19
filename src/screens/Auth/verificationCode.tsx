@@ -209,6 +209,7 @@ const VerificationCode = () => {
     const payload: UserVerifyOtp = {
       otp: parseInt(values.code.join("")), // Join the OTP code array to form the full OTP
     };
+    
     if (values?.code.join("")?.length !== 4) return;
 
     try {
