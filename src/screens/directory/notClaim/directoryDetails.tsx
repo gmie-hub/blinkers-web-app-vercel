@@ -21,8 +21,8 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
   FollowBusiness,
   getBusinessById,
-    getFollowersByBusiness_id,
-    handleCopyLink,
+  getFollowersByBusiness_id,
+  handleCopyLink,
 } from "../../request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../../customs/routeIndicator";
@@ -48,9 +48,7 @@ const NotClaim = () => {
   const currentPath = location.pathname;
   const currentHref = location.href;
 
-
-
-
+  // let  type: 'images' | 'videos';
 
   //   const hasReviews = reviewData?.lenght;
   //   console.log(hasReviews , "hasReviews")
@@ -69,7 +67,6 @@ const NotClaim = () => {
     navigate(`/subscription-pricing/${id}`);
     window.scrollTo(0, 0);
   };
-
 
   const handleNavigateToVideo = () => {
     navigate(`/videos`);
@@ -107,6 +104,12 @@ const NotClaim = () => {
   const businessDetailsErrorMessage =
     businessDetailsError?.message ||
     "An error occurred. Please try again later.";
+  console.log(businessDetailsData?.gallery[0]?.url, "businessDetailsData");
+
+  const isImage = (url: string) => /\.(jpg|jpeg|png|svg|gif)$/i.test(url);
+
+  // Function to check if the file is a video
+  const isVideo = (url: string) => /\.(mp4|avi|mov|wmv|webm)$/i.test(url);
 
   const followBusinessMutation = useMutation({
     mutationFn: FollowBusiness,
@@ -155,7 +158,6 @@ const NotClaim = () => {
     }
   };
 
-  
   const handleNavigateToWriteReview = () => {
     if (!user) {
       notification.error({
@@ -167,18 +169,24 @@ const NotClaim = () => {
           navigate(`/login?redirect=${currentPath}`);
         },
       });
-    } else if(businessDetailsData?.business_status?.toString() !== "2"){
+    } else if (businessDetailsData?.business_status?.toString() !== "2") {
       notification.error({
         message: "Error",
         description: "This business is under approval",
       });
-    }
-    else {
+    } else {
       navigate(`/write-review/${id}`);
     }
     window.scrollTo(0, 0);
   };
 
+  const images =
+    businessDetailsData?.gallery &&
+    businessDetailsData?.gallery?.filter((item) => item.type === "image");
+
+  const videos =
+    businessDetailsData?.gallery &&
+    businessDetailsData?.gallery?.filter((item) => item.type === "video");
   return (
     <>
       {getBusinessDetailsQuery?.isLoading ? (
@@ -242,7 +250,7 @@ const NotClaim = () => {
                         )}
                         <p style={{ paddingBlockEnd: "0.4rem" }}>
                           {businessDetailsData?.total_followers}
-                       
+
                           {businessDetailsData?.total_followers &&
                           businessDetailsData?.total_followers > 1
                             ? " Followers"
@@ -250,22 +258,22 @@ const NotClaim = () => {
                         </p>
                       </div>
                       <p style={{ paddingBlock: "0.2rem" }}>
-                        Number of Ads Posted: <span> {businessDetailsData?.total_ads}</span>{" "}
+                        Number of Ads Posted:{" "}
+                        <span> {businessDetailsData?.total_ads}</span>{" "}
                       </p>
 
                       <div className={styles.starWrapper2}>
-                          {(user?.id !== businessDetailsData?.user_id) &&
+                        {user?.id !== businessDetailsData?.user_id && (
                           //  (user?.claim_status?.toLowerCase() !== 'successful') &&
-                           (
-                            <div
-                              onClick={handleNavigateToWriteReview}
-                              className={styles.message}
-                            >
-                              <Image src={Star} alt="Star" preview={false} />
+                          <div
+                            onClick={handleNavigateToWriteReview}
+                            className={styles.message}
+                          >
+                            <Image src={Star} alt="Star" preview={false} />
 
-                              <p>Write a review</p>
-                            </div>
-                         )} 
+                            <p>Write a review</p>
+                          </div>
+                        )}
                         <div
                           onClick={() => {
                             setOpenShare(true);
@@ -280,29 +288,30 @@ const NotClaim = () => {
 
                           <p>Share</p>
                         </div>
-  
-                        { user?.id !== businessDetailsData?.user_id &&
-                        <Button
-                          icon={
-                            <Image
-                              src={linkIcon}
-                              alt="linkIcon"
-                              preview={false}
-                            />
-                          }
-                          disabled={followBusinessMutation?.isPending}
-                          onClick={handleFollowBusiness}
-                          text={
-                            userExists
-                              ? followBusinessMutation?.isPending
-                                ? "Unfollowing"
-                                : "Unfollow"
-                              : followBusinessMutation?.isPending
-                              ? "Following"
-                              : "Follow"
-                          }
-                          variant="transparent"
-                        />}
+
+                        {user?.id !== businessDetailsData?.user_id && (
+                          <Button
+                            icon={
+                              <Image
+                                src={linkIcon}
+                                alt="linkIcon"
+                                preview={false}
+                              />
+                            }
+                            disabled={followBusinessMutation?.isPending}
+                            onClick={handleFollowBusiness}
+                            text={
+                              userExists
+                                ? followBusinessMutation?.isPending
+                                  ? "Unfollowing"
+                                  : "Unfollow"
+                                : followBusinessMutation?.isPending
+                                ? "Following"
+                                : "Follow"
+                            }
+                            variant="transparent"
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -338,23 +347,29 @@ const NotClaim = () => {
                         </div>
 
                         <div className={styles.info}>
-                          <Image src={WebICon} alt="WebICon" preview={false}
-                           />
+                          <Image src={WebICon} alt="WebICon" preview={false} />
 
                           <p>{businessDetailsData?.website || "N/A"}</p>
                         </div>
                       </>
                     )}
 
-                    { (user?.id ===  businessDetailsData?.user_id!)  && (user?.claim_status?.toLowerCase() !== "successful") && (
-                      <div className={styles.chatBtn}>
-                        <Button
-                          onClick={() => handleClaim()}
-                          text={user?.claim_status?.toLowerCase() === "pending" ? "Claim Business Status: 'PENDING'" :"Claim This Business"}
-                          disabled={user?.claim_status?.toLowerCase() === "pending"}
-                        />
-                      </div>
-                    )}
+                    {user?.id === businessDetailsData?.user_id! &&
+                      user?.claim_status?.toLowerCase() !== "successful" && (
+                        <div className={styles.chatBtn}>
+                          <Button
+                            onClick={() => handleClaim()}
+                            text={
+                              user?.claim_status?.toLowerCase() === "pending"
+                                ? "Claim Business Status: 'PENDING'"
+                                : "Claim This Business"
+                            }
+                            disabled={
+                              user?.claim_status?.toLowerCase() === "pending"
+                            }
+                          />
+                        </div>
+                      )}
 
                     <div className={styles.social}>
                       <Image
@@ -401,23 +416,6 @@ const NotClaim = () => {
                 <div className={styles.rightSection}>
                   <h1>About {businessDetailsData?.name}</h1>
                   <p>{businessDetailsData?.about}</p>
-
-                  {/* {user?.claim_status?.toLowerCase() === "successful" ? (
-                    <>
-                      <div className={styles.photo}>
-                        <h1>Photos</h1>
-                        <p>No photos available yet</p>
-                      </div>
-                      <div className={styles.photo}>
-                        <h1>Videos</h1>
-                        <p>No Videos available yet</p>
-                      </div>
-                      <div className={styles.review}>
-                        <h1>Reviews</h1>
-                        <p>No reviews added yet</p>
-                      </div>
-                    </>
-                  ) : ( */}
                   <>
                     <div className={styles.photo}>
                       <div className={styles.reviewbtn}>
@@ -436,8 +434,30 @@ const NotClaim = () => {
                           />
                         </div>
                       </div>
-                      {/* <p>No photos available yet</p> */}
-                      <Images limit={4} />
+
+                      {images && images.length > 0 ? (
+                        <div className={styles.imageWrapper}>
+                          {images.slice(0, 4).map(
+                            (
+                              image,index
+                            ) => (
+                              <div
+                                key={index}
+                                className={styles.imageContainer}
+                              >
+                                <Image
+                                key={index}
+                                  src={image.url}
+                                  alt={`Image ${image.id}`}
+                                  className={styles.image}
+                                />
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        <p>No images available yet</p>
+                      )}
                     </div>
                     <div className={styles.photo}>
                       <div className={styles.reviewbtn}>
@@ -456,52 +476,42 @@ const NotClaim = () => {
                           />
                         </div>
                       </div>{" "}
-                      <Images limit={4} />
-                      {/* <p>No Videos available yet</p> */}
+                      {videos && videos.length > 0 ? (
+                        <div className={styles.imageWrapper}>
+                          {videos?.slice(0, 4)?.map(
+                            (
+                              image,index
+                            ) => (
+                              <div
+                                key={index}
+                                className={styles.imageContainer}
+                              >
+                                <video
+                                  key={index}
+                                  controls
+                                  playsInline
+                                  poster={image?.url}
+                                  className={styles.image}
+                                >
+                                  <source src={image?.url} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
+                               
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        <p>No images available yet</p>
+                      )}
                     </div>
-                    <div className={styles.review}>
-                      {/* <div className={styles.reviewbtn}>
-                          <h1>Reviews</h1>
 
-                          <div
-                            onClick={handleNavigateReview}
-                            className={styles.btnWrapper}
-                          >
-                            <p className={styles.btn}>See All</p>
-                            <Image
-                              width={20}
-                              src={ArrowIcon}
-                              alt="ArrowIcon"
-                              preview={false}
-                            />
-                          </div>
-                        </div> */}
-                      {/* <p>No Reviews available yet</p> */}
+                    <div className={styles.review}>
                       <Reviews limit={3} canSeeAllBtn={false} />,
                     </div>
                   </>
-                  {/* )} */}
                 </div>
               </div>
-
-              {/* <div>
-                <div className={styles.reviewbtn}>
-                  <p className={styles.title}> Related Businesses</p>
-
-                  <div
-                    onClick={handleNavigateToRelatedBusiness}
-                    className={styles.btnWrapper}
-                  >
-                    <p className={styles.btn}>See All</p>
-                    <Image
-                      width={20}
-                      src={ArrowIcon}
-                      alt="ArrowIcon"
-                      preview={false}
-                    />
-                  </div>
-                </div>
-              </div> */}
             </>
           )}
 
@@ -535,7 +545,7 @@ const NotClaim = () => {
               <p>{currentHref}</p>
 
               <Button
-                onClick={()=>handleCopyLink(currentHref)}
+                onClick={() => handleCopyLink(currentHref)}
                 icon={<Image src={copyIcon} alt={copyIcon} preview={false} />}
                 className={styles.buttonStyle}
                 text="Copy Link"

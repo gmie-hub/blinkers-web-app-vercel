@@ -10,7 +10,7 @@ import Iphone from "../../assets/Iphone.svg";
 const Footer = () => {
   return (
     <main className={styles.footerWrapper}>
-      <section className={styles.section1} >
+      <section className={styles.section1}>
         <div className={styles.leftSection}>
           <h3>Download The App</h3>
           <p>
@@ -28,15 +28,30 @@ const Footer = () => {
                 <p>Apple Store</p>
               </div>
             </div> */}
-            <Image src={AppStore} alt="AppStore" preview={false} />
-            <Image src={GooglePlay} alt="GooglePlay" preview={false} />
-
-            
+            <div
+              onClick={() =>
+                window.open(
+                  "https://apps.apple.com/ng/app/blinkers/id6473721412",
+                  "_blank"
+                )
+              }
+            >
+              <Image src={AppStore} alt="AppStore" preview={false} />
+            </div>
+            <div
+                onClick={() =>
+                  window.open(
+                    "https://play.google.com/store/apps/details?id=com.app.blinkers",
+                    "_blank"
+                  )
+                }
+              >
+              <Image src={GooglePlay} alt="GooglePlay" preview={false} />
+            </div>
           </div>
         </div>
         <div className={styles.rightSection}>
           <Image src={Iphone} alt="Iphone" preview={false} />
-
         </div>
       </section>
       <section className={styles.section2}>
@@ -75,32 +90,44 @@ const Footer = () => {
             <p>FAQ</p>
           </div>
         </div>
-      
+
         <div className={styles.section2Item}>
           <div className={styles.list2}>
             <p style={{ paddingBlockEnd: "0.5rem" }} className={styles.title}>
-              Contact Info
+            Download Now
             </p>
 
             <div className={styles.smallsre}>
-            <div>
-              <Image
-                className={styles.BlinkersLogo}
-                src={appleStoreIcon}
-                alt="appleStoreIcon"
-                preview={false}
-              />
+              <div
+                onClick={() =>
+                  window.open(
+                    "https://apps.apple.com/ng/app/blinkers/id6473721412",
+                    "_blank"
+                  )
+                }
+              >
+                <Image
+                  className={styles.BlinkersLogo}
+                  src={appleStoreIcon}
+                  alt="appleStoreIcon"
+                  preview={false}
+                />
+              </div>
+              <div
+                onClick={() =>
+                  window.open(
+                    "https://play.google.com/store/apps/details?id=com.app.blinkers",
+                    "_blank"
+                  )
+                }
+              >
+                <Image
+                  src={GoolgeStoreIcon}
+                  alt="GoolgeStoreIcon"
+                  preview={false}
+                />
+              </div>
             </div>
-            <div>
-              <Image
-                src={GoolgeStoreIcon}
-                alt="GoolgeStoreIcon"
-                preview={false}
-              />
-            </div>
-              
-            </div>
-          
           </div>
         </div>
       </section>

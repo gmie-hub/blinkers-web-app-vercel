@@ -31,6 +31,7 @@ const Header = () => {
   };
 
   const handleNavigateToProfile = () => {
+    // if(user?.business === null)
     navigate("/profile");
   };
 

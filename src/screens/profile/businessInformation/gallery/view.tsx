@@ -30,7 +30,7 @@ const GalleryView: React.FC<GalleryViewProps> = ({ businessDetailsData, type, })
       <br />
       {galleryItems && galleryItems.length > 0 ? (
         <div className={styles.img_wrapper}>
-          {galleryItems.map((item: gallery, index: number) => (
+          {galleryItems?.map((item: gallery, index: number) => (
             type === 'images' ? (
               <div key={index} className={styles.imageContainer}>
                 <img src={item?.url} alt={`myimg ${index + 1}`} />

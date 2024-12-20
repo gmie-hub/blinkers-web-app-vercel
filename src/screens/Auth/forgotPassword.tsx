@@ -323,8 +323,8 @@ const ForgotPassword = () => {
                           form.setFieldValue("phoneNumber", phoneNumber)
                         } // Update Formik state
                         inputStyle={{ width: "100%" }}
-                        preferredCountries={["ng", "gb", "gh", "cm"]} 
-                        onlyCountries={["ng", "gb", "gh", "cm"]} 
+                        preferredCountries={["ng", "gb", "gh", "cm","lr"]} 
+                        onlyCountries={["ng", "gb", "gh", "cm","lr"]} 
                         placeholder="Enter phone numer"
 
                       />

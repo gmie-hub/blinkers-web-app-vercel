@@ -152,8 +152,8 @@ const SignUp = () => {
                           form.setFieldValue("country_code", dialCode); // Update Formik country_code field
                         }}
                         inputStyle={{ width: "100%" }}
-                        preferredCountries={["ng", "gb", "gh", "cm"]} 
-                        onlyCountries={["ng", "gb", "gh", "cm"]} 
+                        preferredCountries={["ng", "gb", "gh", "cm",'lr']} 
+                        onlyCountries={["ng", "gb", "gh", "cm",'lr']} 
                         placeholder="Enter phone numer"
                       />
                     )}

@@ -239,3 +239,15 @@ flex-direction: column;
   font-weight: 700;
   font-size: 1.8rem;
 }
+.buttonStyle {
+  min-width: 22rem;
+  width: 100%;
+  color: white;
+  @media screen and (min-width: 768px) {
+    min-width: 22rem;
+    width: 0 !important;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100% !important;
+  }
+}

@@ -19,6 +19,7 @@ const images = [
 const PictureBg = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Function to handle moving to the next image
   const handleNextImage = () => {
@@ -26,6 +27,8 @@ const PictureBg = () => {
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
   };
+  
+
 
   const handleNavigateToMarket = () => {
     navigate("/market");
@@ -50,6 +53,15 @@ const PictureBg = () => {
     setCurrentImageIndex(index);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // Update the search query state
+  };
+
+  const handleSearch = () => {
+    navigate(`/market/${searchTerm}`);
+
+  };
+
   return (
     <div
       className={styles.image}
@@ -72,14 +84,14 @@ const PictureBg = () => {
             placeholder="What are you looking for?"
             // width="40rem"
               // isBtn={true}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
             >
               <Button
                 type="button"
                 variant="green"
                 text="Search"
                 className={styles.searchBtn}
-                // onClick={handleSearch} // Set appliedSearchTerm here
+                onClick={handleSearch} // Set appliedSearchTerm here
               />
             </SearchInput>
             </div>

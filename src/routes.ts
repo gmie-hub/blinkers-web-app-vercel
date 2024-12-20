@@ -42,7 +42,7 @@ export const routes = {
     SubmittedSuccessfully: "/submittedsuccessfully",
   },
   profile: {
-    profile: "/profile",
+    profile: "/profile/:id?",
     editBusiness: "/edit-business",
     viewJobDetails: "/view-job-details/:id",
     applicants: "/applicants/:id",
