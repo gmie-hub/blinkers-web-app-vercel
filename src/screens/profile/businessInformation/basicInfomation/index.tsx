@@ -124,7 +124,7 @@
 // }
 
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./basicInfo.module.scss";
 import { Tabs, TabsProps } from "antd";
 import postIcon from "../../../../assets/plusgreen.svg";

@@ -76,7 +76,7 @@
 
 import Icon from "/Container.svg";
 import styles from "./styles.module.scss";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import MyBusinesses from "./myBusinesses";
 import { useParams } from "react-router-dom";

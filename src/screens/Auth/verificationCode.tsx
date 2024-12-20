@@ -205,9 +205,11 @@ const VerificationCode = () => {
     mutationKey: ["verify-otp"],
   });
 
+
   const verifyOtpHandler = async (values: FormValues) => {
     const payload: UserVerifyOtp = {
-      otp: parseInt(values.code.join("")), // Join the OTP code array to form the full OTP
+      otp: parseInt(values.code.join("")), 
+      // pin_id: savedPin || "",
     };
     
     if (values?.code.join("")?.length !== 4) return;

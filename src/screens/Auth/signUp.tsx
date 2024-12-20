@@ -68,8 +68,12 @@ const SignUp = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description:   error?.response?.data?.error[0] || errorMessage(error) || "An error occurred",
+        description:    errorMessage(error) || "An error occurred",
       });
+  //     const errorMessages = Object.values(error?.response?.data?.error)
+  // .flat() // Flatten any nested arrays
+  // .join(", ");
+  //     console.log(errorMessages, 'jumm')
     }
   };
 
