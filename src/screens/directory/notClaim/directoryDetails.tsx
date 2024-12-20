@@ -31,7 +31,6 @@ import MailIcon from "../../../assets/mailicon.svg";
 import WebICon from "../../../assets/webicon.svg";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
-import Images from "../claimed/image/image";
 import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import StarYellow from "../../../assets/staryellow.svg";
 import { errorMessage } from "../../../utils/errorMessage";
@@ -106,10 +105,6 @@ const NotClaim = () => {
     "An error occurred. Please try again later.";
   console.log(businessDetailsData?.gallery[0]?.url, "businessDetailsData");
 
-  const isImage = (url: string) => /\.(jpg|jpeg|png|svg|gif)$/i.test(url);
-
-  // Function to check if the file is a video
-  const isVideo = (url: string) => /\.(mp4|avi|mov|wmv|webm)$/i.test(url);
 
   const followBusinessMutation = useMutation({
     mutationFn: FollowBusiness,

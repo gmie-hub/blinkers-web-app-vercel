@@ -69,7 +69,7 @@ export const getAllBusiness = async (
   return (await api.get(url))?.data as any;
 };
 
-export const getAllMarket = async (page?: number, search?: string | number) => {
+export const getAllMarket = async (page?: number, search?: string | number, state_id?:number,local_government_area_id?:number) => {
   let url = `/ads`;
 
   const queryParams: string[] = [];
@@ -81,6 +81,16 @@ export const getAllMarket = async (page?: number, search?: string | number) => {
   if (search !== undefined && search !== "") {
     queryParams.push(`search=${search}`);
   }
+  if (state_id !== undefined && state_id !== 0) {
+    queryParams.push(`state_id=${state_id}`);
+  }
+  if (local_government_area_id !== undefined && local_government_area_id !== 0) {
+    queryParams.push(`local_government_area_id=${local_government_area_id}`);
+  }
+  
+
+
+  
   // if(sub_category_id !==undefined && sub_category_id.length !== 0){
   //   queryParams.push(`sub_category_id=${sub_category_id}`);
   // }

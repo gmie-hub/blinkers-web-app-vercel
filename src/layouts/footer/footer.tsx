@@ -36,17 +36,27 @@ const Footer = () => {
                 )
               }
             >
-              <Image src={AppStore} alt="AppStore" preview={false} />
+              <Image
+                style={{ cursor: "pointer" }}
+                src={AppStore}
+                alt="AppStore"
+                preview={false}
+              />
             </div>
             <div
-                onClick={() =>
-                  window.open(
-                    "https://play.google.com/store/apps/details?id=com.app.blinkers",
-                    "_blank"
-                  )
-                }
-              >
-              <Image src={GooglePlay} alt="GooglePlay" preview={false} />
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.app.blinkers",
+                  "_blank"
+                )
+              }
+            >
+              <Image
+                style={{ cursor: "pointer" }}
+                src={GooglePlay}
+                alt="GooglePlay"
+                preview={false}
+              />
             </div>
           </div>
         </div>
@@ -94,7 +104,7 @@ const Footer = () => {
         <div className={styles.section2Item}>
           <div className={styles.list2}>
             <p style={{ paddingBlockEnd: "0.5rem" }} className={styles.title}>
-            Download Now
+              Download Now
             </p>
 
             <div className={styles.smallsre}>
@@ -111,6 +121,7 @@ const Footer = () => {
                   src={appleStoreIcon}
                   alt="appleStoreIcon"
                   preview={false}
+                  style={{ cursor: "pointer" }}
                 />
               </div>
               <div
@@ -125,6 +136,7 @@ const Footer = () => {
                   src={GoolgeStoreIcon}
                   alt="GoolgeStoreIcon"
                   preview={false}
+                  style={{ cursor: "pointer" }}
                 />
               </div>
             </div>

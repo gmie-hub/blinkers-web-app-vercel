@@ -14,6 +14,7 @@ import {
 } from "../../../request.ts";
 import { useQueries } from "@tanstack/react-query";
 import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
+import { useNavigate } from "react-router-dom";
 
 const PriceOptions = [
   { key: 1, value: "Low To High" },
@@ -32,19 +33,22 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [categoryId, setCategoryId] = useState(0);
   const [selectedItems, setSelectedItems] = useState<number[]>([]); // Array of strings
-  const [stateId, setStateId] = useState("");
+  const [stateId, setStateId] = useState(0);
+  const [lgaId, setLgaId] = useState(0);
+  const navigate = useNavigate();
 
-  // const handleStateChange = (value: string) => {
-  //   console.log("Search Query:", value);
-  //   setStateId(value);
-  // };
-
-  const handleStateChange = (value: string) => {
+  const handleStateChange = (value: number, setFieldValue: any) => {
     console.log("Selected State ID:", value);
-    setStateId(value); 
-    // setFieldValue("lga", "")
+    setStateId(value);
+    setLgaId(0); 
+    setFieldValue("lga", ""); 
   };
 
+  const handleLgaChange = (value: number) => {
+    console.log("Selected State ID:", value);
+    setLgaId(value);
+    // setFieldValue("lga", "")
+  };
   console.log(selectedItems, "Selected Items");
 
   // useEffect(() => {
@@ -78,36 +82,37 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const [getCategoryQuery, getSubCategoryQuery, getStateQuery,getLGAQuery] = useQueries({
-    queries: [
-      {
-        queryKey: ["get-all-category"],
-        queryFn: () => getAllCategory(),
-        retry: 0,
-        refetchOnWindowFocus: true,
-      },
-      {
-        queryKey: ["get-sub-category", categoryId],
-        queryFn: () => getSubCategory(categoryId),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!categoryId,
-      },
-      {
-        queryKey: ["get-all-state"],
-        queryFn: getAllState,
-        retry: 0,
-        refetchOnWindowFocus: true,
-      },
-      {
-        queryKey: ["get-all-lga",stateId],
-        queryFn: () => getLGAbyStateId(parseInt(stateId!)),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled:!!stateId
-      },
-    ],
-  });
+  const [getCategoryQuery, getSubCategoryQuery, getStateQuery, getLGAQuery] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ["get-all-category"],
+          queryFn: () => getAllCategory(),
+          retry: 0,
+          refetchOnWindowFocus: true,
+        },
+        {
+          queryKey: ["get-sub-category", categoryId],
+          queryFn: () => getSubCategory(categoryId),
+          retry: 0,
+          refetchOnWindowFocus: true,
+          enabled: !!categoryId,
+        },
+        {
+          queryKey: ["get-all-state"],
+          queryFn: getAllState,
+          retry: 0,
+          refetchOnWindowFocus: true,
+        },
+        {
+          queryKey: ["get-all-lga", stateId],
+          queryFn: () => getLGAbyStateId(stateId!),
+          retry: 0,
+          refetchOnWindowFocus: true,
+          enabled: !!stateId,
+        },
+      ],
+    });
 
   const categoryData = getCategoryQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data;
@@ -134,7 +139,6 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
       : []),
   ];
 
-
   // Updated handleCheckboxChange to save only subCategory titles
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -155,11 +159,20 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     return selectedItems.includes(subCategoryTitle);
   };
 
+  const handleBack = () => {
+    appliedSearchTerm = "";
+    setAppliedSearchTerm("");
+    // search = "";
+    navigate("/market");
+    setStateId(0);
+    setLgaId(0);
+  };
+
   return (
     <Formik
       initialValues={{
         state: "",
-        lga:"",
+        lga: "",
         selectedItems: [],
         nearby_me: false,
         selectedPrices: {},
@@ -168,7 +181,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         console.log(values);
       }}
     >
-      {({ values }) => (
+      {({ values,setFieldValue }) => (
         <Form>
           <div className={styles.container}>
             <div className={styles.leftSide}>
@@ -232,10 +245,8 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       label="State"
                       options={stateOptions}
                       placeholder="Select State"
-                      // onSearchChange={handleStateChange}
-                      // onSearchChange={handleStateChange} // Updates stateId
-                      onChange={(value: any) => handleStateChange(value)} // Update stateId here
-
+                      // onChange={(value: any) => handleStateChange(value)}
+                      onChange={(value: any) => handleStateChange(value, setFieldValue)} // Update stateId and reset lga here
 
                     />
                     <br />
@@ -245,7 +256,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       label="Lga"
                       options={lgaOptions}
                       placeholder="Select LGA"
-                      // onSearchChange={handleSearchChange}
+                      onChange={(value: any) => handleLgaChange(value)} // Update stateId here
                     />
                   </div>
                   <div>
@@ -266,10 +277,14 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                     </ul>
                   </div>
                   <div style={{ marginBlockStart: "2rem" }}>
-                    <Button text="Apply Filter" />
+                    {/* <Button text="Apply Filter" /> */}
                     <br />
                     <br />
-                    <Button variant="white" text="Reset Filter" />
+                    <Button
+                      onClick={handleBack}
+                      variant="white"
+                      text="Reset Filter"
+                    />
                   </div>
                 </>
               )}
@@ -294,6 +309,10 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                 appliedSearchTerm={appliedSearchTerm}
                 setAppliedSearchTerm={setAppliedSearchTerm}
                 selectedItems={selectedItems}
+                stateId={stateId}
+                lgaId={lgaId}
+                setStateId={setStateId}
+                setLgaId={setLgaId}
               />
             </div>
           </div>

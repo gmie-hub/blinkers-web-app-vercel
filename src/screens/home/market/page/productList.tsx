@@ -4,7 +4,7 @@ import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
 import favorite from "../../../../assets/Icon + container.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { countUpTo } from "../../trend";
 import { useQueries } from "@tanstack/react-query";
 import { getAllMarket } from "../../../request";
@@ -14,33 +14,41 @@ import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use 
 import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
+import { useEffect } from "react";
 
 interface ProductListProps {
   appliedSearchTerm: string;
   setAppliedSearchTerm:any;
-  selectedItems:number[]
+  selectedItems:number[];
+  stateId:number;
+  lgaId:number;
+  setLgaId:any
+  setStateId :any
 }
 
-const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm, }) => {
+const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm,stateId,lgaId ,setLgaId,setStateId}) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-  // let { search } = useParams();
   const { currentPage, setCurrentPage, onChange } = usePagination()
+  const { search } = useParams();
 
-  // const onChange: PaginationProps["onChange"] = (page) => {
-  //   setCurrentPage(page);
-  //   window.scroll(0,0)
-  // };
   const [getAllMarketQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-market", currentPage, appliedSearchTerm,],
-        queryFn: () => getAllMarket(currentPage, appliedSearchTerm, ),
-        retry: 0,
-        refetchOnWindowFocus: false,
+        queryKey: ["get-all-market", currentPage, appliedSearchTerm,stateId,lgaId],
+        queryFn: () => getAllMarket(currentPage, appliedSearchTerm, stateId,lgaId),
+        // retry: 0,
+        refetchOnWindowFocus: true,
+        // enabled: Boolean(currentPage && appliedSearchTerm),
       },
     ],
   });
+  useEffect(()=>{
+    if(search){
+      setAppliedSearchTerm(search)
+    }
+
+  },[search])
 
   const marketData = getAllMarketQuery?.data?.data?.data || [];
   const marketError = getAllMarketQuery?.error as AxiosError;
@@ -52,13 +60,15 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
     window.scrollTo(0, 0);
   };
 
-  const handleBack = () => {
+   const handleBack = () => {
     appliedSearchTerm="";
     setAppliedSearchTerm('')
     // search = ""; 
     setCurrentPage(1); 
     navigate("/market"); 
     getAllMarketQuery?.refetch(); 
+    setStateId(0)
+    setLgaId(0)
   };
 
 
@@ -70,7 +80,7 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
         <h1 className="error">{marketErrorMessage}</h1>
       ) : (
         <div>
-           {appliedSearchTerm?.length > 0 && marketData?.length > 0 && (
+           { appliedSearchTerm?.length > 0 && marketData?.length > 0 &&  (
               <div>
                 <Button
                   type="button"
