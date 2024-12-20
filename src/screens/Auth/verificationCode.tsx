@@ -204,7 +204,7 @@ const VerificationCode = () => {
     mutationFn: userVerifyOtp,
     mutationKey: ["verify-otp"],
   });
-  const savedPin = localStorage.getItem("savedPin");
+  const savedPin = localStorage.getItem("savedPinSignUp");
 
 
   const verifyOtpHandler = async (values: FormValues) => {
@@ -222,7 +222,7 @@ const VerificationCode = () => {
             message: "Success",
             description: data?.message,
           });
-          localStorage.setItem("savedPin", "");
+          localStorage.setItem("savedPinSignUp", "");
 
           navigate("/login");
         },

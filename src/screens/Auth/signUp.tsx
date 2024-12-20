@@ -62,7 +62,7 @@ const SignUp = () => {
           });
           const pin = data?.data?.length > 4 ? data?.data : "";
 
-          localStorage.setItem("savedPin", pin);
+          localStorage.setItem("savedPinSignUp", pin);
 
           handleNavigateToVerifyOtp(values?.email);
 
