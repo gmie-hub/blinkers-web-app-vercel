@@ -2,7 +2,7 @@ export const errorMessage = (error: any) => {
 
   const errorMessages = Object.values(error?.response?.data?.error)
   .flat() // Flatten any nested arrays
-  .join(", ");
+  // .join(", ");
 
   return (
      (typeof error === "object")? errorMessages :
