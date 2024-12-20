@@ -1,47 +1,3 @@
-.promoImageContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem; // Adjust the gap between images if necessary
-  width: 100%; // Ensure the container takes the full width of the screen
-  box-sizing: border-box;
-  justify-content: space-between; // Ensure images spread across the row
-  padding-block-end: 6.4rem;
-  
-}
-
-.promoImage {
-  flex: 1 1 calc(16% - 1rem); // 4 items per row, minus the gap
-  max-width: 16%; // Keep the width constant for 4 per row
-  box-sizing: border-box;
-  img {
-    border-radius: 1rem;
-    width: 100%; // Ensure images take full width of their container
-    height: auto; // Maintain a1spect ratio
-    object-fit: contain; // Ensure the image fits without distortion
-  }
-}
-
-@media (max-width: 1024px) {
-  .promoImage {
-    flex: 1 1 calc(33.33% - 1rem); // 3 items per row for medium-sized screens
-    max-width: 33.33%; // Keep the width constant for 3 per row
-  }
-}
-
-@media (max-width: 768px) {
-  .promoImage {
-    flex: 1 1 calc(50% - 1rem); // 2 items per row for smaller screens
-    max-width: 50%; // Keep the width constant for 2 per row
-  }
-}
-
-@media (max-width: 480px) {
-  .promoImage {
-    flex: 1 1 100%; // 1 item per row for very small screens
-    max-width: 300px; // Maintain a constant size when there's only one item
-    margin: 0 auto; // Center the single item on the screen
-  }
-}
 
 .promoHead {
   display: flex;
@@ -53,26 +9,8 @@
   font-weight: 500;
   font-size: 2.3rem;
 }
-.productList {
-  padding: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  text-align: start;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid #00990012;
 
-  cursor: pointer;
-  & > p {
-    padding-block-start: 0.5rem !important;
-  }
-}
-.starWrapper {
-  align-items: end;
-  display: flex;
-  padding-block-end: 2rem;
-  gap: 1rem;
-}
+
 
 .back {
   display: flex;
@@ -85,33 +23,45 @@
     font-weight: 600;
   }
 }
-.info {
-  display: flex;
-  padding-block-start: 0.8rem;
-  align-items: center;
-  gap: 0.8rem;
+.promoImageContainer {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 images per row */
+  gap: 1rem; /* Spacing between images */
+  width: 100%; /* Full width of the container */
+  padding-block-end: 6.4rem; /* Padding at the bottom */
 }
 
-.subjectBg {
-  color: var(--color-primary-green);
-  background-color: var(--color-light-green);
-  padding: 0.8rem;
-  font-weight: 500;
-  font-size: 1.2rem;
-  margin-block-start: 1.6rem;
+.imageContainer {
+  position: relative;
+  width: 100%; /* Full width of the grid cell */
+  height: 24rem; /* Set a fixed height for all images */
   border-radius: 0.8rem;
-  max-width: fit-content;
-  display: inline;
+  overflow: hidden; /* Prevent overflow */
+  box-sizing: border-box;
 }
 
-.imageWrapper{
-    border: #EEEEEE solid;
-    padding: 4rem;
+.image {
+  width: 100%; /* Fill the container's width */
+  height: 100%; /* Fill the container's height */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
+  border-radius: 0.8rem;
 }
-.InnerWrapper{
 
-    border: #EEEEEE solid;
-    padding-inline: 2.4rem;
-    padding-block: 1.6rem;
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .promoImageContainer {
+    grid-template-columns: repeat(4, 1fr); /* 4 images per row */
+  }
+}
 
+@media (max-width: 768px) {
+  .promoImageContainer {
+    grid-template-columns: repeat(3, 1fr); /* 3 images per row */
+  }
+}
+
+@media (max-width: 480px) {
+  .promoImageContainer {
+    grid-template-columns: repeat(2, 1fr); /* 2 images per row */
+  }
 }

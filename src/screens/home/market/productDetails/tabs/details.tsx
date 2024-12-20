@@ -28,11 +28,7 @@ const Details = ({ productDetailsData }: Props) => {
       <div className={styles.para}>
         <h2> Technical Details</h2>
         <p>
-        {productDetailsData?.technical_details || (
-  <>
-    The flare sleeve is the center of attraction for this dress, you can never go wrong in this beautiful piece. This flare sleeve midi dress is made of solid textured fabric, it contains polyester and spandex with an invisible zipper to back for easy wear.
-  </>
-)}
+        {productDetailsData?.technical_details }
         </p>
       </div>
     </div>

@@ -145,7 +145,7 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
                           preview={false}
                         />
                       )}
-                      <span>(20)</span>
+                      <span>({item?.averageRating})</span>
                     </div>
                   </div>
                 </div>

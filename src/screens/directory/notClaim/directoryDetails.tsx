@@ -68,11 +68,11 @@ const NotClaim = () => {
   };
 
   const handleNavigateToVideo = () => {
-    navigate(`/videos`);
+    navigate(`/videos/${id}`);
     window.scrollTo(0, 0);
   };
   const handleNavigateToImages = () => {
-    navigate(`/images`);
+    navigate(`/images/${id}`);
     window.scrollTo(0, 0);
   };
 

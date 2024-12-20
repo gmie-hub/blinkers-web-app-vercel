@@ -288,54 +288,54 @@
   text-align: center;
 }
 // }
-// .imageSize{
-//   width: 80%;
-//   // height: 20rem;
-//   // position: ;
-//   object-fit:cover
-// }
-// .imageItem{
-//   display: flex;
-//   flex-direction: column;
-// }
+.imageSize{
+  width: 80%;
+  // height: 20rem;
+  // position: ;
+  object-fit:cover
+}
+.imageItem{
+  display: flex;
+  flex-direction: column;
+}
 
-// .imageContainer {
-//   position: relative;
-//   width: 25.8rem; 
-//   height: 26.3rem;
-//   border-radius: 0.8rem;
+.imageContainer {
+  position: relative;
+  width: 25.8rem; 
+  height: 26.3rem;
+  border-radius: 0.8rem;
 
-//   img {
-//     // width: 100%;
-//     height: 26rem 
-//   }
+  img {
+    // width: 100%;
+    height: 26rem 
+  }
 
-//   @media screen and (max-width: 768px) {
-//     // width: 12rem; /* Adjust image size */
-//     height: 13rem;
-//   }
+  @media screen and (max-width: 768px) {
+    // width: 12rem; /* Adjust image size */
+    height: 13rem;
+  }
 
-//   @media screen and (max-width: 480px) {
-//     width: 100%; /* Full width for mobile */
-//     height: auto;
-//   }
-// }
+  @media screen and (max-width: 480px) {
+    width: 100%; /* Full width for mobile */
+    height: auto;
+  }
+}
 
-// .imageWrapper {
-//   display: grid;
-//   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); // Adjusts to the screen size
-//   gap: 16px; // Spacing between the images
-// }
+.imageWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); // Adjusts to the screen size
+  gap: 16px; // Spacing between the images
+}
 
-// .imageContainer {
-//   position: relative;
-// }
+.imageContainer {
+  position: relative;
+}
 
-// .image {
-//   // width: 100%;
-//   height: 26rem;
-//   object-fit: cover; // Ensures all images are the same size while maintaining aspect ratio
-// }
+.image {
+  // width: 100%;
+  height: 26rem;
+  object-fit: cover; // Ensures all images are the same size while maintaining aspect ratio
+}
 .imageWrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Ensures 4 images per row */

@@ -78,7 +78,6 @@ const Directory = () => {
     navigate("/profile/2")
   }
 
-  console.log(searchTerm, appliedSearchTerm, "JobData");
   return (
     <div className="wrapper">
       <div className={styles.container}>
@@ -210,7 +209,7 @@ const Directory = () => {
 
             <Pagination
               current={currentPage}
-              total={directoryData?.data?.data?.total} // Total number of items
+              total={getAllDirectoryQuery?.data?.data?.total} // Total number of items
               pageSize={20} // Number of items per page
               onChange={onChange} // Handle page change
               showSizeChanger={false} // Hide the option to change the page size
