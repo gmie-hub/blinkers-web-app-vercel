@@ -204,12 +204,13 @@ const VerificationCode = () => {
     mutationFn: userVerifyOtp,
     mutationKey: ["verify-otp"],
   });
+  const savedPin = localStorage.getItem("savedPin");
 
 
   const verifyOtpHandler = async (values: FormValues) => {
     const payload: UserVerifyOtp = {
       otp: parseInt(values.code.join("")), 
-      // pin_id: savedPin || "",
+      pin_id: savedPin || "",
     };
     
     if (values?.code.join("")?.length !== 4) return;
@@ -221,6 +222,8 @@ const VerificationCode = () => {
             message: "Success",
             description: data?.message,
           });
+          localStorage.setItem("savedPin", "");
+
           navigate("/login");
         },
       });

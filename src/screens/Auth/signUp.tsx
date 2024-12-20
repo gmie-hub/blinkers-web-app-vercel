@@ -60,6 +60,10 @@ const SignUp = () => {
             message: "Success",
             description: data?.message,
           });
+          const pin = data?.data?.length > 4 ? data?.data : "";
+
+          localStorage.setItem("savedPin", pin);
+
           handleNavigateToVerifyOtp(values?.email);
 
           resetForm(); // Reset the form on success

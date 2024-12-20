@@ -221,6 +221,8 @@ const ResetPasswordVerificationCode = () => {
             message: "Success",
             description: data?.message,
           });
+          localStorage.setItem("savedPin", "");
+
           handleNavigateToResetPassword(email!);
         },
       });
