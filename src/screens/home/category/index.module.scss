@@ -1,12 +1,50 @@
 .card {
   display: flex;
+  // flex-direction: column;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
   padding: 2rem;
   border-radius: 10px;
   // width: 85vw; /* 90% of the viewport width */
-  justify-content: center; /* Center the card horizontally */
+  align-items: flex-start;
+  justify-content: space-between; /* Center the card horizontally */
   margin: 0 auto; /* Center the card horizontally on the screen */
+}
+
+.cardItem {
+  flex: 1 1 calc(25% - 2rem); /* Each item takes up 25% of the row minus gap */
+  min-width: 200px; /* Minimum width to maintain readability */
+  max-width: 300px; /* Optional: Set a max width for better alignment */
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .card-item {
+    flex: 1 1 calc(50% - 2rem); /* Adjust to 2 items per row */
+  }
+}
+
+@media (max-width: 480px) {
+  .card-item {
+    flex: 1 1 calc(100% - 2rem); /* Full-width on smaller screens */
+  }
+}
+
+.subCategory {
+  padding: 1rem;
+
+  & li {
+    list-style: none;
+    color: #707070;
+    font-size: 1.6rem;
+    padding-block: 1rem;
+    cursor: pointer;
+  }
+
+  & p {
+    color: var(--color-primary-green);
+    font-size: 1.8rem;
+  }
 }
 
 .column {
@@ -31,8 +69,7 @@
   font-size: 16px;
   color: #333;
   width: max-content;
-    cursor: pointer; /* Add this line to make the items clickable */
-
+  cursor: pointer; /* Add this line to make the items clickable */
 }
 
 /* Media query for tablet and small screens (max-width: 1024px) */
