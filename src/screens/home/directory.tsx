@@ -14,7 +14,7 @@ const cardData = [
     icon: <Image src={cardIcon} alt="cardIcon" preview={false} />,
     title: "Categories",
     content: "Browse diverse product categories to find exactly what you need.",
-    route: "/categories", // Route for this card
+    route: "/market", // Route for this card
     placeholder:"Search Categories..."
   },
   {

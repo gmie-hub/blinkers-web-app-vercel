@@ -27,7 +27,10 @@ const Header = () => {
   };
 
   const handleNavigateToSell = () => {
-    navigate("/sell");
+    if(user?.role !== '2' || user?.business === null){
+      navigate("/seller-signUp");
+
+    }
   };
 
   const handleNavigateToProfile = () => {
@@ -127,9 +130,9 @@ const Header = () => {
             </div>
             <div className={styles.mobileButtonWrapper}>
               <Button
-                onClick={() => {
-                  handleNavigateToSell();
-                }}
+                onClick={
+                  handleNavigateToSell
+                }
                 className={styles.btn}
               >
                 Sell

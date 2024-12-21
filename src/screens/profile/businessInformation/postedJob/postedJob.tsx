@@ -2,7 +2,6 @@ import styles from "./postedJob.module.scss";
 import { useNavigate,  } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useCallback } from "react";
 import { Spin } from "antd"; // Import Spin from Ant Design
 import { getJobBYBusinessId } from "../../../request";
 import { userAtom } from "../../../../utils/store";
@@ -34,19 +33,18 @@ export default function JobPosted() {
     ],
   });
 
-  const handleNavigateToViewJobDetails = useCallback(
+  const handleNavigateToViewJobDetails = 
     (jobId: number) => {
       navigate(`/view-job-details/${jobId}`);
-    },
-    [navigate]
-  );
+    }
+  
 
   const JobData = getAllJobByBusinessQuery?.data?.data?.data || [];
   const jobError = getAllJobByBusinessQuery?.error as AxiosError;
   const jobErrorMessage =
     jobError?.message || "An error occurred. Please try again later.";
 
-  const jobPostedJsx = JobData.map((item: JobItem, index: number) => (
+  const jobPostedJsx =JobData && JobData?.map((item: JobItem, index: number) => (
     <Card
       key={index}
       onClick={() => handleNavigateToViewJobDetails(item.id)}

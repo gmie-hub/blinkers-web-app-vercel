@@ -37,8 +37,8 @@ import { errorMessage } from "../../../utils/errorMessage";
 
 const NotClaim = () => {
   const navigate = useNavigate();
-  const [showContent, setShowContent] = useState(true); // Manage review form visibility
-  const [showCard, setShowCard] = useState(false); // Manage card visibility
+  const [showContent] = useState(true); // Manage review form visibility
+  const [showCard] = useState(false); // Manage card visibility
   const { id } = useParams();
   const [openShare, setOpenShare] = useState(false);
   const user = useAtomValue(userAtom);
@@ -53,8 +53,9 @@ const NotClaim = () => {
   //   console.log(hasReviews , "hasReviews")
 
   const handleClaim = () => {
-    setShowContent(false); // Hide the review form
-    setShowCard(true); // Show the card
+    // setShowContent(false); // Hide the review form
+    // setShowCard(true); // Show the card
+    navigate(`/claim-business/${id}`);
     window.scrollTo(0, 0);
   };
 
@@ -104,7 +105,6 @@ const NotClaim = () => {
     businessDetailsError?.message ||
     "An error occurred. Please try again later.";
   console.log(businessDetailsData?.gallery[0]?.url, "businessDetailsData");
-
 
   const followBusinessMutation = useMutation({
     mutationFn: FollowBusiness,
@@ -172,6 +172,11 @@ const NotClaim = () => {
     } else {
       navigate(`/write-review/${id}`);
     }
+    window.scrollTo(0, 0);
+  };
+
+  const handleNavigateToRelatedBusiness = () => {
+    navigate(`/related-businesses/${id}`);
     window.scrollTo(0, 0);
   };
 
@@ -364,7 +369,7 @@ const NotClaim = () => {
                             }
                           />
                         </div>
-                      )}
+                      )} 
 
                     <div className={styles.social}>
                       <Image
@@ -415,40 +420,35 @@ const NotClaim = () => {
                     <div className={styles.photo}>
                       <div className={styles.reviewbtn}>
                         <h1>Photos</h1>
+                        {images && images?.length > 4 && (
+                          <div
+                            onClick={handleNavigateToImages}
+                            className={styles.btnWrapper}
+                          >
+                            <p className={styles.btn}>See All</p>
 
-                        <div
-                          onClick={handleNavigateToImages}
-                          className={styles.btnWrapper}
-                        >
-                          <p className={styles.btn}>See All</p>
-                          <Image
-                            width={20}
-                            src={ArrowIcon}
-                            alt="ArrowIcon"
-                            preview={false}
-                          />
-                        </div>
+                            <Image
+                              width={20}
+                              src={ArrowIcon}
+                              alt="ArrowIcon"
+                              preview={false}
+                            />
+                          </div>
+                        )}
                       </div>
 
                       {images && images.length > 0 ? (
                         <div className={styles.imageWrapper}>
-                          {images.slice(0, 4).map(
-                            (
-                              image,index
-                            ) => (
-                              <div
+                          {images.slice(0, 4).map((image, index) => (
+                            <div key={index} className={styles.imageContainer}>
+                              <Image
                                 key={index}
-                                className={styles.imageContainer}
-                              >
-                                <Image
-                                key={index}
-                                  src={image.url}
-                                  alt={`Image ${image.id}`}
-                                  className={styles.image}
-                                />
-                              </div>
-                            )
-                          )}
+                                src={image.url}
+                                alt={`Image ${image.id}`}
+                                className={styles.image}
+                              />
+                            </div>
+                          ))}
                         </div>
                       ) : (
                         <p>No images available yet</p>
@@ -457,44 +457,37 @@ const NotClaim = () => {
                     <div className={styles.photo}>
                       <div className={styles.reviewbtn}>
                         <h1>Video</h1>
-
-                        <div
-                          onClick={handleNavigateToVideo}
-                          className={styles.btnWrapper}
-                        >
-                          <p className={styles.btn}>See All</p>
-                          <Image
-                            width={20}
-                            src={ArrowIcon}
-                            alt="ArrowIcon"
-                            preview={false}
-                          />
-                        </div>
+                        {videos && videos?.length > 4 && (
+                          <div
+                            onClick={handleNavigateToVideo}
+                            className={styles.btnWrapper}
+                          >
+                            <p className={styles.btn}>See All</p>
+                            <Image
+                              width={20}
+                              src={ArrowIcon}
+                              alt="ArrowIcon"
+                              preview={false}
+                            />
+                          </div>
+                        )}
                       </div>{" "}
                       {videos && videos.length > 0 ? (
                         <div className={styles.imageWrapper}>
-                          {videos?.slice(0, 4)?.map(
-                            (
-                              image,index
-                            ) => (
-                              <div
+                          {videos?.slice(0, 4)?.map((image, index) => (
+                            <div key={index} className={styles.imageContainer}>
+                              <video
                                 key={index}
-                                className={styles.imageContainer}
+                                controls
+                                playsInline
+                                poster={image?.url}
+                                className={styles.image}
                               >
-                                <video
-                                  key={index}
-                                  controls
-                                  playsInline
-                                  poster={image?.url}
-                                  className={styles.image}
-                                >
-                                  <source src={image?.url} type="video/mp4" />
-                                  Your browser does not support the video tag.
-                                </video>
-                               
-                              </div>
-                            )
-                          )}
+                                <source src={image?.url} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                            </div>
+                          ))}
                         </div>
                       ) : (
                         <p>No images available yet</p>
@@ -549,9 +542,30 @@ const NotClaim = () => {
           </Modal>
         </div>
       )}
-      {showContent && (
-        <RelatedBusinesses showSeeAll={true} showHeading={false} limit={4} />
-      )}
+      <div>
+        {showContent && (
+          <div className="wrapper">
+          <div className={styles.reviewbtn}>
+            <p className={styles.title}> Related Businesses</p>
+
+            <div
+              onClick={handleNavigateToRelatedBusiness}
+              className={styles.btnWrapper}
+            >
+              <p className={styles.btn}>See All</p>
+              <Image
+                width={20}
+                src={ArrowIcon}
+                alt="ArrowIcon"
+                preview={false}
+              />
+            </div>
+          </div>
+          <RelatedBusinesses  showHeading={false} limit={4} />
+
+        </div>
+        )}
+      </div>
     </>
   );
 };

@@ -79,7 +79,7 @@ interface OptionType {
 
 interface SearchableSelectProps {
   name: string;
-  label: string;
+  label?: string;
   options: OptionType[];
   placeholder?: string;
   onSearchChange?: (value: string) => void; // Handle search input change

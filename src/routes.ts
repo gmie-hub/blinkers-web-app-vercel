@@ -51,11 +51,12 @@ export const routes = {
 
   auth: {
     signUp: "/sign-up",
+    SellerSignUp: "/seller-signUp",
     login: "/login",
     forgotPassword: "/forgot-password",
     resetPassword: "/reset-password/:email",
     passwordResetSuccessful: "/password-reset-successful",
-    VerificationCode: "/verification-code/:email",
+    VerificationCode: "/verification-code/:email/:phoneNumber",
     ResetVerificationCode: "/reset-password-verification-code/:email/",
   },
 };

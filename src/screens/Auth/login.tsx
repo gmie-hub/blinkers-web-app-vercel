@@ -71,7 +71,9 @@ const Login = () => {
             message: "Success",
             description: "User logged in successfully",
           });
-          console.log(data, "hsyjadata dat");
+          const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
+          localStorage.setItem("savedPinSignUp", pin);
+          console.log(pin, 'kik')
 
           const userResponse = {
             ...data, // Spread all matching properties

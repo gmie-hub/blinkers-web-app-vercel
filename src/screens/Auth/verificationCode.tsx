@@ -22,9 +22,11 @@ const VerificationCode = () => {
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const { notification } = App.useApp();
   const navigate = useNavigate();
-  const { email } = useParams<{ email: string }>(); // Define the type of id
-  const [route, setRoute] = useState("");
+  // const { email } = useParams<{ email: string }>();
+  const { phoneNumber } = useParams<{ phoneNumber: string }>(); 
 
+  const [route, setRoute] = useState("");
+console.log(route,'eroute')
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime: number) => {
@@ -170,8 +172,8 @@ const VerificationCode = () => {
 
   const resendOtpHandler = async () => {
     const payload: resendOtp = {
-      type: "Email",
-      value: email!,
+      type: "Phone",
+      value: phoneNumber!,
       from_page: "Signup",
       route: route,
     };
@@ -183,6 +185,8 @@ const VerificationCode = () => {
             message: "Success",
             description: data?.message,
           });
+          setRoute('');
+
         },
       });
     } catch (error: any) {
@@ -190,6 +194,8 @@ const VerificationCode = () => {
         message: "Error",
         description: "An error occurred",
       });
+      setRoute('');
+
     }
   };
 

@@ -4,6 +4,9 @@ import api from "../../utils/apiClient";
 export const SignUpCall = async (payload: Partial<signUp>) => {
   return (await api.post("/auth/register", payload))?.data as Response;
 };
+export const SellerSignUpCall = async (payload: Partial<signUp>) => {
+  return (await api.post("/users/complete", payload))?.data as Response;
+};
 export const ResetPasswordCall = async (payload: Partial<ResetPasswordPayload>) => {
   return (await api.post("/auth/reset-password", payload))?.data as Response;
 };

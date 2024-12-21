@@ -524,3 +524,11 @@ interface JobApplication {
 interface ApplicationStatusPayload {
   status: string; 
 }
+interface JobItem {
+  id: number;
+  title: string;
+  job_type: string;
+  status: string;
+  total_applicant: number;
+  start_date: string;
+}

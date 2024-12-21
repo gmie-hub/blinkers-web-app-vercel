@@ -73,7 +73,7 @@ const Directory = () => {
       });
     } 
     else if(user?.business === null){
-      navigate('job/add-business')
+      navigate('/job/add-business')
     } else 
     navigate("/profile/2")
   }

@@ -36,15 +36,15 @@ const SignUp = () => {
     mutationKey: ["sign-up"],
   });
 
-  const handleNavigateToVerifyOtp = (email: string) => {
-    navigate(`/verification-code/${email}`);
+  const handleNavigateToVerifyOtp = (email: string, phoneNumber:string) => {
+    navigate(`/verification-code/${email}/${phoneNumber}`);
   };
 
   const SignUpHandler = async (values: FormikValues, resetForm: any) => {
     const payload: Partial<signUp> = {
       name: values?.name,
       country_code: countryCode, // Use the updated country code
-      number: values.phoneNumber,
+      number: countryCode+values.phoneNumber,
       address: values.address,
       address_lat: values.address,
       address_long: values?.address,
@@ -60,11 +60,10 @@ const SignUp = () => {
             message: "Success",
             description: data?.message,
           });
-          const pin = data?.data?.length > 4 ? data?.data : "";
+          const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
 
+          handleNavigateToVerifyOtp(values?.email,values?.phoneNumber);
           localStorage.setItem("savedPinSignUp", pin);
-
-          handleNavigateToVerifyOtp(values?.email);
 
           resetForm(); // Reset the form on success
         },
@@ -74,10 +73,7 @@ const SignUp = () => {
         message: "Error",
         description:    errorMessage(error) || "An error occurred",
       });
-  //     const errorMessages = Object.values(error?.response?.data?.error)
-  // .flat() // Flatten any nested arrays
-  // .join(", ");
-  //     console.log(errorMessages, 'jumm')
+
     }
   };
 

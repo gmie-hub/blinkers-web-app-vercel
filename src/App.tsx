@@ -20,6 +20,7 @@ import WriteReview from "./screens/home/market/writeReview/reviewBusiness";
 import SubmittedSuccessfully from "./customs/detailsubmitted";
 import Login from "./screens/Auth/login";
 import SignUp from "./screens/Auth/signUp";
+import SellerSignup from "./screens/Auth/sellerSignup";
 import AuthLayout from "./screens/Auth/authLayout";
 import ForgotPassword from "./screens/Auth/forgotPassword";
 import ResetPassword from "./screens/Auth/resetPassword";
@@ -102,6 +103,8 @@ function App() {
 
   const authRoutes = [
     { path: routes.auth.signUp, element: <SignUp /> },
+    { path: routes.auth.SellerSignUp, element: <SellerSignup /> },
+
     { path: routes.auth.login, element: <Login /> },
     { path: routes.auth.forgotPassword, element: <ForgotPassword /> },
     { path: routes.auth.resetPassword, element: <ResetPassword /> },

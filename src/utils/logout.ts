@@ -5,6 +5,10 @@ export const logout = () => {
   localStorage.removeItem("basic-info");
   localStorage.removeItem("link-data");
   localStorage.removeItem("blinkers-web&site#");
+  localStorage.removeItem("activeTabKeyProfile");
+  localStorage.removeItem("activeTabKeyBasicInfo");
+
+
 
   window.location.href = "/";
 };

@@ -169,6 +169,7 @@ const ResetPasswordVerificationCode = () => {
       inputRefs.current[inputRefs.current.length - 1]?.focus();
     }
   };
+  console.log(email?.includes('@') , 'parrot')
 
   const resendOptMutation = useMutation({
     mutationFn: ResendOptCall,
@@ -176,8 +177,9 @@ const ResetPasswordVerificationCode = () => {
   });
 
   const resendOtpHandler = async () => {
+  const emailTypes =  email?.includes('@')
     const payload: resendOtp = {
-      type: "Email",
+      type: emailTypes ? 'Email' : "Phone",
       value: email!,
       from_page: "Forgot",
       route: route,
@@ -190,6 +192,8 @@ const ResetPasswordVerificationCode = () => {
             message: "Success",
             description: data?.message,
           });
+          setRoute('');
+
         },
       });
     } catch (error: any) {
@@ -197,6 +201,8 @@ const ResetPasswordVerificationCode = () => {
         message: "Error",
         description: "An error occurred",
       });
+      setRoute('');
+
     }
   };
 

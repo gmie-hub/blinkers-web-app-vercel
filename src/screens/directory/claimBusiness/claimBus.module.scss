@@ -3,27 +3,23 @@
   gap: 4rem;
   padding-block: 4rem;
   @media screen and (min-width: 768px) {
-
-  padding-inline: 2.4rem;
-  border: solid #eeeeee;
+    padding-inline: 2.4rem;
+    border: solid #eeeeee;
   }
 }
 
 .claimWrapper {
-    @media screen and (min-width: 768px) {
-
-  padding: 6.4rem;
-  box-shadow: 0px 4px 40px 0px #00990012;
-  border: solid #00990012;
-    }
-
-
+  @media screen and (min-width: 768px) {
+    padding: 6.4rem;
+    box-shadow: 0px 4px 40px 0px #00990012;
+    border: solid #00990012;
+  }
 }
 
 .leftSection {
   flex: 0.5; /* 40% of the width */
   // padding: 2rem;
-  
+
   background-color: #ecfcec;
 }
 
@@ -33,9 +29,8 @@
   flex-direction: column;
   text-align: start;
   @media screen and (min-width: 768px) {
-
-  padding-inline: 1.4rem;
-  border-inline-start: #EEEEEE solid;
+    padding-inline: 1.4rem;
+    border-inline-start: #eeeeee solid;
   }
 
   & > h1 {
@@ -280,18 +275,23 @@
     font-size: 2.4rem;
   }
 }
-.wrapper{
-    padding-inline: 16.8rem;
-    @media (max-width: 600px) {
-      padding-inline: 2.4rem;
-      
-    }
-    }
-  
-    .inputContainer {
-        margin-block: 2.4rem;
-      }
-      
-      .inputCon {
-        margin-block: 4rem;
-      }
+.wrapper {
+  padding-inline: 16.8rem;
+  @media (max-width: 600px) {
+    padding-inline: 2.4rem;
+  }
+}
+
+.inputContainer {
+  margin-block: 2.4rem;
+}
+
+.inputCon {
+  margin-block: 4rem;
+}
+.justifyCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}

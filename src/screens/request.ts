@@ -9,9 +9,13 @@ export const getAllReviews = async (id: string, page?: number) => {
   return (await api.get(url))?.data as ReviewResponse;
 };
 
+// export const getAllJobs = async (page: number, search?: string | number) => {
+//   return (await api.get(`jobs?page=${page}&search=${search}`))
+//     ?.data as JobResponse;
+// };
 export const getAllJobs = async (page: number, search?: string | number) => {
-  return (await api.get(`jobs?page=${page}&search=${search}`))
-    ?.data as JobResponse;
+  const url = search ? `jobs?page=${page}&search=${search}` : `jobs?page=${page}`;
+  return (await api.get(url))?.data as JobResponse;
 };
 export const getAllState = async () => {
   return (await api.get(`states?per_page=${40}`))?.data as StateResponse;

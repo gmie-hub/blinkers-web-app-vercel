@@ -12,13 +12,15 @@ export const api: AxiosInstance = axios.create({
 api.interceptors.request.use(
   function (config) {
     let token = "";
+
     if (typeof (config?.headers as any).authorization === "undefined") {
       const tokenModel = JSON.parse(
         localStorage.getItem("blinkers-web&site#") || "{}"
       );
 
-      if (tokenModel?.data?.security_token) {
-        token = tokenModel?.data?.security_token;
+      if (tokenModel?.security_token) {
+        token = tokenModel?.security_token;
+
       }
     }
     config.headers = {
@@ -39,7 +41,6 @@ api.interceptors.request.use(
     }
   }
 );
-
 api.interceptors.response.use(null, function (error) {
   if (error?.response?.status === 401 || error?.response?.status === 403) {
   }

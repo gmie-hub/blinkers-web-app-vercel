@@ -40,8 +40,8 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const handleStateChange = (value: number, setFieldValue: any) => {
     console.log("Selected State ID:", value);
     setStateId(value);
-    setLgaId(0); 
-    setFieldValue("lga", ""); 
+    setLgaId(0);
+    setFieldValue("lga", "");
   };
 
   const handleLgaChange = (value: number) => {
@@ -49,7 +49,6 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     setLgaId(value);
     // setFieldValue("lga", "")
   };
-  console.log(selectedItems, "Selected Items");
 
   // useEffect(() => {
   //   if (selectedItems.length > 0) {
@@ -181,7 +180,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         console.log(values);
       }}
     >
-      {({ values,setFieldValue }) => (
+      {({ values, setFieldValue }) => (
         <Form>
           <div className={styles.container}>
             <div className={styles.leftSide}>
@@ -246,8 +245,9 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       options={stateOptions}
                       placeholder="Select State"
                       // onChange={(value: any) => handleStateChange(value)}
-                      onChange={(value: any) => handleStateChange(value, setFieldValue)} // Update stateId and reset lga here
-
+                      onChange={(value: any) =>
+                        handleStateChange(value, setFieldValue)
+                      } // Update stateId and reset lga here
                     />
                     <br />
 

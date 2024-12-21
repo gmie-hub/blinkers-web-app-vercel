@@ -6,7 +6,7 @@ interface Props {
 interface Response {
   statusCode: number;
   message: string;
-  data:string ;
+  data:any ;
 }
 
 interface signUp {
@@ -50,4 +50,23 @@ interface UserVerifyOtp {
   otp?: number;
   pin_id?:string;
   // is_email?:string
+}
+interface SellerSignUpData{
+  name:string
+number?:string;
+email:string;
+address:string;
+address_lat:string;
+address_long:string
+
+store_name:string
+
+store_bio:string
+state_id:number;
+local_government_area_id:number;
+profile_image:string;
+facebook_address:string;
+instagram_address:string;
+twitter_address:string
+website_address:string
 }

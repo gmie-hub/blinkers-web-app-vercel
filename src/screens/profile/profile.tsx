@@ -80,6 +80,7 @@ import { useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import MyBusinesses from "./myBusinesses";
 import { useParams } from "react-router-dom";
+import MyApplications from "./myApplication/myApplications";
 
 const Profile = () => {
   const { id } = useParams();
@@ -113,7 +114,7 @@ const Profile = () => {
     {
       key: "4",
       label: "My Applications",
-      // children: <Reviews limit={3} />,
+      children: <MyApplications />,
     },
     {
       key: "5",

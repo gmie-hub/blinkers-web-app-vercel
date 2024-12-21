@@ -45,7 +45,7 @@ const ClaimBusiness = () => {
   };
 
   const handleNavigateToRelatedBusiness = () => {
-    navigate(`/related-businesses`);
+    navigate(`/related-businesses/${id}`);
     window.scrollTo(0, 0);
   };
 
@@ -164,7 +164,7 @@ const ClaimBusiness = () => {
                 <div>
                   <Image src={ProductIcon} alt="ProductIcon" preview={false} />
 
-                  <div className={styles.detailsflex}>
+                  <div className={styles.justifyCenter}>
                     <p className={styles.name}>Omorinsola’s Store</p>
                     <p className={styles.subjectBg}>Fashion Accessories</p>
 

@@ -52,24 +52,24 @@ const MyBusinesses = () => {
                 src={ProfileImg}
                 alt="ProfileImg"
               />
-              <p>Shop With Rinsy</p>
+              <p>{user?.business?.name}</p>
 
               <div className={styles.info}>
                 <Image src={TimeIcon} alt="TimeIcon" preview={false} />
 
                 <div className={styles.open}>
                   <p>Opening Hours</p>
-                  <p>Monday - Fridays (10am- 11pm)</p>
+                  {/* <p>Monday - Fridays (10am- 11pm)</p> */}
                 </div>
               </div>
               <div className={styles.info}>
                 <Image src={LocationIcon} alt="LocationIcon" preview={false} />
-                4, blinkers street, Lekki, Nigeria
+                {user?.address}
               </div>
               <div className={styles.info}>
                 <Image src={CallIcon} alt="CallIcon" preview={false} />
 
-                <p>09012345678</p>
+                <p>{user?.number}</p>
               </div>
               <div style={{ marginBlockStart: "2.4rem" }}>
                 <Button
