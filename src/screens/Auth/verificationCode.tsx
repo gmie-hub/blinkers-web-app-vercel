@@ -258,7 +258,7 @@ console.log(route,'eroute')
           });
           localStorage.setItem("savedPinSignUp", "");
 
-          // navigate("/login");
+          navigate("/login");
         },
       });
     } catch (error: any) {
