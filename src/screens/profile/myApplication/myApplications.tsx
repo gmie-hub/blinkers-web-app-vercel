@@ -77,6 +77,8 @@ const MyApplications = () => {
         <h1 className="error">{jobErrorMessage}</h1>
       ) : (
         <>
+        <h3>My Applications</h3>
+        <p>Track your submitted job applications and see their status.</p>
          <div>
             <Tabs
               className={styles.tabs}
