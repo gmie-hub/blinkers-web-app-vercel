@@ -26,6 +26,12 @@ const SellerVerificationCode = () => {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
 
+  const handleNaviagteToSellerSignUp = () =>{
+    navigate("/seller-signUp")
+    window.scroll(0,0)
+    
+  }
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime: number) => {
@@ -203,6 +209,7 @@ const SellerVerificationCode = () => {
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
 
   const verifyOptMutation = useMutation({
     mutationFn: userVerifyOtp,
@@ -227,8 +234,8 @@ const SellerVerificationCode = () => {
             description: data?.message,
           });
           localStorage.setItem("savedPinSignUp", "");
+          handleNaviagteToSellerSignUp()
 
-          navigate("/login");
         },
       });
     } catch (error: any) {
@@ -330,6 +337,12 @@ const SellerVerificationCode = () => {
                 }
                 className={styles.buttonOtp}
               />
+               <Button
+                  type="submit"
+                  text={"Verify Email Later"}
+                  className={styles.button}
+                  onClick={handleNaviagteToSellerSignUp}
+                />
 
               {/* <Button
                 variant="transparent"

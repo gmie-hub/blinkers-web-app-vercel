@@ -32,6 +32,7 @@ const Header = () => {
       navigate("/create-ad")
     }
     else{
+      // navigate("/seller-signUp");
       navigate("/seller-verification");
 
     }
