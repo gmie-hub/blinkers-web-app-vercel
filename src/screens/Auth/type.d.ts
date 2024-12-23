@@ -44,7 +44,7 @@ interface resendOtp {
   type?: string;
   value:string;
   from_page:string;
-  route:string;
+  route?:string;
 }
 interface UserVerifyOtp {
   otp?: number;

@@ -47,6 +47,7 @@ import Applicants from "./screens/profile/businessInformation/postedJob/applican
 import ViewApplicant from "./screens/profile/businessInformation/postedJob/applicants/viewApplicantDetails/viewApplicant";
 import CreateAd from "./screens/profile/myAds/editAds";
 import MyAds from "./screens/profile/myAds/myAds";
+import SellerVerification from "./screens/Auth/sellerVerificationModal";
 
 
 function App() {
@@ -106,6 +107,7 @@ function App() {
   const authRoutes = [
     { path: routes.auth.signUp, element: <SignUp /> },
     { path: routes.auth.SellerSignUp, element: <SellerSignup /> },
+    { path: routes.auth.sellerVerification, element: <SellerVerification /> },
 
     { path: routes.auth.login, element: <Login /> },
     { path: routes.auth.forgotPassword, element: <ForgotPassword /> },

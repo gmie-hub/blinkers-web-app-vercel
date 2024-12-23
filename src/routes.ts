@@ -61,6 +61,7 @@ export const routes = {
     passwordResetSuccessful: "/password-reset-successful",
     VerificationCode: "/verification-code/:email/:phoneNumber",
     ResetVerificationCode: "/reset-password-verification-code/:email/",
+    sellerVerification:'seller-verification'
   },
 };
 

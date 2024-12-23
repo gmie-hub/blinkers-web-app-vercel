@@ -19,6 +19,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [user] = useAtom(userAtom);
+  
 
 
   const handleNavigateToLogin = () => {
@@ -31,7 +32,7 @@ const Header = () => {
       navigate("/create-ad")
     }
     else{
-      navigate("/seller-signUp");
+      navigate("/seller-verification");
 
     }
   };
