@@ -24,7 +24,7 @@ const ResetPasswordVerificationCode = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const { email } = useParams<{ email: string }>(); // Define the type of id
-  const [route, setRoute] = useState("");
+  const [route, setRoute] = useState("Sms");
   const handleNavigateToResetPassword = (email: string) => {
     navigate(`/reset-password/${email}`);
   };
@@ -79,15 +79,16 @@ const ResetPasswordVerificationCode = () => {
         return () => clearInterval(timer);
       }, 0);
     }
+    resendOtpHandler();
 
 
   };
 
-  useEffect(() => {
-    if (route) {
-      resendOtpHandler();
-    }
-  }, [route]);
+  // useEffect(() => {
+  //   if (route) {
+  //     resendOtpHandler();
+  //   }
+  // }, [route]);
 
   const initialValues: FormValues = {
     code: ["", "", "", ""], // 4 fields instead of 6
@@ -177,12 +178,13 @@ const ResetPasswordVerificationCode = () => {
   });
 
   const resendOtpHandler = async () => {
-  const emailTypes =  email?.includes('@')
+  const isEmailTypes =  email?.includes('@')
     const payload: resendOtp = {
-      type: emailTypes ? 'Email' : "Phone",
+      type: isEmailTypes ? 'Email' : "Phone",
       value: email!,
       from_page: "Forgot",
-      route: route,
+      // route: route,
+    
     };
 
     try {
@@ -212,11 +214,17 @@ const ResetPasswordVerificationCode = () => {
   });
 
   const savedPin = localStorage.getItem("savedPin");
+  const isEmailTypes =  email?.includes('@')
 
   const verifyOtpHandler = async (values: FormValues) => {
-    const payload: UserVerifyOtp = {
+    const payload: any = {
+
       otp: parseInt(values.code.join("")),
-      pin_id: savedPin || "",
+      // pin_id: savedPin || "",
+        // "is_email": true
+
+        ...(isEmailTypes === false && { pin_id: savedPin }),
+        ...(isEmailTypes && { is_email: true }), 
     };
     if (values?.code.join("")?.length !== 4) return;
 
@@ -323,7 +331,7 @@ const ResetPasswordVerificationCode = () => {
                 variant="transparent"
                 onClick={() => handleResendClick("Sms")}
                 disabled={resendOptMutation?.isPending || timeLeft > 0}
-                type="submit"
+                type="button"
                 text={
                   route === "Sms" && resendOptMutation?.isPending
                     ? "loading..."

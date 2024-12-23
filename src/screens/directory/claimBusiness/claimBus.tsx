@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { App, Image } from "antd";
-import ProductIcon from "../../../assets/Frame 215.svg";
 import Star from "../../../assets/Vector.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
@@ -19,13 +18,15 @@ import Input from "../../../customs/input/input";
 import TimeIcon from "../../../assets/time42.svg";
 import LocationIcon from "../../../assets/locationnot.svg";
 import CallIcon from "../../../assets/callclaim.svg";
-import { ClaimBusinessApi } from "../../request";
-import { useMutation } from "@tanstack/react-query";
+import { ClaimBusinessApi, getBusinessById } from "../../request";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import RouteIndicator from "../../../customs/routeIndicator";
 import * as Yup from "yup";
 import { errorMessage } from "../../../utils/errorMessage";
+import { AxiosError } from "axios";
+import CustomSpin from "../../../customs/spin";
 
 const ClaimBusiness = () => {
   const navigate = useNavigate();
@@ -126,7 +127,7 @@ const ClaimBusiness = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description:errorMessage(error) || "An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
     }
   };
@@ -146,9 +147,33 @@ const ClaimBusiness = () => {
     },
   });
 
+  const [getBusinessDetailsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-business-details", id],
+        queryFn: () => getBusinessById(parseInt(id!)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!id,
+      },
+    ],
+  });
+
+  const businessDetailsData = getBusinessDetailsQuery?.data?.data;
+  const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
+  const businessDetailsErrorMessage =
+    businessDetailsError?.message ||
+    "An error occurred. Please try again later.";
+
   return (
+    <>
+    {getBusinessDetailsQuery?.isLoading ? (
+      <CustomSpin />
+    ) : getBusinessDetailsQuery?.isError ? (
+      <h1 className="error">{businessDetailsErrorMessage}</h1>
+    ) : (
     <div className={styles.wrapper}>
-     <RouteIndicator showBack/>
+      <RouteIndicator showBack />
       {showContent && (
         <div className={styles.claimWrapper}>
           <div className={styles.top}>
@@ -162,16 +187,23 @@ const ClaimBusiness = () => {
           <div className={styles.mainContainer}>
             <div className={styles.leftSection}>
               <div className={styles.card}>
-                <div>
-                  <Image src={ProductIcon} alt="ProductIcon" preview={false} />
+                {/* <div> */}
+                  <img
+                    className={styles.imageSize}
+                    src={businessDetailsData?.logo}
+                    alt="ProductIcon"
+                  />
 
                   <div className={styles.justifyCenter}>
-                    <p className={styles.name}>Omorinsola’s Store</p>
-                    <p className={styles.subjectBg}>Fashion Accessories</p>
+                    <p className={styles.name}> {businessDetailsData?.name}</p>
+                    <p className={styles.subjectBg}>
+                      {" "}
+                      {businessDetailsData?.category?.title}{" "}
+                    </p>
 
                     <div className={styles.starWrapper}>
                       {countUpTo(
-                        5,
+                        businessDetailsData?.average_rating || 0,
                         <Image
                           width={20}
                           src={Star}
@@ -186,55 +218,96 @@ const ClaimBusiness = () => {
                         />
                       )}{" "}
                     </div>
-                    <p style={{ paddingBlockEnd: "1.4rem" }}>No reviews yet</p>
-                    <p style={{ paddingBlockEnd: "0.4rem" }}>100</p>
-                    <p>Followers</p>
+                    {businessDetailsData?.total_rating === 0 ? (
+                      <p style={{ paddingBlockEnd: "1.4rem" }}>
+                        No reviews yet
+                      </p>
+                    ) : (
+                      <p style={{ paddingBlockEnd: "1.4rem" }}>
+                        {businessDetailsData?.average_rating} (
+                        {businessDetailsData?.total_rating}{" "}
+                        {businessDetailsData?.total_rating &&
+                        businessDetailsData?.total_rating < 2
+                          ? "Rating"
+                          : "Ratings"}
+                        )
+                      </p>
+                    )}
+                    <p style={{ paddingBlockEnd: "0.4rem" }}>
+                      {businessDetailsData?.total_followers}
+
+                      {businessDetailsData?.total_followers &&
+                      businessDetailsData?.total_followers > 1
+                        ? " Followers"
+                        : " Follower"}
+                    </p>
                   </div>
-                </div>
+                  <p style={{ paddingBlock: "0.2rem" }}>
+                    Number of Ads Posted:{" "}
+                    <span> {businessDetailsData?.total_ads}</span>{" "}
+                  </p>
+                {/* </div> */}
 
                 <div>
-                  <div className={styles.info}>
-                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
+                      <div className={styles.info}>
+                        <img src={TimeIcon} alt="TimeIcon" />
 
-                    <div className={styles.open}>
-                      <p>Opening Hours</p>
-                      <p>Monday - Fridays (10am- 11pm)</p>
+                        <div className={styles.open}>
+                          <p>Opening Hours</p>
+                          <p>Monday - Fridays (10am- 11pm)</p>
+                        </div>
+                      </div>
+                      <div className={styles.info}>
+                        <img src={LocationIcon} alt="LocationIcon" />
+                        <p>{businessDetailsData?.address}</p>
+                      </div>
+                      <div className={styles.info}>
+                        <img src={CallIcon} alt="CallIcon" />
+
+                        <p>{businessDetailsData?.phone || "N/A"}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.info}>
-                    <Image
-                      src={LocationIcon}
-                      alt="LocationIcon"
-                      preview={false}
-                    />
-                    4, blinkers street, Lekki, Nigeria
-                  </div>
-                  <div className={styles.info}>
-                    <Image src={CallIcon} alt="CallIcon" preview={false} />
-
-                    <p>09012345678</p>
-                  </div>
-                </div>
 
                 <div className={styles.social}>
-                  <Image
-                    src={WhatsappLogo}
-                    alt="WhatsappLogo"
-                    preview={false}
-                  />
-                  <Image
-                    //   width={40}
-                    height={35}
-                    src={FaceBookStoreIcon}
-                    alt="FaceBookStoreIcon"
-                    preview={false}
-                  />
-                  <Image
-                    src={InstagramIcon}
-                    alt="InstagramIcon"
-                    preview={false}
-                  />
-                </div>
+                      <Image
+                        style={{ cursor: "pointer" }}
+                        src={WhatsappLogo}
+                        alt="WhatsappLogo"
+                        preview={false}
+                        onClick={() => {
+                          if (businessDetailsData?.whatsapp) {
+                            window.open(businessDetailsData.whatsapp, "_blank");
+                          }
+                        }}
+                      />
+                      <Image
+                        style={{ cursor: "pointer" }}
+                        //   width={40}
+                        height={35}
+                        src={FaceBookStoreIcon}
+                        alt="FaceBookStoreIcon"
+                        preview={false}
+                        onClick={() => {
+                          if (businessDetailsData?.facebook) {
+                            window.open(businessDetailsData.facebook, "_blank");
+                          }
+                        }}
+                      />
+                      <Image
+                        style={{ cursor: "pointer" }}
+                        src={InstagramIcon}
+                        alt="InstagramIcon"
+                        preview={false}
+                        onClick={() => {
+                          if (businessDetailsData?.instagram) {
+                            window.open(
+                              businessDetailsData.instagram,
+                              "_blank"
+                            );
+                          }
+                        }}
+                      />
+                    </div>
               </div>
             </div>
             <div className={styles.rightSection}>
@@ -290,7 +363,15 @@ const ClaimBusiness = () => {
                     </div>
                   </div>
 
-                  <Button disabled={createBusinessMutation?.isPending} type="submit" text={createBusinessMutation?.isPending ? "Loading" : "Submit Form"} />
+                  <Button
+                    disabled={createBusinessMutation?.isPending}
+                    type="submit"
+                    text={
+                      createBusinessMutation?.isPending
+                        ? "Loading"
+                        : "Submit Form"
+                    }
+                  />
                 </Form>
               </FormikProvider>
             </div>
@@ -330,14 +411,13 @@ const ClaimBusiness = () => {
               able to edit your business details in your profile. We will
               contact you via email.
             </p>
-            <Button
-             text="Okay"
-             onClick={handleNavigateToSubPlan}
-            />
+            <Button text="Okay" onClick={handleNavigateToSubPlan} />
           </div>
         </div>
       )}
     </div>
+    )}
+    </>
   );
 };
 export default ClaimBusiness;

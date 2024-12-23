@@ -26,22 +26,42 @@ const VerificationCode = () => {
   // const { email } = useParams<{ email: string }>();
   const { phoneNumber } = useParams<{ phoneNumber: string }>(); 
 
-  const [route, setRoute] = useState("");
+  const [route, setRoute] = useState("Sms");
 console.log(route,'eroute')
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime: number) => {
-        if (prevTime <= 1) {
-          clearInterval(timer);
-          setIsResendDisabled(false); // Enable the "Resend Code" button when timer reaches 0
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000); // Update every second
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setTimeLeft((prevTime: number) => {
+  //       if (prevTime <= 1) {
+  //         clearInterval(timer);
+  //         setIsResendDisabled(false); // Enable the "Resend Code" button when timer reaches 0
+  //         return 0;
+  //       }
+  //       return prevTime - 1;
+  //     });
+  //   }, 1000); 
 
-    return () => clearInterval(timer); // Cleanup interval on component unmount
-  }, []);
+  //   return () => clearInterval(timer); // Cleanup interval on component unmount
+  // }, []);
+
+
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer); // Clear the interval when time reaches 0
+            setIsResendDisabled(false); // Enable the "Resend Code" button
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+  
+      // Cleanup interval on component unmount or when timeLeft changes
+      return () => clearInterval(timer);
+    }
+  }, [timeLeft]);
+
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -84,6 +104,7 @@ console.log(route,'eroute')
         return () => clearInterval(timer);
       }, 0);
     }
+    resendOtpHandler(route);
   };
 
   const initialValues: FormValues = {
@@ -171,7 +192,7 @@ console.log(route,'eroute')
     mutationKey: ["verify-otp"],
   });
 
-  const resendOtpHandler = async () => {
+  const resendOtpHandler = async (route: string)  => {
     const payload: resendOtp = {
       type: "Phone",
       value: phoneNumber!,
@@ -186,7 +207,7 @@ console.log(route,'eroute')
             message: "Success",
             description: data?.message,
           });
-          setRoute('');
+          // setRoute('');
 
         },
       });
@@ -195,17 +216,17 @@ console.log(route,'eroute')
         message: "Error",
         description:errorMessage(error) || "An error occurred",
       });
-      setRoute('');
+      // setRoute('');
 
     }
   };
 
-  useEffect(() => {
-    if (route) {
-      resendOtpHandler();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [route]);
+  // useEffect(() => {
+  //   if (route) {
+  //     resendOtpHandler();
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [route]);
 
   const verifyOptMutation = useMutation({
     mutationFn: userVerifyOtp,
@@ -215,11 +236,17 @@ console.log(route,'eroute')
 
 
   const verifyOtpHandler = async (values: FormValues) => {
-    const payload: UserVerifyOtp = {
+    const payload: any = {
       otp: parseInt(values.code.join("")), 
-      pin_id: savedPin || "",
-    };
+      // is_email: true 
+      // ...(route === "Whatsapp" && { pin_id: savedPin }), 
+      // pin_id: savedPin || "",
+      ...(route === "SMS" && { pin_id: savedPin }),
+      ...(route === "Whatsapp" && { is_email: true }), 
+    };  
     
+    console.log(payload); // Debug the payload to ensure it's correct
+
     if (values?.code.join("")?.length !== 4) return;
 
     try {
@@ -231,7 +258,7 @@ console.log(route,'eroute')
           });
           localStorage.setItem("savedPinSignUp", "");
 
-          navigate("/login");
+          // navigate("/login");
         },
       });
     } catch (error: any) {
@@ -239,6 +266,7 @@ console.log(route,'eroute')
         message: "Error",
         description:errorMessage(error) || "An error occurred",
       });
+      setRoute('')
     }
   };
 
@@ -325,7 +353,7 @@ console.log(route,'eroute')
                 variant="transparent"
                 onClick={() => handleResendClick("Sms")}
                 disabled={resendOptMutation?.isPending || timeLeft > 0}
-                type="submit"
+                type="button"
                 text={
                   route === "Sms" && resendOptMutation?.isPending
                     ? "loading..."
@@ -338,7 +366,7 @@ console.log(route,'eroute')
                 variant="transparent"
                 onClick={() => handleResendClick("Whatsapp")}
                 disabled={resendOptMutation?.isPending || timeLeft > 0}
-                type="submit"
+                type="button"
                 className={styles.buttonOtp}
                 text={
                   route === "Whatsapp" && resendOptMutation?.isPending

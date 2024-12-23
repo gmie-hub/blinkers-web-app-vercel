@@ -219,9 +219,10 @@ const SellerVerificationCode = () => {
 
 
   const verifyOtpHandler = async (values: FormValues) => {
-    const payload: UserVerifyOtp = {
+    const payload: any = {
       otp: parseInt(values.code.join("")), 
       pin_id: savedPin || "",
+      is_email: true
     };
     
     if (values?.code.join("")?.length !== 4) return;
@@ -329,7 +330,7 @@ const SellerVerificationCode = () => {
                 variant="transparent"
                 onClick={() => handleResendClick()}
                 disabled={resendOptMutation?.isPending || timeLeft > 0}
-                type="submit"
+                type="button"
                 text={
                   resendOptMutation?.isPending
                     ? "loading..."
@@ -338,7 +339,7 @@ const SellerVerificationCode = () => {
                 className={styles.buttonOtp}
               />
                <Button
-                  type="submit"
+                  type="button"
                   text={"Verify Email Later"}
                   className={styles.button}
                   onClick={handleNaviagteToSellerSignUp}
