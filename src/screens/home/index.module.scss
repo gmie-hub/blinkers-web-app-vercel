@@ -615,16 +615,17 @@
   text-decoration: line-through;
   color: red; /* Optional: Use a muted color for canceled text */
 }
+.trendingdiscount {
+  color: #222222;
+  width: 600;
+}
+
 
 .info {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   color: #6e6e6e;
-}
-.trendingdiscount {
-  color: #222222;
-  width: 600;
 }
 
 .dirTitle {

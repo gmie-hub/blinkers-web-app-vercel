@@ -6,7 +6,7 @@ import Card from "../../customs/card/card";
 import BlinkersLogo from "../../assets/Frame 1618868702.svg"; // Actual image import
 import * as Yup from "yup";
 import { App, Image } from "antd";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import { errorMessage } from "../../utils/errorMessage";
 import { SellerSignUpCall } from "./request";
@@ -16,34 +16,31 @@ import SearchableSelect from "../../customs/searchableSelect/searchableSelect";
 import { userAtom } from "../../utils/store";
 import { useAtom } from "jotai";
 
-
 const SellerSignUp = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const [stateId, setStateId] = useState(0);
   const [user, setUser] = useAtom(userAtom);
 
+  const handleStateChange = (value: number, setFieldValue: any) => {
+    setStateId(value);
+    setFieldValue("local_government_area_id", "");
+  };
+
   const SignUpMutation = useMutation({
     mutationFn: SellerSignUpCall,
     mutationKey: ["sign-up"],
   });
 
-  const handleStateChange = (value: number, setFieldValue: any) => {
-    console.log("Selected State ID:", value);
-    setStateId(value);
-    setFieldValue("local_government_area_id", "");
-  };
 
-  
-
-  const SignUpHandler = async (values: FormikValues, ) => {
+  const SignUpHandler = async (values: FormikValues) => {
     const payload: Partial<SellerSignUpData> = {
       name: user?.name,
       number: user?.number,
-      address: user?.address,
+      address: values?.address,
       address_lat: user?.address,
       address_long: user?.address,
-      email: user?.email,
+      // email: user?.email,
       store_name: values?.store_name,
       store_bio: values?.store_bio,
       state_id: values?.state_id,
@@ -55,40 +52,64 @@ const SellerSignUp = () => {
       website_address: values?.website_address,
     };
 
-    try {
-      await SignUpMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-
-          setUser((prevUser: any) => ({
-            ...prevUser,
-            role: "2",
-          }));
-        },
-      });
-    } catch (error: any) {
+    if (
+      !values?.facebook_address &&
+      !values?.instagram_address &&
+      !values?.twitter_address &&
+      !values?.website_address
+    ) {
       notification.error({
-        message: "Error",
-        description: errorMessage(error) || "An error occurred",
+        message: "Social media Link",
+        description: "at least one social media link is compulsory",
+        placement: "top",
+        duration: 4,
       });
-      
-    }
+      return; // Ensure this stops further execution
+    }     
+
+
+      try {
+        await SignUpMutation.mutateAsync(payload, {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message,
+            });
+
+            setUser((prevUser: any) => ({
+              ...prevUser,
+              role: "2",
+            }));
+            handleNavigateCreateAds();
+          },
+        });
+      } catch (error: any) {
+        notification.error({
+          message: "Error",
+          description: errorMessage(error) || "An error occurred",
+        });
+      }
   };
 
   const validationSchema = Yup.object().shape({
-  
     store_name: Yup.string().required("required"),
+    address: Yup.string().required("required"),
     state_id: Yup.string().required("required"),
     local_government_area_id: Yup.string().required("required"),
-    profile_image: Yup.string().required("required"),
-    facebook_address: Yup.string().required("required").url("Invalid URL format"),
-    instagram_address: Yup.string().required("required").url("Invalid URL format"),
-    twitter_address: Yup.string().required("required").url("Invalid URL format"),
-    website_address: Yup.string().required("required").url("Invalid URL format"),
-    });
+    // profile_image: Yup.string().required("required"),
+    facebook_address: Yup.string()
+      // .required("required")
+      .url("Invalid URL format"),
+    instagram_address: Yup.string()
+      // .required("required")
+      .url("Invalid URL format"),
+    twitter_address: Yup.string()
+      // .required("required")
+      .url("Invalid URL format"),
+    website_address: Yup.string()
+      // .required("required")
+      .url("Invalid URL format"),
+  });
 
   const [getStateQuery, getLGAQuery] = useQueries({
     queries: [
@@ -130,6 +151,10 @@ const SellerSignUp = () => {
         }))
       : []),
   ];
+  const handleNavigateCreateAds = () => {
+    navigate("/create-ad");
+    window.scroll(0, 0);
+  };
 
   return (
     <section className={styles.container}>
@@ -150,40 +175,49 @@ const SellerSignUp = () => {
 
         <Formik
           initialValues={{
-            address:user?.address,
+            address: user?.address,
             store_name: "",
             store_bio: "",
             state_id: "",
             local_government_area_id: "",
-            profile_image: "",
+            // profile_image: "",
             facebook_address: "",
             instagram_address: "",
             twitter_address: "",
             website_address: "",
           }}
           onSubmit={(values) => {
-            SignUpHandler(values, );
-            
+            SignUpHandler(values);
           }}
           validationSchema={validationSchema}
         >
           {({ setFieldValue }) => {
             return (
               <Form className="fields">
-                <Input name="store_name"  label="Store name"  placeholder="Store name" className={styles.inputText} />
-                <Input name="store_bio"type="textarea" label="About store" placeholder="About store" className={styles.inputText} />
+                <Input
+                  name="store_name"
+                  label="Store name"
+                  placeholder="Store name"
+                  className={styles.inputText}
+                />
+                <Input
+                  name="store_bio"
+                  type="textarea"
+                  label="About store"
+                  placeholder="About store"
+                  className={styles.inputText}
+                />
                 <Input
                   name="address"
-                  disabled={true}
+                  // disabled={true}
                   label="Address"
-
                   className={styles.inputText}
                 />
                 <br />
 
                 <SearchableSelect
                   name="state_id"
-                    label="State"
+                  label="State"
                   options={stateOptions}
                   placeholder="Select State"
                   // onChange={(value: any) => handleStateChange(value)}
@@ -195,35 +229,35 @@ const SellerSignUp = () => {
 
                 <SearchableSelect
                   name="local_government_area_id"
-                    label="Lga"
+                  label="Lga"
                   options={lgaOptions}
                   placeholder="Select LGA"
                 />
 
                 <Input
                   name="facebook_address"
-                    label="Facebook link"
+                  label="Facebook link"
                   placeholder="Enter Facebook link e.g. https://facebook.com/username "
                   className={styles.inputText}
                 />
 
                 <Input
                   name="instagram_address"
-                    label="Twitter link"
+                  label="Twitter link"
                   placeholder="Enter Twitter link e.g. https://twitter.com/username "
                   type="text"
                   className={styles.inputText}
                 />
                 <Input
                   name="twitter_address"
-                    label="Instagram link"
+                  label="Instagram link"
                   placeholder="Enter Instagram link e.g. https://instagram.com/username "
                   type="text"
                   className={styles.inputText}
                 />
                 <Input
                   name="website_address"
-                    label="Website link"
+                  label="Website link"
                   placeholder="Enter Website link e.g. https://lipsum.com/"
                   type="text"
                   className={styles.inputText}

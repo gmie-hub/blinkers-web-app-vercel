@@ -25,6 +25,7 @@ import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import RouteIndicator from "../../../customs/routeIndicator";
 import * as Yup from "yup";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const ClaimBusiness = () => {
   const navigate = useNavigate();
@@ -125,7 +126,7 @@ const ClaimBusiness = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: error?.response?.data?.message,
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

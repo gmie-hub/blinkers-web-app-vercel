@@ -37,16 +37,16 @@ import RegisterAsApplicant from "./screens/job/apply/applyAsApplicant/index";
 import ApplyForJob from "./screens/job/applytoStrive/index";
 import PostJob from "./screens/job/postJob/postJob";
 import EditJob from "./screens/job/postJob/postJob";
-
 import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
-
-import Images from "./screens/directory/gallery/image";
+import Images  from "./screens/directory/gallery/image";
 import Videos from "./screens/directory/gallery/video";
 import Profile from "./screens/profile/profile";
 import EditBusiness from "./screens/profile/editBusiness/editBusiness";
 import ViewJobDetails from "./screens/profile/businessInformation/postedJob/viewJobDetails/viewJob";
 import Applicants from "./screens/profile/businessInformation/postedJob/applicants/applicant";
 import ViewApplicant from "./screens/profile/businessInformation/postedJob/applicants/viewApplicantDetails/viewApplicant";
+import CreateAd from "./screens/profile/myAds/editAds";
+import MyAds from "./screens/profile/myAds/myAds";
 
 
 function App() {
@@ -98,7 +98,9 @@ function App() {
     { path: routes.profile.applicants, element: <Applicants /> },
     { path: routes.profile.viewApplicant, element: <ViewApplicant /> },
 
- 
+    { path: routes.profile.createAd, element: <CreateAd /> },
+    { path: routes.profile.myAds, element: <MyAds /> },
+
   ];
 
   const authRoutes = [

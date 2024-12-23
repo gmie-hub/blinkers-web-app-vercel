@@ -202,6 +202,13 @@
   align-items: center;
   padding-block: 1.6rem;
   border-bottom: #eeeeee solid;
+  @media (max-width: 412px) {
+    flex-direction: column;
+
+    & > div{
+      width: 100%;
+    }
+  }
 }
 
 .message {
@@ -281,33 +288,33 @@
     width: 10% !important;
   }
 }
-.justifyCenter{
+.justifyCenter {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 // }
-.imageSize{
+.imageSize {
   width: 80%;
   // height: 20rem;
   // position: ;
-  object-fit:cover
+  object-fit: cover;
 }
-.imageItem{
+.imageItem {
   display: flex;
   flex-direction: column;
 }
 
 .imageContainer {
   position: relative;
-  width: 25.8rem; 
+  width: 25.8rem;
   height: 26.3rem;
   border-radius: 0.8rem;
 
   img {
     // width: 100%;
-    height: 26rem 
+    height: 26rem;
   }
 
   @media screen and (max-width: 768px) {
@@ -323,7 +330,10 @@
 
 .imageWrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); // Adjusts to the screen size
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(200px, 1fr)
+  ); // Adjusts to the screen size
   gap: 16px; // Spacing between the images
 }
 

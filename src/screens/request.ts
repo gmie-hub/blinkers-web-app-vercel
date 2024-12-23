@@ -20,6 +20,10 @@ export const getAllJobs = async (page: number, search?: string | number) => {
 export const getAllState = async () => {
   return (await api.get(`states?per_page=${40}`))?.data as StateResponse;
 };
+export const getMyApplications = async (page: number,user_id:number) => {
+  return (await api.get(`jobs/application?page=${page}&user_id=${user_id}`))?.data as JobResponse;
+};
+
 
 export const getLGAbyStateId = async (stateId: number) => {
   return (await api.get(`local-govt?state_id=${stateId}`))?.data as LGAResponse;
@@ -73,8 +77,11 @@ export const getAllBusiness = async (
   return (await api.get(url))?.data as any;
 };
 
+export const getMyAdzByUserId = async (user_id:number) => {
+  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}`))?.data as any;
+};
 export const getAllMarket = async (page?: number, search?: string | number, state_id?:number,local_government_area_id?:number) => {
-  let url = `/ads`;
+  let url = `/ads?per_page=${50}`;
 
   const queryParams: string[] = [];
 
@@ -100,7 +107,7 @@ export const getAllMarket = async (page?: number, search?: string | number, stat
   // }
 
   if (queryParams.length > 0) {
-    url += `?${queryParams.join("&")}`;
+    url += `&${queryParams.join("&")}`;
   }
 
   return (await api.get(url))?.data as AllProductaResponse;
@@ -127,6 +134,14 @@ export const createBusiness = async (payload: FormData) => {
   )?.data;
 };
 
+export const createAds = async (payload: FormData) => {
+  return (
+    await api.post("/ads", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+  )?.data;
+};
+
 export const ClaimBusinessApi = async (payload: FormData) => {
   return (
     await api.post("/business/claims", payload, {
@@ -141,6 +156,38 @@ export const ProfInfoApi = async (payload: FormData) => {
       headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
+};
+export const uploadAdsGallery = async (payload: FormData) => {
+  return (
+    await api.post('ads/image', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  )?.data;
+};
+export const uploadAdsVideo = async (payload: FormData) => {
+  return (
+    await api.post('ads/video', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  )?.data;
+};
+
+
+export const  deleteAdsGalarybyId = async ({ add_id, image_ids }: { add_id: number | string; image_ids: number[] }) => {
+  return (
+    await api.delete(`ads/image`, {
+      data: {
+        add_id, // Sending business_id and ids in the body
+        image_ids,
+      },
+    })
+  )?.data as any;
+};
+
+
+export const getAdsByUserId = async (id: number) => {
+  return (await api.get(`/ads?user_id=1299&per_page=50${id}`))
+    ?.data as AllProductaResponse;
 };
 
 export const getApplicantsbyId = async (id: number) => {

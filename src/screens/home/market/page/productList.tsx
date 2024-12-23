@@ -127,7 +127,14 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
                       </p>
                     </div>
                     <p style={{ color: "#222222", fontWeight: "600" }}>
-                      ₦{item?.price}
+                      {/* ₦{item?.price} */}
+                      {item?.discount_price === "" ? (
+                      <span>{`₦${item?.price}`}</span>
+                    ) : (
+                      <span
+                        className={styles.canceledText}
+                      >{`₦${item?.price}`}</span>
+                    )}
                     </p>
                     <div className={styles.starWrapper}>
                       {countUpTo(
@@ -169,7 +176,7 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
           <Pagination
             current={currentPage}
             total={getAllMarketQuery?.data?.data?.total} // Total number of items
-            pageSize={20} // Number of items per page
+            pageSize={50} // Number of items per page
             onChange={onChange} // Handle page change
             showSizeChanger={false} // Hide the option to change the page size
             style={{

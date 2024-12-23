@@ -61,6 +61,9 @@ const ForgotPassword = () => {
         message: "Error",
         description: errorMessage(error) || "An error occurred",
       });
+      handleNavigateToVerifyOtp(values?.email || values?.phoneNumber);
+
+      
     }
   };
 

@@ -15,6 +15,7 @@ interface UploadProps
   icon?: React.ReactNode;
   fileName?: string;
   fileSize?: number;
+  placeHolder?:string
 }
 
 const Upload: React.FC<UploadProps> = ({
@@ -27,6 +28,7 @@ const Upload: React.FC<UploadProps> = ({
   className,
   name,
   value,
+  placeHolder,
   ...rest
 }) => {
   return (
@@ -45,7 +47,9 @@ const Upload: React.FC<UploadProps> = ({
                 {fileName ? (
                   fileName
                 ) : (
+                  placeHolder ? <span>{placeHolder}</span>  :
                   <span>Click to <span style={{color:"#009900"}}> upload</span>  or drag and drop an image </span>
+                  
                 )}
               </h5>
 

@@ -12,6 +12,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { App } from "antd";
 import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect";
 import * as Yup from 'yup';
+import { errorMessage } from "../../../../utils/errorMessage";
 
 const AddBusiness = () => {
   const [upload, setUpload] = useState<File | null>(null);
@@ -98,7 +99,7 @@ const AddBusiness = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: error?.response?.data?.message,
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

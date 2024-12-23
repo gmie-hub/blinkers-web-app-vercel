@@ -14,6 +14,7 @@ import Input from "../../../../customs/input/input";
 import { useAtomValue } from "jotai";
 import { basicInfoAtom, userAtom } from "../../../../utils/store";
 import * as Yup from "yup";
+import { errorMessage } from "../../../../utils/errorMessage";
 
 interface ComponentProps {
   onPrev: () => void;
@@ -118,7 +119,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description:errorMessage(error) || "An error occurred",
       });
       clearFormData(setFieldValue);
     }
@@ -245,7 +246,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: error?.response?.data?.message,
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

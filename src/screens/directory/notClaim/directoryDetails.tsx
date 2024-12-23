@@ -334,7 +334,7 @@ const NotClaim = () => {
                         <p>{businessDetailsData?.phone || "N/A"}</p>
                       </div>
                     </div>
-                    {user?.claim_status?.toLowerCase() === "successful" && (
+                    {businessDetailsData?.business_status === '2'&& (
                       <>
                         <div className={styles.info}>
                           <Image
@@ -354,7 +354,8 @@ const NotClaim = () => {
                       </>
                     )}
 
-                    {user?.id === businessDetailsData?.user_id! &&
+                    {businessDetailsData?.business_status !== '2' &&
+                      // user?.id === businessDetailsData?.user_id! &&
                       user?.claim_status?.toLowerCase() !== "successful" && (
                         <div className={styles.chatBtn}>
                           <Button
@@ -369,7 +370,8 @@ const NotClaim = () => {
                             }
                           />
                         </div>
-                      )} 
+                      )
+                    }
 
                     <div className={styles.social}>
                       <Image
@@ -545,25 +547,24 @@ const NotClaim = () => {
       <div>
         {showContent && (
           <div className="wrapper">
-          <div className={styles.reviewbtn}>
-            <p className={styles.title}> Related Businesses</p>
+            <div className={styles.reviewbtn}>
+              <p className={styles.title}> Related Businesses</p>
 
-            <div
-              onClick={handleNavigateToRelatedBusiness}
-              className={styles.btnWrapper}
-            >
-              <p className={styles.btn}>See All</p>
-              <Image
-                width={20}
-                src={ArrowIcon}
-                alt="ArrowIcon"
-                preview={false}
-              />
+              <div
+                onClick={handleNavigateToRelatedBusiness}
+                className={styles.btnWrapper}
+              >
+                <p className={styles.btn}>See All</p>
+                <Image
+                  width={20}
+                  src={ArrowIcon}
+                  alt="ArrowIcon"
+                  preview={false}
+                />
+              </div>
             </div>
+            <RelatedBusinesses showHeading={false} limit={4} />
           </div>
-          <RelatedBusinesses  showHeading={false} limit={4} />
-
-        </div>
         )}
       </div>
     </>

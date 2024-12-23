@@ -62,7 +62,7 @@ const SignUp = () => {
           });
           const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
 
-          handleNavigateToVerifyOtp(values?.email,values?.phoneNumber);
+          handleNavigateToVerifyOtp(values?.email,countryCode+values?.phoneNumber);
           localStorage.setItem("savedPinSignUp", pin);
 
           resetForm(); // Reset the form on success

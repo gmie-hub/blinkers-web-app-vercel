@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { userVerifyOtp, ResendOptCall } from "./request";
 import { useParams } from "react-router-dom";
 import BackIcon from "../../assets/back.svg";
+import { errorMessage } from "../../utils/errorMessage";
 
 interface FormValues {
   code: string[];
@@ -192,7 +193,7 @@ console.log(route,'eroute')
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description:errorMessage(error) || "An error occurred",
       });
       setRoute('');
 
@@ -236,7 +237,7 @@ console.log(route,'eroute')
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

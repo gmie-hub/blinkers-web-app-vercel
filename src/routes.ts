@@ -47,6 +47,9 @@ export const routes = {
     viewJobDetails: "/view-job-details/:id",
     applicants: "/applicants/:id",
     viewApplicant: "/jobs/view-applicant/:id",
+    createAd: "/create-ad",
+    myAds:'/my-ads'
+
   },
 
   auth: {

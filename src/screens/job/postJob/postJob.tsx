@@ -23,6 +23,7 @@ import Editor from "../../../customs/editor/editor";
 import RouteIndicator from "../../../customs/routeIndicator";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
+import { errorMessage } from "../../../utils/errorMessage";
 
 export default function PostJobs() {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ export default function PostJobs() {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description: errorMessage(error) ||"An error occurred",
       });
     }
   };
@@ -196,7 +197,7 @@ export default function PostJobs() {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };
@@ -218,24 +219,7 @@ export default function PostJobs() {
         </div>
         <section>
           <Formik
-            // initialValues={{
-            //   business_id: '',
-            //   title:  '',
-            //   employment_type: '',
-            //   job_type:  '',
-            //   level: '',
-            //   industry:'',
-            //   location: '',
-            //   description: '',
-            //   responsibilities: '',
-            //   qualifications:  '',
-            //   benefits: '',
-            //   start_date: '',
-            //   end_date:  '',
-            //   salary:'',
-            //   accepting_applications: false, // <-- Ensures boolean value
-            // }}
-
+           
             initialValues={{
               business_id: JobDetailsData?.business_id,
               title: JobDetailsData?.title || "",

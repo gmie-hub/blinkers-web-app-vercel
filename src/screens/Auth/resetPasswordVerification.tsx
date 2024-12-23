@@ -199,7 +199,7 @@ const ResetPasswordVerificationCode = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description: errorMessage(error) ||"An error occurred",
       });
       setRoute('');
 
@@ -332,7 +332,7 @@ const ResetPasswordVerificationCode = () => {
                 className={styles.buttonOtp}
               />
 
-              <Button
+              {/* <Button
                 variant="transparent"
                 onClick={() => handleResendClick("Whatsapp")}
                 disabled={resendOptMutation?.isPending || timeLeft > 0}
@@ -343,7 +343,7 @@ const ResetPasswordVerificationCode = () => {
                     ? "loading..."
                     : "Resend Code via Whatsapp"
                 }
-              />
+              /> */}
 
 
               <div

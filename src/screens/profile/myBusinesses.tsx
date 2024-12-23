@@ -4,7 +4,6 @@ import { Image } from "antd";
 import CallIcon from "../../assets/callclaim.svg";
 import LocationIcon from "../../assets/locationnot.svg";
 import Button from "../../customs/button/button";
-import ProfileImg from "../../assets/Product.svg";
 import { getBusinessById } from "../request";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
@@ -13,11 +12,12 @@ import Index from "./businessInformation/basicInfomation";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import CustomSpin from "../../customs/spin";
+import { useNavigate } from "react-router-dom";
 
 const MyBusinesses = () => {
   const user = useAtomValue(userAtom);
   const [showBusinessInfo, setShowBusinessInfo] = useState(false);
-
+const navigate =useNavigate()
   const [getBusinessDetailsQuery] = useQueries({
     queries: [
       {
@@ -45,11 +45,12 @@ const MyBusinesses = () => {
       ) : (
       showBusinessInfo === false && (
         <div className="wrapper">
+          {user?.business !==  null ?
           <div className={styles.mainContent}>
             <div className={styles.card}>
               <img
                 className={styles.profileImg}
-                src={ProfileImg}
+                src={user?.business?.logo}
                 alt="ProfileImg"
               />
               <p>{user?.business?.name}</p>
@@ -89,6 +90,9 @@ const MyBusinesses = () => {
               </div>
             </div>
           </div>
+          :
+          <p style={{cursor:'pointer', textAlign:"center"}} onClick={()=>navigate('/job/add-business')}>Please click to  create a business </p>
+          }
         </div>
       )
     )}

@@ -1,0 +1,76 @@
+.mainContent {
+  margin-block-start: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  // height: 100vh; /* Adjust the height as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.leftColumn,
+.middleColumn,
+.rightColumn {
+  flex: 1;
+  padding: 2rem;
+}
+
+.leftColumn {
+  display: flex;
+  //   justify-content: center;
+  flex-direction: column;
+//   align-items: center;
+}
+.middleColumn {
+  border-inline-start: rgb(183, 164, 164) solid 1px;
+
+  border-inline-end: rgb(183, 164, 164) solid 1px;
+}
+.profileImg {
+  border-radius: 50%;
+  width: 10rem;
+  height: 10rem;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  gap: 16px; /* Adjust the gap between items */
+}
+
+.smalcard {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.cameraIcon {
+  width: 2rem;
+  height: 2rem;
+  
+
+  position: absolute;
+  bottom: 10px; /* Adjust this value to move the camera icon up or down */
+  left: 50%;
+  transform: translateX(-50%); /* This centers the camera icon horizontally */
+  cursor: pointer; /* Optional: Adds a pointer cursor on hover */
+}
+.imageContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.inputContainer {
+  display: flex;
+  gap: 1rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.delete {
+  background: transparent !important;
+  color: red !important;
+}

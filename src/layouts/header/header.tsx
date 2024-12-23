@@ -20,14 +20,17 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user] = useAtom(userAtom);
 
-  console.log(user?.email, "emd");
 
   const handleNavigateToLogin = () => {
     navigate("/login");
   };
 
+  console.log( user?.role === '2',' user?.business === null')
   const handleNavigateToSell = () => {
-    if(user?.role !== '2' || user?.business === null){
+    if(user?.role === '2' || user?.business !== null){
+      navigate("/create-ad")
+    }
+    else{
       navigate("/seller-signUp");
 
     }

@@ -22,6 +22,7 @@ import CustomSpin from "../../../../../customs/spin";
 import { formatAmount, getTimeAgo } from "../../../../../utils/formatTime";
 import ReusableModal from "../../../../../partials/deleteModal/deleteModal";
 import ModalContent from "../../../../../partials/successModal/modalContent";
+import { errorMessage } from "../../../../../utils/errorMessage";
 
 const JobDetails = () => {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ const JobDetails = () => {
     } catch (error: any) {
       notification.error({
         message: 'Error',
-        description: error?.response?.data?.message,
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

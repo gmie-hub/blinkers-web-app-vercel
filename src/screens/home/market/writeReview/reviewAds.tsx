@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { WriteReviewApi } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
+import { errorMessage } from "../../../../utils/errorMessage";
 
 const WriteReviewAds = () => {
   const [currentRating, setCurrentRating] = useState(0); // Track current rating
@@ -60,7 +61,7 @@ const WriteReviewAds = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

@@ -53,7 +53,7 @@ const AddGallery: FC<ComponentProps> = ({ onPrev, businessDetailsData }) => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred",
+        description:errorMessage(error) || "An error occurred",
       });
     }
   };

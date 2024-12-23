@@ -13,7 +13,7 @@ interface Props {
 }
 
 const FlagSeller = ({ handleCloseModal }: Props) => {
-//   const [formValues, setFormValues] = useState<FormikValues | null>(null); // Store form values here
+  //   const [formValues, setFormValues] = useState<FormikValues | null>(null); // Store form values here
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isDeleteSuccessful, setIsDeleteSucessful] = useState(false);
 
@@ -29,10 +29,10 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
 
     setIsDeleteModal(true);
   };
-  const handelDelete = () =>{
-    setIsDeleteSucessful(true) 
-     setIsDeleteModal(false) 
-  }
+  const handelDelete = () => {
+    setIsDeleteSucessful(true);
+    setIsDeleteModal(false);
+  };
 
   return (
     <div>
@@ -95,8 +95,7 @@ const FlagSeller = ({ handleCloseModal }: Props) => {
         handleConfirm={() => {
           handelDelete();
         }}
-        icon=               { <img src={DeleteIcon} alt="DeleteIcon" />}
-
+        icon={<img src={DeleteIcon} alt="DeleteIcon" />}
       />
 
       <ModalContent

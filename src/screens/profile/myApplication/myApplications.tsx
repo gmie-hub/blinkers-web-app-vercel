@@ -1,19 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { useQueries } from "@tanstack/react-query";
-import { getAllJobs } from "../../request";
+import { getMyApplications } from "../../request";
 import { AxiosError } from "axios";
 import { Pagination, Tabs, TabsProps } from "antd";
 import { getTimeAgo } from "../../../utils/formatTime";
 import CustomSpin from "../../../customs/spin";
 import usePagination from "../../../hooks/usePagnation";
 import { useState } from "react";
+import { userAtom } from "../../../utils/store";
+import { useAtomValue } from "jotai";
 
 
 
 const MyApplications = () => {
   const navigate = useNavigate();
   const { currentPage, onChange } = usePagination();
+  const user = useAtomValue(userAtom);
+
   const [activeKey, setActiveKey] = useState(
     () => {
     return "1";
@@ -27,7 +31,7 @@ const MyApplications = () => {
     queries: [
       {
         queryKey: ["get-all-jobs", currentPage],
-        queryFn: () => getAllJobs(currentPage, ),
+        queryFn: () => getMyApplications(currentPage,user?.id! ),
         retry: 0,
         refetchOnWindowFocus: false,
       },
