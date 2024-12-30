@@ -8,19 +8,21 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+# dist
 dist-ssr
 *.local
 
+#build
+/build
+/out  
 
-    # misc
-    .DS_Store
-    .env.local
-    .env.development.local
-    .env.test.local
-    .env.production.local
-    .env
-
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
 
 # Editor directories and files
 .vscode/*
