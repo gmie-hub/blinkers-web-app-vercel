@@ -6,8 +6,11 @@ import BlinkersLogo from "../../assets/Logo.svg";
 import AppStore from "../../assets/apstore.svg";
 import GooglePlay from "../../assets/googleplay.svg";
 import Iphone from "../../assets/Iphone.svg";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <main className={styles.footerWrapper}>
       <section className={styles.section1}>
@@ -75,7 +78,7 @@ const Footer = () => {
             />
 
             <p>E-mail: blinkersnigeria@gmail.com</p>
-            <p>Phone: 09012345678</p>
+            <p>Phone: +2348155656205</p>
             <p>
               Address: 18B, Onikepo Akande street, off Admiralty way, Lekki
               phase 1, Lagos, Nigeria
@@ -84,20 +87,41 @@ const Footer = () => {
         </div>
         <div className={styles.section2Item}>
           <div className={styles.list}>
-            <p className={styles.title}>Company</p>
-            <p>About Us</p>
-            <p>Contact Us</p>
+            <h3 className={styles.title}>Company</h3>
+            <p
+              onClick={() => {
+                navigate("/about-us");
+                window.scroll(0, 0);
+              }}
+            >
+              About Us
+            </p>
+            <p
+              onClick={() => {
+                navigate("/contact-us");
+                window.scroll(0, 0);
+              }}
+            >
+              Contact Us
+            </p>
             <p>How to Buy</p>
             <p>How to Sell</p>
           </div>
         </div>
         <div className={styles.section2Item}>
           <div className={styles.list}>
-            <p className={styles.title}>Quick Links</p>
+            <h3 className={styles.title}>Quick Links</h3>
             <p>Privacy Policy</p>
             <p>Terms and Conditions</p>
             <p>Safety Tips</p>
-            <p>FAQ</p>
+            <p
+              onClick={() => {
+                navigate("/faq");
+                window.scroll(0, 0); // Scroll to the top of the page
+              }}
+            >
+              FAQ
+            </p>
           </div>
         </div>
 

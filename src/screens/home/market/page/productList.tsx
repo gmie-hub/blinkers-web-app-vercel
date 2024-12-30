@@ -29,8 +29,15 @@ interface ProductListProps {
 const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm,stateId,lgaId ,setLgaId,setStateId}) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-  const { currentPage, setCurrentPage, onChange } = usePagination()
+  const { currentPage, setCurrentPage, onChange,pageNum } = usePagination()
   const { search } = useParams();
+
+useEffect(() => {
+  if (currentPage !== pageNum) {
+    setCurrentPage(pageNum);
+  }
+}, [pageNum, currentPage, setCurrentPage])
+
 
   const [getAllMarketQuery] = useQueries({
     queries: [
@@ -71,6 +78,11 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
     setLgaId(0)
   };
 
+  // const handlePageChange = (pageNum: number) => {
+  //   setSearchParams({ pageNum: pageNum?.toString() }); // Update the URL with the new page number
+  //   setCurrentPage(pageNum); // Update the state
+  //   window.scrollTo(0, 0); // Scroll to the top of the page
+  // };
 
   return (
     <>
@@ -126,16 +138,24 @@ const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedS
                         <span>{item?.state?.state_name}</span>
                       </p>
                     </div>
-                    <p style={{ color: "#222222", fontWeight: "600" }}>
+                    {/* <span className={styles.trendingdiscount}>
+                      {item?.discount_price &&
+                        `₦${item?.discount_price} (Discounted)`}
+                    </span> */}
+                    <span style={{ color: "#222222", fontWeight: "600" }}>
                       {/* ₦{item?.price} */}
                       {item?.discount_price === "" ? (
                       <span>{`₦${item?.price}`}</span>
                     ) : (
                       <span
                         className={styles.canceledText}
-                      >{`₦${item?.price}`}</span>
+                      >{`₦${item?.price}`} </span>
                     )}
-                    </p>
+                         <span> {item?.discount_price &&
+                        `₦${item?.discount_price} `}</span>
+                   
+                    </span>
+               
                     <div className={styles.starWrapper}>
                       {countUpTo(
                         0,

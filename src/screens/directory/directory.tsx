@@ -1,6 +1,6 @@
 import styles from "./directory.module.scss";
 import { Image, notification, Pagination } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
@@ -21,9 +21,17 @@ const Directory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   let { search } = useParams();
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
-  const { currentPage, setCurrentPage, onChange } = usePagination();
+  const { currentPage, setCurrentPage, onChange ,pageNum} = usePagination();
   const currentPath = location.pathname;
   const user = useAtomValue(userAtom);
+
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage])
+  
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state

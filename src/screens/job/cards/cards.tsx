@@ -9,6 +9,7 @@ import FaArrowLeft from "../../../assets/backArrow.svg";
 import Button from "../../../customs/button/button";
 import CustomSpin from "../../../customs/spin";
 import usePagination from "../../../hooks/usePagnation";
+import { useEffect } from "react";
 
 interface Props {
   searchTerm: string;
@@ -17,8 +18,14 @@ interface Props {
 
 const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
   const navigate = useNavigate();
-  const { currentPage, setCurrentPage, onChange } = usePagination();
-
+  const { currentPage, setCurrentPage, onChange ,pageNum} = usePagination();
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage])
+  
+  
   const handleNavigateDetails = (id: number) => {
     navigate(`/job-details/${id}`);
     window.scrollTo(0, 0);

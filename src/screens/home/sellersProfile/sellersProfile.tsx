@@ -171,7 +171,7 @@ const SellerProfile = () => {
                 <div className={styles.card}>
                   <div>
                     <div className={styles.passport}>
-                      <img src={sellersDetailsData?.profile_image!} alt="ProductIcon" className={styles.sellerLogo} />
+                      <img src={sellersDetailsData?.profile_image || ''} alt="ProductIcon" className={styles.sellerLogo} />
 
                       <div className={styles.detailsflex}>
                         <p className={styles.name}>

@@ -2,7 +2,7 @@ export const routes = {
   // home: "/",
   page: {
     home: "/",
-    market: "/market",
+    market: "/market/:search?",
     productDetails: "/product-details/:id",
     relatedAds: "/related-ads/:id",
     review: "/review/:id",
@@ -14,7 +14,7 @@ export const routes = {
     ContactUs: "/contact-us",
     AboutUS: "/about-us",
     faq: "/faq",
-    homeMarket: "/market/:search",
+    // homeMarket: "/market/:search?",
   },
   job: {
     job: "/jobs",
