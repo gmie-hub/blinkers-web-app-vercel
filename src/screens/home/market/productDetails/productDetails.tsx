@@ -107,6 +107,7 @@ const BigScreen = ({
   };
 
   const relatedAdsData = productDetailsData?.related_ads;
+  // console.log(profileDetailsData,'profileDetailsData')
 
   const handleNavigateToRelatedAds = () => {
     navigate(`/related-ads/${id}`);
@@ -133,7 +134,7 @@ const BigScreen = ({
     }
   };
 
-  console.log('jum')
+  console.log('')
 
   return (
     <main>
