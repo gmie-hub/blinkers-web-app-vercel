@@ -140,7 +140,7 @@ useEffect(() => {
                     </div>
                     {/* <span className={styles.trendingdiscount}>
                       {item?.discount_price &&
-                        `₦${item?.discount_price} (Discounted)`}
+                        `₦${item?.discount_price} `}
                     </span> */}
                     <span style={{ color: "#222222", fontWeight: "600" }}>
                       {/* ₦{item?.price} */}

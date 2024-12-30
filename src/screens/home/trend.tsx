@@ -107,7 +107,7 @@ const Trends = () => {
 
                     <span className={styles.trendingdiscount}>
                       {item?.discount_price &&
-                        `₦${item?.discount_price} (Discounted)`}
+                        `₦${item?.discount_price}`}
                     </span>
 
                     <span>
@@ -265,7 +265,7 @@ const Trends = () => {
 
                     <span className={styles.trendingdiscount}>
                       {item?.discount_price &&
-                        `₦${item?.discount_price} (Discounted)`}
+                        `₦${item?.discount_price} `}
                     </span>
                     <span>
                       {item?.discount_price === "" ? (

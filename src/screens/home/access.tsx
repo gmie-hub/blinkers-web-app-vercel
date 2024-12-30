@@ -23,6 +23,12 @@ const Access = () => {
             variant="green"
             text="Download App"
             className="buttonStyle"
+            onClick={() =>
+              window.open(
+                "https://onelink.to/32m46u",
+                "_blank"
+              )
+            }
           />
         </div>
       </section>

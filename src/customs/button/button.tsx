@@ -15,7 +15,7 @@ interface ButtonProps extends PropsWithChildren {
   isLoading?: boolean;
 }
 
-const Button: FC<ButtonProps> = ({
+const   Button: FC<ButtonProps> = ({
   onClick,
   children,
   variant = 'green', // Default to green if not specified
