@@ -14,6 +14,7 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
   CreateJob,
   employmentTypeData,
+  getIndustries,
   getJobDetails,
   jobTypeData,
   LevelData,
@@ -24,6 +25,7 @@ import RouteIndicator from "../../../customs/routeIndicator";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../utils/errorMessage";
+import SearchableSelect from "../../../customs/searchableSelect/searchableSelect";
 
 export default function PostJobs() {
   const navigate = useNavigate();
@@ -39,7 +41,9 @@ export default function PostJobs() {
     navigate(-1);
   };
 
-  const [getJobDetailsQuery] = useQueries({
+  
+
+  const [getJobDetailsQuery,getAllIndustriesQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-jobs-details"],
@@ -48,10 +52,29 @@ export default function PostJobs() {
         refetchOnWindowFocus: false,
         enabled: !!id,
       },
+      {
+        queryKey: ['get-all-industries'],
+        queryFn: () => getIndustries(),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
     ],
   });
 
   const JobDetailsData = getJobDetailsQuery?.data?.data;
+
+  const industryData = getAllIndustriesQuery?.data?.data?.data || [];
+
+  const allIndustriesOptions: { value: string; label: string }[] = [
+    { value: 0, label: 'Select Industry' },
+    ...(industryData?.length > 0
+      ? industryData?.map((item: IndustriesDatum) => ({
+          value: item?.id?.toString(),
+          label: item?.name,
+        }))
+      : []),
+  ];
+
 
   const createJobMutation = useMutation({
     mutationFn: CreateJob,
@@ -268,21 +291,20 @@ export default function PostJobs() {
                       onChange={handleChange}
                     />
 
-                    {/* <SearchableSelect
-                      name="business_id"
-                      label="Company's Name"
-                      options={allBusinessOptions}
-                      placeholder="Select Company Name"
-                      onSearchChange={handleSearchChange}
-                    /> */}
-                    <Input
+                    <SearchableSelect
+                      name="industry"
+                      label="Industry"
+                      options={allIndustriesOptions}
+                      placeholder="Select Industry"
+                    />
+                    {/* <Input
                       name="industry"
                       label="industry"
                       placeholder="industry"
                       type="text"
                       //   value={values.industry}
                       onChange={handleChange}
-                    />
+                    /> */}
                     <Input
                       name="start_date"
                       label="Start Date"

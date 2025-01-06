@@ -40,7 +40,13 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
       ? reletedJob.slice(0, limit)
       : reletedJob;
 
-  const businessReviewErrorMessage = "Failed to load reviews";
+
+      const  businessReviewError = getJobDetailsQuery?.error as AxiosError;
+      const businessReviewErrorMessage =
+      businessReviewError?.message || "An error occurred. Please try again later.";
+    
+
+
   const handleNavigateDetails = (id: number) => {
     navigate(`/job-details/${id}`);
     window.scrollTo(0, 0);

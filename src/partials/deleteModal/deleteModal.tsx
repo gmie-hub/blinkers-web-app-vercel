@@ -3,7 +3,7 @@ import { Modal } from 'antd';
 import { ReactNode } from 'react';
 import Button from '../../customs/button/button';
 import { Image } from "antd";
-import ProductIcon from "../../assets/Ellipse 840.svg";
+import ProductIcon from "../../assets/remove_11695444 2.svg";
 
 interface Props {
   handleCancel: () => void;

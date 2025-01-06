@@ -12,6 +12,8 @@ import { FlagJobApi } from "../../../request";
 import { errorMessage } from "../../../../utils/errorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { userAtom } from "../../../../utils/store";
+import { useAtomValue } from "jotai";
 
 interface Props {
   handleCloseModal: () => void;
@@ -21,7 +23,7 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isDeleteSuccessful, setIsDeleteSuccessful] = useState(false);
   const { notification } = App.useApp();
-  // const user = useAtomValue(userAtom);
+  const user = useAtomValue(userAtom);
   const { id } = useParams(); // Extract job ID from URL
 
   const validationSchema = Yup.object().shape({
@@ -36,7 +38,7 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
   const FlagJobHandler = async (values: FormikValues) => {
     const payload: Partial<FlagJob> = {
       job_id: id!,
-      applicant_id: 6,
+      applicant_id: user?.applicant?.id,
       action: "flag",
       reason: values.reasonForFlag,
     };

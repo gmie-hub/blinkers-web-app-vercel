@@ -48,6 +48,7 @@ export const routes = {
     applicants: "/applicants/:id",
     viewApplicant: "/jobs/view-applicant/:id",
     createAd: "/create-ad",
+    editAds: "/edit-ad/:id",
     myAds:'/my-ads'
 
   },
@@ -59,7 +60,7 @@ export const routes = {
     forgotPassword: "/forgot-password",
     resetPassword: "/reset-password/:email",
     passwordResetSuccessful: "/password-reset-successful",
-    VerificationCode: "/verification-code/:email/:phoneNumber",
+    VerificationCode: "/verification-code/:email?/:phoneNumber?",
     ResetVerificationCode: "/reset-password-verification-code/:email/",
     sellerVerification:'seller-verification'
   },

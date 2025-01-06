@@ -46,8 +46,11 @@ const safetyTips = [
 interface Props {
   productDetailsData?: ProductDatum;
   handleFollowBusiness?: () => void;
+  handleFollowSeller?:()=>void;
   followBusinessMutation?: boolean;
-  userExists?: boolean;
+  followSellersMutation?:boolean;
+  isUserFollowingBusiness?: boolean;
+  isUserFollowingSeller?:boolean;
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
 }
@@ -55,9 +58,12 @@ interface Props {
 const SmallScreen = ({
   productDetailsData,
   handleFollowBusiness,
+  handleFollowSeller,
+  followSellersMutation,
   followBusinessMutation,
   businessDetailsData,
-  userExists,
+  isUserFollowingBusiness,
+  isUserFollowingSeller,
   profileDetailsData,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
@@ -317,7 +323,7 @@ const SmallScreen = ({
                           onClick={handleFollowBusiness}
                           disabled={followBusinessMutation}
                           text={
-                            userExists
+                            isUserFollowingBusiness
                               ? followBusinessMutation
                                 ? "Unfollowing"
                                 : "Unfollow"
@@ -455,14 +461,14 @@ const SmallScreen = ({
                       {user?.id !== profileDetailsData?.id && (
                         <Button
                           variant="white"
-                          onClick={handleFollowBusiness}
-                          disabled={followBusinessMutation}
+                          onClick={handleFollowSeller}
+                          disabled={followSellersMutation}
                           text={
-                            userExists
-                              ? followBusinessMutation
+                            isUserFollowingSeller
+                              ? followSellersMutation
                                 ? "Unfollowing"
                                 : "Unfollow"
-                              : followBusinessMutation
+                              : followSellersMutation
                               ? "Following"
                               : "Follow"
                           }

@@ -200,7 +200,7 @@ interface ProductDatum {
   cost_price?: string | null;
   created_at: string;
   description: string;
-  description_tags?: string | null;
+  description_tags?: string[];
   discount_price?: string | null;
   from_date?: string | null;
   id: number;
@@ -210,7 +210,7 @@ interface ProductDatum {
   pickup_address: string;
   pickup_lat: string;
   pickup_lng: string;
-  price: string;
+  price: string | number;
   seller_email?: string | null;
   seller_info?: string | null;
   slug: string;
@@ -531,4 +531,17 @@ interface JobItem {
   status: string;
   total_applicant: number;
   start_date: string;
+}
+
+interface IndustriesDatum {
+  name: string;
+  id: number;
+  created_at:string;
+  updated_at:string;
+}
+
+interface ChangePassword {
+  current_password:string
+  password: string;
+  confirm_password:string;
 }

@@ -10,6 +10,7 @@ const ApplyAsApplicant = () => {
   const [displayForm, setDisplayForm] = useState(false);
   const [current, setCurrent] = useState(0);
 
+
   const { Step } = Steps;
 
   const next = useCallback(() => {

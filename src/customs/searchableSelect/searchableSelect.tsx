@@ -80,7 +80,7 @@ interface OptionType {
 interface SearchableSelectProps {
   name: string;
   label?: string;
-  options: OptionType[];
+  options: OptionType[] | any;
   placeholder?: string;
   onSearchChange?: (value: string) => void; // Handle search input change
   onChange?: (value: number) => void; // Optional onChange prop
@@ -97,7 +97,7 @@ const SearchableSelect: FC<SearchableSelectProps> = ({
   const [searchValue, setSearchValue] = useState('');
 
   const filteredOptions = useMemo(
-    () => options.filter((option) => option.label.toLowerCase().includes(searchValue.toLowerCase())),
+    () => options.filter((option:any) => option.label.toLowerCase().includes(searchValue.toLowerCase())),
     [searchValue, options],
   );
 

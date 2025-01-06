@@ -8,7 +8,7 @@ import Folder from "../../../../../assets/folder.svg";
 import Plus from "../../../../../assets/add.svg";
 import Delete from "../../../../../assets/deleteicon.svg";
 import edit from "../../../../../assets/edit-2.svg";
-import { App, Modal } from "antd";
+import { App, Checkbox, Modal } from "antd";
 import * as Yup from "yup";
 import EmpHistory from "./modals/employerHistory";
 import EducationModal from "./modals/education";
@@ -24,7 +24,11 @@ import {
 } from "../../../../../utils/store";
 import { useAtom } from "jotai";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import { getApplicantsbyId, ProfInfoApi } from "../../../../request";
+import {
+  getApplicantsbyId,
+  getIndustries,
+  ProfInfoApi,
+} from "../../../../request";
 import {
   Education,
   EmploymentHistory,
@@ -37,6 +41,8 @@ import { routes } from "../../../../../routes";
 import { useNavigate } from "react-router-dom";
 import CustomSpin from "../../../../../customs/spin";
 import api from "../../../../../utils/apiClient";
+// import { Dropdown, Space } from "antd";
+import { errorMessage } from "../../../../../utils/errorMessage";
 
 interface Payload {
   skills?: SkillsData[];
@@ -76,6 +82,17 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   // const [emp, setEmp] = useState([] as EmploymentHistory[]);
 
   const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+
+  console.log(selectedIndustries, "selectedItemsselectedItems");
+  const handleCheckboxChange = (checkedValue: string, checked: boolean) => {
+    setSelectedIndustries(
+      (prev) =>
+        checked
+          ? [...prev, checkedValue] // Add item if checked
+          : prev.filter((item) => item !== checkedValue) // Remove item if unchecked
+    );
+  };
 
   // A function to handle the uploaded file
   const handleCoverLetterUpload = (file: any) => {
@@ -149,7 +166,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     setOpenModals((prev) => ({ ...prev, [sectionKey]: false }));
   };
 
-  const [getApplicantQuery] = useQueries({
+  const [getApplicantQuery, getAllIndustriesQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-applicant"],
@@ -157,8 +174,36 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         retry: 0,
         refetchOnWindowFocus: false,
       },
+      {
+        queryKey: ["get-all-industries"],
+        queryFn: () => getIndustries(),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
     ],
   });
+
+  const industryData = getAllIndustriesQuery?.data?.data?.data || [];
+
+  // const dropdownOverlay = (
+  //   <div
+  //     style={{ padding: "10px", backgroundColor: "white", borderRadius: "4px" }}
+  //   >
+  //     <Space direction="vertical">
+  //       {industryData?.map((option: IndustriesDatum) => (
+  //         <Checkbox
+  //           key={option?.id?.toString()}
+  //           checked={selectedIndustries.includes(option?.id?.toString())}
+  //           onChange={(e) =>
+  //             handleCheckboxChange(option?.id?.toString(), e.target.checked)
+  //           }
+  //         >
+  //           {option?.name}
+  //         </Checkbox>
+  //       ))}
+  //     </Space>
+  //   </div>
+  // );
 
   const applicantDetailsData = getApplicantQuery?.data?.data?.applicant;
   const applicantDetailsError = getApplicantQuery?.error as AxiosError;
@@ -171,10 +216,11 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     //   (user?.is_applicant && getApplicantQuery?.isFetched) ||
     //   (user?.is_applicant && getApplicantQuery?.isSuccess)
     // ) {
-      if (
-        user?.is_applicant &&
-        (getApplicantQuery?.isFetched && getApplicantQuery?.isSuccess)
-      ) {
+    if (
+      user?.is_applicant &&
+      getApplicantQuery?.isFetched &&
+      getApplicantQuery?.isSuccess
+    ) {
       setLinkData(applicantDetailsData?.links || []);
       setSkillsData(applicantDetailsData?.skills || []);
       setEducationInfoData(applicantDetailsData?.education || []);
@@ -301,17 +347,18 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       formData.append(
         `employment_history[${index}][start_date]`,
         item?.start_date
-      );if(item?.end_date){
-      formData.append(`employment_history[${index}][end_date]`, item?.end_date);
-      }
-      formData.append(
-        `employment_history[${index}][summary]`,
-        item?.summary
       );
-    
+      if (item?.end_date) {
+        formData.append(
+          `employment_history[${index}][end_date]`,
+          item?.end_date
+        );
+      }
+      formData.append(`employment_history[${index}][summary]`, item?.summary);
+
       formData.append(
         `employment_history[${index}][current_work]`,
-        item && item?.current_work ? '1' : '0'
+        item && item?.current_work ? "1" : "0"
       );
     });
 
@@ -325,20 +372,25 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       );
       formData.append(`education[${index}][grade]`, item?.Grade);
       formData.append(`education[${index}][start_date]`, item?.start_date);
-      if(item?.end_date){
-      formData.append(`education[${index}][end_date]`, item?.end_date);
+      if (item?.end_date) {
+        formData.append(`education[${index}][end_date]`, item?.end_date);
       }
       formData.append(
         `education[${index}][studying]`,
-        item?.studying ? '1' : '0'
+        item?.studying ? "1" : "0"
       );
     });
 
     // Append skills as an array
     skillsData?.forEach((item: any, index: number) => {
-      formData.append(`skills[${index}]`, item );
+      formData.append(`skills[${index}]`, item);
     });
 
+    if (selectedIndustries?.length > 0) {
+      selectedIndustries.forEach((industry) => {
+        formData.append(`industry_ids[${index}]`, industry);
+      });
+    }
     // Append links as an array
     linksData?.forEach((item: LinkData, index: number) => {
       formData.append(`links[${index}][type]`, item?.type);
@@ -360,12 +412,14 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           }));
         },
       });
+      setSelectedIndustries([]);
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occurred while submitting your information.",
+        description:
+          errorMessage(error) ||
+          "An error occurred while submitting your information.",
       });
-      
     }
   };
 
@@ -389,6 +443,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
     const payload: Record<string, any> = {
       specialization: values?.specialization,
+      industry_ids: [],
       employment_history: [],
       education: [],
       skills: [],
@@ -409,10 +464,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         start_date: item?.start_date,
         // end_date:item?.end_date,
         summary: item?.summary,
-        ...(item?.end_date && { end_date: item?.end_date }), 
-        current_work: item?.current_work  ? '1' : '0',
+        ...(item?.end_date && { end_date: item?.end_date }),
+        current_work: item?.current_work ? "1" : "0",
       });
-      
     });
 
     // Append education history
@@ -424,15 +478,20 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         grade: item?.Grade,
         start_date: item?.start_date,
         // end_date: item?.end_date ,
-        studying: item?.studying ? '1' : '0',
+        studying: item?.studying ? "1" : "0",
         ...(item?.end_date && { end_date: item?.end_date }),
       });
     });
 
     // Append skills
     data?.skills?.forEach((item: any) => {
-      const skills =  item;
+      const skills = item;
       payload.skills.push(skills);
+    });
+
+    selectedIndustries?.forEach((item: any) => {
+      const industry = item;
+      payload.industry_ids.push(industry);
     });
 
     // Append links
@@ -471,6 +530,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           }));
         },
       });
+      setSelectedIndustries([]);
     } catch (error: any) {
       notification.error({
         message: "Error",
@@ -505,10 +565,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           onSubmit={(values, { resetForm }) => {
             applicantDetailsData !== null
               ? updateInfoHandler(values, {})
-              : 
-              ProfInfoHandler(values, resetForm);
+              : ProfInfoHandler(values, resetForm);
           }}
-           validationSchema={validationSchema}
+          validationSchema={validationSchema}
         >
           {({ setFieldValue }) => (
             <Form>
@@ -519,6 +578,42 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                   placeholder="Job Specialization"
                   type="text"
                 />
+                {/* <Dropdown
+                  overlay={dropdownOverlay}
+                  trigger={["click"]}
+                  placement="bottomLeft"
+                >
+                  <Button variant="white">Check to Select Industries</Button>
+                </Dropdown> */}
+                <p >Select Industries</p>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                  {industryData?.map((option: IndustriesDatum) => (
+                    <div
+                      key={option?.id?.toString()}
+                      style={{
+                        width: "calc(50% - 10px)", // Ensures two items per row with space between
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Checkbox
+                        checked={selectedIndustries.includes(
+                          option?.id?.toString()
+                        )}
+                        onChange={(e) =>
+                          handleCheckboxChange(
+                            option?.id?.toString(),
+                            e.target.checked
+                          )
+                        }
+                      >
+                        {option?.name}
+                      </Checkbox>
+                    </div>
+                  ))}
+                </div>
+
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <img src={Folder} alt="Folder" />
                   <p className="label">Upload CV</p>

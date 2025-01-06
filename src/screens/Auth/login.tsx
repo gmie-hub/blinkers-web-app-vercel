@@ -69,7 +69,7 @@ const Login = () => {
         onSuccess: (data) => {
           notification.success({
             message: "Success",
-            description: "User logged in successfully",
+            description: data?.message,
           });
           const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
           localStorage.setItem("savedPinSignUp", pin);
@@ -96,6 +96,7 @@ const Login = () => {
         message: "Error",
         description: errorMessage(error) || "An error occurred",
       });
+      
     }
   };
 

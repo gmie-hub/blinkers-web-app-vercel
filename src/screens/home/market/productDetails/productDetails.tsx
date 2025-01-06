@@ -45,16 +45,22 @@ const safetyTips = [
 interface Props {
   productDetailsData?: ProductDatum;
   handleFollowBusiness?: () => void;
-  userExists?: boolean;
+  handleFollowSeller?:()=>void;
+  isUserFollowingBusiness?: boolean;
+  isUserFollowingSeller?:boolean;
   followBusinessMutation?: boolean;
+  followSellersMutation?:boolean;
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?:UserData
 }
 const BigScreen = ({
+  handleFollowSeller,
   productDetailsData,
+  followSellersMutation,
   handleFollowBusiness,
   followBusinessMutation,
-  userExists,
+  isUserFollowingBusiness,
+  isUserFollowingSeller,
   businessDetailsData,
   profileDetailsData,
 }: Props) => {
@@ -299,7 +305,7 @@ const BigScreen = ({
                       onClick={handleFollowBusiness}
                       disabled={followBusinessMutation}
                       text={
-                        userExists
+                        isUserFollowingBusiness
                           ? followBusinessMutation
                             ? "Unfollowing"
                             : "Unfollow"
@@ -459,14 +465,14 @@ const BigScreen = ({
                     { user?.id !== profileDetailsData?.id &&
 
                     <Button
-                      onClick={handleFollowBusiness}
-                      disabled={followBusinessMutation}
+                      onClick={handleFollowSeller}
+                      disabled={followSellersMutation}
                       text={
-                        userExists
-                          ? followBusinessMutation
+                        isUserFollowingSeller
+                          ? followSellersMutation
                             ? "Unfollowing"
                             : "Unfollow"
-                          : followBusinessMutation
+                          : followSellersMutation
                           ? "Following"
                           : "Follow"
                       }

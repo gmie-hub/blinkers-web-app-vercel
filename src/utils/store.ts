@@ -125,6 +125,7 @@ export interface UserLogin {
   updated_at: string;
   website_address?: string;
   applicantId?:number;
+  applicant?:Applicant
 }
 
 export const userAtom = atomWithStorage<UserLogin | undefined | null>(

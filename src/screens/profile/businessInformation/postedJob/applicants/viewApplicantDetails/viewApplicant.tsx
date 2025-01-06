@@ -14,7 +14,9 @@ import { formatDateToMonthYear } from "../../../../../../utils/formatTime";
 import CustomSpin from "../../../../../../customs/spin";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../../../../../customs/routeIndicator";
-import { App } from "antd";
+import { App, Modal } from "antd";
+import { useState } from "react";
+import RejectApplication from "./rejectApplication";
 
 interface BasicInformationProps {
   title?: string;
@@ -27,6 +29,7 @@ export default function ApplicantDetails({}: BasicInformationProps) {
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
   const navigate = useNavigate();
+  const [openDelete, setOpenDelete] = useState(false);
 
   const [getApplicantDetailsQuery] = useQueries({
     queries: [
@@ -47,26 +50,27 @@ export default function ApplicantDetails({}: BasicInformationProps) {
     ApplicantDetailsError?.message ||
     "An error occurred. Please try again later.";
 
-
-//   const updateApplicationStatus = async (payload: ApplicationStatusPayload, id: number) => {
-//     const response = await api.patch(`jobs/application/${id}`, payload);
-//     return response.data;
-//   };
-  
+  //   const updateApplicationStatus = async (payload: ApplicationStatusPayload, id: number) => {
+  //     const response = await api.patch(`jobs/application/${id}`, payload);
+  //     return response.data;
+  //   };
 
   const approveApplicationMutation = useMutation({
-    mutationFn: ({ payload, id }: { payload: ApplicationStatusPayload; id: number }) =>
-      updateApplicationStatus(payload, id),
+    mutationFn: ({
+      payload,
+      id,
+    }: {
+      payload: ApplicationStatusPayload;
+      id: number;
+    }) => updateApplicationStatus(payload, id),
     mutationKey: ["reject-status"],
   });
-  
-  const approveApplicationHandler = async (id: number) => {
 
-  
+  const approveApplicationHandler = async (id: number) => {
     const payload: ApplicationStatusPayload = {
-      status: '2', // Use a number if required
+      status: "2", // Use a number if required
     };
-  
+
     try {
       await approveApplicationMutation.mutateAsync(
         { payload, id },
@@ -86,49 +90,14 @@ export default function ApplicantDetails({}: BasicInformationProps) {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: error?.message || "An error occurred while rejecting the application",
+        description:
+          error?.message || "An error occurred while rejecting the application",
       });
     }
   };
 
-
-  // Mutation setup
-  const rejectApplicationMutation = useMutation({
-    mutationFn: ({ payload, id }: { payload: ApplicationStatusPayload; id: number }) =>
-      updateApplicationStatus(payload, id),
-    mutationKey: ["reject-status"],
-  });
+ 
   
-  const rejectApplicationHandler = async (id: number) => {
-
-  
-    const payload: ApplicationStatusPayload = {
-      status: '3', // Use a number if required
-    };
-  
-    try {
-      await rejectApplicationMutation.mutateAsync(
-        { payload, id },
-        {
-          onSuccess: (data) => {
-            notification.success({
-              message: "Success",
-              description: data?.message || "Application rejected successfully",
-            });
-            queryClient.refetchQueries({
-              queryKey: ["get-all-job-applicants"],
-            });
-            navigate(-1); // Go back to the previous page
-          },
-        }
-      );
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description: error?.message || "An error occurred while rejecting the application",
-      });
-    }
-  };
   return (
     <div className="wrapper">
       {getApplicantDetailsQuery?.isLoading ? (
@@ -290,10 +259,16 @@ export default function ApplicantDetails({}: BasicInformationProps) {
               <Button
                 variant="redOutline"
                 type="submit"
-                disabled={ rejectApplicationMutation?.isPending}
-                text={rejectApplicationMutation?.isPending ? "loading..." : "Reject Application"}
+                // disabled={rejectApplicationMutation?.isPending}
+                // text={
+                //   rejectApplicationMutation?.isPending
+                //     ? "loading..."
+                //     : "Reject Application"
+                // }
                 className="buttonStyle"
-                onClick={()=>rejectApplicationHandler(parseInt(id!))}
+                // onClick={() => rejectApplicationHandler(parseInt(id!))}
+                onClick={() => setOpenDelete(true)}
+                text="Reject Application"
               />
 
               <Button
@@ -301,20 +276,26 @@ export default function ApplicantDetails({}: BasicInformationProps) {
                 type="submit"
                 disabled={approveApplicationMutation?.isPending}
                 text={
-                    approveApplicationMutation?.isPending
+                  approveApplicationMutation?.isPending
                     ? "loading..."
                     : "Approve Application"
                 }
                 className="buttonStyle"
-                onClick={()=>approveApplicationHandler(parseInt(id!))}
+                onClick={() => approveApplicationHandler(parseInt(id!))}
               />
             </section>
           </section>
         </>
       )}
+      <Modal
+        open={openDelete}
+        onCancel={() => setOpenDelete(false)}
+        centered
+        footer={null}
+      >
+        <RejectApplication handleCloseModal={() => setOpenDelete(false)} />
+      </Modal>
     </div>
   );
 }
 /* eslint-disable no-empty-pattern */
-
-

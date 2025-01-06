@@ -98,7 +98,7 @@ const JobDetails = () => {
           },
         },
       );
-    } catch (error: any) {
+    } catch (error  : any) {
       notification.error({
         message: 'Error',
         description:errorMessage(error) || "An error occurred",

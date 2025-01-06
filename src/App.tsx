@@ -5,7 +5,7 @@ import { routes } from "./routes";
 import Layout from "./layouts/pageLayout";
 import Directory from "./screens/directory/directory";
 import SubscriptionPricing from "./screens/directory/subscriptionPlan/subPlan";
-import NotClaim from "./screens/directory/notClaim/directoryDetails";
+import NotClaim from "./screens/directory/directoryDeails/directoryDetails";
 import ClaimBusiness from "./screens/directory/claimBusiness/claimBus";
 // import ClaimedBusiness from "./screens/directory/claimed/claimed";
 import RelatedBusinesses from "./screens/directory/relatedBusinesses/relatedBusiness";
@@ -34,7 +34,6 @@ import Job from "./screens/job/job";
 import JobDetails from "./screens/job/jobDetails/jobDetails";
 import JobLikeThis from "./screens/job/jobLikeThis/jobsLikeThis";
 import RegisterAsApplicant from "./screens/job/apply/applyAsApplicant/index";
-import ApplyForJob from "./screens/job/applytoStrive/index";
 import PostJob from "./screens/job/postJob/postJob";
 import EditJob from "./screens/job/postJob/postJob";
 import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
@@ -45,7 +44,8 @@ import EditBusiness from "./screens/profile/editBusiness/editBusiness";
 import ViewJobDetails from "./screens/profile/businessInformation/postedJob/viewJobDetails/viewJob";
 import Applicants from "./screens/profile/businessInformation/postedJob/applicants/applicant";
 import ViewApplicant from "./screens/profile/businessInformation/postedJob/applicants/viewApplicantDetails/viewApplicant";
-import CreateAd from "./screens/profile/myAds/editAds";
+import CreateAd from "./screens/profile/myAds/createAds";
+import EditAds from "./screens/profile/myAds/editAd";
 import MyAds from "./screens/profile/myAds/myAds";
 import SellerVerification from "./screens/Auth/sellerVerificationModal";
 
@@ -88,7 +88,6 @@ function App() {
     { path: routes.job.videos, element: <Videos /> },
     { path: routes.job.RegAsApplicant, element: <RegisterAsApplicant /> },
     { path: routes.job.AddBusiness, element: <AddBusiness /> },
-    { path: routes.job.applyForJob, element: <ApplyForJob /> },
     { path: routes.job.postJob, element: <PostJob /> },
     { path: routes.job.editJob, element: <EditJob/> },
 
@@ -100,6 +99,8 @@ function App() {
     { path: routes.profile.viewApplicant, element: <ViewApplicant /> },
 
     { path: routes.profile.createAd, element: <CreateAd /> },
+    { path: routes.profile.editAds, element: <EditAds /> },
+
     { path: routes.profile.myAds, element: <MyAds /> },
 
   ];

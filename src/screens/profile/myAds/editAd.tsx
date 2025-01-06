@@ -1,28 +1,28 @@
 import { Form, Formik, FormikValues } from "formik";
 import styles from "./editAds.module.scss";
-import { useMutation, useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
 import SearchableSelect from "../../../customs/searchableSelect/searchableSelect";
 import Button from "../../../customs/button/button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  createAds,
-//   deleteAdsGalarybyId,
+  deleteAdsGalarybyId,
   getAllCategory,
   getAllState,
   getLGAbyStateId,
   getProductDetails,
   getSubCategory,
-//   uploadAdsGallery,
-//   uploadAdsVideo,
+  UpdateAds,
+  uploadAdsGallery,
+  uploadAdsVideo,
 } from "../../request";
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import Checkbox from "../../../customs/checkBox/checkbox";
 import Upload from "../../../customs/upload/upload";
 import { App } from "antd";
 import { errorMessage } from "../../../utils/errorMessage";
-// import favorite from "../../../assets/deleteicon.svg";
+import DeleteIcon from "../../../assets/deleteicon.svg";
 import CustomSpin from "../../../customs/spin";
 import * as Yup from "yup";
 
@@ -32,11 +32,10 @@ const EditAdz = () => {
   const [categoryId, setCategoryId] = useState(0);
   const { notification } = App.useApp();
   const [uploadFeature, setUploadFeature] = useState<File | null>(null);
-  const [uploads, setUploads] = useState<File[]>([]);
-  const [uploadVideos, setUploadVideos] = useState<File[]>([]);
-
-  console.log(uploads, "jummy 4 oclos");
-//   const queryClient = useQueryClient();
+  const [upload, setUpload] = useState<File | null>(null);
+  const [uploadVideo, setUploadVideo] = useState<File | null>(null);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
@@ -58,7 +57,7 @@ const EditAdz = () => {
     queries: [
       {
         queryKey: ["get-product-details", id],
-        queryFn: () => getProductDetails(parseInt("837")),
+        queryFn: () => getProductDetails(parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
         // enabled: !!id,
@@ -151,46 +150,45 @@ const EditAdz = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
-    const files = e.target.files;
-    if (!files) return;
+    if (!e.target?.files) return;
+    const selectedFile = e.target?.files[0];
 
-    const validFiles = Array.from(files).filter((file) =>
-      ["image/jpeg", "image/png", "image/jpg", "image/gif"].includes(file.type)
-    );
+    const validFileTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+    ];
 
-    if (validFiles.length > 0) {
-      setUploads([...uploads, ...validFiles]);
-      setFieldValue("imageFiles", [...uploads, ...validFiles]);
-    } else {
+    if (!validFileTypes.includes(selectedFile?.type)) {
       notification.error({
         message: "Invalid File Type",
         description: "Only image files (jpg, jpeg, png) are allowed.",
       });
+      return;
     }
+    setFieldValue("imageFiles", selectedFile);
+    setUpload(selectedFile);
   };
   const handleVideoChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
-    const files = e.target.files;
-    if (!files) return;
+    setUploadVideo(null);
+    if (!e.target?.files) return;
+    const selectedFile = e.target?.files[0];
 
-    // const validVideos = Array.from(files).filter((file) =>
-    //   ["video/mp4", "video/x-matroska", "video/webm"].includes(file.type)
-    // );
-    const validVideos = Array.from(files).filter((file) =>
-        ["video/mp4", "video/quicktime", "video/3gpp"].includes(file.type)
-    );
+    const validFileTypes = ["video/mp4"];
 
-    if (validVideos.length > 0) {
-      setUploadVideos([...uploadVideos, ...validVideos]);
-      setFieldValue("videoFiles", [...uploadVideos, ...validVideos]);
-    } else {
+    if (!validFileTypes.includes(selectedFile?.type)) {
       notification.error({
         message: "Invalid File Type",
-        description: "Only video files (mp4, mkv, webm) are allowed.",
+        description: "Only video files (mp4,) are allowed.",
       });
+      return;
     }
+    setFieldValue("videoFiles", selectedFile);
+    setUploadVideo(selectedFile);
   };
 
   const handleFileChangeFeature = (
@@ -209,7 +207,7 @@ const EditAdz = () => {
     ];
 
     // Validate if the file type is valid
-    if (!validFileTypes.includes(selectedFile.type)) {
+    if (!validFileTypes.includes(selectedFile?.type)) {
       notification.error({
         message: "Invalid File Type",
         description:
@@ -220,145 +218,202 @@ const EditAdz = () => {
     setFieldValue("featureImage", selectedFile);
     setUploadFeature(selectedFile);
   };
-//   const deleteGalaryMutation = useMutation({ mutationFn: deleteAdsGalarybyId });
+  const deleteGalaryMutation = useMutation({ mutationFn: deleteAdsGalarybyId });
 
-//   const DeleteGalaryHandler = async (imageIds: number[]) => {
-//     try {
-//       await deleteGalaryMutation.mutateAsync(
-//         {
-//           add_id: 837!, // Ensure id is available
-//           image_ids: imageIds,
-//         },
-//         {
-//           onSuccess: (data) => {
-//             notification.success({
-//               message: "Success",
-//               description: data?.message,
-//             });
-//             queryClient.refetchQueries({
-//               queryKey: ["get-product-details"],
-//             });
-//           },
-//         }
-//       );
-//     } catch (error: any) {
-//       notification.error({
-//         message: "Error",
-//         description: errorMessage(error) || "An error occurred",
-//       });
-//     }
-//   };
-
-  //   const UploadGalleryMutation = useMutation({
-  //     mutationFn: uploadAdsGallery,
-  //     mutationKey: ["upload-ads-gallery"],
-  //   });
-
-  //   const UploadGalleryHandler = async () => {
-  //     const formData = new FormData();
-
-  //     // if (id) {
-  //     formData.append("add_id", "837"); // Correctly append the file
-  //     // }
-  //     if (upload) {
-  //       formData.append("add_image[]", upload); // Correctly append the file
-  //     }
-
-  //     try {
-  //       await UploadGalleryMutation.mutateAsync(formData, {
-  //         onSuccess: (data) => {
-  //           notification.success({
-  //             message: "Success",
-  //             description: data?.message,
-  //           });
-
-  //           queryClient.refetchQueries({
-  //             queryKey: ["get-product-details"],
-  //           });
-  //           setUpload(null);
-  //         },
-  //       });
-  //     } catch (error: any) {
-  //       notification.error({
-  //         message: "Error",
-  //         description: errorMessage(error) || "An error occurred",
-  //       });
-
-  //       setUpload(null);
-  //     }
-  //   };
-
-  //   const UploadVideoMutation = useMutation({
-  //     mutationFn: uploadAdsVideo,
-  //     mutationKey: ["upload-ads-video"],
-  //   });
-
-  //   const UploadVideoHandler = async () => {
-  //     const formData = new FormData();
-
-  //     // if (id) {
-  //     formData.append("add_id", "837"); // Correctly append the file
-  //     // }
-  //     if (uploadVideo) {
-  //       formData.append("add_image[]", uploadVideo); // Correctly append the file
-  //     }
-
-  //     try {
-  //       await UploadVideoMutation.mutateAsync(formData, {
-  //         onSuccess: (data) => {
-  //           notification.success({
-  //             message: "Success",
-  //             description: data?.message,
-  //           });
-
-  //           queryClient.refetchQueries({
-  //             queryKey: ["get-product-details"],
-  //           });
-  //           setUploadVideo(null);
-  //         },
-  //       });
-  //     } catch (error: any) {
-  //       notification.error({
-  //         message: "Error",
-  //         description: errorMessage(error) || "An error occurred",
-  //       });
-
-  //       setUploadVideo(null);
-  //     }
-  //   };
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  //   useEffect(() => {
-  //     if (upload) {
-  //       UploadGalleryHandler();
-  //     }
-  //   }, [upload]);
-  //   useEffect(() => {
-  //     if (uploadVideo) {
-  //       UploadVideoHandler();
-  //     }
-  //   }, [uploadVideo]);
-  //   useEffect(() => {
-  //     if (uploadFeature) {
-  //       UploadGalleryHandler();
-  //     }
-  //   }, [uploadFeature]);
-
-  const clearFile = () => {
-    setUploads([]);
-    setUploadVideos([]);
-    setUploadFeature(null);
+  const DeleteGalaryHandler = async (imageIds: number[]) => {
+    try {
+      await deleteGalaryMutation.mutateAsync(
+        {
+          add_id: id!, // Ensure id is available
+          image_ids: imageIds,
+        },
+        {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message,
+            });
+            queryClient.refetchQueries({
+              queryKey: ["get-product-details"],
+            });
+          },
+        }
+      );
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
   };
 
-  const createAdsMutation = useMutation({
-    mutationFn: createAds,
+  const UploadGalleryMutation = useMutation({
+    mutationFn: uploadAdsGallery,
+    mutationKey: ["upload-ads-gallery"],
   });
 
-  const createAdsHandler = async (
-    values: FormikValues,
-    resetForm: () => void
-  ) => {
+  const UploadGalleryHandler = async () => {
     const formData = new FormData();
+
+    if (id) {
+      formData.append("add_id", id); // Correctly append the file
+    }
+    if (upload) {
+      formData.append("add_image[]", upload); // Correctly append the file
+    }
+
+    try {
+      await UploadGalleryMutation.mutateAsync(formData, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+
+          queryClient.refetchQueries({
+            queryKey: ["get-product-details"],
+          });
+          setUpload(null);
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+
+      setUpload(null);
+    }
+  };
+
+  const UploadVideoMutation = useMutation({
+    mutationFn: uploadAdsVideo,
+    mutationKey: ["upload-ads-video"],
+  });
+
+  const UploadVideoHandler = async () => {
+    const formData = new FormData();
+
+    if (id) {
+      formData.append("add_id", id); // Correctly append the file
+    }
+    if (uploadVideo) {
+      formData.append("add_video[]", uploadVideo); // Correctly append the file
+    }
+
+    try {
+      await UploadVideoMutation.mutateAsync(formData, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+
+          queryClient.refetchQueries({
+            queryKey: ["get-product-details"],
+          });
+          setUploadVideo(null);
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+
+      setUploadVideo(null);
+    }
+  };
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (upload) {
+      UploadGalleryHandler();
+    }
+  }, [upload]);
+
+  useEffect(() => {
+    if (uploadVideo) {
+      UploadVideoHandler();
+    }
+  }, [uploadVideo]);
+
+  useEffect(() => {
+    if (uploadFeature) {
+      UploadGalleryHandler();
+    }
+  }, [uploadFeature]);
+
+  const updateAdsMutation = useMutation({
+    mutationFn: UpdateAds,
+    mutationKey: ["edit-ads"],
+  });
+
+  //   const createAdsHandler = async (
+  //     values: FormikValues,
+  //     resetForm: () => void
+  //   ) => {
+  //     const formData = new FormData();
+  //     const descriptionTags = [];
+
+  //     if (values.Used) {
+  //       descriptionTags.push("USED");
+  //     }
+  //     if (values.New) {
+  //       descriptionTags.push("NEW");
+  //     }
+  //     if (values.PayOnDelivery) {
+  //       descriptionTags.push("PAY ON DELIVERY");
+  //     }
+  //     formData.append("category_id", values?.category_id);
+  //     formData.append("sub_category_id", values?.sub_category_id);
+  //     formData.append("title", values?.title);
+  //     formData.append("price", values?.price);
+  //     formData.append("discount_price", values?.discount_price);
+  //     // formData.append("description_tags[0]", checkedBox);
+  //     descriptionTags.forEach((tag, index) => {
+  //       formData.append(`description_tags[${index}]`, tag);
+  //     });
+  //     formData.append("description", values?.description);
+  //     formData.append("state_id", values?.state_id);
+  //     formData.append("technical_details", values?.technical_details);
+
+  //     formData.append(
+  //       "local_government_area_id",
+  //       values?.local_government_area_id
+  //     );
+  //     formData.append("pickup_address", values.pickup_address);
+  //     formData.append("pickup_lat", values.pickup_address);
+  //     formData.append("pickup_lng", values.pickup_address);
+  //     if (uploadFeature) {
+  //       formData.append("add_featured_image", uploadFeature);
+  //     }
+  //     if (upload) {
+  //       formData.append("add_image", upload);
+  //     }
+  //     if (uploadVideo) {
+  //       formData.append("add_video", uploadVideo);
+  //     }
+
+  //     try {
+  //       await updateAdsMutation.mutateAsync(formData, {
+  //         onSuccess: (data) => {
+  //           notification.success({
+  //             message: "Success",
+  //             description: data?.message,
+  //           });
+  //           resetForm();
+  //         },
+  //       });
+  //     } catch (error: any) {
+  //       notification.error({
+  //         message: "Error",
+  //         description: errorMessage(error) || "An error occurred",
+  //       });
+  //     }
+  //   };
+
+  const editAdsHandler = async (values: FormikValues) => {
     const descriptionTags = [];
 
     if (values.Used) {
@@ -370,49 +425,39 @@ const EditAdz = () => {
     if (values.PayOnDelivery) {
       descriptionTags.push("PAY ON DELIVERY");
     }
-    formData.append("category_id", values?.category_id);
-    formData.append("sub_category_id", values?.sub_category_id);
-    formData.append("title", values?.title);
-    formData.append("price", values?.price);
-    formData.append("discount_price", values?.discount_price);
-    // formData.append("description_tags[0]", checkedBox);
-    descriptionTags.forEach((tag, index) => {
-        formData.append(`description_tags[${index}]`, tag);
-      });
-    formData.append("description", values?.description);
-    formData.append("state_id", values?.state_id);
-    formData.append("technical_details", values?.technical_details);
 
-    formData.append(
-      "local_government_area_id",
-      values?.local_government_area_id
-    );
-    formData.append("pickup_address", values.pickup_address);
-    formData.append("pickup_lat", values.pickup_address);
-    formData.append("pickup_lng", values.pickup_address);
-    if (uploadFeature) {
-      formData.append("add_featured_image", uploadFeature);
-    }
+    const payload: Partial<ProductDatum> = {
+      id: parseInt(id!) ?? 0,
+      category_id: values.category_id,
+      sub_category_id: values?.sub_category_id,
+      title: values?.title,
+    //   price: values?.price,
+   
+    // price: values?.price
+    // ? parseInt(values?.price.toString().replace(/[^\d]/g, ''))
+    // : 0,
 
-    uploads.forEach((file, index: number) => {
-      formData.append(`add_image[${index}]`, file);
-    });
-
-    uploadVideos.forEach((file, index: number) => {
-        console.log(file.type); // Log the file type
-
-      formData.append(`add_video[${index}]`, file);
-    });
+    price: values?.price
+    ? parseInt(values?.price.toString().replace(/,/g, '').split('.')[0])
+    : 0,
+      discount_price: values?.discount_price,
+      description: values?.description,
+      state_id: values?.state_id,
+      technical_details: values?.technical_details,
+      local_government_area_id: values?.local_government_area_id,
+      pickup_address: values?.pickup_address,
+      pickup_lat: values?.pickup_lat,
+      pickup_lng: values?.pickup_lng,
+      description_tags: descriptionTags,
+    };
 
     try {
-      await createAdsMutation.mutateAsync(formData, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
+      await updateAdsMutation.mutateAsync(payload, {
+        onSuccess: () => {
+          queryClient.refetchQueries({
+            queryKey: ["get-all-jobs"],
           });
-          resetForm();
-          clearFile();
+          navigate("/profile");
         },
       });
     } catch (error: any) {
@@ -428,7 +473,12 @@ const EditAdz = () => {
     sub_category_id: Yup.string().required("required"),
     title: Yup.string().required("required"),
     price: Yup.string().required("required"),
-    discount_price: Yup.string().required("required"),
+    // price: Yup.number()
+    // .required("Price is required")
+    // .typeError("Price must be a valid number") // Ensures the value is a number
+    // .positive("Price must be a positive number") // Optional: ensures the number is positive
+    // .integer("Price must be an integer"), 
+    // discount_price: Yup.string().required("required"),
     description: Yup.string().required("required"),
     state_id: Yup.string().required("required"),
     local_government_area_id: Yup.string().required("required"),
@@ -436,17 +486,7 @@ const EditAdz = () => {
     // state_id: Yup.string().required("required"),
     // state_id: Yup.string().required("required"),
   });
-  const handleRemoveFeature = () => {
-    setUploadFeature(null);
-  };
 
-  const handleRemoveUpload = (index: number) => {
-    setUploads((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleRemoveVideo = (index: number) => {
-    setUploadVideos((prev) => prev.filter((_, i) => i !== index));
-  };
   return (
     <section className="wrapper">
       {getProductDetailsQuery?.isLoading ? (
@@ -456,24 +496,28 @@ const EditAdz = () => {
       ) : (
         <Formik
           initialValues={{
-            title: "",
-            Used: false,
-            New: false,
-            PayOnDelivery: false,
-            price: "",
-            discount_price: "",
-            category_id: "",
-            sub_category_id: "",
-            pickup_address: "",
-            state_id: "",
-            local_government_area_id: "",
-            description: "",
-            technical_details: "",
+            title: productDetailsData?.title || "",
+            Used: productDetailsData?.description_tags?.includes("USED"),
+            New: productDetailsData?.description_tags?.includes("NEW"),
+            PayOnDelivery:
+              productDetailsData?.description_tags?.includes("PAY ON DELIVERY"),
+            price: productDetailsData?.price || "",
+ 
+
+            discount_price: productDetailsData?.discount_price || "",
+            category_id: productDetailsData?.category_id || "",
+            sub_category_id: productDetailsData?.sub_category_id || "",
+            pickup_address: productDetailsData?.pickup_address || "",
+            state_id: productDetailsData?.state_id || "",
+            local_government_area_id:
+              productDetailsData?.local_government_area_id || "",
+            description: productDetailsData?.description || "",
+            technical_details: productDetailsData?.technical_details || "",
           }}
-          onSubmit={(values, { resetForm }) => {
-            createAdsHandler(values, resetForm);
+          onSubmit={(values) => {
+            editAdsHandler(values);
           }}
-            validationSchema={validationSchema}
+          validationSchema={validationSchema}
           enableReinitialize
         >
           {({ handleChange, setFieldValue, values }) => {
@@ -491,24 +535,26 @@ const EditAdz = () => {
                       }
                     />
                     <Upload
-                      placeHolder="upload your photos, max 9 files"
+                      placeHolder="upload your photos"
                       name="imageFile"
                       // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
                     />
                     <Upload
-                      placeHolder="upload your Videos, max 2 files"
+                      placeHolder="upload your Videos"
                       name="videoFile"
                       onChange={(e) => handleVideoChange(e, setFieldValue)}
                     />
                   </div>
                   <h3>Uploaded Media</h3>
-
+                  {/* 
                   {uploadFeature && (
                     <div>
                       <h3>Feature Image</h3>
                       <img
+                        // src={productDetailsData?.add_images?.}
                         src={URL.createObjectURL(uploadFeature)}
+
                         alt="Feature Preview"
                         style={{
                           width: "150px",
@@ -519,9 +565,9 @@ const EditAdz = () => {
                       <br />
                       <button onClick={handleRemoveFeature}>Cancel</button>
                     </div>
-                  )}
+                  )} */}
 
-                  {uploads?.length > 0 && <h3>Images</h3>}
+                  {/* { uploads?.length > 0 && <h3>Images</h3>}
 
                   <div
                     style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
@@ -567,9 +613,9 @@ const EditAdz = () => {
                         </button>
                       </div>
                     ))}
-                  </div>
+                  </div> */}
 
-                  {/* <div className={styles.imageContainer}>
+                  <div className={styles.imageContainer}>
                     {productDetailsData?.add_images?.map((image, index) => (
                       <div key={index} className={styles.imageWrapper}>
                         <img
@@ -583,11 +629,11 @@ const EditAdz = () => {
                           className={styles.favoriteIcon}
                           onClick={() => DeleteGalaryHandler([image?.id])} // Your delete logic can be handled here
                         >
-                          <img width={30} src={favorite} alt="Favorite" />
+                          <img width={30} src={DeleteIcon} alt="Favorite" />
                         </div>
                       </div>
                     ))}
-                  </div> */}
+                  </div>
 
                   <div className={styles.inputRow}>
                     <Input
@@ -683,16 +729,17 @@ const EditAdz = () => {
                   <section className={styles.buttonGroup}>
                     <Button
                       variant="red"
-                      type="submit"
+                      type="button"
                       disabled={false}
                       text="Cancel"
                       className="buttonStyle"
+                      onClick={()=>navigate(-1)}
                     />
                     <Button
                       variant="green"
                       type="submit"
-                      disabled={false}
-                      text="Submit"
+                      disabled={updateAdsMutation?.isPending}
+                      text={updateAdsMutation?.isPending ? 'loading' : "Submit"}
                       className="buttonStyle"
                     />
                   </section>

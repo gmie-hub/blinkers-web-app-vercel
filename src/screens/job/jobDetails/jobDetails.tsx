@@ -122,11 +122,12 @@ const JobDetails = () => {
     mutationFn: ApplyForJobApi,
     mutationKey: ["apply-job"],
   });
+  console.log(user?.applicant?.id)
 
   const ApplyJobHandler = async () => {
     const payload: Partial<FlagJob> = {
       job_id: id!,
-      applicant_id: 6,
+      applicant_id: user?.applicant?.id,
       message: "Applying",
     };
 

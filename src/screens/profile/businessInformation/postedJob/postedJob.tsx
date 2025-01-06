@@ -51,13 +51,13 @@ export default function JobPosted() {
       style={styles.card}
     >
       <div className={styles.headerWrapper}>
-        <img width={20} src={user?.business?.logo} alt="businesslogo"  />
-        <h3>{item.title}</h3>
+        <img style={{borderRadius:'50%'}} width={20} src={user?.business?.logo} alt="businesslogo"  />
+        <h3>{item?.title}</h3>
       </div>
 
       <div className={styles.wrapper1}>
         <div className={styles.jobKindWrapper}>
-          <p>{item.job_type}</p>
+          <p>{item?.job_type}</p>
         </div>
       </div>
 

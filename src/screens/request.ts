@@ -37,6 +37,12 @@ export const getLGAbyStateId = async (stateId: number) => {
 export const getJobDetails = async (id: number) => {
   return (await api.get(`jobs/${id}`))?.data as JobDetailsResponse;
 };
+export const getIndustries = async (page?: number) => {
+  // Construct the URL dynamically based on whether page is provided
+  const url = page ? `industries?page=${page}&per_page=100` : `industries?per_page=100`;
+
+  return (await api.get(url))?.data as any;
+};
 
 export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
@@ -122,6 +128,12 @@ export const FollowBusiness = async (payload: Partial<FollowBusiness>) => {
     ?.data as any;
 };
 
+export const FollowSeller = async (payload: Partial<FollowBusiness>) => {
+  return (await api.post("followers/handle-action", payload, {}))
+    ?.data as any;
+};
+
+
 export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
   return (await api.post("business/reviews", payload, {}))?.data as any;
 };
@@ -141,6 +153,11 @@ export const createAds = async (payload: FormData) => {
     })
   )?.data;
 };
+
+export const UpdateAds = async (payload: Partial<ProductDatum>) => {
+  return (await api.patch(`ads/${payload.id}`, payload, {}))?.data as Response;
+};
+
 
 export const ClaimBusinessApi = async (payload: FormData) => {
   return (
@@ -198,8 +215,8 @@ export const getApplicantsbyId = async (id: number) => {
 export const getBusinessById = async (id: number) => {
   return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;
 };
-export const getFollowersByUser_id = async (user_id: number) => {
-  return (await api.get(`business/followers?user_id=${user_id}`))
+export const getFollowersByUser_id = async () => {
+  return (await api.get(`/followers`))
     ?.data as BusinessFollowersResponse;
 };
 export const getFollowersByBusiness_id = async (business_id: number) => {
@@ -343,3 +360,15 @@ export const updateApplicationStatus = async (payload: ApplicationStatusPayload,
   const response = await api.patch(`jobs/application/${id}`, payload);
   return response.data;
 };
+
+export const deleteAds = async ({ id }: { id: number }) => {
+  return (await api.delete(`ads/${id}`))?.data as ProductDatum;
+};
+
+export const changePassword = async (payload: Partial<ChangePassword>) => {
+  return (await api.patch(`users/change-password`, payload, {}))?.data as Response;
+};
+
+export const deleteUser = async () => {
+  return (await api.delete(`/users/delete`))?.data ;
+};  

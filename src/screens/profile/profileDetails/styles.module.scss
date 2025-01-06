@@ -4,38 +4,172 @@
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  // height: 100vh; /* Adjust the height as needed */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   height: fit-content;
+  flex-wrap: nowrap; /* Prevent wrapping of columns */
 }
-
 .leftColumn,
 .middleColumn,
 .rightColumn {
-  flex: 1;
-  padding: 2rem;
+  padding: 2rem !important;
 }
 
-.leftColumn {
-  display: flex;
-  //   justify-content: center;
-  flex-direction: column;
-//   align-items: center;
-}
+
+// .leftColumn {
+//   flex: 0 0 30%; /* 30% width */
+//   display: flex;
+//   flex-direction: column;
+// }
+
 .middleColumn {
+  flex: 0 0 50%; /* 50% width */
   border-inline-start: rgb(183, 164, 164) solid 1px;
-
   border-inline-end: rgb(183, 164, 164) solid 1px;
 }
+
+.rightColumn {
+  flex: 0 0 20%; /* 20% width */
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 1200px) {
+  .mainContent {
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+  }
+
+  .leftColumn,
+  .middleColumn,
+  .rightColumn {
+    flex: 0 0 100%; /* Full width for each column */
+    padding: 2rem !important;
+  }
+
+  .middleColumn {
+    border-inline-start: none;
+    border-inline-end: none;
+  }
+}
+
+
 .profileImg {
   border-radius: 50%;
   width: 10rem;
   height: 10rem;
+  object-fit: cover;
 }
+
+// .container {
+//   display: grid;
+//   grid-template-columns: repeat(1, 1fr); /* Two columns */
+//   gap: 16px; /* Adjust the gap between items */
+// }
+
+// .smalcard {
+//   padding: 10px;
+//   border: 1px solid #ccc;
+//   border-radius: 4px;
+//   background-color: #f9f9f9;
+//   text-align: center;
+
+//   max-width:  px; /* Set the maximum width */
+//   word-wrap: break-word; /* Ensure long words break to the next line */
+//   white-space: normal;
+// }
+
+.cameraIcon {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  bottom: 10px; /* Adjust this value to move the camera icon up or down */
+  left: 50%;
+  transform: translateX(-50%); /* This centers the camera icon horizontally */
+  cursor: pointer; /* Optional: Adds a pointer cursor on hover */
+}
+
+.imageContainer {
+  position: relative;
+  display: inline-block;
+}
+
+
+
+.delete {
+  background: transparent !important;
+  color: red !important;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 1200px) {
+  .mainContent {
+    flex-direction: column;
+    align-items: center; /* Centers columns on smaller screens */
+  }
+
+  .middleColumn {
+    border-inline-start: none;
+    border-inline-end: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr; /* Single column for small screens */
+  }
+
+ 
+
+  .profileImg {
+    width: 8rem;
+    height: 8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .leftColumn,
+  .middleColumn,
+  .rightColumn {
+    padding: 1rem;
+    width: 95%;
+  }
+
+  .smalcard {
+    padding: 8px;
+  }
+
+  .cameraIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    bottom: 5px;
+  }
+
+  .profileImg {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+
+.inputContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.inputContainer > * {
+  flex: 1; /* Each input takes up an equal share of the available space */
+}
+
+.leftColumn {
+  flex: 0 0 30%; /* 30% width */
+  display: flex;
+  flex-direction: column;
+  max-width: 30%; /* Ensure the width of leftColumn is constrained */
+}
+
 .container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  // display: grid;
+  grid-template-columns: 1fr; /* Single column for smalcards */
   gap: 16px; /* Adjust the gap between items */
+  width: 100%; /* Make sure the container takes the full width of leftColumn */
 }
 
 .smalcard {
@@ -44,33 +178,11 @@
   border-radius: 4px;
   background-color: #f9f9f9;
   text-align: center;
-}
+  margin-block: 1rem;
+  text-align: start;
 
-.cameraIcon {
-  width: 2rem;
-  height: 2rem;
-  
-
-  position: absolute;
-  bottom: 10px; /* Adjust this value to move the camera icon up or down */
-  left: 50%;
-  transform: translateX(-50%); /* This centers the camera icon horizontally */
-  cursor: pointer; /* Optional: Adds a pointer cursor on hover */
-}
-.imageContainer {
-  position: relative;
-  display: inline-block;
-}
-
-.inputContainer {
-  display: flex;
-  gap: 1rem;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-}
-
-.delete {
-  background: transparent !important;
-  color: red !important;
+  max-width: 100%; /* Prevent crossing parent container */
+  box-sizing: border-box; /* Include padding and border in width calculations */
+  word-wrap: break-word; /* Break long words */
+  white-space: normal; /* Allow text to wrap */
 }

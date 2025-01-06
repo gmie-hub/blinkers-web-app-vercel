@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 const MyBusinesses = () => {
   const user = useAtomValue(userAtom);
   const [showBusinessInfo, setShowBusinessInfo] = useState(false);
-const navigate =useNavigate()
+  const navigate = useNavigate();
   const [getBusinessDetailsQuery] = useQueries({
     queries: [
       {
@@ -38,64 +38,86 @@ const navigate =useNavigate()
 
   return (
     <>
-       {getBusinessDetailsQuery?.isLoading ? (
+      {getBusinessDetailsQuery?.isLoading ? (
         <CustomSpin />
       ) : getBusinessDetailsQuery?.isError ? (
         <h1 className="error">{businessDetailsErrorMessage}</h1>
       ) : (
-      showBusinessInfo === false && (
-        <div className="wrapper">
-          {user?.business !==  null ?
-          <div className={styles.mainContent}>
-            <div className={styles.card}>
-              <img
-                className={styles.profileImg}
-                src={user?.business?.logo}
-                alt="ProfileImg"
-              />
-              <p>{user?.business?.name}</p>
+        showBusinessInfo === false && (
+          <div className="wrapper">
+            {user?.business !== null ? (
+              <div className={styles.mainContent}>
+                <div className={styles.card}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      className={styles.profileImg}
+                      src={user?.business?.logo}
+                      alt="ProfileImg"
+                    />
+                  </div>
+                  <br />
 
-              <div className={styles.info}>
-                <Image src={TimeIcon} alt="TimeIcon" preview={false} />
+                  <p>{user?.business?.name}</p>
 
-                <div className={styles.open}>
-                  <p>Opening Hours</p>
-                  {/* <p>Monday - Fridays (10am- 11pm)</p> */}
+                  <div className={styles.info}>
+                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
+
+                    <div className={styles.open}>
+                      <p>Opening Hours</p>
+                      {/* <p>Monday - Fridays (10am- 11pm)</p> */}
+                    </div>
+                  </div>
+                  <div className={styles.info}>
+                    <Image
+                      src={LocationIcon}
+                      alt="LocationIcon"
+                      preview={false}
+                      width={60}
+                    />
+                    {user?.address}
+                  </div>
+                  <div className={styles.info}>
+                    <Image src={CallIcon} alt="CallIcon" preview={false} />
+
+                    <p>{user?.number}</p>
+                  </div>
+                  <div style={{ marginBlockStart: "2.4rem" }}>
+                    <Button
+                      disabled={
+                        businessDetailsData?.business_status?.toString() !== "2"
+                      }
+                      onClick={() => setShowBusinessInfo(true)}
+                      className={
+                        businessDetailsData?.business_status?.toString() !== "2"
+                          ? styles.inview
+                          : ""
+                      }
+                      text={
+                        businessDetailsData?.business_status?.toString() !== "2"
+                          ? "Currently in Review"
+                          : "View Business Information"
+                      }
+                    />
+                  </div>
                 </div>
               </div>
-              <div className={styles.info}>
-                <Image src={LocationIcon} alt="LocationIcon" preview={false} />
-                {user?.address}
-              </div>
-              <div className={styles.info}>
-                <Image src={CallIcon} alt="CallIcon" preview={false} />
-
-                <p>{user?.number}</p>
-              </div>
-              <div style={{ marginBlockStart: "2.4rem" }}>
-                <Button
-                disabled={businessDetailsData?.business_status?.toString() !== "2"}
-                  onClick={() => setShowBusinessInfo(true)}
-                  className={
-                    businessDetailsData?.business_status?.toString() !== "2"
-                      ? styles.inview
-                      : ""
-                  }
-                  text={
-                    businessDetailsData?.business_status?.toString() !== "2"
-                      ? "Currently in Review"
-                      : "View Business Information"
-                  }
-                />
-              </div>
-            </div>
+            ) : (
+              <p
+                style={{ cursor: "pointer", textAlign: "center" }}
+                onClick={() => navigate("/job/add-business")}
+              >
+                Please click to create a business{" "}
+              </p>
+            )}
           </div>
-          :
-          <p style={{cursor:'pointer', textAlign:"center"}} onClick={()=>navigate('/job/add-business')}>Please click to  create a business </p>
-          }
-        </div>
-      )
-    )}
+        )
+      )}
       {showBusinessInfo && <Index />}
     </>
   );

@@ -254,5 +254,20 @@
 }
 .buttonGroup {
   display: flex;
-justify-content: end;  gap: 2.2rem;
+  justify-content: end;
+  gap: 2.2rem;
+  @media screen and (max-width: 600px) {
+
+    flex-direction: column;
+  }
+}
+.RejectModalWrapper {
+  text-align: center;
+  line-height: 3.2rem;
+  padding-block-start: 5rem;
+}
+.RejectModalPara {
+  color: var(--color-header-text);
+  font-size: 1.6rem;
+  font-weight: bold;
 }

@@ -26,7 +26,7 @@ const VerificationCode = () => {
   // const { email } = useParams<{ email: string }>();
   const { phoneNumber } = useParams<{ phoneNumber: string }>(); 
 
-  const [route, setRoute] = useState("Sms");
+  const [route, setRoute] = useState("SMS");
 console.log(route,'eroute')
   // useEffect(() => {
   //   const timer = setInterval(() => {

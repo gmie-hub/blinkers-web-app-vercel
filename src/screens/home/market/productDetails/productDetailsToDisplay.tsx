@@ -6,8 +6,10 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
   FollowBusiness,
+  FollowSeller,
   getApplicantsbyId,
   getBusinessById,
+  getFollowersByBusiness_id,
   getFollowersByUser_id,
   getProductDetails,
 } from "../../../request";
@@ -16,6 +18,7 @@ import RouteIndicator from "../../../../customs/routeIndicator";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import CustomSpin from "../../../../customs/spin";
+import { errorMessage } from "../../../../utils/errorMessage";
 
 const Main = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
@@ -41,8 +44,10 @@ const Main = () => {
 
   const [
     getProductDetailsQuery,
-    getBusinessFollowersQuery,
+    getSellersFollowersQuery,
     getBusinessDetailsQuery,
+    getBusinessFollowersQuery,
+
     getUserDetailsQuery,
 
   ] = useQueries({
@@ -55,11 +60,10 @@ const Main = () => {
         enabled: !!id,
       },
       {
-        queryKey: ["get-business-followers", sellerId],
-        queryFn: () => getFollowersByUser_id(sellerId!),
+        queryKey: ["get-sellers-followers"],
+        queryFn:  getFollowersByUser_id,
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!sellerId,
       },
       {
         queryKey: ["get-business-details",],
@@ -69,15 +73,26 @@ const Main = () => {
         enabled: !!businessId,
       },
       {
+        queryKey: ["get-business-followers", businessId],
+        queryFn: () => getFollowersByBusiness_id(businessId!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!businessId,
+      },
+      {
         queryKey: ["get-sellers-details", sellerId],
-        queryFn: () => getApplicantsbyId(1292!),
+        queryFn: () => getApplicantsbyId(sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!sellerId,
       },
     ],
   });
-  const userExists = getBusinessFollowersQuery?.data?.data?.data?.some(
+  const isUserFollowingBusiness = getBusinessFollowersQuery?.data?.data?.data?.some(
+    (item) => item?.user_id === user?.id
+  );
+
+  const isUserFollowingSeller = getSellersFollowersQuery?.data?.data?.data?.some(
     (item) => item?.user_id === user?.id
   );
 
@@ -131,8 +146,8 @@ const Main = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: "An error occur",
-        // errorMessage(error) ,
+        description:errorMessage(error) || "An error occur",
+         
       });
     }
   };
@@ -152,6 +167,56 @@ const Main = () => {
     }
   };
 
+
+  const followSellersMutation = useMutation({
+    mutationFn: FollowSeller,
+    mutationKey: ["follow-seller"],
+  });
+
+  const followSellerHandler = async () => {
+    const payload: Partial<FollowBusiness> = {
+      user_id: sellerId!,
+      action: "follow",
+    };
+
+    try {
+      await followBusinessMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+          queryClient.refetchQueries({
+            queryKey: ["get-business-followers"],
+          });
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description:errorMessage(error) || "An error occur",
+      });
+    }
+  };
+
+
+  const handleFollowSeller = () => {
+    if (!user) {
+      notification.error({
+        message: "Log in required",
+        description: "You need to log in to access this page!",
+        placement: "top",
+        duration: 4,
+        onClose: () => {
+          navigate(`/login?redirect=${currentPath}`);
+        },
+      });
+    } else {
+      followSellerHandler();
+    }
+  };
+
+
   return (
     <>
       <div className="wrapper">
@@ -169,18 +234,24 @@ const Main = () => {
           {windowWidth < 1024 ? (
             <SmallScreen
               handleFollowBusiness={handleFollowBusiness}
+              handleFollowSeller={handleFollowSeller}
               productDetailsData={productDetailsData}
               followBusinessMutation={followBusinessMutation?.isPending}
-              userExists={userExists}
+              followSellersMutation={followSellersMutation?.isPending}
+              isUserFollowingBusiness={isUserFollowingBusiness}
+              isUserFollowingSeller={isUserFollowingSeller}
               businessDetailsData={businessDetailsData}
               profileDetailsData={profileDetailsData}
             /> // Render SmallScreen on small screens
           ) : (
             <BigScreen
+            handleFollowSeller={handleFollowSeller}
               handleFollowBusiness={handleFollowBusiness}
               productDetailsData={productDetailsData}
+              followSellersMutation={followSellersMutation?.isPending}
               followBusinessMutation={followBusinessMutation?.isPending}
-              userExists={userExists}
+              isUserFollowingBusiness={isUserFollowingBusiness}
+              isUserFollowingSeller={isUserFollowingSeller}
               businessDetailsData={businessDetailsData}
               profileDetailsData={profileDetailsData}
             /> // Render BigScreen on larger screens
