@@ -16,7 +16,7 @@ import {
 import { App } from "antd";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import { userAtom } from "../../../../utils/store";
-import { useAtomValue } from "jotai";
+import {  useAtomValue } from "jotai";
 import CustomSpin from "../../../../customs/spin";
 import { errorMessage } from "../../../../utils/errorMessage";
 
@@ -64,6 +64,7 @@ const Main = () => {
         queryFn:  getFollowersByUser_id,
         retry: 0,
         refetchOnWindowFocus: true,
+        enabled:false
       },
       {
         queryKey: ["get-business-details",],
@@ -74,7 +75,7 @@ const Main = () => {
       },
       {
         queryKey: ["get-business-followers", businessId],
-        queryFn: () => getFollowersByBusiness_id(businessId!),
+        queryFn: () => getFollowersByBusiness_id(user?.id!,businessId!),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!businessId,

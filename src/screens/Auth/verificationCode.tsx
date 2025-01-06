@@ -72,14 +72,7 @@ console.log(route,'eroute')
     )}`;
   };
 
-  // const   handleResendClick = () => {
-  //   if (!isResendDisabled) {
-  //     setTimeLeft(85); // Reset timer to 1:25
-  //     setIsResendDisabled(true); // Disable the button again
-  //   }
-  //   resendOtpHandler();
 
-  // };
 
   const handleResendClick = (route: string) => {
     setRoute(route);

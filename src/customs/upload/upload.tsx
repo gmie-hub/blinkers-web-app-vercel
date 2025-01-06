@@ -39,7 +39,7 @@ const Upload: React.FC<UploadProps> = ({
           {description && description}
 
           <label className={styles.upload}>
-            <input type="file" hidden {...field} {...rest} value={undefined} />
+            <input type="file" hidden {...field} {...rest} value="" />
             {icon || <Image src={DocIcon} alt="DocIcon" preview={false} />}
 
             <div>

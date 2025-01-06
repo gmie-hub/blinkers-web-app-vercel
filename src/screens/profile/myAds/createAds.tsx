@@ -4,40 +4,38 @@ import { useMutation, useQueries } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
 import SearchableSelect from "../../../customs/searchableSelect/searchableSelect";
 import Button from "../../../customs/button/button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   createAds,
-//   deleteAdsGalarybyId,
+  //   deleteAdsGalarybyId,
   getAllCategory,
   getAllState,
   getLGAbyStateId,
-  getProductDetails,
   getSubCategory,
-//   uploadAdsGallery,
-//   uploadAdsVideo,
+  //   uploadAdsGallery,
+  //   uploadAdsVideo,
 } from "../../request";
-import {  useState } from "react";
-import { AxiosError } from "axios";
+import { useRef, useState } from "react";
 import Checkbox from "../../../customs/checkBox/checkbox";
 import Upload from "../../../customs/upload/upload";
 import { App } from "antd";
 import { errorMessage } from "../../../utils/errorMessage";
-// import favorite from "../../../assets/deleteicon.svg";
-import CustomSpin from "../../../customs/spin";
+
 import * as Yup from "yup";
 
 const CreateAdz = () => {
-  const { id } = useParams();
   const [stateId, setStateId] = useState(0);
   const [categoryId, setCategoryId] = useState(0);
   const { notification } = App.useApp();
   const [uploadFeature, setUploadFeature] = useState<File | null>(null);
   const [uploads, setUploads] = useState<File[]>([]);
   const [uploadVideos, setUploadVideos] = useState<File[]>([]);
-  const navigate = useNavigate()
 
-  console.log(uploads, "jummy 4 oclos");
-//   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const navigate = useNavigate();
+
+  console.log(uploadFeature, "jummy 4 oclos");
 
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
@@ -49,60 +47,38 @@ const CreateAdz = () => {
     setFieldValue("sub_category_id", "");
   };
 
-  const [
-    getProductDetailsQuery,
-    getStateQuery,
-    getLGAQuery,
-    getAllCategoryQuery,
-    getSubCategoryQuery,
-  ] = useQueries({
-    queries: [
-      {
-        queryKey: ["get-product-details", id],
-        queryFn: () => getProductDetails(parseInt("837")),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        // enabled: !!id,
-      },
-      {
-        queryKey: ["get-all-state"],
-        queryFn: getAllState,
-        retry: 0,
-        refetchOnWindowFocus: true,
-      },
-      {
-        queryKey: ["get-all-lga", stateId],
-        queryFn: () => getLGAbyStateId(stateId!),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!stateId,
-      },
-      {
-        queryKey: ["get-all-category"],
-        queryFn: () => getAllCategory(),
-        retry: 0,
-        refetchOnWindowFocus: true,
-      },
-      {
-        queryKey: ["get-sub-category", categoryId],
-        queryFn: () => getSubCategory(categoryId),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!categoryId,
-      },
-    ],
-  });
+  const [getStateQuery, getLGAQuery, getAllCategoryQuery, getSubCategoryQuery] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ["get-all-state"],
+          queryFn: getAllState,
+          retry: 0,
+          refetchOnWindowFocus: true,
+        },
+        {
+          queryKey: ["get-all-lga", stateId],
+          queryFn: () => getLGAbyStateId(stateId!),
+          retry: 0,
+          refetchOnWindowFocus: true,
+          enabled: !!stateId,
+        },
+        {
+          queryKey: ["get-all-category"],
+          queryFn: () => getAllCategory(),
+          retry: 0,
+          refetchOnWindowFocus: true,
+        },
+        {
+          queryKey: ["get-sub-category", categoryId],
+          queryFn: () => getSubCategory(categoryId),
+          retry: 0,
+          refetchOnWindowFocus: true,
+          enabled: !!categoryId,
+        },
+      ],
+    });
 
-  const productDetailsData = getProductDetailsQuery?.data?.data;
-  const productDetailsError = getProductDetailsQuery?.error as AxiosError;
-  const productDetailsErrorMessage =
-    productDetailsError?.message ||
-    "An error occurred. Please try again later.";
-
-  console.log(
-    productDetailsData?.add_images[0]?.add_image,
-    "productDetailsData"
-  );
   const stateData = getStateQuery?.data?.data?.data ?? [];
   const lgaData = getLGAQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data ?? [];
@@ -180,7 +156,13 @@ const CreateAdz = () => {
     //   ["video/mp4", "video/x-matroska", "video/webm"].includes(file.type)
     // );
     const validVideos = Array.from(files).filter((file) =>
-        ["video/mp4", "video/quicktime", "video/3gpp"].includes(file.type)
+      [
+        "video/mp4",
+        "video/quicktime",
+        "video/3gpp",
+        "image/jpeg",
+        "image/png",
+      ].includes(file.type)
     );
 
     if (validVideos.length > 0) {
@@ -221,129 +203,6 @@ const CreateAdz = () => {
     setFieldValue("featureImage", selectedFile);
     setUploadFeature(selectedFile);
   };
-//   const deleteGalaryMutation = useMutation({ mutationFn: deleteAdsGalarybyId });
-
-//   const DeleteGalaryHandler = async (imageIds: number[]) => {
-//     try {
-//       await deleteGalaryMutation.mutateAsync(
-//         {
-//           add_id: 837!, // Ensure id is available
-//           image_ids: imageIds,
-//         },
-//         {
-//           onSuccess: (data) => {
-//             notification.success({
-//               message: "Success",
-//               description: data?.message,
-//             });
-//             queryClient.refetchQueries({
-//               queryKey: ["get-product-details"],
-//             });
-//           },
-//         }
-//       );
-//     } catch (error: any) {
-//       notification.error({
-//         message: "Error",
-//         description: errorMessage(error) || "An error occurred",
-//       });
-//     }
-//   };
-
-  //   const UploadGalleryMutation = useMutation({
-  //     mutationFn: uploadAdsGallery,
-  //     mutationKey: ["upload-ads-gallery"],
-  //   });
-
-  //   const UploadGalleryHandler = async () => {
-  //     const formData = new FormData();
-
-  //     // if (id) {
-  //     formData.append("add_id", "837"); // Correctly append the file
-  //     // }
-  //     if (upload) {
-  //       formData.append("add_image[]", upload); // Correctly append the file
-  //     }
-
-  //     try {
-  //       await UploadGalleryMutation.mutateAsync(formData, {
-  //         onSuccess: (data) => {
-  //           notification.success({
-  //             message: "Success",
-  //             description: data?.message,
-  //           });
-
-  //           queryClient.refetchQueries({
-  //             queryKey: ["get-product-details"],
-  //           });
-  //           setUpload(null);
-  //         },
-  //       });
-  //     } catch (error: any) {
-  //       notification.error({
-  //         message: "Error",
-  //         description: errorMessage(error) || "An error occurred",
-  //       });
-
-  //       setUpload(null);
-  //     }
-  //   };
-
-  //   const UploadVideoMutation = useMutation({
-  //     mutationFn: uploadAdsVideo,
-  //     mutationKey: ["upload-ads-video"],
-  //   });
-
-  //   const UploadVideoHandler = async () => {
-  //     const formData = new FormData();
-
-  //     // if (id) {
-  //     formData.append("add_id", "837"); // Correctly append the file
-  //     // }
-  //     if (uploadVideo) {
-  //       formData.append("add_image[]", uploadVideo); // Correctly append the file
-  //     }
-
-  //     try {
-  //       await UploadVideoMutation.mutateAsync(formData, {
-  //         onSuccess: (data) => {
-  //           notification.success({
-  //             message: "Success",
-  //             description: data?.message,
-  //           });
-
-  //           queryClient.refetchQueries({
-  //             queryKey: ["get-product-details"],
-  //           });
-  //           setUploadVideo(null);
-  //         },
-  //       });
-  //     } catch (error: any) {
-  //       notification.error({
-  //         message: "Error",
-  //         description: errorMessage(error) || "An error occurred",
-  //       });
-
-  //       setUploadVideo(null);
-  //     }
-  //   };
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  //   useEffect(() => {
-  //     if (upload) {
-  //       UploadGalleryHandler();
-  //     }
-  //   }, [upload]);
-  //   useEffect(() => {
-  //     if (uploadVideo) {
-  //       UploadVideoHandler();
-  //     }
-  //   }, [uploadVideo]);
-  //   useEffect(() => {
-  //     if (uploadFeature) {
-  //       UploadGalleryHandler();
-  //     }
-  //   }, [uploadFeature]);
 
   const clearFile = () => {
     setUploads([]);
@@ -378,8 +237,8 @@ const CreateAdz = () => {
     formData.append("discount_price", values?.discount_price);
     // formData.append("description_tags[0]", checkedBox);
     descriptionTags.forEach((tag, index) => {
-        formData.append(`description_tags[${index}]`, tag);
-      });
+      formData.append(`description_tags[${index}]`, tag);
+    });
     formData.append("description", values?.description);
     formData.append("state_id", values?.state_id);
     formData.append("technical_details", values?.technical_details);
@@ -400,7 +259,7 @@ const CreateAdz = () => {
     });
 
     uploadVideos.forEach((file, index: number) => {
-        console.log(file.type); // Log the file type
+      console.log(file.type); // Log the file type
 
       formData.append(`add_video[${index}]`, file);
     });
@@ -421,6 +280,8 @@ const CreateAdz = () => {
         message: "Error",
         description: errorMessage(error) || "An error occurred",
       });
+      resetForm();
+      clearFile();
     }
   };
 
@@ -439,6 +300,10 @@ const CreateAdz = () => {
   });
   const handleRemoveFeature = () => {
     setUploadFeature(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset the file input value
+    }
   };
 
   const handleRemoveUpload = (index: number) => {
@@ -448,69 +313,83 @@ const CreateAdz = () => {
   const handleRemoveVideo = (index: number) => {
     setUploadVideos((prev) => prev.filter((_, i) => i !== index));
   };
+
   return (
     <section className="wrapper">
-      {getProductDetailsQuery?.isLoading ? (
-        <CustomSpin />
-      ) : getProductDetailsQuery?.isError ? (
-        <h1 className="error">{productDetailsErrorMessage}</h1>
-      ) : (
-        <Formik
-          initialValues={{
-            title: "",
-            Used: false,
-            New: false,
-            PayOnDelivery: false,
-            price: "",
-            discount_price: "",
-            category_id: "",
-            sub_category_id: "",
-            pickup_address: "",
-            state_id: "",
-            local_government_area_id: "",
-            description: "",
-            technical_details: "",
-          }}
-          onSubmit={(values, { resetForm }) => {
-            createAdsHandler(values, resetForm);
-          }}
-            validationSchema={validationSchema}
-          enableReinitialize
-        >
-          {({ handleChange, setFieldValue, values }) => {
-            return (
-              <Form>
-                <div className={styles.inputContainer}>
-                  <h3>Upload Product Photos and Videos</h3>
-                  <div className={styles.inputRow}>
-                    <Upload
-                      placeHolder="upload your feature image, max 1file"
-                      name="featureImage"
-                      // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
-                      onChange={(e) =>
-                        handleFileChangeFeature(e, setFieldValue)
-                      }
-                    />
-                    <Upload
-                      placeHolder="upload your photos"
-                      name="imageFile"
-                      // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
-                      onChange={(e) => handleFileChange(e, setFieldValue)}
-                    />
-                    <Upload
-                      placeHolder="upload your Videos"
-                      name="videoFile"
-                      onChange={(e) => handleVideoChange(e, setFieldValue)}
-                    />
-                  </div>
-                  <h3>Uploaded Media</h3>
+      <Formik
+        initialValues={{
+          title: "",
+          Used: false,
+          New: false,
+          PayOnDelivery: false,
+          price: "",
+          discount_price: "",
+          category_id: "",
+          sub_category_id: "",
+          pickup_address: "",
+          state_id: "",
+          local_government_area_id: "",
+          description: "",
+          technical_details: "",
+        }}
+        onSubmit={(values, { resetForm }) => {
+          createAdsHandler(values, resetForm);
+        }}
+        validationSchema={validationSchema}
+        enableReinitialize
+      >
+        {({ handleChange, setFieldValue, values }) => {
+          return (
+            <Form>
+              <div className={styles.inputContainer}>
+                <h3>Upload Product Photos and Videos</h3>
+                <div className={styles.inputRow}>
+                  <Upload
+                    ref={fileInputRef}
+                    placeHolder="upload your feature image, max 1file"
+                    name="featureImage"
+                    // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
+                    onChange={(e) => handleFileChangeFeature(e, setFieldValue)}
+                  />
+                  <Upload
+                    placeHolder="upload your photos"
+                    name="imageFile"
+                    // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
+                    onChange={(e) => handleFileChange(e, setFieldValue)}
+                  />
+                  <Upload
+                    placeHolder="upload your Videos"
+                    name="videoFile"
+                    onChange={(e) => handleVideoChange(e, setFieldValue)}
+                  />
+                </div>
+                <h3>Uploaded Media</h3>
 
-                  {uploadFeature && (
-                    <div>
-                      <h3>Feature Image</h3>
+                {uploadFeature && (
+                  <div>
+                    <h3>Feature Image</h3>
+                    <img
+                      src={URL.createObjectURL(uploadFeature)}
+                      alt="Feature Preview"
+                      style={{
+                        width: "150px",
+                        height: "150px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <br />
+                    <button onClick={handleRemoveFeature}>Cancel</button>
+                  </div>
+                )}
+
+                {uploads?.length > 0 && <h3>Images</h3>}
+
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  {uploads?.map((file, index) => (
+                    <div key={index} style={{ textAlign: "center" }}>
                       <img
-                        src={URL.createObjectURL(uploadFeature)}
-                        alt="Feature Preview"
+                        src={URL.createObjectURL(file)}
+                        alt={`Upload ${index + 1}`}
                         style={{
                           width: "150px",
                           height: "150px",
@@ -518,59 +397,36 @@ const CreateAdz = () => {
                         }}
                       />
                       <br />
-                      <button onClick={handleRemoveFeature}>Cancel</button>
+                      <button onClick={() => handleRemoveUpload(index)}>
+                        Cancel
+                      </button>
                     </div>
-                  )}
+                  ))}
+                </div>
 
-                  {uploads?.length > 0 && <h3>Images</h3>}
+                {uploadVideos?.length > 0 && <h3>Videos</h3>}
 
-                  <div
-                    style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
-                  >
-                    {uploads?.map((file, index) => (
-                      <div key={index} style={{ textAlign: "center" }}>
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`Upload ${index + 1}`}
-                          style={{
-                            width: "150px",
-                            height: "150px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <br />
-                        <button onClick={() => handleRemoveUpload(index)}>
-                          Cancel
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  {uploadVideos.map((file, index) => (
+                    <div key={index} style={{ textAlign: "center" }}>
+                      <video
+                        src={URL.createObjectURL(file)}
+                        controls
+                        style={{
+                          width: "200px",
+                          height: "150px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <br />
+                      <button onClick={() => handleRemoveVideo(index)}>
+                        Cancel
+                      </button>
+                    </div>
+                  ))}
+                </div>
 
-                  {uploadVideos?.length > 0 && <h3>Videos</h3>}
-
-                  <div
-                    style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
-                  >
-                    {uploadVideos.map((file, index) => (
-                      <div key={index} style={{ textAlign: "center" }}>
-                        <video
-                          src={URL.createObjectURL(file)}
-                          controls
-                          style={{
-                            width: "200px",
-                            height: "150px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <br />
-                        <button onClick={() => handleRemoveVideo(index)}>
-                          Cancel
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* <div className={styles.imageContainer}>
+                {/* <div className={styles.imageContainer}>
                     {productDetailsData?.add_images?.map((image, index) => (
                       <div key={index} className={styles.imageWrapper}>
                         <img
@@ -590,121 +446,115 @@ const CreateAdz = () => {
                     ))}
                   </div> */}
 
-                  <div className={styles.inputRow}>
-                    <Input
-                      name="title"
-                      label="title"
-                      placeholder="Ad title"
-                      type="text"
-                      onChange={handleChange}
-                    />
-                    <Input
-                      name="price"
-                      label="Price"
-                      placeholder="price"
-                      type="text"
-                      onChange={handleChange}
-                    />
-                    <Input
-                      name="discount_price"
-                      label="Discount Price"
-                      placeholder="Discount Price"
-                      type="text"
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className={styles.inputRow}>
-                    <SearchableSelect
-                      name="category_id"
-                      label="Category"
-                      options={categoryOptions}
-                      placeholder="Select Category"
-                      onChange={(value: any) =>
-                        handleCategoryChange(value, setFieldValue)
-                      }
-                    />
-                    <SearchableSelect
-                      name="sub_category_id"
-                      label="Sub Category"
-                      options={subCategoryOptions}
-                      placeholder="Select Sub Category"
-                    />
-
-                    <Input
-                      name="pickup_address"
-                      label="Pickup address"
-                      type="text"
-                      placeholder="Pickup address"
-                    />
-                  </div>
-                  <div className={styles.inputRow}>
-                    <SearchableSelect
-                      name="state_id"
-                      label="State"
-                      options={stateOptions}
-                      placeholder="Select State"
-                      onChange={(value: any) =>
-                        handleStateChange(value, setFieldValue)
-                      }
-                    />
-                    <br />
-
-                    <SearchableSelect
-                      name="local_government_area_id"
-                      label="Lga"
-                      options={lgaOptions}
-                      placeholder="Select LGA"
-                    />
-                  </div>
-                  <div style={{ display: "flex", gap: "2rem" }}>
-                    <Checkbox
-                      label="USED"
-                      name="Used"
-                      isChecked={values.Used}
-                    />
-                    <Checkbox label="NEW" name="New" isChecked={values.New} />
-                    <Checkbox
-                      label="PAY ON DELIVERY"
-                      name="PayOnDelivery"
-                      isChecked={values.PayOnDelivery}
-                    />
-                  </div>
+                <div className={styles.inputRow}>
                   <Input
-                    name="description"
-                    label="Description"
-                    type="textarea"
-                    placeholder="Description"
+                    name="title"
+                    label="Title"
+                    placeholder="Add title"
+                    type="text"
+                    onChange={handleChange}
                   />
                   <Input
-                    name="technical_details"
-                    label="Technical Details"
-                    type="textarea"
-                    placeholder="Technical Details"
+                    name="price"
+                    label="Price"
+                    placeholder="price"
+                    type="text"
+                    onChange={handleChange}
                   />
-                  <section className={styles.buttonGroup}>
-                    <Button
-                      variant="red"
-                      type="button"
-                      disabled={false}
-                      text="Cancel"
-                      className="buttonStyle"
-                      onClick={()=>navigate(-1)}
-                    />
-                    <Button
-                      variant="green"
-                      type="submit"
-                      disabled={createAdsMutation?.isPending}
-                      text={createAdsMutation?.isPending ? 'loading' : "Submit"}
-                      className="buttonStyle"
-
-                    />
-                  </section>
+                  <Input
+                    name="discount_price"
+                    label="Discount Price"
+                    placeholder="Discount Price"
+                    type="text"
+                    onChange={handleChange}
+                  />
                 </div>
-              </Form>
-            );
-          }}
-        </Formik>
-      )}
+                <div className={styles.inputRow}>
+                  <SearchableSelect
+                    name="category_id"
+                    label="Category"
+                    options={categoryOptions}
+                    placeholder="Select Category"
+                    onChange={(value: any) =>
+                      handleCategoryChange(value, setFieldValue)
+                    }
+                  />
+                  <SearchableSelect
+                    name="sub_category_id"
+                    label="Sub Category"
+                    options={subCategoryOptions}
+                    placeholder="Select Sub Category"
+                  />
+
+                  <Input
+                    name="pickup_address"
+                    label="Pickup address"
+                    type="text"
+                    placeholder="Pickup address"
+                  />
+                </div>
+                <div className={styles.inputRow}>
+                  <SearchableSelect
+                    name="state_id"
+                    label="State"
+                    options={stateOptions}
+                    placeholder="Select State"
+                    onChange={(value: any) =>
+                      handleStateChange(value, setFieldValue)
+                    }
+                  />
+                  <br />
+
+                  <SearchableSelect
+                    name="local_government_area_id"
+                    label="Lga"
+                    options={lgaOptions}
+                    placeholder="Select LGA"
+                  />
+                </div>
+                <div style={{ display: "flex", gap: "2rem" }}>
+                  <Checkbox label="USED" name="Used" isChecked={values.Used} />
+                  <Checkbox label="NEW" name="New" isChecked={values.New} />
+                  <Checkbox
+                    label="PAY ON DELIVERY"
+                    name="PayOnDelivery"
+                    isChecked={values.PayOnDelivery}
+                  />
+                </div>
+                <Input
+                  name="description"
+                  label="Description"
+                  type="textarea"
+                  placeholder="Description"
+                />
+                <Input
+                  name="technical_details"
+                  label="Technical Details"
+                  type="textarea"
+                  placeholder="Technical Details"
+                />
+                <section className={styles.buttonGroup}>
+                  <Button
+                    variant="red"
+                    type="button"
+                    disabled={false}
+                    text="Cancel"
+                    className="buttonStyle"
+                    onClick={() => navigate(-1)}
+                  />
+                  <Button
+                    variant="green"
+                    type="submit"
+                    disabled={createAdsMutation?.isPending}
+                    text={createAdsMutation?.isPending ? "loading..." : "Submit"}
+                    className="buttonStyle"
+                  />
+                </section>
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
     </section>
   );
 };

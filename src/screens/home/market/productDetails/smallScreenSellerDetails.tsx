@@ -393,24 +393,24 @@ const SmallScreen = ({
                       />
                       <div>
                         <p className={styles.name}>
-                          {profileDetailsData?.store_name || ""}
+                          {profileDetailsData?.name || ""}
                         </p>
                         <div className={styles.starWrapper}>
-                          <span className={styles.star}>
+                          {/* <span className={styles.star}>
                             <Image
                               width={20}
                               src={StarYellow}
                               alt="StarYellow"
                               preview={false}
                             />
-                            {/* ( {profileDetailsData?.total_rating}{" "}
+                            ( {profileDetailsData?.total_rating}{" "}
                         {profileDetailsData &&
                         profileDetailsData?.total_rating > 1
                           ? "ratings"
                           : "rating"}
-                        ) */}
-                          </span>
-                          <span className={styles.dot}>.</span>{" "}
+                        )
+                          </span> */}
+                          {/* <span className={styles.dot}>.</span>{" "} */}
                           <span>
                             {/* {profileDetailsData?.total_followers}
                         {profileDetailsData &&

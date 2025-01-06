@@ -88,7 +88,7 @@ const NotClaim = () => {
       },
       {
         queryKey: ["get-business-followers", id],
-        queryFn: () => getFollowersByBusiness_id(parseInt(id!)),
+        queryFn: () => getFollowersByBusiness_id(user?.id!,parseInt(id!),),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!id,

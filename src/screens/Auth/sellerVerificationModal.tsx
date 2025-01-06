@@ -25,6 +25,7 @@ const SellerVerificationCode = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
+  const [route, setRoute] = useState("SMS");
 
   const handleNaviagteToSellerSignUp = () =>{
     navigate("/seller-signUp")
@@ -56,16 +57,37 @@ const SellerVerificationCode = () => {
     )}`;
   };
 
-  // const   handleResendClick = () => {
-  //   if (!isResendDisabled) {
-  //     setTimeLeft(85); // Reset timer to 1:25
-  //     setIsResendDisabled(true); // Disable the button again
-  //   }
-  //   resendOtpHandler();
 
+  // const handleResendClick = () => {
+  //   if (!isResendDisabled) {
+  //     setTimeLeft(5); // Reset timer to 1:25
+  //     setIsResendDisabled(true); // Disable the button again
+
+  //     // Start counting down again from 85 seconds
+  //     setTimeout(() => {
+  //       const timer = setInterval(() => {
+  //         setTimeLeft((prevTime: number) => {
+  //           if (prevTime <= 1) {
+  //             clearInterval(timer); // Stop the countdown when it reaches 0
+  //             setIsResendDisabled(false); // Enable the "Resend Code" button when timer reaches 0
+  //             return 0;
+  //           }
+  //           return prevTime - 1;
+  //         });
+  //       }, 1000); // Update every second
+
+  //       // Cleanup the interval when the component is unmounted
+  //       return () => clearInterval(timer);
+  //     }, 0);
+  //   }
+  //   else{
+  //       resendOtpHandler()
+  //   }
   // };
 
-  const handleResendClick = () => {
+
+const handleResendClick = () => {
+    setRoute(route);
     if (!isResendDisabled) {
       setTimeLeft(5); // Reset timer to 1:25
       setIsResendDisabled(true); // Disable the button again
@@ -87,9 +109,7 @@ const SellerVerificationCode = () => {
         return () => clearInterval(timer);
       }, 0);
     }
-    else{
-        resendOtpHandler()
-    }
+    resendOtpHandler();
   };
 
   const initialValues: FormValues = {

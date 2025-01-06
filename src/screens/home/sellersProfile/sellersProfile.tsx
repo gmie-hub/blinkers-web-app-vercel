@@ -76,10 +76,11 @@ const SellerProfile = () => {
       },
       {
         queryKey: ["get-business-followers", id],
-        queryFn: () => getFollowersByUser_id(parseInt(id!)),
+        queryFn: getFollowersByUser_id,
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!id,
+        // enabled: !!id,
+        enabled:false,
       },
     ],
   });

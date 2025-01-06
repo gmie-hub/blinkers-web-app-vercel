@@ -219,8 +219,10 @@ export const getFollowersByUser_id = async () => {
   return (await api.get(`/followers`))
     ?.data as BusinessFollowersResponse;
 };
-export const getFollowersByBusiness_id = async (business_id: number) => {
-  return (await api.get(`business/followers?business_id=${business_id}`))
+export const getFollowersByBusiness_id = async (user_id: number,business_id: number) => {
+  // return (await api.get(`business/followers?business_id=${business_id}`))
+  return (await api.get(`business/followers?user_id=${user_id}&business_id=${business_id}`))
+
     ?.data as BusinessFollowersResponse;
 };
 

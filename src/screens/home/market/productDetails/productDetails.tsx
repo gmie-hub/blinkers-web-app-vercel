@@ -431,15 +431,15 @@ const BigScreen = ({
                       className={styles.sellerLogo}
                     />
                     <div>
-                      <p className={styles.name}>{profileDetailsData?.store_name || ''}</p>
+                      <p className={styles.name}>{profileDetailsData?.name || ''}</p>
                       <div className={styles.starWrapper}>
                         <span className={styles.star}>
-                          <Image
+                          {/* <Image
                             width={20}
                             src={StarYellow}
                             alt="StarYellow"
                             preview={false}
-                          />
+                          /> */}
                           {/* ( {profileDetailsData?.total_rating }{" "}
                           {profileDetailsData &&
                           profileDetailsData?.total_rating > 1
@@ -447,7 +447,7 @@ const BigScreen = ({
                             : "rating"}
                           ) */}
                         </span>
-                        <span className={styles.dot}>.</span>{" "}
+                        {/* <span className={styles.dot}>.</span>{" "} */}
                         {/* <span>{profileDetailsData?.total_followers}{profileDetailsData && profileDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span> */}
                       </div>
                     </div>
