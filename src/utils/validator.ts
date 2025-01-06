@@ -1,5 +1,6 @@
 import { number, ref, string } from 'yup';
 
+
 export const validator = {
   password: string()
     .required('Password is required')
