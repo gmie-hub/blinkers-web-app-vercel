@@ -316,7 +316,7 @@ const CreateAdz = () => {
 
   return (
     <section className="wrapper">
-      <Formik
+      <Formik 
         initialValues={{
           title: "",
           Used: false,

@@ -61,10 +61,10 @@ const Main = () => {
       },
       {
         queryKey: ["get-sellers-followers"],
-        queryFn:  getFollowersByUser_id,
+        queryFn: ()=> getFollowersByUser_id(user?.id!,sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled:false
+        enabled:!!sellerId
       },
       {
         queryKey: ["get-business-details",],
@@ -181,7 +181,7 @@ const Main = () => {
     };
 
     try {
-      await followBusinessMutation.mutateAsync(payload, {
+      await followSellersMutation.mutateAsync(payload, {
         onSuccess: (data) => {
           notification.success({
             message: "Success",
