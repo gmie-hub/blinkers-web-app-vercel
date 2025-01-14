@@ -5,10 +5,16 @@ import Card from '../../../../customs/card/card';
 import RouteIndicator from '../../../../customs/routeIndicator';
 import BasicInfoForm from './forms/basicInfo';
 import ProfInfoForm from './forms/profInfo';
+import { useQueries } from '@tanstack/react-query';
+import { getApplicantsbyId } from '../../../request';
+import { userAtom } from '../../../../utils/store';
+import { useAtomValue } from 'jotai';
+import { AxiosError } from 'axios';
 
 const ApplyAsApplicant = () => {
   const [displayForm, setDisplayForm] = useState(false);
   const [current, setCurrent] = useState(0);
+  const user = useAtomValue(userAtom);
 
 
   const { Step } = Steps;
@@ -24,6 +30,26 @@ const ApplyAsApplicant = () => {
     setDisplayForm((prevState) => !prevState);
     window.scroll(0,0)
   }, [current]);
+
+
+  const [getApplicantQuery, ] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-applicant"],
+        queryFn: () => getApplicantsbyId(user?.id!),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+   
+    ],
+  })
+
+  const applicantDetailsData = getApplicantQuery?.data?.data;
+  const applicantDetailsError = getApplicantQuery?.error as AxiosError;
+  const applicantDetailsErrorMessage =
+    applicantDetailsError?.message ||
+    "An error occurred. Please try again later.";
+
 
   
 
@@ -85,7 +111,7 @@ const ApplyAsApplicant = () => {
           </Steps>
         </section>
 
-        {!displayForm ? <BasicInfoForm handleNext={next} /> : <ProfInfoForm onPrev={prev} />}
+        {!displayForm ? <BasicInfoForm handleNext={next} applicantDetailsData={applicantDetailsData} /> : <ProfInfoForm onPrev={prev} />}
       </Card>
     </div>
     </div>

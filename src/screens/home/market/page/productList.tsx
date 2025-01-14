@@ -158,7 +158,7 @@ useEffect(() => {
                
                     <div className={styles.starWrapper}>
                       {countUpTo(
-                        0,
+                        parseInt(item?.averageRating),
                         <Image
                           width={20}
                           src={StarYellow}

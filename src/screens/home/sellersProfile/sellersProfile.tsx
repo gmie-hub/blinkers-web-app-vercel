@@ -4,7 +4,7 @@ import Reviews from "../market/productDetails/tabs/businessReview";
 import Button from "../../../customs/button/button";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import { App, Image } from "antd";
+import { App, Image, Modal } from "antd";
 import StarYellow from "../../../assets/staryellow.svg";
 import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
@@ -22,6 +22,7 @@ import RouteIndicator from "../../../customs/routeIndicator";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
   FollowBusiness,
+  FollowSeller,
   getApplicantsbyId,
   getFollowersByUser_id,
 } from "../../request";
@@ -31,6 +32,8 @@ import CustomSpin from "../../../customs/spin";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../utils/errorMessage";
+import { useState } from "react";
+import FlagSeller from "../market/flagSeller/flagSeller";
 
 const SellerProfile = () => {
   const navigate = useNavigate();
@@ -39,6 +42,7 @@ const SellerProfile = () => {
   const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
   const queryClient = useQueryClient();
+  const [flagSeller, setFlagSeller] = useState(false);
 
   // const hasReviews = reviewData?.lenght;
   // console.log(hasReviews, "hasReviews");
@@ -49,7 +53,7 @@ const SellerProfile = () => {
   // };
 
   const handleNavigateToSellersAds = () => {
-    navigate(`/sellers-posted-ads`);
+    navigate(`/sellers-posted-ads/${id}`);
     window.scrollTo(0, 0);
   };
 
@@ -58,15 +62,8 @@ const SellerProfile = () => {
     window.scrollTo(0, 0);
   };
 
-  const [getSellersDetailsQuery, getBusinessFollowersQuery] = useQueries({
+  const [getSellersDetailsQuery, getSellersFollowersQuery] = useQueries({
     queries: [
-      // {
-      //   queryKey: ["get-business-details", id],
-      //   queryFn: () => getBusinessById(parseInt(id!)),
-      //   retry: 0,
-      //   refetchOnWindowFocus: true,
-      //   enabled: !!id,
-      // },
       {
         queryKey: ["get-sellers-details", id],
         queryFn: () => getApplicantsbyId(parseInt(id!)),
@@ -75,21 +72,18 @@ const SellerProfile = () => {
         enabled: !!id,
       },
       {
-        queryKey: ["get-business-followers", id],
+        queryKey: ["get-sellers-followers", id],
         queryFn: ()=> getFollowersByUser_id(user?.id!,parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        // enabled: !!id,
         enabled:!!id,
       },
     ],
   });
 
-  const userExists = getBusinessFollowersQuery?.data?.data?.data?.some(
+  const hasUserFlaggedSeller = getSellersFollowersQuery?.data?.data?.data?.some(
     (item) => item?.user_id === user?.id
   );
-
-  console.log(userExists, "userExists");
 
   const sellersDetailsData = getSellersDetailsQuery?.data?.data;
   const sellersDetailsError = getSellersDetailsQuery?.error as AxiosError;
@@ -97,54 +91,54 @@ const SellerProfile = () => {
   sellersDetailsError?.message ||
     "An error occurred. Please try again later.";
 
-  const followBusinessMutation = useMutation({
-    mutationFn: FollowBusiness,
-    mutationKey: ["follow-business"],
-  });
-
-  const followBusinessHandler = async () => {
-    const payload: Partial<FollowBusiness> = {
-      business_id: sellersDetailsData?.id,
-      user_id: user?.id,
-      action: userExists ? "unfollow" : "follow",
+    const followSellersMutation = useMutation({
+      mutationFn: FollowSeller,
+      mutationKey: ["follow-seller"],
+    });
+  
+    const followSellerHandler = async () => {
+      const payload: Partial<FollowBusiness> = {
+        user_id: parseInt(id!),
+        action: hasUserFlaggedSeller ? "unfollow": "follow",
+      };
+  
+      try {
+        await followSellersMutation.mutateAsync(payload, {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message,
+            });
+            queryClient.refetchQueries({
+              queryKey: ["get-sellers-followers"],
+            });
+          },
+        });
+      } catch (error: any) {
+        notification.error({
+          message: "Error",
+          description:errorMessage(error) || "An error occur",
+        });
+      }
     };
-
-    try {
-      await followBusinessMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          queryClient.refetchQueries({
-            queryKey: ["get-business-followers"],
-          });
-        },
-      });
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error),
-      });
-      console.log(error, "eee");
-    }
-  };
-  const handleFollowBusiness = () => {
-    if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
-        placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
-      });
-    } else {
-      followBusinessHandler();
-    }
-  };
-
+  
+  
+    const handleFollowSeller = () => {
+      if (!user) {
+        notification.error({
+          message: "Log in required",
+          description: "You need to log in to access this page!",
+          placement: "top",
+          duration: 4,
+          onClose: () => {
+            navigate(`/login?redirect=${currentPath}`);
+          },
+        });
+      } else {
+        followSellerHandler();
+      }
+    };
+  
   return (
     <>
       {getSellersDetailsQuery?.isLoading ? (
@@ -218,14 +212,14 @@ const SellerProfile = () => {
                   <div className={styles.followBtn}>
                     {user?.id !== sellersDetailsData?.id && (
                       <Button
-                        disabled={followBusinessMutation?.isPending}
-                        onClick={handleFollowBusiness}
+                        disabled={followSellersMutation?.isPending}
+                        onClick={handleFollowSeller}
                         text={
-                          userExists
-                            ? followBusinessMutation?.isPending
+                          hasUserFlaggedSeller
+                            ? followSellersMutation?.isPending
                               ? "Unfollowing"
                               : "Unfollow"
-                            : followBusinessMutation?.isPending
+                            : followSellersMutation?.isPending
                             ? "Following"
                             : "Follow"
                         }
@@ -285,8 +279,11 @@ const SellerProfile = () => {
                     icon={
                       <Image src={FlagLogo} alt="FlagLogo" preview={false} />
                     }
-                    text="Flag Seller"
+                    text={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
                     variant="redOutline"
+                    onClick={() => {
+                      setFlagSeller(true);
+                    }}
                   />
                   {/* </div> */}
 
@@ -385,6 +382,17 @@ const SellerProfile = () => {
         </div>
       )}
       <SellersAds showHeading={false} limit={4} />
+
+      <Modal
+        open={flagSeller}
+        onCancel={() => setFlagSeller(false)}
+        centered
+        title={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
+
+        footer={null}
+      >
+        <FlagSeller hasUserFlaggedSeller={hasUserFlaggedSeller} sellerId={sellersDetailsData?.id}  handleCloseModal={() => setFlagSeller(false)} />
+      </Modal>
     </>
   );
 };

@@ -10,7 +10,7 @@ import DeleteIcon from "../../../../assets/del.svg";
 import { App } from "antd";
 import { FlagJobApi } from "../../../request";
 import { errorMessage } from "../../../../utils/errorMessage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
@@ -25,42 +25,46 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
   const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
   const { id } = useParams(); // Extract job ID from URL
+  const queryClient = useQueryClient();
 
   const validationSchema = Yup.object().shape({
     reasonForFlag: Yup.string().required("Required"),
   });
 
-  const FlagJobMutation = useMutation({
+  const flagJobMutation = useMutation({
     mutationFn: FlagJobApi,
     mutationKey: ["flag-job"],
   });
 
-  const FlagJobHandler = async (values: FormikValues) => {
+  const flagJobHandler = async (values: FormikValues) => {
     const payload: Partial<FlagJob> = {
       job_id: id!,
-      applicant_id: user?.applicant?.id,
+      applicant_id: user?.id,
       action: "flag",
       reason: values.reasonForFlag,
     };
 
     try {
-      await FlagJobMutation.mutateAsync(payload, {
+      await flagJobMutation.mutateAsync(payload, {
         onSuccess: () => {
           // notification.success({
           //   message: "Success",
           //   description: data?.message,
           // });
-          setIsDeleteSuccessful(true)
+          queryClient.refetchQueries({
+            queryKey: ["get-flagged-job-by-userId"],
+          });
+          setIsDeleteSuccessful(true);
         },
       });
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: error?.response?.data?.error || errorMessage(error) || "An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
-      console.log(error?.response?.data?.error, 'error')
+      
     }
-    handleCloseModal()
+    handleCloseModal();
   };
 
   const handleFlag = () => {
@@ -68,9 +72,9 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
   };
 
   const handleDelete = () => {
-   ;
     setIsDeleteModal(false);
   };
+
 
   return (
     <div>
@@ -105,8 +109,7 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
                   <Button
                     variant="red"
                     type="submit"
-                    disabled={FlagJobMutation?.isPending}
-                    text={FlagJobMutation?.isPending ? "loading..." : "submit"}
+                    text={"submit"}
                     className={styles.btn}
                     // onClick={handleCloseModal}
                   />
@@ -117,13 +120,16 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
                 open={isDeleteModal}
                 handleCancel={() => setIsDeleteModal(false)}
                 title="Are You Sure You Want To Flag This Job?"
-                confirmText="Yes, Submit"
+                confirmText={
+                  flagJobMutation?.isPending ? "loading..." : "Yes, Submit"
+                }
                 cancelText="No, Go Back"
                 handleConfirm={async () => {
-                  await FlagJobHandler(values); // Pass current form values directly
+                  await flagJobHandler(values); // Pass current form values directly
                   handleDelete();
                 }}
                 icon={<img src={DeleteIcon} alt="DeleteIcon" />}
+                disabled={flagJobMutation?.isPending}
               />
             </Form>
           )}

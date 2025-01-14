@@ -102,6 +102,12 @@ interface FlagJob {
   action: string;
   reason: string;
 }
+interface FlagSeller{
+  user_id: number,
+  seller_id: number,
+  action: string,
+  reason: string
+}
 interface FollowBusinessDatum {
   business_id: number;
   created_at: string;
@@ -121,6 +127,7 @@ interface FlagJob {
   job_id: string;
   applicant_id: stirng;
   message: string;
+  user_id:number
 }
 
 interface AllBusinessesData {
@@ -318,6 +325,7 @@ interface UserData {
   country_code: string;
   created_at: string;
   dob: string | null;
+  date_of_birth?:string;
   email_token: string;
   email_token_status: number;
   email_unverified_until: string;
@@ -332,7 +340,7 @@ interface UserData {
   is_password_changed: string;
   last_login: string;
   local_government_area_id: number | null;
-  profile_image: string | null;
+  profile_image: string | null | any;
   register_method: string;
   remember_token: string | null;
   role: string;
@@ -490,7 +498,16 @@ interface ApplicantResponse {
   message: string;
   status: boolean;
   data: JobApplicationData;
+  
 }
+interface ApplicDetailsResponse {
+  message: string;
+  status: boolean;
+  data: JobApplication;
+  
+}
+
+
 
 interface JobApplicationData {
   current_page: number;
@@ -507,6 +524,7 @@ interface JobApplicationData {
   to: number;
   total: number;
   applicant:Applicant,
+ 
 }
 
 interface JobApplication {
@@ -519,6 +537,9 @@ interface JobApplication {
   created_at: string;
   updated_at: string;
   applicant: Applicant;
+  job:JobDatum
+  business:AllBusinessesDatum
+  related_jobs:JobDatum[]
 }
 
 interface ApplicationStatusPayload {

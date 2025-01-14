@@ -2,7 +2,7 @@ import { formatDistanceToNow ,format, parseISO} from "date-fns";
 
 
 export const getTimeAgo = (postedDate: string | null | undefined): string => {
-  if (!postedDate || postedDate.trim() === "") {
+  if (!postedDate || postedDate?.trim() === "") {
     return "Invalid date";
   }
 
@@ -62,6 +62,36 @@ export function formatDateToMonthYear(dateString: string | null): string {
 
   return `${month} ${year}`;
 }
+
+export function formatDateToDayMonthYear(dateString: string | null): string {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ""; // Check for invalid date
+
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const day = date.getDate();
+
+  // Determine the correct suffix for the day
+  const suffix = (day: number): string => {
+    if (day >= 11 && day <= 13) return "th"; // Special case for 11th, 12th, 13th
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  return `${day}${suffix(day)} of ${month}, ${year}`;
+}
+
 
 export const formatDateOnly = (dateString: string | null) => {
   if (!dateString) return ''; // Return an empty string or handle it as needed

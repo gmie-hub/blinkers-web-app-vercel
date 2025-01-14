@@ -47,6 +47,7 @@ import ViewApplicant from "./screens/profile/businessInformation/postedJob/appli
 import CreateAd from "./screens/profile/myAds/createAds";
 import EditAds from "./screens/profile/myAds/editAd";
 import MyAds from "./screens/profile/myAds/myAds";
+import MyApplicantsDetails from "./screens/profile/myApplication/myApplicationDetails";
 import SellerVerification from "./screens/Auth/sellerVerificationModal";
 
 
@@ -102,6 +103,7 @@ function App() {
     { path: routes.profile.editAds, element: <EditAds /> },
 
     { path: routes.profile.myAds, element: <MyAds /> },
+    { path: routes.profile.myapplicationDetails, element: <MyApplicantsDetails /> },
 
   ];
 

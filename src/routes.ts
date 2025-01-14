@@ -8,7 +8,7 @@ export const routes = {
     review: "/review/:id",
     productReview: "/product-review/:id",
     sellersProfile: "/sellers-profile/:id",
-    posetedAdsBySeller: "/sellers-posted-ads",
+    posetedAdsBySeller: "/sellers-posted-ads/:id",
     // writeReview: "/write-review/:id",
     writeReviewForBusiness: "/write-review/:id",
     ContactUs: "/contact-us",
@@ -49,7 +49,9 @@ export const routes = {
     viewApplicant: "/jobs/view-applicant/:id",
     createAd: "/create-ad",
     editAds: "/edit-ad/:id",
-    myAds:'/my-ads'
+    myAds:'/my-ads',
+    myapplicationDetails:'/my-application-details/:id/:applicationDetailsId'
+
 
   },
 

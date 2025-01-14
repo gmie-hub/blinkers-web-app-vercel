@@ -92,3 +92,26 @@
   display: flex;
   justify-content: space-between;
 }
+
+.abs {
+  position: relative;
+  display: inline-block;
+}
+
+.profile {
+  width: 13.8rem;
+  height: 13.8rem;
+  border-radius: 5%;
+  background-color: aliceblue;
+  padding: 1rem;
+}
+
+.abs img:last-child {
+  position: absolute;
+  bottom: 2rem;
+  left: 8rem;
+  width: 4rem;
+  height: 4rem;
+  transform: translate(50%, 50%);
+  border-radius: 50%;
+}

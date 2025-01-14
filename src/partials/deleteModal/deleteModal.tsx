@@ -16,9 +16,10 @@ interface Props {
   confirmVariant?: 'red' | 'greenOutline' | 'default';
   cancelVariant?: 'red' | 'greenOutline' | 'default';
   icon?: ReactNode;
+  disabled?:boolean;
 }
 
-const ReusableModal = ({
+const ReusableDeleteModal = ({
   open,
   handleCancel,
   handleConfirm,
@@ -26,6 +27,7 @@ const ReusableModal = ({
   description = '',
   confirmText = 'Confirm',
   cancelText = 'Cancel',
+  disabled ,
 //   confirmVariant = 'red',
 //   cancelVariant = 'greenOutline',
   icon =<Image src={ProductIcon} alt="ProductIcon" preview={false} />
@@ -57,6 +59,7 @@ const ReusableModal = ({
             type="submit"
             text={confirmText}
             className={styles.btn}
+            disabled={disabled}
           />
         </div>
       </section>
@@ -64,4 +67,4 @@ const ReusableModal = ({
   );
 };
 
-export default ReusableModal;
+export default ReusableDeleteModal;

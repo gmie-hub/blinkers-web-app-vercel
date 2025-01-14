@@ -1,17 +1,16 @@
 import styles from "./styles.module.scss";
-import CallIcon from "../../../assets/callclaim.svg";
+import Profile from "../../../assets/Avatarprofile.svg";
 import CameraIcon from "../../../assets/camera.svg";
 import { Form, Formik, FormikValues } from "formik";
 import Input from "../../../customs/input/input";
 import Button from "../../../customs/button/button";
-import { getAllState, getLGAbyStateId } from "../../request";
+import { basicInfoApi, getAllState, getLGAbyStateId } from "../../request";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import SearchableSelect from "../../../customs/searchableSelect/searchableSelect";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import { App } from "antd";
-import { SellerSignUpCall } from "../../Auth/request";
 import { errorMessage } from "../../../utils/errorMessage";
 import * as Yup from "yup";
 interface Props {
@@ -19,37 +18,40 @@ interface Props {
 }
 
 const YourProfile = ({ profileData }: Props) => {
-  const [stateId, setStateId] = useState(0);
+  const [stateId, setStateId] = useState(profileData?.state_id);
   const user = useAtomValue(userAtom);
   const { notification } = App.useApp();
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<any>(null);
   const queryClient = useQueryClient();
+  const [previewImage, setPreviewImage] = useState<string | null>(null); // For preview
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: Function
+  ) => {
     if (!e.target?.files) return;
     const selectedFile = e.target?.files[0];
 
-    // Validate if the file is an image
-    const validImageTypes = [
+    // Define valid file types
+    const validFileTypes = [
       "image/jpeg",
+      "image/jpg",
       "image/png",
       "image/gif",
-      "image/svg+xml",
     ];
-    if (!validImageTypes.includes(selectedFile.type)) {
+
+    // Validate if the file type is valid
+    if (!validFileTypes.includes(selectedFile.type)) {
       notification.error({
         message: "Invalid File Type",
-        description: "Please upload a valid image (JPEG, PNG, GIF,SVG).",
+        description:
+          "The logo field must be a file of type: jpg, jpeg, png, gif, docx, doc, ppt.",
       });
       return;
     }
-
-    // Update the profile image
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileImage(reader.result as string);
-    };
-    reader.readAsDataURL(selectedFile);
+    setFieldValue("profile_image", selectedFile);
+    setProfileImage(selectedFile);
+    setPreviewImage(URL.createObjectURL(selectedFile)); // Generate preview URL
   };
 
   const [getStateQuery, getLGAQuery] = useQueries({
@@ -99,40 +101,46 @@ const YourProfile = ({ profileData }: Props) => {
     setFieldValue("local_government_area_id", "");
   };
 
-  const SignUpMutation = useMutation({
-    mutationFn: SellerSignUpCall,
-    mutationKey: ["sign-up"],
+  const basicInfoMutation = useMutation({
+    mutationFn: basicInfoApi,
   });
 
-  const SignUpHandler = async (values: FormikValues) => {
-    const payload: Partial<SellerSignUpData> = {
-      name: values?.name,
-      number: values?.number,
-      address: values?.address,
-      address_lat: values?.address,
-      address_long: values?.address,
-      //   email: values?.email,
-      store_name: values?.store_name,
-      store_bio: values?.store_bio,
-      state_id: values?.state_id,
-      local_government_area_id: values?.local_government_area_id,
-      profile_image: values?.profile_image,
-      facebook_address: values?.facebook_address,
-      instagram_address: values?.instagram_address,
-      twitter_address: values?.twitter_address,
-      website_address: values?.website_address,
-    };
+  const basicInfoHandler = async (values: FormikValues) => {
+    const formData = new FormData();
+
+    formData.append("name", values?.name);
+    formData.append("store_name", values?.store_name);
+    formData.append("address", values?.address);
+
+    formData.append("state_id", values?.state_id);
+
+    formData.append(
+      "local_government_area_id",
+      values?.local_government_area_id
+    );
+
+    formData.append("facebook_address", values?.facebook_address);
+    formData.append("instagram_address", values?.instagram_address);
+    formData.append("twitter_address", values?.twitter_address);
+    formData.append("website_address", values?.website_address);
+
+    if (profileImage) {
+      formData.append("profile_image", profileImage);
+    }
+    formData.append("_method", "patch");
 
     try {
-      await SignUpMutation.mutateAsync(payload, {
+      await basicInfoMutation.mutateAsync(formData, {
         onSuccess: (data) => {
           notification.success({
             message: "Success",
             description: data?.message,
           });
+          setProfileImage(null);
           queryClient.refetchQueries({
             queryKey: ["get-all-jobs"],
           });
+          // handleNext();
         },
       });
     } catch (error: any) {
@@ -140,27 +148,26 @@ const YourProfile = ({ profileData }: Props) => {
         message: "Error",
         description: errorMessage(error) || "An error occurred",
       });
+
+      setProfileImage(null);
     }
   };
   const validationSchema = Yup.object().shape({
     address: Yup.string().required("required").max(55),
   });
 
-
-  
   return (
     <div>
       <Formik
-        enableReinitialize
         initialValues={{
           name: profileData?.name || "",
           address: profileData?.address || "",
           email: profileData?.email,
           number: profileData?.number || "",
-          store_name: "",
+          store_name: profileData?.store_name || "",
           store_bio: "",
-          state_id: "",
-          local_government_area_id: "",
+          state_id: profileData?.state_id || "",
+          local_government_area_id: profileData?.local_government_area_id || "",
           profile_image: profileData?.profile_image || "",
           facebook_address: profileData?.facebook_address || "",
           instagram_address: profileData?.instagram_address || "",
@@ -168,8 +175,9 @@ const YourProfile = ({ profileData }: Props) => {
           website_address: profileData?.website_address || "",
         }}
         onSubmit={(values) => {
-          SignUpHandler(values);
+          basicInfoHandler(values);
         }}
+        enableReinitialize={true}
         validationSchema={validationSchema}
       >
         {({ setFieldValue }) => {
@@ -177,36 +185,53 @@ const YourProfile = ({ profileData }: Props) => {
             <Form>
               <div>
                 <p style={{ fontWeight: "bold" }}>Edit Profile</p>
-                <div className={styles.imageContainer}>
+
+                <div className={styles.abs}>
                   <img
-                    className={styles.profileImg}
-                    src={profileImage || CallIcon}
-                    alt="ProfileImg"
-                  />
-                  <img
-                    className={styles.cameraIcon}
-                    src={CameraIcon}
-                    alt="CameraIcon"
+                    src={
+                      previewImage
+                        ? previewImage
+                        : profileData?.profile_image || Profile
+                    }
+                    alt="profile"
+                    className={styles.profile}
+                    style={{ cursor: "pointer" }}
                     onClick={() =>
                       document.getElementById("fileInput")?.click()
                     }
                   />
-                  <input
-                    type="file"
-                    id="fileInput"
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
+                  <img
+                    src={CameraIcon}
+                    alt="Camera"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      document.getElementById("fileInput")?.click()
+                    }
+
                   />
                 </div>
+                <input
+                  name="profile_image"
+                  type="file"
+                  id="fileInput"
+                  style={{ display: "none" }}
+                  onChange={(e) => handleFileChange(e, setFieldValue)}
+                />
+
+
                 {user?.role === "2" ? (
                   <div>
                     <div className={styles.inputContainer}>
                       <Input name="store_name" placeholder="Store name" />
-                      <Input name="email" placeholder="Email" />
+                      <Input name="email" placeholder="Email" disabled={true} />
                     </div>
                     <div className={styles.inputContainer}>
                       <Input name="address" placeholder="Address" />
-                      <Input name="number" placeholder="Phone number" />
+                      <Input
+                        name="number"
+                        placeholder="Phone number"
+                        disabled={true}
+                      />
                     </div>
                     <br />
 
@@ -270,7 +295,8 @@ const YourProfile = ({ profileData }: Props) => {
                     <br />
                   </div>
                 )}
-                <br /><br />
+                <br />
+                <br />
 
                 <Button
                   variant="green"

@@ -1,5 +1,5 @@
 // import styles from './index.module.scss';
-import { PaginationProps, Spin, Table } from 'antd';
+import { PaginationProps, Spin, Table, Tabs, TabsProps } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
@@ -15,6 +15,7 @@ const Applicants = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const { id } = useParams();
+  const [status, setStatus] = useState('0')
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
@@ -51,10 +52,11 @@ const Applicants = () => {
       key: 'status',
       render: (_, { status }) => (
         <StatusBadge
-          status={status === '0' ? 'InActive' : status === '1' ? 'Pending' : status === '2' ? 'Approved' : 'Rejected'}
+          status={status === '0' ? 'Pending' : status === '1' ? 'Shortlisted' : status === '2' ? 'Rejected' : 'Approved'}
         />
       ),
     },
+    
     {
       title: 'Action',
       key: 'action',
@@ -75,9 +77,9 @@ const Applicants = () => {
   const [getAllApplicantQuery] = useQueries({
     queries: [
       {
-        queryKey: ['get-all-job-applicants',id],
+        queryKey: ['get-all-job-applicants',id,status],
         // queryFn: () => getjobApplicationbyJobId(parseInt(id!)),
-        queryFn: ()=>getAllApplication(currentPage,parseInt(id!)),
+        queryFn: ()=>getAllApplication(currentPage,parseInt(id!), parseInt(status)),
         retry: 0,
         refetchOnWindowFocus: false,
       },
@@ -89,6 +91,20 @@ const Applicants = () => {
   const jobApplicantsError = getAllApplicantQuery?.error as AxiosError;
   const jobApplicantsErrorMessage = jobApplicantsError?.message || 'An error occurred. Please try again later.';
 
+
+  
+  const items: TabsProps["items"] = [
+    { key: "0", label: "Pending" },
+    { key: "1", label: "Shortlisted" },
+    { key: "3", label: "Rejected" },
+    { key: "2", label: "Approved" },
+  ];
+
+  const handleTabChange = (key: string) => {
+    setStatus(key);
+    localStorage?.setItem("activeTabKeyBasicInfo", key);
+  };
+ 
   return (
     <div className='wrapper'>
       {/* <Card style={styles.card}> */}
@@ -108,6 +124,16 @@ const Applicants = () => {
       ) : getAllApplicantQuery?.isError ? (
         <h1 className="error">{jobApplicantsErrorMessage}</h1>
       ) : (
+
+        <>
+         <div>
+            <Tabs
+              activeKey={status}
+              onChange={handleTabChange}
+              items={items}
+            />
+          </div>
+          
         <Table
           columns={columns}
           dataSource={Applicants}
@@ -124,6 +150,7 @@ const Applicants = () => {
             
           }}
         />
+        </>
       )}
     </div>
   );

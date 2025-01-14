@@ -9,6 +9,7 @@ import {
   FollowSeller,
   getApplicantsbyId,
   getBusinessById,
+  getFlaggedSellerBySeller_idUser_id,
   getFollowersByBusiness_id,
   getFollowersByUser_id,
   getProductDetails,
@@ -47,8 +48,8 @@ const Main = () => {
     getSellersFollowersQuery,
     getBusinessDetailsQuery,
     getBusinessFollowersQuery,
-
     getUserDetailsQuery,
+    getFlaggedSellerQuery,
 
   ] = useQueries({
     queries: [
@@ -87,8 +88,21 @@ const Main = () => {
         refetchOnWindowFocus: true,
         enabled: !!sellerId,
       },
+      {
+        queryKey: ["get-flagged-sellers"],
+        queryFn: ()=> getFlaggedSellerBySeller_idUser_id(user?.id!,sellerId!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled:!!sellerId
+      },
     ],
   });
+
+    
+  const hasUserFlaggedSeller = getFlaggedSellerQuery?.data?.data?.data?.some(
+    (item) => item?.user_id === user?.id
+  );
+
   const isUserFollowingBusiness = getBusinessFollowersQuery?.data?.data?.data?.some(
     (item) => item?.user_id === user?.id
   );
@@ -129,7 +143,7 @@ const Main = () => {
     const payload: Partial<FollowBusiness> = {
       business_id: productDetailsData?.business_id || 0,
       user_id: user?.id,
-      action: "follow",
+      action: isUserFollowingBusiness ? "unfollow": "follow",
     };
 
     try {
@@ -177,7 +191,7 @@ const Main = () => {
   const followSellerHandler = async () => {
     const payload: Partial<FollowBusiness> = {
       user_id: sellerId!,
-      action: "follow",
+      action: isUserFollowingSeller ? "unfollow": "follow",
     };
 
     try {
@@ -188,7 +202,7 @@ const Main = () => {
             description: data?.message,
           });
           queryClient.refetchQueries({
-            queryKey: ["get-business-followers"],
+            queryKey: ["get-sellers-followers"],
           });
         },
       });
@@ -243,6 +257,7 @@ const Main = () => {
               isUserFollowingSeller={isUserFollowingSeller}
               businessDetailsData={businessDetailsData}
               profileDetailsData={profileDetailsData}
+              hasUserFlaggedSeller={hasUserFlaggedSeller}
             /> // Render SmallScreen on small screens
           ) : (
             <BigScreen
@@ -255,6 +270,8 @@ const Main = () => {
               isUserFollowingSeller={isUserFollowingSeller}
               businessDetailsData={businessDetailsData}
               profileDetailsData={profileDetailsData}
+              hasUserFlaggedSeller={hasUserFlaggedSeller}
+
             /> // Render BigScreen on larger screens
           )}
         </div>

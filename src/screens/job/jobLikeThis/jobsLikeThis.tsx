@@ -86,12 +86,27 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
                     </div>
                   </div>
                   <div className={styles.full}>
-                    <span>{item?.employment_type}</span>{" "}
-                    <span className={styles.dot}></span>
-                    <span>{item?.job_type}</span>{" "}
-                    <span className={styles.dot}></span>
-                    <span>{item?.level}</span>
-                    <p className={styles.posted}>
+                  <span>
+                      {" "}
+                      {item?.employment_type &&
+                        item?.employment_type?.length > 0 &&
+                        item?.employment_type?.charAt(0).toUpperCase() +
+                          item?.employment_type?.slice(1)}
+                    </span>{" "}                    <span className={styles.dot}></span>
+                    <span>
+                      {" "}
+                      {item?.job_type &&
+                        item?.job_type?.length > 0 &&
+                        item?.job_type?.charAt(0)?.toUpperCase() +
+                          item?.job_type?.slice(1)}
+                    </span>{" "}                    <span className={styles.dot}></span>
+                    <span>
+                      {" "}
+                      {item?.level &&
+                        item?.level?.length > 0 &&
+                        item?.level?.charAt(0)?.toUpperCase() +
+                          item?.level?.slice(1)}
+                    </span>                    <p className={styles.posted}>
                       {getTimeAgo(item?.created_at || "")}
                     </p>
                   </div>

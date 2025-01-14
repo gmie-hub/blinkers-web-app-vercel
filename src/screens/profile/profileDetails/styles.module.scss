@@ -14,7 +14,6 @@
   padding: 2rem !important;
 }
 
-
 // .leftColumn {
 //   flex: 0 0 30%; /* 30% width */
 //   display: flex;
@@ -50,14 +49,6 @@
   }
 }
 
-
-.profileImg {
-  border-radius: 50%;
-  width: 10rem;
-  height: 10rem;
-  object-fit: cover;
-}
-
 // .container {
 //   display: grid;
 //   grid-template-columns: repeat(1, 1fr); /* Two columns */
@@ -75,23 +66,6 @@
 //   word-wrap: break-word; /* Ensure long words break to the next line */
 //   white-space: normal;
 // }
-
-.cameraIcon {
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-  bottom: 10px; /* Adjust this value to move the camera icon up or down */
-  left: 50%;
-  transform: translateX(-50%); /* This centers the camera icon horizontally */
-  cursor: pointer; /* Optional: Adds a pointer cursor on hover */
-}
-
-.imageContainer {
-  position: relative;
-  display: inline-block;
-}
-
-
 
 .delete {
   background: transparent !important;
@@ -115,13 +89,6 @@
   .container {
     grid-template-columns: 1fr; /* Single column for small screens */
   }
-
- 
-
-  .profileImg {
-    width: 8rem;
-    height: 8rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -135,19 +102,7 @@
   .smalcard {
     padding: 8px;
   }
-
-  .cameraIcon {
-    width: 1.5rem;
-    height: 1.5rem;
-    bottom: 5px;
-  }
-
-  .profileImg {
-    width: 6rem;
-    height: 6rem;
-  }
 }
-
 
 .inputContainer {
   display: flex;
@@ -185,4 +140,28 @@
   box-sizing: border-box; /* Include padding and border in width calculations */
   word-wrap: break-word; /* Break long words */
   white-space: normal; /* Allow text to wrap */
+}
+
+
+.abs {
+  position: relative;
+  display: inline-block;
+}
+
+.profile {
+  width: 13.8rem;
+  height: 13.8rem;
+  border-radius: 50%;
+  background-color: aliceblue;
+  padding: 1rem;
+}
+
+.abs img:last-child {
+  position: absolute;
+  bottom: 2rem;
+  left: 8rem;
+  width: 4rem;
+  height: 4rem;
+  transform: translate(50%, 50%);
+  border-radius: 50%;
 }

@@ -20,8 +20,12 @@ export const getAllJobs = async (page: number, search?: string | number) => {
 export const getAllState = async () => {
   return (await api.get(`states?per_page=${40}`))?.data as StateResponse;
 };
-export const getMyApplications = async (page: number,user_id:number) => {
-  return (await api.get(`jobs/application?page=${page}&user_id=${user_id}`))?.data as JobResponse;
+export const getMyApplications = async (page: number,user_id:number,status:number) => {
+  return (await api.get(`jobs/application?page=${page}&user_id=${user_id}&status=${status}`))?.data as ApplicantResponse;
+};
+
+export const getMyApplicationDetails = async (id: number) => {
+  return (await api.get(`jobs/application/${id}`))?.data as ApplicDetailsResponse;
 };
 
 
@@ -47,6 +51,8 @@ export const getIndustries = async (page?: number) => {
 export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };
+
+
 
 export const getSubCategory = async (id: number) => {
   return (await api.get(`categories/sub?category_id=${id}`))
@@ -158,6 +164,14 @@ export const UpdateAds = async (payload: Partial<ProductDatum>) => {
   return (await api.patch(`ads/${payload.id}`, payload, {}))?.data as Response;
 };
 
+export const basicInfoApi = async (payload: FormData) => {
+  return (
+    await api.post("/users/update", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+  )?.data;
+};
+
 
 export const ClaimBusinessApi = async (payload: FormData) => {
   return (
@@ -202,8 +216,9 @@ export const  deleteAdsGalarybyId = async ({ add_id, image_ids }: { add_id: numb
 };
 
 
-export const getAdsByUserId = async (id: number) => {
-  return (await api.get(`/ads?user_id=1299&per_page=50${id}`))
+export const getAdsByUserId = async (user_id:number,page: number) => {
+  return (await api.get(`/ads?user_id=${user_id}&page=${page}&per_page=${50}`))
+
     ?.data as AllProductaResponse;
 };
 
@@ -212,6 +227,7 @@ export const getApplicantsbyId = async (id: number) => {
     ?.data as UserDataResponse;
 };
 
+
 export const getBusinessById = async (id: number) => {
   return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;
 };
@@ -219,6 +235,17 @@ export const getFollowersByUser_id = async (follower_id: number,user_id: number)
   return (await api.get(`followers?follower_id=${follower_id}&user_id=${user_id}`))
     ?.data as BusinessFollowersResponse;
 };
+
+
+export const getFlaggedSellerBySeller_idUser_id = async (user_id: number,seller_id: number) => {
+  return (await api.get(`sellers/flag?user_id=${user_id}&seller_id=${seller_id}`))
+    ?.data as BusinessFollowersResponse;
+};
+export const getFlaggedJobByJob_idUser_id = async (job_id: number,user_id: number) => {
+  return (await api.get(`jobs/flag?job_id=${job_id}&user_id=${user_id}`))
+    ?.data as any;
+};
+
 export const getFollowersByBusiness_id = async (user_id: number,business_id: number) => {
   // return (await api.get(`business/followers?business_id=${business_id}`))
   return (await api.get(`business/followers?user_id=${user_id}&business_id=${business_id}`))
@@ -229,6 +256,11 @@ export const getFollowersByBusiness_id = async (user_id: number,business_id: num
 export const FlagJobApi = async (payload: Partial<FlagJob>) => {
   return (await api.post("/jobs/flag/toggle", payload))?.data as Response;
 };
+
+export const FlagSellerApi = async (payload: Partial<FlagSeller>) => {
+  return (await api.post("/sellers/flag/toggle", payload))?.data as Response;
+};
+
 
 export const ApplyForJobApi = async (payload: Partial<FlagJob>) => {
   return (await api.post("/jobs/application", payload))?.data as Response;
@@ -351,8 +383,8 @@ export const UpdateJob = async (payload: Partial<JobDatum>) => {
   return (await api.patch(`jobs/${payload.id}`, payload, {}))?.data as Response;
 };
 
-export const getAllApplication = async (page: number,job_id:number) => {
-  return (await api.get(`jobs/application?page=${page}&job_id=${job_id}`))?.data as any;
+export const getAllApplication = async (page: number,job_id:number,status:number) => {
+  return (await api.get(`jobs/application?page=${page}&job_id=${job_id}&status=${status}`))?.data as any;
 };
 export const getApplicationDetails = async (id: number) => {
   return (await api.get(`jobs/application/${id}`))?.data as ApplicantResponse;

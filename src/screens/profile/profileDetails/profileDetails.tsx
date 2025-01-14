@@ -11,12 +11,15 @@ import YourProfile from "./yourProfile";
 import Button from "../../../customs/button/button";
 import { App } from "antd";
 import { errorMessage } from "../../../utils/errorMessage";
-import { useNavigate } from "react-router-dom";
+import { logout } from "../../../utils/logout";
+import ReusableModal from "../../../partials/deleteModal/deleteModal";
+import { useState } from "react";
+import DeleteIcon from "../../../assets/del.svg";
 
 const ProfileDetails = () => {
   const user = useAtomValue(userAtom);
   const { notification } = App.useApp();
-  const navigate = useNavigate()
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
 
   const [getProfileQuery] = useQueries({
     queries: [
@@ -42,7 +45,7 @@ const ProfileDetails = () => {
         message: "Success",
         description: "Deleted successfully",
       });
-      navigate('/login')
+      logout();
     },
   });
 
@@ -50,7 +53,6 @@ const ProfileDetails = () => {
     try {
       // Call mutateAsync without the onSuccess callback, because it's already defined in useMutation
       await deleteUserMutation.mutateAsync();
-
     } catch (error: any) {
       // Handle error if the mutation fails
       notification.error({
@@ -59,6 +61,8 @@ const ProfileDetails = () => {
       });
     }
   };
+
+
 
   return (
     <div>
@@ -111,11 +115,29 @@ const ProfileDetails = () => {
           </div>
           <div className={styles.rightColumn}>
             <ChangePassword />
-            <Button onClick={DeleteUserHandler} type="button" text="Delete Account" variant="redOutline" />
+            <Button
+              onClick={()=>{setIsDeleteModal(true);}}
+              type="button"
+              text="Delete Account"
+              variant="redOutline"
+            />
           </div>
         </div>
       )}
-    
+
+      <ReusableModal
+        open={isDeleteModal}
+        handleCancel={() => setIsDeleteModal(false)}
+        title="Are You Sure You Want to Delete Your Account?"
+        confirmText="Yes, Submit"
+        cancelText="No, Go Back"
+        handleConfirm={
+          DeleteUserHandler
+        }
+        icon={<img src={DeleteIcon} alt="DeleteIcon" />}
+      />
+
+     
     </div>
   );
 };

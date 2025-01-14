@@ -320,7 +320,10 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     if (id) {
       formData.append("user_id", id?.toString()); // Convert id to string and append
     }
-    formData.append("cv", upload as File);
+    if(upload){
+      formData.append("cv", upload as File);
+
+    }
     // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
 
     if (uploadedCoverLetter) {

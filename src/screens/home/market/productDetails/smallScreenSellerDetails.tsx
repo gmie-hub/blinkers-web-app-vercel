@@ -53,6 +53,8 @@ interface Props {
   isUserFollowingSeller?:boolean;
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
+  hasUserFlaggedSeller?:boolean;
+
 }
 
 const SmallScreen = ({
@@ -65,6 +67,7 @@ const SmallScreen = ({
   isUserFollowingBusiness,
   isUserFollowingSeller,
   profileDetailsData,
+  hasUserFlaggedSeller,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -74,6 +77,7 @@ const SmallScreen = ({
   const [isNumberVisible, setIsNumberVisible] = useState(false);
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
+  
 
   const items: TabsProps["items"] = [
     {
@@ -500,7 +504,7 @@ const SmallScreen = ({
                             preview={false}
                           />
                         }
-                        text="Flag Seller"
+                        text={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
                         variant="redOutline"
                         onClick={() => {
                           setFlagSeller(true);
@@ -640,7 +644,7 @@ const SmallScreen = ({
         title="Flag Seller"
         footer={null}
       >
-        <FlagSeller handleCloseModal={() => setFlagSeller(false)} />
+        <FlagSeller hasUserFlaggedSeller={hasUserFlaggedSeller} sellerId={productDetailsData?.user_id} handleCloseModal={() => setFlagSeller(false)} />
       </Modal>
     </main>
   );

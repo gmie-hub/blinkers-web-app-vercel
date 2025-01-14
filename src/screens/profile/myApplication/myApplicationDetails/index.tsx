@@ -1,73 +1,50 @@
-import Button from "../../../customs/button/button";
-import styles from "./jobDetails.module.scss";
-import FlagJobicon from "../../../assets/flag.svg";
-import JobLocation from "../../../assets/joblocation.svg";
-import StatusBadge from "../../../partials/statusBadge/statusBadge";
-import ArrowIcon from "../../../assets/arrow-right-green.svg";
-import MoreJobsLikeThis from "../jobLikeThis/jobsLikeThis";
+import styles from "./style.module.scss";
+import FlagJobicon from "../../../../assets/flag.svg";
+import JobLocation from "../../../../assets/joblocation.svg";
+import ArrowIcon from "../../../../assets/arrow-right-green.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import { App, Modal } from "antd";
 import { useState } from "react";
-import FlagJob from "./flagJob/flagJob";
-import { useMutation, useQueries } from "@tanstack/react-query";
-import { ApplyForJobApi, getFlaggedJobByJob_idUser_id, getJobDetails } from "../../request";
+import {  useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { formatAmount, getTimeAgo } from "../../../utils/formatTime";
 import DOMPurify from "dompurify";
-import JobTypeIcon from "../../../assets/jobtype.svg";
-import WorkIcon from "../../../assets/jobarrange.svg";
-import JobLevelIon from "../../../assets/joblevel.svg";
-import SalaryIcon from "../../../assets/salary.svg";
-import RouteIndicator from "../../../customs/routeIndicator";
-import { userAtom } from "../../../utils/store";
+import JobTypeIcon from "../../../../assets/jobtype.svg";
+import WorkIcon from "../../../../assets/jobarrange.svg";
+import JobLevelIon from "../../../../assets/joblevel.svg";
+import SalaryIcon from "../../../../assets/salary.svg";
 import { useAtomValue } from "jotai";
-import { routes } from "../../../routes";
-import ModalContent from "../../../partials/successModal/modalContent";
-import { errorMessage } from "../../../utils/errorMessage";
-import CustomSpin from "../../../customs/spin";
+import { userAtom } from "../../../../utils/store";
+import { getFlaggedJobByJob_idUser_id, getMyApplicationDetails } from "../../../request";
+import CustomSpin from "../../../../customs/spin";
+import RouteIndicator from "../../../../customs/routeIndicator";
+import FlagJob from "../../../job/jobDetails/flagJob/flagJob";
+import MoreJobsLikeThis from "../../../job/jobLikeThis/jobsLikeThis";
+import { formatAmount, formatDateToDayMonthYear, formatDateToMonthYear, getTimeAgo } from "../../../../utils/formatTime";
+import StatusBadge from "../../../../partials/statusBadge/statusBadge";
+import Button from "../../../../customs/button/button";
 
-const JobDetails = () => {
+const MyApplicationDetails = () => {
   const navigate = useNavigate();
-  const [flagJob, setFlagJob] = useState(false);
+  const [flagJob,setFlagJob] = useState(false);
   const { id } = useParams();
-  const user = useAtomValue(userAtom);
-  const [regModal, setRegModal] = useState(false);
+  const { applicationDetailsId } = useParams();
   const { notification } = App.useApp();
-  const currentPath = location.pathname;
+  const user = useAtomValue(userAtom);
+
 
   const handleNavigateToMoreJob = () => {
     navigate(`/job/more-jobs-like-this/${id}`);
-    window.scrollTo(0, 0);
-  };
-  const handleNavigateApplyToJob = () => {
-    // if (!user) {
-    //   notification.error({
-    //     message: "Log in required",
-    //     description: "You need to log in to access this page!",
-    //     placement: "top",
-    //     duration: 3,
-    //     onClose: () => {
-    //       navigate(`/login?redirect=${currentPath}`);
-    //     },
-    //   });
-    // } else 
-    if (user?.is_applicant) {
-      // navigate(`/job/apply/${id}`);
-      ApplyJobHandler();
-    } else {
-      setRegModal(true);
-    }
     window.scrollTo(0, 0);
   };
 
   const [getJobDetailsQuery,getFlaggedJobQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-jobs-details", id],
-        queryFn: () => getJobDetails(parseInt(id!)),
+        queryKey: ["get-jobs-application-details", applicationDetailsId],
+        queryFn: () => getMyApplicationDetails(parseInt(applicationDetailsId!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!id,
+        enabled: !!applicationDetailsId,
       },
       {
         queryKey: ["get-flagged-job-by-userId",id],
@@ -79,6 +56,9 @@ const JobDetails = () => {
     ],
   });
 
+
+  const hasUserFlaggedJob = getFlaggedJobQuery?.data?.data?.data?.length > 0;
+
   const JobDetailsData = getJobDetailsQuery?.data?.data;
   const jobDetailsError = getJobDetailsQuery?.error as AxiosError;
   const jobDetailsErrorMessage =
@@ -87,7 +67,7 @@ const JobDetails = () => {
   const getStatus = () => {
     let status;
 
-    switch (JobDetailsData?.status) {
+    switch (JobDetailsData?.job?.status) {
       case "0":
         status = "InActive";
         break;
@@ -103,67 +83,32 @@ const JobDetails = () => {
 
     return status;
   };
-  const handleFlagJob = () => {
-    if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
-        placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
-      });
-    } else if (user.is_applicant) {
-      setFlagJob(true);
-    } else {
-      setRegModal(true);
+
+  const getApplicationStatus = () => {
+    let status;
+
+    switch (JobDetailsData?.status) {
+      case "0":
+        status = "Pending";
+        break;
+      case "1":
+        status = "Shortlisted";
+        break;
+      case "2":
+        status = "Rejected";
+        break;
+      default:
+        status = "Approved";
     }
+
+    return status;
   };
-
-  const handleRegModal = () => {
-    navigate(routes?.job?.RegAsApplicant);
-  };
-
-  const ApplyJobMutation = useMutation({
-    mutationFn: ApplyForJobApi,
-    mutationKey: ["apply-job"],
-  });
-  console.log(user?.applicant?.id)
-
-  const ApplyJobHandler = async () => {
-    const payload: Partial<FlagJob> = {
-      job_id: id!,
-      applicant_id: user?.applicant?.id,
-      message: "Applying",
-    };
-
-    try {
-      await ApplyJobMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-        },
-      });
-    } catch (error: any) {
-      notification.error({
-        message: "Error",
-        description:
-       
-          errorMessage(error) ||
-          "An error occurred",
-      });
-    }
-  };
-  const hasUserFlaggedJob = getFlaggedJobQuery?.data?.data?.data?.length > 0;
 
 
   return (
     <main>
       {getJobDetailsQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getJobDetailsQuery?.isError ? (
         <h1 className="error">{jobDetailsErrorMessage}</h1>
       ) : (
@@ -183,9 +128,9 @@ const JobDetails = () => {
               </span>
               <span className={styles.location}>
                 <img src={JobLocation} alt="JobLocation" />
-                <p>{JobDetailsData?.location}</p>
+                <p>{JobDetailsData?.job?.location}</p>
               </span>
-              <h3 className={styles.jobTitle}>{JobDetailsData?.title}</h3>
+              <h3 className={styles.jobTitle}>{JobDetailsData?.job?.title}</h3>
               <div className={styles.open}>
                 <span style={{ color: "#009900" }}>
                   {getTimeAgo(JobDetailsData?.created_at)}
@@ -193,7 +138,7 @@ const JobDetails = () => {
                 <div className={styles.dot}></div>
 
                 <span style={{ color: "#828282" }}>
-                  {JobDetailsData?.total_applicant} Applicants
+                  {JobDetailsData?.job?.total_applicant} Applicants
                 </span>
 
                 <StatusBadge status={getStatus()} />
@@ -207,7 +152,7 @@ const JobDetails = () => {
                     type="submit"
                     text="Apply For Job"
                     className="buttonStyle"
-                    onClick={handleNavigateApplyToJob}
+                    // onClick={handleNavigateApplyToJob}
                   />
                 </div>
               )}
@@ -219,29 +164,40 @@ const JobDetails = () => {
                   text={hasUserFlaggedJob ? "Unflag This Job" : "Flag This Job"}
                   className={styles.buttonStyle}
                   icon={<img src={FlagJobicon} alt="FlagJobicon" />}
-                  onClick={handleFlagJob}
+                  onClick={()=>{setFlagJob(true)}}
                 />
               </div>
             </div>
           </section>
           <div style={{ marginBlockStart: "4rem" }}>
-            {JobDetailsData?.status?.toString() !== "1" && (
+            {JobDetailsData?.job?.status?.toString() !== "1" && (
               <p style={{ color: "#E21B1B" }}>
                 This job is no longer accepting applications
               </p>
             )}
+            <p>You applied for this job on the {formatDateToDayMonthYear(JobDetailsData?.created_at!)}</p>
+            {JobDetailsData?.status === '3' &&
+            <p>Thank you for applying, Unfortunately you were not selected for this job</p>
+
+            }
+             <span style={{display:'flex', gap:'1rem'}}>
+                <span>Application Status:</span> <StatusBadge status={getApplicationStatus()} />
+              </span>
 
             <section className={styles.container}>
+             
               <div className={styles.info}>
                 <img src={JobTypeIcon} alt="TimeIcon" />
 
                 <p>Job Type</p>
               </div>
               <p>
-                {JobDetailsData?.employment_type &&
-                  JobDetailsData?.employment_type?.length > 0 &&
-                  JobDetailsData?.employment_type?.charAt(0).toUpperCase() +
-                    JobDetailsData?.employment_type?.slice(1)}
+                {JobDetailsData?.job?.employment_type &&
+                  JobDetailsData?.job?.employment_type?.length > 0 &&
+                  JobDetailsData?.job?.employment_type
+                    ?.charAt(0)
+                    ?.toUpperCase() +
+                    JobDetailsData?.job?.employment_type?.slice(1)}
               </p>
 
               <div className={styles.info}>
@@ -250,10 +206,10 @@ const JobDetails = () => {
                 <p>Full Time</p>
               </div>
               <p>
-                {JobDetailsData?.level &&
-                  JobDetailsData?.level?.length > 0 &&
-                  JobDetailsData?.level?.charAt(0).toUpperCase() +
-                    JobDetailsData?.level?.slice(1)}
+                {JobDetailsData?.job?.level &&
+                  JobDetailsData?.job?.level?.length > 0 &&
+                  JobDetailsData?.job?.level?.charAt(0)?.toUpperCase() +
+                    JobDetailsData?.job?.level?.slice(1)}
               </p>
               <div className={styles.info}>
                 <img src={WorkIcon} alt="TimeIcon" />
@@ -261,10 +217,10 @@ const JobDetails = () => {
                 <p>Work Arrangement</p>
               </div>
               <p>
-                {JobDetailsData?.job_type &&
-                  JobDetailsData?.job_type?.length > 0 &&
-                  JobDetailsData?.job_type?.charAt(0).toUpperCase() +
-                    JobDetailsData?.job_type?.slice(1)}
+                {JobDetailsData?.job?.job_type &&
+                  JobDetailsData?.job?.job_type?.length > 0 &&
+                  JobDetailsData?.job?.job_type?.charAt(0)?.toUpperCase() +
+                    JobDetailsData?.job?.job_type?.slice(1)}
               </p>
               <div className={styles.info}>
                 <img src={SalaryIcon} alt="TimeIcon" />
@@ -272,7 +228,9 @@ const JobDetails = () => {
                 <p>Salary</p>
               </div>
               <p>
-                {formatAmount(parseInt(JobDetailsData?.renumeration || "0"))}{" "}
+                {formatAmount(
+                  parseInt(JobDetailsData?.job?.renumeration || "0")
+                )}{" "}
                 <small style={{ color: "#707070" }}>/ month</small>
               </p>
               <span></span>
@@ -283,7 +241,9 @@ const JobDetails = () => {
               <h3>Job Description:</h3>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(JobDetailsData?.description || ""),
+                  __html: DOMPurify.sanitize(
+                    JobDetailsData?.job?.description || ""
+                  ),
                 }}
               />
             </div>
@@ -294,7 +254,7 @@ const JobDetails = () => {
               <p
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(
-                    JobDetailsData?.responsibilities || ""
+                    JobDetailsData?.job?.responsibilities || ""
                   ),
                 }}
               />
@@ -304,8 +264,8 @@ const JobDetails = () => {
               <h3>Qualifications</h3>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(
-                    JobDetailsData?.qualifications || ""
+                  __html: DOMPurify?.sanitize(
+                    JobDetailsData?.job?.qualifications || ""
                   ),
                 }}
               />{" "}
@@ -314,7 +274,9 @@ const JobDetails = () => {
               <h3>Benefits</h3>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(JobDetailsData?.benefits || ""),
+                  __html: DOMPurify?.sanitize(
+                    JobDetailsData?.job?.benefits || ""
+                  ),
                 }}
               />
             </div>
@@ -327,16 +289,13 @@ const JobDetails = () => {
             <div className={styles.reviewbtn}>
               <p className={styles.title}>More Jobs Like This</p>
 
-              {JobDetailsData?.related_jobs &&
-                JobDetailsData?.related_jobs?.length > 4 && (
-                  <div
-                    onClick={handleNavigateToMoreJob}
-                    className={styles.btnWrapper}
-                  >
-                    <p className={styles.btn}>See All</p>
-                    <img src={ArrowIcon} alt="ArrowIcon" />
-                  </div>
-                )}
+              <div
+                onClick={handleNavigateToMoreJob}
+                className={styles.btnWrapper}
+              >
+                <p className={styles.btn}>See All</p>
+                <img src={ArrowIcon} alt="ArrowIcon" />
+              </div>
             </div>
             {/* <p>No Reviews available yet</p> */}
           </div>
@@ -353,16 +312,7 @@ const JobDetails = () => {
       >
         <FlagJob handleCloseModal={() => setFlagJob(false)} />
       </Modal>
-
-      <ModalContent
-        open={regModal}
-        handleCancel={() => setRegModal(false)}
-        handleClick={() => {
-          handleRegModal();
-        }}
-        heading={"Please Register as an applicant before perform this action"}
-      />
     </main>
   );
 };
-export default JobDetails;
+export default MyApplicationDetails;

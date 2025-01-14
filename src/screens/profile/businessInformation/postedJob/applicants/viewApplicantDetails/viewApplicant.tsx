@@ -2,7 +2,7 @@ import styles from "./viewApplicant.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import Button from "../../../../../../customs/button/button";
-import EyeIcon from "../../../../../../assets/eye.svg";
+import EyeIcon from "../../../../../../assets/eyewhite.svg";
 import StatusBadge from "../../../../../../partials/statusBadge/statusBadge";
 import JobDetailsElements from "./jobDetailsElements/jobDetailsElements";
 import {

@@ -4,7 +4,7 @@ import DeleteIcon from "../../../../../assets/deleteicon.svg";
 import JobLocation from "../../../../../assets/joblocation.svg";
 import StatusBadge from "../../../../../partials/statusBadge/statusBadge";
 import EditIcon from "../../../../../assets/edit-2.svg";
-import EyeIcon from "../../../../../assets/eye.svg"
+import EyeIcon from "../../../../../assets/eyewhite.svg"
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "antd";
 import { useState } from "react";

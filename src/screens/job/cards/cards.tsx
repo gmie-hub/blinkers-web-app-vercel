@@ -101,7 +101,7 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                       {" "}
                       {item?.employment_type &&
                         item?.employment_type?.length > 0 &&
-                        item?.employment_type?.charAt(0).toUpperCase() +
+                        item?.employment_type?.charAt(0)?.toUpperCase() +
                           item?.employment_type?.slice(1)}
                     </span>{" "}
                     <div className={styles.dot}></div>
@@ -109,7 +109,7 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                       {" "}
                       {item?.job_type &&
                         item?.job_type?.length > 0 &&
-                        item?.job_type?.charAt(0).toUpperCase() +
+                        item?.job_type?.charAt(0)?.toUpperCase() +
                           item?.job_type?.slice(1)}
                     </span>{" "}
                     <div className={styles.dot}></div>
@@ -117,7 +117,7 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                       {" "}
                       {item?.level &&
                         item?.level?.length > 0 &&
-                        item?.level?.charAt(0).toUpperCase() +
+                        item?.level?.charAt(0)?.toUpperCase() +
                           item?.level?.slice(1)}
                     </span>
                   </div>

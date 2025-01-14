@@ -51,7 +51,8 @@ interface Props {
   followBusinessMutation?: boolean;
   followSellersMutation?:boolean;
   businessDetailsData?: AllBusinessesDatum;
-  profileDetailsData?:UserData
+  profileDetailsData?:UserData;
+  hasUserFlaggedSeller?:boolean;
 }
 const BigScreen = ({
   handleFollowSeller,
@@ -63,6 +64,7 @@ const BigScreen = ({
   isUserFollowingSeller,
   businessDetailsData,
   profileDetailsData,
+  hasUserFlaggedSeller,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -140,7 +142,6 @@ const BigScreen = ({
     }
   };
 
-  console.log('')
 
   return (
     <main>
@@ -532,7 +533,7 @@ const BigScreen = ({
                       icon={
                         <Image src={FlagLogo} alt="FlagLogo" preview={false} />
                       }
-                      text="Flag Seller"
+                      text={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
                       variant="redOutline"
                       onClick={() => {
                         setFlagSeller(true);
@@ -691,7 +692,7 @@ const BigScreen = ({
         title="Flag Seller"
         footer={null}
       >
-        <FlagSeller handleCloseModal={() => setFlagSeller(false)} />
+        <FlagSeller hasUserFlaggedSeller={hasUserFlaggedSeller} sellerId={productDetailsData?.user_id}  handleCloseModal={() => setFlagSeller(false)} />
       </Modal>
     </main>
   );

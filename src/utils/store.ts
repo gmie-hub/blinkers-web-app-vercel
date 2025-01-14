@@ -89,6 +89,7 @@ export interface UserLogin {
   country_code: string;
   created_at: string;
   dob?: string;
+  date_of_birth?:string;
   email: string;
   email_token: string;
   email_token_status: number;
