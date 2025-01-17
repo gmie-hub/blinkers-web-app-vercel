@@ -124,9 +124,9 @@ export default function Reviews() {
                     initialValues={{
                       reply: "",
                     }}
-                    onSubmit={(values, { resetForm }) => {
+                    onSubmit={( ) => {
                       // handleReplySubmit(values, item.id); // Handle the reply submission
-                      resetForm();
+                      // resetForm();
                     }}
                     validationSchema={validationSchema}
                   >
