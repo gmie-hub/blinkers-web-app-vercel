@@ -29,6 +29,7 @@ const Input: React.FC<ComponentProps> = (props) => {
     type,
     placeholder,
     asterisk = false,
+    onChange,
   } = props;
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -64,6 +65,10 @@ const Input: React.FC<ComponentProps> = (props) => {
                   placeholder={placeholder}
                   disabled={disabled}
                   className={classNames(styles.input, className)}
+                  onChange={(e) => {
+                    field.onChange(e); // Call Formik's handler
+                    onChange?.(e); // Call the custom handler if provided
+                  }}
                 />
                 {icon && <span className={styles.iconRight}>{icon}</span>}
                 {type === "password" && (

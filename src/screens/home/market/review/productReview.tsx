@@ -29,6 +29,8 @@ export default function AllProductReviews() {
           queryFn: () => getAllReviews(id!),
           retry: 0,
           refetchOnWindowFocus: false,
+          enabled:!!id
+
         },
       ],
     });

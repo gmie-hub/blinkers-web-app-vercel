@@ -5,7 +5,7 @@ interface JobDatum {
   employment_type: string;
   job_type: string;
   level: string;
-  industry: string;
+  industry_id: string;
   is_admin: boolean;
   is_open: boolean;
   location: string;
@@ -544,6 +544,7 @@ interface JobApplication {
 
 interface ApplicationStatusPayload {
   status: string; 
+  message? :string
 }
 interface JobItem {
   id: number;

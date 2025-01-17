@@ -86,9 +86,10 @@ const MyAds = () => {
   const [getAdsByUserIdQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-my-market"],
+        queryKey: ["get-my-market",user?.id],
         queryFn: () => getMyAdzByUserId(user?.id!),
         refetchOnWindowFocus: true,
+        enabled:!!user?.id
       },
     ],
   });

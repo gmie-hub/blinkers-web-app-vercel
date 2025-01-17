@@ -134,7 +134,7 @@ const JobDetails = () => {
   const ApplyJobHandler = async () => {
     const payload: Partial<FlagJob> = {
       job_id: id!,
-      applicant_id: user?.applicant?.id,
+      applicant_id: user?.applicant?.id || user?.applicantId,
       message: "Applying",
     };
 

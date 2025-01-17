@@ -106,7 +106,7 @@ const CreateAdz = () => {
   const categoryData = getAllCategoryQuery?.data?.data?.data ?? [];
 
   const categoryOptions: { value: number; label: string }[] = [
-    { value: 0, label: "Select Business" }, // Default option
+    { value: 0, label: "Select category" }, // Default option
     ...(categoryData && categoryData?.length > 0
       ? categoryData?.map((item: CategoryDatum) => ({
           value: item?.id,
@@ -115,7 +115,7 @@ const CreateAdz = () => {
       : []),
   ];
   const subCategoryOptions: { value: number; label: string }[] = [
-    { value: 0, label: "Select Business" }, // Default option
+    { value: 0, label: "Select sub category" }, // Default option
     ...(subCategory && subCategory?.length > 0
       ? subCategory?.map((item: CategoryDatum) => ({
           value: item?.id,

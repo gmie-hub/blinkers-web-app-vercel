@@ -8,7 +8,7 @@ import Folder from "../../../../../assets/folder.svg";
 import Plus from "../../../../../assets/add.svg";
 import Delete from "../../../../../assets/deleteicon.svg";
 import edit from "../../../../../assets/edit-2.svg";
-import { App, Checkbox, Modal } from "antd";
+import { App, Checkbox, Modal, Select } from "antd";
 import * as Yup from "yup";
 import EmpHistory from "./modals/employerHistory";
 import EducationModal from "./modals/education";
@@ -77,22 +77,14 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const [filePrevieCoverLetterUrl, setFilePreviewCoverLetterUrl] = useState<
     string | null
   >(null);
-
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const queryClient = useQueryClient();
   // const [emp, setEmp] = useState([] as EmploymentHistory[]);
 
   const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
-  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
 
   console.log(selectedIndustries, "selectedItemsselectedItems");
-  const handleCheckboxChange = (checkedValue: string, checked: boolean) => {
-    setSelectedIndustries(
-      (prev) =>
-        checked
-          ? [...prev, checkedValue] // Add item if checked
-          : prev.filter((item) => item !== checkedValue) // Remove item if unchecked
-    );
-  };
 
   // A function to handle the uploaded file
   const handleCoverLetterUpload = (file: any) => {
@@ -173,37 +165,19 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         queryFn: () => getApplicantsbyId(user?.id!),
         retry: 0,
         refetchOnWindowFocus: false,
+        enabled: !!user?.id,
       },
       {
-        queryKey: ["get-all-industries"],
-        queryFn: () => getIndustries(),
+        queryKey: ["get-all-industries",searchTerm],
+        queryFn: () => getIndustries(searchTerm),
         retry: 0,
         refetchOnWindowFocus: false,
       },
     ],
   });
+  console.log(searchTerm,'searchTerm')
 
   const industryData = getAllIndustriesQuery?.data?.data?.data || [];
-
-  // const dropdownOverlay = (
-  //   <div
-  //     style={{ padding: "10px", backgroundColor: "white", borderRadius: "4px" }}
-  //   >
-  //     <Space direction="vertical">
-  //       {industryData?.map((option: IndustriesDatum) => (
-  //         <Checkbox
-  //           key={option?.id?.toString()}
-  //           checked={selectedIndustries.includes(option?.id?.toString())}
-  //           onChange={(e) =>
-  //             handleCheckboxChange(option?.id?.toString(), e.target.checked)
-  //           }
-  //         >
-  //           {option?.name}
-  //         </Checkbox>
-  //       ))}
-  //     </Space>
-  //   </div>
-  // );
 
   const applicantDetailsData = getApplicantQuery?.data?.data?.applicant;
   const applicantDetailsError = getApplicantQuery?.error as AxiosError;
@@ -320,9 +294,8 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     if (id) {
       formData.append("user_id", id?.toString()); // Convert id to string and append
     }
-    if(upload){
+    if (upload) {
       formData.append("cv", upload as File);
-
     }
     // formData.append("cover_letter", CoverLetterData?.UploadCoverLetter);
 
@@ -402,7 +375,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
     try {
       await createProfInfoMutation.mutateAsync(formData, {
-        onSuccess: () => {
+        onSuccess: (data) => {
           resetForm();
           setOpenSuccess(true);
           clearLocalStorageData();
@@ -412,7 +385,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           setUser((prevUser: any) => ({
             ...prevUser,
             is_applicant: true,
+            applicantId: data?.id,
           }));
+          console.log(data);
         },
       });
       setSelectedIndustries([]);
@@ -551,6 +526,27 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     // cv: Yup.mixed().required("Cover letter is required"),
     specialization: Yup.string().required("required"),
   });
+  const handleCheckboxChange = (id: string, checked: boolean) => {
+    setSelectedIndustries((prev) =>
+      checked
+        ? [...new Set([...prev, id])]
+        : prev?.filter((industryId) => industryId !== id)
+    );
+  };
+
+  // Filtered Industries based on search term
+  // const filteredIndustries = industryData && industryData?.length > 0 && industryData?.filter((option: any) =>
+  //   option?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+  // );
+
+  const filteredIndustries =
+  industryData &&
+  industryData?.length > 0 &&
+  industryData
+    ?.filter((option: any) =>
+      option?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+    )
+    ?.sort((a: any, b: any) => a?.name?.localeCompare(b?.name));
 
   return (
     <section>
@@ -581,27 +577,46 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                   placeholder="Job Specialization"
                   type="text"
                 />
-                {/* <Dropdown
-                  overlay={dropdownOverlay}
-                  trigger={["click"]}
-                  placement="bottomLeft"
-                >
-                  <Button variant="white">Check to Select Industries</Button>
-                </Dropdown> */}
-                <p >Select Industries</p>
 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                  {industryData?.map((option: IndustriesDatum) => (
-                    <div
+                <p>Select Industries</p>
+
+                <Select
+                  mode="multiple"
+                  placeholder="Select industries"
+                  value={selectedIndustries} // Ensures only selected items are displayed
+                  onChange={(values) =>
+                    setSelectedIndustries([...new Set(values)])
+                  } // Deduplicate selected values
+                  dropdownRender={(menu) => (
+                    <div>
+                      <div style={{ padding: "8px" }}>
+                        <Input
+                          name="s"
+                          placeholder="Search industries"
+                          value={searchTerm}
+                          // onChange={(e) => setSearchTerm(e.target.value)}
+                          onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            console.log("Search Term:", e.target.value); // Logs the current value
+                          }}
+                        
+                        />
+                      </div>
+                      <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                        {menu}
+                      </div>
+                    </div>
+                  )}
+                  showSearch={false}  
+                >
+                  
+                  {filteredIndustries && filteredIndustries?.length > 0  && filteredIndustries?.map((option: any) => (
+                    <Select.Option
                       key={option?.id?.toString()}
-                      style={{
-                        width: "calc(50% - 10px)", // Ensures two items per row with space between
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                      value={option?.id?.toString()}
                     >
                       <Checkbox
-                        checked={selectedIndustries.includes(
+                        checked={selectedIndustries?.includes(
                           option?.id?.toString()
                         )}
                         onChange={(e) =>
@@ -613,10 +628,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                       >
                         {option?.name}
                       </Checkbox>
-                    </div>
+                    </Select.Option>
                   ))}
-                </div>
-
+                </Select>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <img src={Folder} alt="Folder" />
                   <p className="label">Upload CV</p>

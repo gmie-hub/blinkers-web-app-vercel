@@ -153,6 +153,7 @@
   width: 100%; /* Ensure container takes 100% width */
   flex-direction: row;
   margin-block-end: 3.4rem;
+  gap:4rem;
   @media (max-width: 1024px) {
 
     gap:4rem;
@@ -620,7 +621,7 @@
 
 .arrowButton {
   margin-top: 1rem;
-  background-color: #007bff;
+  background-color: var(--color-primary-green);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -629,7 +630,7 @@
 }
 
 .arrowButton:hover {
-  background-color: #0056b3;
+  background-color: var(--color-primary-green);
 }
 .sellerLogo{
   border-radius: 50%;

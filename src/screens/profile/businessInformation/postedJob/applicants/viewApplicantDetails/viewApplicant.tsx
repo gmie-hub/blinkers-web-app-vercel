@@ -38,6 +38,7 @@ export default function ApplicantDetails({}: BasicInformationProps) {
         queryFn: () => getApplicationDetails(parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: false,
+        enabled:!!id
       },
     ],
   });

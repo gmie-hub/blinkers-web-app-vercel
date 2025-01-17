@@ -39,7 +39,7 @@ const FlagJobs = ({ handleCloseModal }: Props) => {
   const flagJobHandler = async (values: FormikValues) => {
     const payload: Partial<FlagJob> = {
       job_id: id!,
-      applicant_id: user?.id,
+      applicant_id: user?.applicant?.id || user?.applicantId ,
       action: "flag",
       reason: values.reasonForFlag,
     };

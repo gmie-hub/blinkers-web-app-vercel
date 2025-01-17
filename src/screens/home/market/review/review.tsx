@@ -31,6 +31,8 @@ export default function AllReviews() {
           queryFn: () => getAllReviews(id!,currentPage),
           retry: 0,
           refetchOnWindowFocus: false,
+          enabled:!!id
+
         },
       ],
     });

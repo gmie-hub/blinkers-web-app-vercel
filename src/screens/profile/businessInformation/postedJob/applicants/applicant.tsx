@@ -52,7 +52,7 @@ const Applicants = () => {
       key: 'status',
       render: (_, { status }) => (
         <StatusBadge
-          status={status === '0' ? 'Pending' : status === '1' ? 'Shortlisted' : status === '2' ? 'Rejected' : 'Approved'}
+          status={status === '0' ? 'Pending' : status === '1' ? 'Shortlisted' : status === '2' ? 'Approved' : 'Rejected'}
         />
       ),
     },
@@ -82,6 +82,7 @@ const Applicants = () => {
         queryFn: ()=>getAllApplication(currentPage,parseInt(id!), parseInt(status)),
         retry: 0,
         refetchOnWindowFocus: false,
+        enabled:!!id
       },
     ],
   });

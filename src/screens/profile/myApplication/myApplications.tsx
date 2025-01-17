@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { useQueries } from "@tanstack/react-query";
 import { getMyApplications } from "../../request";
@@ -26,10 +26,11 @@ const MyApplications = () => {
   const [getAllJobQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-jobs", currentPage,activeKey],
+        queryKey: ["get-all-jobs", currentPage,activeKey, user?.id],
         queryFn: () => getMyApplications(currentPage, user?.id!,parseInt(activeKey!)),
         retry: 0,
         refetchOnWindowFocus: false,
+        enabled:!!user?.id
       },
     ],
   });
@@ -78,7 +79,7 @@ const MyApplications = () => {
                 <div
                   onClick={() => handleNavigateDetails(item?.job_id,item?.id)}
                   className={styles.chooseCard}
-                  key={item.id}
+                  key={item?.id}
                 >
                   <div className={styles.cardWrapper}>
                     <img

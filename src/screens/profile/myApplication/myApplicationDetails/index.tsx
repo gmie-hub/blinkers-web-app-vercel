@@ -3,7 +3,7 @@ import FlagJobicon from "../../../../assets/flag.svg";
 import JobLocation from "../../../../assets/joblocation.svg";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import { App, Modal } from "antd";
+import {  Modal } from "antd";
 import { useState } from "react";
 import {  useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -19,7 +19,7 @@ import CustomSpin from "../../../../customs/spin";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import FlagJob from "../../../job/jobDetails/flagJob/flagJob";
 import MoreJobsLikeThis from "../../../job/jobLikeThis/jobsLikeThis";
-import { formatAmount, formatDateToDayMonthYear, formatDateToMonthYear, getTimeAgo } from "../../../../utils/formatTime";
+import { formatAmount, formatDateToDayMonthYear, getTimeAgo } from "../../../../utils/formatTime";
 import StatusBadge from "../../../../partials/statusBadge/statusBadge";
 import Button from "../../../../customs/button/button";
 
@@ -28,7 +28,6 @@ const MyApplicationDetails = () => {
   const [flagJob,setFlagJob] = useState(false);
   const { id } = useParams();
   const { applicationDetailsId } = useParams();
-  const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
 
 

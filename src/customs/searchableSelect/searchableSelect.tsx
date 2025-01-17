@@ -115,7 +115,7 @@ const SearchableSelect: FC<SearchableSelectProps> = ({
               <>
                 {/* Custom search input inside dropdown */}
                 <Input
-                  placeholder="Search business"
+                  placeholder="Search"
                   value={searchValue}
                   onChange={(e) => {
                     const newSearchValue = e.target.value;

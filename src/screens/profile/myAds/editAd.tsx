@@ -16,7 +16,7 @@ import {
   uploadAdsGallery,
   uploadAdsVideo,
 } from "../../request";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
 import Checkbox from "../../../customs/checkBox/checkbox";
 import Upload from "../../../customs/upload/upload";
@@ -36,6 +36,7 @@ const EditAdz = () => {
   const [uploadVideo, setUploadVideo] = useState<File | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
@@ -60,7 +61,7 @@ const EditAdz = () => {
         queryFn: () => getProductDetails(parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        // enabled: !!id,
+        enabled: !!id,
       },
       {
         queryKey: ["get-all-state"],
@@ -338,84 +339,23 @@ const EditAdz = () => {
     }
   }, [uploadVideo]);
 
-  useEffect(() => {
-    if (uploadFeature) {
-      UploadGalleryHandler();
-    }
-  }, [uploadFeature]);
+  // useEffect(() => {
+  //   if (uploadFeature) {
+  //     UploadGalleryHandler();
+  //   }
+  // }, [uploadFeature]);
 
   const updateAdsMutation = useMutation({
-    mutationFn: UpdateAds,
+    mutationFn: ({ id, payload }: { id: string | number; payload: FormData }) =>
+      UpdateAds(id, payload),
     mutationKey: ["edit-ads"],
   });
-
-  //   const createAdsHandler = async (
-  //     values: FormikValues,
-  //     resetForm: () => void
-  //   ) => {
-  //     const formData = new FormData();
-  //     const descriptionTags = [];
-
-  //     if (values.Used) {
-  //       descriptionTags.push("USED");
-  //     }
-  //     if (values.New) {
-  //       descriptionTags.push("NEW");
-  //     }
-  //     if (values.PayOnDelivery) {
-  //       descriptionTags.push("PAY ON DELIVERY");
-  //     }
-  //     formData.append("category_id", values?.category_id);
-  //     formData.append("sub_category_id", values?.sub_category_id);
-  //     formData.append("title", values?.title);
-  //     formData.append("price", values?.price);
-  //     formData.append("discount_price", values?.discount_price);
-  //     // formData.append("description_tags[0]", checkedBox);
-  //     descriptionTags.forEach((tag, index) => {
-  //       formData.append(`description_tags[${index}]`, tag);
-  //     });
-  //     formData.append("description", values?.description);
-  //     formData.append("state_id", values?.state_id);
-  //     formData.append("technical_details", values?.technical_details);
-
-  //     formData.append(
-  //       "local_government_area_id",
-  //       values?.local_government_area_id
-  //     );
-  //     formData.append("pickup_address", values.pickup_address);
-  //     formData.append("pickup_lat", values.pickup_address);
-  //     formData.append("pickup_lng", values.pickup_address);
-  //     if (uploadFeature) {
-  //       formData.append("add_featured_image", uploadFeature);
-  //     }
-  //     if (upload) {
-  //       formData.append("add_image", upload);
-  //     }
-  //     if (uploadVideo) {
-  //       formData.append("add_video", uploadVideo);
-  //     }
-
-  //     try {
-  //       await updateAdsMutation.mutateAsync(formData, {
-  //         onSuccess: (data) => {
-  //           notification.success({
-  //             message: "Success",
-  //             description: data?.message,
-  //           });
-  //           resetForm();
-  //         },
-  //       });
-  //     } catch (error: any) {
-  //       notification.error({
-  //         message: "Error",
-  //         description: errorMessage(error) || "An error occurred",
-  //       });
-  //     }
-  //   };
+  
 
   const editAdsHandler = async (values: FormikValues) => {
+    const formData = new FormData();
     const descriptionTags = [];
-
+  
     if (values.Used) {
       descriptionTags.push("USED");
     }
@@ -425,41 +365,39 @@ const EditAdz = () => {
     if (values.PayOnDelivery) {
       descriptionTags.push("PAY ON DELIVERY");
     }
-
-    const payload: Partial<ProductDatum> = {
-      id: parseInt(id!) ?? 0,
-      category_id: values.category_id,
-      sub_category_id: values?.sub_category_id,
-      title: values?.title,
-    //   price: values?.price,
-   
-    // price: values?.price
-    // ? parseInt(values?.price.toString().replace(/[^\d]/g, ''))
-    // : 0,
-
-    price: values?.price
-    ? parseInt(values?.price.toString().replace(/,/g, '').split('.')[0])
-    : 0,
-      discount_price: values?.discount_price,
-      description: values?.description,
-      state_id: values?.state_id,
-      technical_details: values?.technical_details,
-      local_government_area_id: values?.local_government_area_id,
-      pickup_address: values?.pickup_address,
-      pickup_lat: values?.pickup_lat,
-      pickup_lng: values?.pickup_lng,
-      description_tags: descriptionTags,
-    };
-
+  
+    formData.append("category_id", values?.category_id);
+    formData.append("sub_category_id", values?.sub_category_id);
+    formData.append("title", values?.title);
+    formData.append("price", values?.price);
+    formData.append("discount_price", values?.discount_price);
+    descriptionTags.forEach((tag, index) => {
+      formData.append(`description_tags[${index}]`, tag);
+    });
+    formData.append("description", values?.description);
+    formData.append("state_id", values?.state_id);
+    formData.append("technical_details", values?.technical_details);
+    formData.append("local_government_area_id", values?.local_government_area_id);
+    formData.append("pickup_address", values.pickup_address);
+    formData.append("pickup_lat", values.pickup_lat);
+    formData.append("pickup_lng", values.pickup_lng);
+  
+    if (uploadFeature) {
+      formData.append("add_featured_image", uploadFeature);
+    }
+  
     try {
-      await updateAdsMutation.mutateAsync(payload, {
-        onSuccess: () => {
-          queryClient.refetchQueries({
-            queryKey: ["get-all-jobs"],
-          });
-          navigate("/profile");
-        },
-      });
+      await updateAdsMutation.mutateAsync(
+        { id: productDetailsData?.id!, payload: formData },
+        {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message,
+            });
+          },
+        }
+      );
     } catch (error: any) {
       notification.error({
         message: "Error",
@@ -467,6 +405,7 @@ const EditAdz = () => {
       });
     }
   };
+  
 
   const validationSchema = Yup.object().shape({
     category_id: Yup.string().required("required"),
@@ -486,6 +425,14 @@ const EditAdz = () => {
     // state_id: Yup.string().required("required"),
     // state_id: Yup.string().required("required"),
   });
+
+  const handleRemoveFeature = () => {
+    setUploadFeature(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset the file input value
+    }
+  };
 
   return (
     <section className="wrapper">
@@ -547,6 +494,23 @@ const EditAdz = () => {
                     />
                   </div>
                   <h3>Uploaded Media</h3>
+                  {uploadFeature && (
+                  <div>
+                    <h3>Feature Image</h3>
+                    <img
+                      src={URL.createObjectURL(uploadFeature)}
+                      alt="Feature Preview"
+                      style={{
+                        width: "150px",
+                        height: "150px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <br />
+                    <button onClick={handleRemoveFeature}>Cancel</button>
+                  </div>
+                )}
+
                   {/* 
                   {uploadFeature && (
                     <div>

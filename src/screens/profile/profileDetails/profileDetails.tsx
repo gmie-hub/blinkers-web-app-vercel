@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import CallIcon from "../../../assets/callclaim.svg";
+import Avatarprofile from "../../../assets/Avatarprofile.svg";
 import { deleteUser, getApplicantsbyId } from "../../request";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import { userAtom } from "../../../utils/store";
@@ -28,6 +28,8 @@ const ProfileDetails = () => {
         queryFn: () => getApplicantsbyId(user?.id!),
         retry: 0,
         refetchOnWindowFocus: true,
+        enabled:!!user?.id
+
       },
     ],
   });
@@ -82,9 +84,10 @@ const ProfileDetails = () => {
             >
               <p style={{ fontWeight: "bold" }}>Your Profile</p>
               <img
-                className={styles.profileImg}
-                src={CallIcon}
+                className={styles.profile}
+                src={profileData?.profile_image || Avatarprofile}
                 alt="ProfileImg"
+               
               />
               <p>
                 {user?.role === "2"

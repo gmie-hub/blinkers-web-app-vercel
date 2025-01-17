@@ -5,8 +5,11 @@ import { Tabs, TabsProps } from "antd";
 import MyBusinesses from "./myBusinesses";
 import { useParams } from "react-router-dom";
 import MyApplications from "./myApplication/myApplications";
+import MyDetails from "../job/apply/applyAsApplicant/index";
+
 import ProfileDetails from "./profileDetails/profileDetails";
 import MyAds from "./myAds/myAds";
+import MyFavorite from "./myFavorite";
 
 const Profile = () => {
   const { id } = useParams();
@@ -44,16 +47,21 @@ const Profile = () => {
     },
     {
       key: "5",
+      label: "My Details",
+      children: <MyDetails  showRouteIndicator={false}/>,
+    },
+    {
+      key: "6",
       label: "My Ads",
       children: <MyAds />,
     },
     {
-      key: "6",
+      key: "7",
       label: "Favorites",
-      // children: <Reviews limit={3} />,
+      children: <MyFavorite />,
     },
     {
-      key: "7",
+      key: "8",
       label: "Settings",
       // children: <Reviews limit={3} />,
     },

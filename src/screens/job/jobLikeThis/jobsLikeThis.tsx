@@ -23,7 +23,7 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
         queryFn: () => getJobDetails(parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        // enabled:!!id
+        enabled:!!id
       },
     ],
   });

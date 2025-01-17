@@ -1,7 +1,7 @@
 import styles from './viewApplicant.module.scss';
 import { App } from 'antd';
 import { useState } from 'react';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikValues } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Input from '../../../../../../customs/input/input';
@@ -32,11 +32,12 @@ const RejectApplication = ({ handleCloseModal }: Props) => {
     mutationKey: ["reject-status"],
   });
   
-  const rejectApplicationHandler = async (id: number) => {
+  const rejectApplicationHandler = async (values: FormikValues,id:number) => {
 
   
     const payload: ApplicationStatusPayload = {
       status: '3', 
+      message:values?.reason,
     };
   
     try {
@@ -69,7 +70,7 @@ const RejectApplication = ({ handleCloseModal }: Props) => {
         initialValues={{
           reason: '',
         }}
-        onSubmit={() => rejectApplicationHandler(parseInt(id!))}
+        onSubmit={(values) => rejectApplicationHandler(values,parseInt(id!))}
       >
         <Form style={{ marginInline: '0' }}>
           <section className={styles.RejectModalWrapper}>

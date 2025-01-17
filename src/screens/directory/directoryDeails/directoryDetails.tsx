@@ -49,7 +49,7 @@ const NotClaim = () => {
 
   // let  type: 'images' | 'videos';
 
-  //   const hasReviews = reviewData?.lenght;
+  //   const hasReviews = reviewData?.length;
   //   console.log(hasReviews , "hasReviews")
 
   const handleClaim = () => {

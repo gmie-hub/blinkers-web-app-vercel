@@ -29,6 +29,7 @@ export default function JobPosted() {
         queryFn: () => getJobBYBusinessId(user?.business?.id!),
         retry: 0,
         refetchOnWindowFocus: false,
+        enabled:!!user?.business?.id!
       },
     ],
   });

@@ -9,6 +9,7 @@ import BrowseLogo from "../../../../assets/Icon (4).svg";
 import CallLogo from "../../../../assets/click.svg";
 import FlagLogo from "../../../../assets/flag.svg";
 import CopyIcon from "../../../../assets/copy.svg";
+import ProfileIcon from "../../../../assets/Avatarprofile.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import { Form, Formik } from "formik";
 import Input from "../../../../customs/input/input";
@@ -26,7 +27,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
 import SmallScreen from "./smallScreenSellerDetails";
 import ArrowIcon from "../../../../assets/arrow-right-green.svg";
-import { formatDateToMonthYear, getTimeAgo } from "../../../../utils/formatTime";
+import {
+  formatDateToMonthYear,
+  getTimeAgo,
+} from "../../../../utils/formatTime";
 import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
@@ -45,14 +49,14 @@ const safetyTips = [
 interface Props {
   productDetailsData?: ProductDatum;
   handleFollowBusiness?: () => void;
-  handleFollowSeller?:()=>void;
+  handleFollowSeller?: () => void;
   isUserFollowingBusiness?: boolean;
-  isUserFollowingSeller?:boolean;
+  isUserFollowingSeller?: boolean;
   followBusinessMutation?: boolean;
-  followSellersMutation?:boolean;
+  followSellersMutation?: boolean;
   businessDetailsData?: AllBusinessesDatum;
-  profileDetailsData?:UserData;
-  hasUserFlaggedSeller?:boolean;
+  profileDetailsData?: UserData;
+  hasUserFlaggedSeller?: boolean;
 }
 const BigScreen = ({
   handleFollowSeller,
@@ -76,7 +80,7 @@ const BigScreen = ({
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
 
-  console.log(businessDetailsData, 'businessDetailsData')
+  console.log(businessDetailsData, "businessDetailsData");
 
   useEffect(() => {
     const handleResize = () => {
@@ -100,16 +104,13 @@ const BigScreen = ({
   const handleTabChange = (key: string) => {
     setActiveKey(key);
   };
-  console.log(businessDetailsData?.id ,'businessDetailsData?.id ')
+  console.log(businessDetailsData?.id, "businessDetailsData?.id ");
 
   const handleNavigateToSellersProfile = () => {
-    if(businessDetailsData && businessDetailsData?.id !==undefined){
-      navigate(`/directory-details/${businessDetailsData?.id }`);
-
-    }
-    else{
+    if (businessDetailsData && businessDetailsData?.id !== undefined) {
+      navigate(`/directory-details/${businessDetailsData?.id}`);
+    } else {
       navigate(`/sellers-profile/${profileDetailsData?.id}`);
-
     }
     window.scrollTo(0, 0);
   };
@@ -120,7 +121,7 @@ const BigScreen = ({
   const handleNavigateToRelatedAds = () => {
     navigate(`/related-ads/${id}`);
     window.scrollTo(0, 0); // Scroll to the top of the page
-  };  
+  };
 
   const items: TabsProps["items"] = [
     {
@@ -142,6 +143,27 @@ const BigScreen = ({
     }
   };
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const maxVisibleImages = 4;
+
+  const images = productDetailsData?.add_images || [];
+
+  const handleNext = () => {
+    if (currentIndex + maxVisibleImages < images.length) {
+      setCurrentIndex(currentIndex + maxVisibleImages);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - maxVisibleImages);
+    }
+  };
+
+  const visibleImages =
+    images &&
+    images?.length &&
+    images?.slice(currentIndex, currentIndex + maxVisibleImages);
 
   return (
     <main>
@@ -150,7 +172,9 @@ const BigScreen = ({
           <div className={styles.leftSide}>
             <h2>{productDetailsData?.title}</h2>
             <div className={styles.accessories}>
-              <p className={styles.subjectBg}>{productDetailsData?.category?.title}</p>{" "}
+              <p className={styles.subjectBg}>
+                {productDetailsData?.category?.title}
+              </p>{" "}
               <div className={styles.eye}>
                 <Image src={TimeIcon} alt={TimeIcon} preview={false} />
                 <p>
@@ -170,22 +194,39 @@ const BigScreen = ({
             </div>
 
             <div className={styles.leftContainer}>
-              <div className={styles.firstSideLeft}>
-                {productDetailsData?.add_images
-                  ?.slice(1) // Start from index 1
-                  ?.map((dress) => (
-                    <div key={dress.id} className={styles.dressCard}>
-                      <div>
-                        <Image
-                          width={"12rem"}
-                          height={"12rem"}
-                          src={dress?.add_image}
-                          alt={dress?.add_image}
-                          preview={true}
-                        />
+              <div>
+               <button
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  className={styles.arrowButton}
+                >
+               ↑  
+                </button>
+
+                <div className={styles.firstSideLeft}>
+                  {visibleImages &&
+                    visibleImages?.length > 0 &&
+                    visibleImages?.map((dress) => (
+                      <div key={dress.id} className={styles.dressCard}>
+                        <div>
+                          <Image
+                            width={"12rem"}
+                            height={"12rem"}
+                            src={dress?.add_image}
+                            alt={dress?.add_image}
+                            preview={true}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
+                <button
+                  onClick={handleNext}
+                  disabled={currentIndex + maxVisibleImages >= images.length}
+                  className={styles.arrowButton}
+                >
+                    ↓
+              </button>
               </div>
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
@@ -259,321 +300,377 @@ const BigScreen = ({
                   </p>
                 </div>
                 {/* business profile */}
-                {businessDetailsData && businessDetailsData ?
-                <div className={styles.card}>
-                  <p className={styles.seller}>Seller’s Information </p>
-                  <div className={styles.flex}>
-                    <img
-                      src={businessDetailsData?.logo}
-                      alt="sellerslogo"
-                      className={styles.sellerLogo}
+                {businessDetailsData && businessDetailsData ? (
+                  <div className={styles.card}>
+                    <p className={styles.seller}>Seller’s Information </p>
+                    <div className={styles.flex}>
+                      <Image
+                        src={businessDetailsData?.logo || ProfileIcon}
+                        alt="sellerslogo"
+                        className={styles.sellerLogo}
+                        preview={true}
+                        width={90}
+                        height={90}
+                      />
+                      <div>
+                        <p className={styles.name}>
+                          {businessDetailsData?.name}
+                        </p>
+                        <div className={styles.starWrapper}>
+                          <span className={styles.star}>
+                            <Image
+                              width={20}
+                              src={StarYellow}
+                              alt="StarYellow"
+                              preview={false}
+                            />
+                            ( {businessDetailsData?.total_rating}{" "}
+                            {businessDetailsData &&
+                            businessDetailsData?.total_rating > 1
+                              ? "ratings"
+                              : "rating"}
+                            )
+                          </span>
+                          <span className={styles.dot}>.</span>{" "}
+                          <span>
+                            {businessDetailsData?.total_followers}
+                            {businessDetailsData &&
+                            businessDetailsData?.total_followers > 1
+                              ? " Followers"
+                              : " Follower"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <p>
+                      Member Since{" "}
+                      {formatDateToMonthYear(
+                        businessDetailsData?.created_at || ""
+                      )}
+                    </p>
+
+                    <div
+                      style={{ paddingBlock: "2.4rem" }}
+                      className={styles.flex}
+                    >
+                      <Button
+                        onClick={() => handleNavigateToSellersProfile()}
+                        text="View Profile"
+                      />
+                      {user?.id !== businessDetailsData?.user_id && (
+                        <Button
+                          onClick={handleFollowBusiness}
+                          disabled={followBusinessMutation}
+                          text={
+                            isUserFollowingBusiness
+                              ? followBusinessMutation
+                                ? "Unfollowing"
+                                : "Unfollow"
+                              : followBusinessMutation
+                              ? "Following"
+                              : "Follow"
+                          }
+                          variant="white"
+                        />
+                      )}
+                    </div>
+                    <div className={styles.social}>
+                      <Image
+                        src={WhatsappLogo}
+                        alt="WhatsappLogo"
+                        preview={false}
+                        onClick={() => {
+                          if (businessDetailsData?.whatsapp) {
+                            window.open(businessDetailsData.whatsapp, "_blank");
+                          }
+                        }}
+                      />
+                      <Image
+                        src={InstagramIcon}
+                        alt="InstagramIcon"
+                        preview={false}
+                        onClick={() => {
+                          if (businessDetailsData?.instagram) {
+                            window.open(
+                              businessDetailsData.instagram,
+                              "_blank"
+                            );
+                          }
+                        }}
+                      />
+                      <Image
+                        src={FaceBookStoreIcon}
+                        alt="FaceBookStoreIcon"
+                        preview={false}
+                        // width={40}
+                        height={32}
+                        onClick={() => {
+                          if (businessDetailsData?.facebook) {
+                            window.open(businessDetailsData.facebook, "_blank");
+                          }
+                        }}
+                      />
+                      <Image
+                        src={BrowseLogo}
+                        alt="BrowseLogo"
+                        preview={false}
+                        onClick={() => {
+                          if (businessDetailsData?.website) {
+                            window.open(businessDetailsData.website, "_blank");
+                          }
+                        }}
+                      />
+                    </div>
+                    <Button
+                      icon={<img src={CallLogo} alt="success" />}
+                      text={
+                        isNumberVisible
+                          ? productDetailsData?.user?.number ||
+                            "No phone number"
+                          : "Click To Show Number"
+                      }
+                      onClick={() =>
+                        handleShowNumber(productDetailsData?.user?.number || "")
+                      }
                     />
-                    <div>
-                      <p className={styles.name}>{businessDetailsData?.name}</p>
-                      <div className={styles.starWrapper}>
-                        <span className={styles.star}>
+
+                    <div className={styles.flag}>
+                      <Button
+                        icon={
                           <Image
-                            width={20}
-                            src={StarYellow}
-                            alt="StarYellow"
+                            src={FlagLogo}
+                            alt="FlagLogo"
                             preview={false}
                           />
-                          ( {businessDetailsData?.total_rating}{" "}
-                          {businessDetailsData &&
-                          businessDetailsData?.total_rating > 1
-                            ? "ratings"
-                            : "rating"}
-                          )
-                        </span>
-                        <span className={styles.dot}>.</span>{" "}
-                        <span>{businessDetailsData?.total_followers}{businessDetailsData && businessDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span>
+                        }
+                        text="Flag Seller"
+                        variant="redOutline"
+                        onClick={() => {
+                          setFlagSeller(true);
+                        }}
+                      />
+                    </div>
+
+                    <div></div>
+                    <Button
+                      className={styles.green}
+                      icon={
+                        <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                      }
+                      text="Copy URL"
+                      variant="noBg"
+                      onClick={() => {
+                        handleCopyLink(currenthref || "");
+                      }}
+                    />
+
+                    <div className={styles.chatCart}>
+                      <p className={styles.seller}>Chat with seller</p>
+
+                      <div className={styles.starWrapper}>
+                        <p className={styles.message}>Is this available</p>
+                        <p className={styles.message}>
+                          {" "}
+                          Where is your location
+                        </p>
+                        <p className={styles.message}> More Enquiry</p>
+                      </div>
+
+                      <Input
+                        name="location"
+                        placeholder="Write your message here"
+                        type="textarea"
+                      />
+                      <div className={styles.startChat}>
+                        <Button text="Start Chat" />
                       </div>
                     </div>
                   </div>
-                  <p>Member Since {formatDateToMonthYear(businessDetailsData?.created_at || '')}</p>
-
-                  <div
-                    style={{ paddingBlock: "2.4rem" }}
-                    className={styles.flex}
-                  >
-                    <Button
-                      onClick={() => handleNavigateToSellersProfile()}
-                      text="View Profile"
-                    />
-                    { user?.id !== businessDetailsData?.user_id &&
-
-                    <Button
-                      onClick={handleFollowBusiness}
-                      disabled={followBusinessMutation}
-                      text={
-                        isUserFollowingBusiness
-                          ? followBusinessMutation
-                            ? "Unfollowing"
-                            : "Unfollow"
-                          : followBusinessMutation
-                          ? "Following"
-                          : "Follow"
-                      }
-                      variant="white"
-                    />}
-                  </div>
-                  <div className={styles.social}>
-                    <Image
-                      src={WhatsappLogo}
-                      alt="WhatsappLogo"
-                      preview={false}
-                      onClick={() => {
-                        if (businessDetailsData?.whatsapp) {
-                          window.open(businessDetailsData.whatsapp, "_blank");
-                        }
-                      }}
-                    />
-                    <Image
-                      src={InstagramIcon}
-                      alt="InstagramIcon"
-                      preview={false}
-                      onClick={() => {
-                        if (businessDetailsData?.instagram) {
-                          window.open(
-                            businessDetailsData.instagram,
-                            "_blank"
-                          );
-                        }
-                      }}
-                    />
-                    <Image
-                      src={FaceBookStoreIcon}
-                      alt="FaceBookStoreIcon"
-                      preview={false}
-                      // width={40}
-                      height={32}
-                      onClick={() => {
-                        if (businessDetailsData?.facebook) {
-                          window.open(businessDetailsData.facebook, "_blank");
-                        }
-                      }}
-                    />
-                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false}
-                    onClick={() => {
-                      if (businessDetailsData?.website) {
-                        window.open(businessDetailsData.website, "_blank");
-                      }
-                    }} />
-                  </div>
-                  <Button
-                    icon={<img src={CallLogo} alt="success" />}
-                    text={
-                      isNumberVisible
-                        ? productDetailsData?.user?.number || "No phone number"
-                        : "Click To Show Number"
-                    }
-                    onClick={() =>
-                      handleShowNumber(productDetailsData?.user?.number || "")
-                    }
-                  />
-
-                  <div className={styles.flag}>
-                    <Button
-                      icon={
-                        <Image src={FlagLogo} alt="FlagLogo" preview={false} />
-                      }
-                      text="Flag Seller"
-                      variant="redOutline"
-                      onClick={() => {
-                        setFlagSeller(true);
-                      }}
-                    />
-                  </div>
-
-                  <div></div>
-                  <Button
-                    className={styles.green}
-                    icon={
-                      <Image src={CopyIcon} alt="CopyIcon" preview={false} />
-                    }
-                    text="Copy URL"
-                    variant="noBg"
-                    onClick={() => {
-                      handleCopyLink(currenthref || "");
-                    }}
-                  />
-
-                  <div className={styles.chatCart}>
-                    <p className={styles.seller}>Chat with seller</p>
-
-                    <div className={styles.starWrapper}>
-                      <p className={styles.message}>Is this available</p>
-                      <p className={styles.message}> Where is your location</p>
-                      <p className={styles.message}> More Enquiry</p>
-                    </div>
-
-                    <Input
-                      name="location"
-                      placeholder="Write your message here"
-                      type="textarea"
-                    />
-                    <div className={styles.startChat}>
-                      <Button text="Start Chat" />
-                    </div>
-                  </div>
-                </div>
-
-
-                :
-
-
-//SellersProfile\\
-                 <div className={styles.card}>
-                  <p className={styles.seller}>Seller’s Information </p>
-                  <div className={styles.flex}>
-                    <img
-                      src={profileDetailsData?.profile_image!}
-                      alt="sellerslogo"
-                      className={styles.sellerLogo}
-                    />
-                    <div>
-                      <p className={styles.name}>{profileDetailsData?.name || ''}</p>
-                      <div className={styles.starWrapper}>
-                        <span className={styles.star}>
-                          {/* <Image
+                ) : (
+                  //SellersProfile\\
+                  <div className={styles.card}>
+                    <p className={styles.seller}>Seller’s Information </p>
+                    <div className={styles.flex}>
+                      <Image
+                        src={profileDetailsData?.profile_image! || ProfileIcon}
+                        alt="sellerslogo"
+                        className={styles.sellerLogo}
+                        preview={true}
+                        width={90}
+                        height={90}
+                      />
+                      <div>
+                        <p className={styles.name}>
+                          {profileDetailsData?.name || ""}
+                        </p>
+                        <div className={styles.starWrapper}>
+                          <span className={styles.star}>
+                            {/* <Image
                             width={20}
                             src={StarYellow}
                             alt="StarYellow"
                             preview={false}
                           /> */}
-                          {/* ( {profileDetailsData?.total_rating }{" "}
+                            {/* ( {profileDetailsData?.total_rating }{" "}
                           {profileDetailsData &&
                           profileDetailsData?.total_rating > 1
                             ? "ratings"
                             : "rating"}
                           ) */}
-                        </span>
-                        {/* <span className={styles.dot}>.</span>{" "} */}
-                        {/* <span>{profileDetailsData?.total_followers}{profileDetailsData && profileDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span> */}
+                          </span>
+                          {/* <span className={styles.dot}>.</span>{" "} */}
+                          {/* <span>{profileDetailsData?.total_followers}{profileDetailsData && profileDetailsData?.total_followers > 1 ? ' Followers' : ' Follower'}</span> */}
+                        </div>
+                      </div>
+                    </div>
+                    <p>
+                      Member Since{" "}
+                      {formatDateToMonthYear(
+                        profileDetailsData?.created_at || ""
+                      )}
+                    </p>
+
+                    <div
+                      style={{ paddingBlock: "2.4rem" }}
+                      className={styles.flex}
+                    >
+                      <Button
+                        onClick={handleNavigateToSellersProfile}
+                        text="View Profile"
+                      />
+                      {user?.id !== profileDetailsData?.id && (
+                        <Button
+                          onClick={handleFollowSeller}
+                          disabled={followSellersMutation}
+                          text={
+                            isUserFollowingSeller
+                              ? followSellersMutation
+                                ? "Unfollowing"
+                                : "Unfollow"
+                              : followSellersMutation
+                              ? "Following"
+                              : "Follow"
+                          }
+                          variant="white"
+                        />
+                      )}
+                    </div>
+                    <div className={styles.social}>
+                      <Image
+                        src={WhatsappLogo}
+                        alt="WhatsappLogo"
+                        preview={false}
+                      />
+                      <Image
+                        src={InstagramIcon}
+                        alt="InstagramIcon"
+                        preview={false}
+                        onClick={() => {
+                          if (profileDetailsData?.instagram_address) {
+                            window.open(
+                              profileDetailsData?.instagram_address,
+                              "_blank"
+                            );
+                          }
+                        }}
+                      />
+                      <Image
+                        src={FaceBookStoreIcon}
+                        alt="FaceBookStoreIcon"
+                        preview={false}
+                        // width={40}
+                        height={32}
+                        onClick={() => {
+                          if (profileDetailsData?.facebook_address) {
+                            window.open(
+                              profileDetailsData.facebook_address,
+                              "_blank"
+                            );
+                          }
+                        }}
+                      />
+                      <Image
+                        src={BrowseLogo}
+                        alt="BrowseLogo"
+                        preview={false}
+                        onClick={() => {
+                          if (profileDetailsData?.website_address) {
+                            window.open(
+                              profileDetailsData.website_address,
+                              "_blank"
+                            );
+                          }
+                        }}
+                      />
+                    </div>
+                    <Button
+                      icon={<img src={CallLogo} alt="success" />}
+                      text={
+                        isNumberVisible
+                          ? productDetailsData?.user?.number ||
+                            "No phone number"
+                          : "Click To Show Number"
+                      }
+                      onClick={() =>
+                        handleShowNumber(productDetailsData?.user?.number || "")
+                      }
+                    />
+
+                    <div className={styles.flag}>
+                      <Button
+                        icon={
+                          <Image
+                            src={FlagLogo}
+                            alt="FlagLogo"
+                            preview={false}
+                          />
+                        }
+                        text={
+                          hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"
+                        }
+                        variant="redOutline"
+                        onClick={() => {
+                          setFlagSeller(true);
+                        }}
+                      />
+                    </div>
+
+                    <div></div>
+                    <Button
+                      className={styles.green}
+                      icon={
+                        <Image src={CopyIcon} alt="CopyIcon" preview={false} />
+                      }
+                      text="Copy URL"
+                      variant="noBg"
+                      onClick={() => {
+                        handleCopyLink(currenthref || "");
+                      }}
+                    />
+
+                    <div className={styles.chatCart}>
+                      <p className={styles.seller}>Chat with seller</p>
+
+                      <div className={styles.starWrapper}>
+                        <p className={styles.message}>Is this available</p>
+                        <p className={styles.message}>
+                          {" "}
+                          Where is your location
+                        </p>
+                        <p className={styles.message}> More Enquiry</p>
+                      </div>
+
+                      <Input
+                        name="location"
+                        placeholder="Write your message here"
+                        type="textarea"
+                      />
+                      <div className={styles.startChat}>
+                        <Button text="Start Chat" />
                       </div>
                     </div>
                   </div>
-                  <p>Member Since {formatDateToMonthYear(profileDetailsData?.created_at || '')}</p>
-
-                  <div
-                    style={{ paddingBlock: "2.4rem" }}
-                    className={styles.flex}
-                  >
-                    <Button
-                      onClick={ handleNavigateToSellersProfile}
-                      text="View Profile"
-                    />
-                    { user?.id !== profileDetailsData?.id &&
-
-                    <Button
-                      onClick={handleFollowSeller}
-                      disabled={followSellersMutation}
-                      text={
-                        isUserFollowingSeller
-                          ? followSellersMutation
-                            ? "Unfollowing"
-                            : "Unfollow"
-                          : followSellersMutation
-                          ? "Following"
-                          : "Follow"
-                      }
-                      variant="white"
-                    />}
-                  </div>
-                  <div className={styles.social}>
-                    <Image
-                      src={WhatsappLogo}
-                      alt="WhatsappLogo"
-                      preview={false}
-                     
-                    />
-                    <Image
-                      src={InstagramIcon}
-                      alt="InstagramIcon"
-                      preview={false}
-                      onClick={() => {
-                        if (profileDetailsData?.instagram_address) {
-                          window.open(profileDetailsData?.instagram_address, "_blank");
-                        }
-                      }}
-                    />
-                    <Image
-                      src={FaceBookStoreIcon}
-                      alt="FaceBookStoreIcon"
-                      preview={false}
-                      // width={40}
-                      height={32}
-                      onClick={() => {
-                        if (profileDetailsData?.facebook_address) {
-                          window.open(profileDetailsData.facebook_address, "_blank");
-                        }
-                      }}
-                    />
-                    <Image src={BrowseLogo} alt="BrowseLogo" preview={false}
-                      onClick={() => {
-                        if (profileDetailsData?.website_address) {
-                          window.open(profileDetailsData.website_address, "_blank");
-                        }
-                      }} />
-                  </div>
-                  <Button
-                    icon={<img src={CallLogo} alt="success" />}
-                    text={
-                      isNumberVisible
-                        ? productDetailsData?.user?.number || "No phone number"
-                        : "Click To Show Number"
-                    }
-                    onClick={() =>
-                      handleShowNumber(productDetailsData?.user?.number || "")
-                    }
-                  />
-
-                  <div className={styles.flag}>
-                    <Button
-                      icon={
-                        <Image src={FlagLogo} alt="FlagLogo" preview={false} />
-                      }
-                      text={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
-                      variant="redOutline"
-                      onClick={() => {
-                        setFlagSeller(true);
-                      }}
-                    />
-                  </div>
-
-                  <div></div>
-                  <Button
-                    className={styles.green}
-                    icon={
-                      <Image src={CopyIcon} alt="CopyIcon" preview={false} />
-                    }
-                    text="Copy URL"
-                    variant="noBg"
-                    onClick={() => {
-                      handleCopyLink(currenthref || "");
-                    }}
-                  />
-
-                  <div className={styles.chatCart}>
-                    <p className={styles.seller}>Chat with seller</p>
-
-                    <div className={styles.starWrapper}>
-                      <p className={styles.message}>Is this available</p>
-                      <p className={styles.message}> Where is your location</p>
-                      <p className={styles.message}> More Enquiry</p>
-                    </div>
-
-                    <Input
-                      name="location"
-                      placeholder="Write your message here"
-                      type="textarea"
-                    />
-                    <div className={styles.startChat}>
-                      <Button text="Start Chat" />
-                    </div>
-                  </div>
-                </div> 
-                }
+                )}
 
                 <div className={styles.card}>
                   <p className={styles.seller}>Safety Tips</p>
@@ -692,7 +789,11 @@ const BigScreen = ({
         title="Flag Seller"
         footer={null}
       >
-        <FlagSeller hasUserFlaggedSeller={hasUserFlaggedSeller} sellerId={productDetailsData?.user_id}  handleCloseModal={() => setFlagSeller(false)} />
+        <FlagSeller
+          hasUserFlaggedSeller={hasUserFlaggedSeller}
+          sellerId={productDetailsData?.user_id}
+          handleCloseModal={() => setFlagSeller(false)}
+        />
       </Modal>
     </main>
   );

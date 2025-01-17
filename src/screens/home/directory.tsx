@@ -5,8 +5,6 @@ import cardIcon from "../../assets/image 21.svg";
 import Image4 from "../../assets/image 23.svg";
 import Image8 from "../../assets/image 27.svg";
 import Image24 from "../../assets/image 28 (1).svg";
-import SearchInput from "../../customs/searchInput";
-import { useState } from "react"; // Import useState for handling search input value
 
 const cardData = [
   {
@@ -50,7 +48,6 @@ const cardData = [
 
 const HomeDirectory = () => {
   const navigate = useNavigate(); // Hook for navigation
-  const [searchValues, setSearchValues] = useState<{ [key: number]: string }>({}); // State to store search input value for each card
 
   const handleNavigate = (route: string, query: string = "") => {
     const fullRoute = query ? `${route}/${query}` : route;
@@ -58,24 +55,14 @@ const HomeDirectory = () => {
     window.scrollTo(0, 0); 
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
-    setSearchValues((prevState) => ({
-      ...prevState,
-      [id]: e.target.value, // Update the search value for the specific card
-    }));
-  };
 
-  const handleKeyDown = (e: React.KeyboardEvent, route: string, id: number) => {
-    if (e.key === 'Enter') {
-      handleNavigate(route, searchValues[id]); // Trigger navigate on Enter key press
-    }
-  };
 
   return (
     <div className={styles.directryContainer}>
       {cardData?.length &&
         cardData?.map((card, index) => (
           <div
+          onClick={()=>handleNavigate(card?.route)}
             className={styles.directryCard}
             key={card.id}
             style={{
@@ -107,20 +94,15 @@ const HomeDirectory = () => {
             <p>{card.content}</p>
             <br />
 
-            <SearchInput
+            {/* <SearchInput
               placeholder={card?.placeholder}
               value={searchValues[card.id] || ""} // Set the search value for the specific card
               onChange={(e) => handleSearchChange(e, card.id)} // Update the search value for this card
               onKeyDown={(e) => handleKeyDown(e, card.route, card.id)} // Trigger handleNavigate on Enter key press
 
             >
-              {/* <button
-                className={styles.smallButton} // Add a style for the button
-                onClick={() => handleNavigate(card.route, searchValues[card.id])} // Pass the specific search value to the route
-              >
-                search
-              </button> */}
-            </SearchInput>
+            
+            </SearchInput> */}
           </div>
         ))}
     </div>

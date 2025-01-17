@@ -31,7 +31,7 @@ const Claimed = () => {
   const [showContent] = useState(true);
   const [openShare, setOpenShare] = useState(false);
 
-  //   const hasReviews = reviewData?.lenght;
+  //   const hasReviews = reviewData?.length;
   //   console.log(hasReviews , "hasReviews")
 
   const textToCopy = "blinkers/ shopwithrinsyaccderb/e";

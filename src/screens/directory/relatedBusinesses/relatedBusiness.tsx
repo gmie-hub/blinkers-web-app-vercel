@@ -58,7 +58,7 @@ const RelatedBusinesses = ({
       <div className={showHeading ? "wrapper" : ""}>
         {showHeading && <RouteIndicator showBack />}
 
-        {/* {showSeeAll && relatedBusinessLenght > 0 && (
+        {/* {showSeeAll && relatedBusinessLength > 0 && (
           <div>
             <div className={styles.reviewbtn}>
               <p className={styles.title}> Related Businesses</p>

@@ -365,3 +365,24 @@ a:visited {
   font-size: 18px;
   color: #555;
 }
+
+
+/* global.css or similar */
+.ant-select-selector {
+  border-color: green !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: green !important;
+  border-color: green !important;
+}
+
+.ant-checkbox-checked::after {
+  border-color: green !important;
+  background-color: green !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  border-color: green !important;
+  box-shadow: 0 0 0 2px rgba(0, 128, 0, 0.2) !important;
+}

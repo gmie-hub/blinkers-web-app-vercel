@@ -21,7 +21,6 @@ import StarG from "../../../assets/starger.svg";
 import RouteIndicator from "../../../customs/routeIndicator";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
-  FollowBusiness,
   FollowSeller,
   getApplicantsbyId,
   getFollowersByUser_id,
@@ -34,6 +33,7 @@ import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../utils/errorMessage";
 import { useState } from "react";
 import FlagSeller from "../market/flagSeller/flagSeller";
+import ProfileIcon from "../../../assets/Avatarprofile.svg";
 
 const SellerProfile = () => {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const SellerProfile = () => {
   const queryClient = useQueryClient();
   const [flagSeller, setFlagSeller] = useState(false);
 
-  // const hasReviews = reviewData?.lenght;
+  // const hasReviews = reviewData?.length;
   // console.log(hasReviews, "hasReviews");
 
   // const handleNavigateToReview = () => {
@@ -166,7 +166,7 @@ const SellerProfile = () => {
                 <div className={styles.card}>
                   <div>
                     <div className={styles.passport}>
-                      <img src={sellersDetailsData?.profile_image || ''} alt="ProductIcon" className={styles.sellerLogo} />
+                      <img src={sellersDetailsData?.profile_image || ProfileIcon} alt="ProductIcon" className={styles.sellerLogo} />
 
                       <div className={styles.detailsflex}>
                         <p className={styles.name}>

@@ -19,7 +19,7 @@ import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
-import { useState } from "react";
+import {  useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
@@ -31,6 +31,7 @@ import {
 import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
+import ProfileIcon from "../../../../assets/Avatarprofile.svg";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -46,15 +47,14 @@ const safetyTips = [
 interface Props {
   productDetailsData?: ProductDatum;
   handleFollowBusiness?: () => void;
-  handleFollowSeller?:()=>void;
+  handleFollowSeller?: () => void;
   followBusinessMutation?: boolean;
-  followSellersMutation?:boolean;
+  followSellersMutation?: boolean;
   isUserFollowingBusiness?: boolean;
-  isUserFollowingSeller?:boolean;
+  isUserFollowingSeller?: boolean;
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
-  hasUserFlaggedSeller?:boolean;
-
+  hasUserFlaggedSeller?: boolean;
 }
 
 const SmallScreen = ({
@@ -77,7 +77,7 @@ const SmallScreen = ({
   const [isNumberVisible, setIsNumberVisible] = useState(false);
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
-  
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const items: TabsProps["items"] = [
     {
@@ -114,6 +114,24 @@ const SmallScreen = ({
       handleCopyLink(textToCopy);
     }
   };
+
+  const maxVisibleImages = 4;
+
+  const images = productDetailsData?.add_images || [];
+
+  const handleNext = () => {
+    if (currentIndex + maxVisibleImages < images.length) {
+      setCurrentIndex(currentIndex + maxVisibleImages);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - maxVisibleImages);
+    }
+  };
+
+  const visibleImages = images && images?.length > 0 && images?.slice(currentIndex, currentIndex + maxVisibleImages);
 
   return (
     <main>
@@ -159,12 +177,12 @@ const SmallScreen = ({
             </div>
 
             <div className={styles.leftContainer}>
-              <div className={styles.firstSideLeft}>
+              {/* <div className={styles.firstSideLeft}>
                 {productDetailsData?.add_images?.map((dress) => (
                   <div key={dress.id} className={styles.dressCard}>
                     <div>
                       <Image
-                        width={"5.3rem"}
+                        width={"2.3rem"}
                         height={"4.4rem"}
                         src={dress.add_image}
                         alt={dress.add_image}
@@ -173,6 +191,37 @@ const SmallScreen = ({
                     </div>
                   </div>
                 ))}
+              </div> */}
+
+
+                 <div className={styles.firstSideLeft}>
+                 <button
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  className={styles.arrowButton}
+                >
+                  &lt; {/* Left arrow */}
+                </button>
+                {visibleImages && visibleImages?.map((dress) => (
+                  <div key={dress.id} className={styles.dressCard}>
+                    <div>
+                      <Image
+                        width={"6.3rem"}
+                        height={"5.4rem"}
+                        src={dress.add_image}
+                        alt={dress.add_image}
+                        preview={true}
+                      />
+                    </div>
+                  </div>
+                ))}
+                 <button
+                  onClick={handleNext}
+                  disabled={currentIndex + maxVisibleImages >= images.length}
+                  className={styles.arrowButton}
+                >
+                  &gt; {/* Right arrow */}
+                </button>
               </div>
 
               <div className={styles.secondSideLeft}>
@@ -185,6 +234,7 @@ const SmallScreen = ({
                       preview={false}
                     />
                   </div>
+                  
                   {/* <Image
                   width={"58.6rem"}
                   // height={'58.6rem'}
@@ -206,7 +256,7 @@ const SmallScreen = ({
                 </div>
               </div>
             </div>
-            
+
             <div className={styles.tabs}>
               {/* <Tabs defaultActiveKey="1" items={items} /> */}
               <Tabs
@@ -249,7 +299,7 @@ const SmallScreen = ({
                     <p className={styles.seller}>Seller’s Information </p>
                     <div className={styles.flexSeller}>
                       <img
-                        src={businessDetailsData?.logo}
+                        src={businessDetailsData?.logo || ProfileIcon}
                         width={"2rem"}
                         alt="ProductIcon"
                         className={styles.sellerLogo}
@@ -390,7 +440,7 @@ const SmallScreen = ({
                     <p className={styles.seller}>Seller’s Information </p>
                     <div className={styles.flexSeller}>
                       <img
-                        src={profileDetailsData?.profile_image ?? ""}
+                        src={profileDetailsData?.profile_image || ProfileIcon}
                         width={"2rem"}
                         alt="sellerslogo"
                         className={styles.sellerLogo}
@@ -504,7 +554,9 @@ const SmallScreen = ({
                             preview={false}
                           />
                         }
-                        text={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
+                        text={
+                          hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"
+                        }
                         variant="redOutline"
                         onClick={() => {
                           setFlagSeller(true);
@@ -644,7 +696,11 @@ const SmallScreen = ({
         title="Flag Seller"
         footer={null}
       >
-        <FlagSeller hasUserFlaggedSeller={hasUserFlaggedSeller} sellerId={productDetailsData?.user_id} handleCloseModal={() => setFlagSeller(false)} />
+        <FlagSeller
+          hasUserFlaggedSeller={hasUserFlaggedSeller}
+          sellerId={productDetailsData?.user_id}
+          handleCloseModal={() => setFlagSeller(false)}
+        />
       </Modal>
     </main>
   );

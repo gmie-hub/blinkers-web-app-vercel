@@ -30,6 +30,8 @@ export default function ProductReviews({
         queryFn: () => getAllReviews(id!),
         retry: 0,
         refetchOnWindowFocus: false,
+        enabled:!!id
+
       },
     ],
   });

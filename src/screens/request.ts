@@ -41,9 +41,10 @@ export const getLGAbyStateId = async (stateId: number) => {
 export const getJobDetails = async (id: number) => {
   return (await api.get(`jobs/${id}`))?.data as JobDetailsResponse;
 };
-export const getIndustries = async (page?: number) => {
+export const getIndustries = async (search?:string) => {
   // Construct the URL dynamically based on whether page is provided
-  const url = page ? `industries?page=${page}&per_page=100` : `industries?per_page=100`;
+  const url = search ? `industries?per_page=${500}&search=${search}` : `industries?per_page=${500}`;
+  // const url = `industries?per_page=${500}&search$=${search}`
 
   return (await api.get(url))?.data as any;
 };
@@ -60,8 +61,8 @@ export const getSubCategory = async (id: number) => {
 };
 export const getAllCategory = async (search?: string | number) => {
   const url = search
-    ? `categories?search=${search}&per_page=${100}`
-    : `categories?per_page=${100}`;
+    ? `categories?search=${search}&per_page=${500}`
+    : `categories?per_page=${500}`;
   return (await api.get(url))?.data as CategoryResponse;
 };
 
@@ -160,9 +161,21 @@ export const createAds = async (payload: FormData) => {
   )?.data;
 };
 
-export const UpdateAds = async (payload: Partial<ProductDatum>) => {
-  return (await api.patch(`ads/${payload.id}`, payload, {}))?.data as Response;
+// export const UpdateAds = async (payload:FormData) => {
+//   return (await api.patch(`ads/${payload.id}`, payload, {
+//     headers: { "Content-Type": "multipart/form-data" },
+
+
+//   }))?.data as Response;
+// };
+
+
+export const UpdateAds = async (id: string | number, payload: FormData) => {
+  return (await api.patch(`1ads/${id}`, payload, {
+    headers: { "Content-Type": "multipart/form-data" },
+  }))?.data as Response;
 };
+
 
 export const basicInfoApi = async (payload: FormData) => {
   return (

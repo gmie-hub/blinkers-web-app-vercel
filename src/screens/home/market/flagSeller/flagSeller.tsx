@@ -73,7 +73,7 @@ const FlagSellerContent = ({ handleCloseModal,sellerId,hasUserFlaggedSeller }: P
           initialValues={{
             reasonForFlag: "",
           }}
-          onSubmit={(values) => {
+          onSubmit={() => {
             // flagSellerHandler(values);
             handleCloseModal();
             setIsDeleteModal(true); // Open the delete confirmation modal
