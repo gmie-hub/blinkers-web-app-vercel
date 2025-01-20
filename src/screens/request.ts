@@ -14,20 +14,30 @@ export const getAllReviews = async (id: string, page?: number) => {
 //     ?.data as JobResponse;
 // };
 export const getAllJobs = async (page: number, search?: string | number) => {
-  const url = search ? `jobs?page=${page}&search=${search}` : `jobs?page=${page}`;
+  const url = search
+    ? `jobs?page=${page}&search=${search}`
+    : `jobs?page=${page}`;
   return (await api.get(url))?.data as JobResponse;
 };
 export const getAllState = async () => {
   return (await api.get(`states?per_page=${40}`))?.data as StateResponse;
 };
-export const getMyApplications = async (page: number,user_id:number,status:number) => {
-  return (await api.get(`jobs/application?page=${page}&user_id=${user_id}&status=${status}`))?.data as ApplicantResponse;
+export const getMyApplications = async (
+  page: number,
+  user_id: number,
+  status: number
+) => {
+  return (
+    await api.get(
+      `jobs/application?page=${page}&user_id=${user_id}&status=${status}`
+    )
+  )?.data as ApplicantResponse;
 };
 
 export const getMyApplicationDetails = async (id: number) => {
-  return (await api.get(`jobs/application/${id}`))?.data as ApplicDetailsResponse;
+  return (await api.get(`jobs/application/${id}`))
+    ?.data as ApplicDetailsResponse;
 };
-
 
 export const getLGAbyStateId = async (stateId: number) => {
   return (await api.get(`local-govt?state_id=${stateId}`))?.data as LGAResponse;
@@ -41,9 +51,11 @@ export const getLGAbyStateId = async (stateId: number) => {
 export const getJobDetails = async (id: number) => {
   return (await api.get(`jobs/${id}`))?.data as JobDetailsResponse;
 };
-export const getIndustries = async (search?:string) => {
+export const getIndustries = async (search?: string) => {
   // Construct the URL dynamically based on whether page is provided
-  const url = search ? `industries?per_page=${500}&search=${search}` : `industries?per_page=${500}`;
+  const url = search
+    ? `industries?per_page=${500}&search=${search}`
+    : `industries?per_page=${500}`;
   // const url = `industries?per_page=${500}&search$=${search}`
 
   return (await api.get(url))?.data as any;
@@ -52,8 +64,6 @@ export const getIndustries = async (search?:string) => {
 export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };
-
-
 
 export const getSubCategory = async (id: number) => {
   return (await api.get(`categories/sub?category_id=${id}`))
@@ -90,10 +100,16 @@ export const getAllBusiness = async (
   return (await api.get(url))?.data as any;
 };
 
-export const getMyAdzByUserId = async (user_id:number) => {
+export const getMyAdzByUserId = async (user_id: number) => {
   return (await api.get(`/ads?per_page=${30}&user_id=${user_id}`))?.data as any;
 };
-export const getAllMarket = async (page?: number, search?: string | number, state_id?:number,local_government_area_id?:number) => {
+
+export const getAllMarket = async (
+  page?: number,
+  search?: string | number,
+  state_id?: number,
+  local_government_area_id?: number
+) => {
   let url = `/ads?per_page=${50}`;
 
   const queryParams: string[] = [];
@@ -105,16 +121,18 @@ export const getAllMarket = async (page?: number, search?: string | number, stat
   if (search !== undefined && search !== "") {
     queryParams.push(`search=${search}`);
   }
+
   if (state_id !== undefined && state_id !== 0) {
     queryParams.push(`state_id=${state_id}`);
   }
-  if (local_government_area_id !== undefined && local_government_area_id !== 0) {
+
+  if (
+    local_government_area_id !== undefined &&
+    local_government_area_id !== 0
+  ) {
     queryParams.push(`local_government_area_id=${local_government_area_id}`);
   }
-  
 
-
-  
   // if(sub_category_id !==undefined && sub_category_id.length !== 0){
   //   queryParams.push(`sub_category_id=${sub_category_id}`);
   // }
@@ -136,10 +154,8 @@ export const FollowBusiness = async (payload: Partial<FollowBusiness>) => {
 };
 
 export const FollowSeller = async (payload: Partial<FollowBusiness>) => {
-  return (await api.post("followers/handle-action", payload, {}))
-    ?.data as any;
+  return (await api.post("followers/handle-action", payload, {}))?.data as any;
 };
-
 
 export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
   return (await api.post("business/reviews", payload, {}))?.data as any;
@@ -165,17 +181,16 @@ export const createAds = async (payload: FormData) => {
 //   return (await api.patch(`ads/${payload.id}`, payload, {
 //     headers: { "Content-Type": "multipart/form-data" },
 
-
 //   }))?.data as Response;
 // };
 
-
 export const UpdateAds = async (id: string | number, payload: FormData) => {
-  return (await api.patch(`1ads/${id}`, payload, {
-    headers: { "Content-Type": "multipart/form-data" },
-  }))?.data as Response;
+  return (
+    await api.patch(`1ads/${id}`, payload, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+  )?.data as Response;
 };
-
 
 export const basicInfoApi = async (payload: FormData) => {
   return (
@@ -184,7 +199,6 @@ export const basicInfoApi = async (payload: FormData) => {
     })
   )?.data;
 };
-
 
 export const ClaimBusinessApi = async (payload: FormData) => {
   return (
@@ -203,21 +217,26 @@ export const ProfInfoApi = async (payload: FormData) => {
 };
 export const uploadAdsGallery = async (payload: FormData) => {
   return (
-    await api.post('ads/image', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    await api.post("ads/image", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
 };
 export const uploadAdsVideo = async (payload: FormData) => {
   return (
-    await api.post('ads/video', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    await api.post("ads/video", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data;
 };
 
-
-export const  deleteAdsGalarybyId = async ({ add_id, image_ids }: { add_id: number | string; image_ids: number[] }) => {
+export const deleteAdsGalarybyId = async ({
+  add_id,
+  image_ids,
+}: {
+  add_id: number | string;
+  image_ids: number[];
+}) => {
   return (
     await api.delete(`ads/image`, {
       data: {
@@ -228,10 +247,8 @@ export const  deleteAdsGalarybyId = async ({ add_id, image_ids }: { add_id: numb
   )?.data as any;
 };
 
-
-export const getAdsByUserId = async (user_id:number,page: number) => {
+export const getAdsByUserId = async (user_id: number, page: number) => {
   return (await api.get(`/ads?user_id=${user_id}&page=${page}&per_page=${50}`))
-
     ?.data as AllProductaResponse;
 };
 
@@ -240,30 +257,44 @@ export const getApplicantsbyId = async (id: number) => {
     ?.data as UserDataResponse;
 };
 
-
 export const getBusinessById = async (id: number) => {
   return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;
 };
-export const getFollowersByUser_id = async (follower_id: number,user_id: number) => {
-  return (await api.get(`followers?follower_id=${follower_id}&user_id=${user_id}`))
-    ?.data as BusinessFollowersResponse;
+export const getFollowersByUser_id = async (
+  follower_id: number,
+  user_id: number
+) => {
+  return (
+    await api.get(`followers?follower_id=${follower_id}&user_id=${user_id}`)
+  )?.data as BusinessFollowersResponse;
 };
 
-
-export const getFlaggedSellerBySeller_idUser_id = async (user_id: number,seller_id: number) => {
-  return (await api.get(`sellers/flag?user_id=${user_id}&seller_id=${seller_id}`))
-    ?.data as BusinessFollowersResponse;
+export const getFlaggedSellerBySeller_idUser_id = async (
+  user_id: number,
+  seller_id: number
+) => {
+  return (
+    await api.get(`sellers/flag?user_id=${user_id}&seller_id=${seller_id}`)
+  )?.data as BusinessFollowersResponse;
 };
-export const getFlaggedJobByJob_idUser_id = async (job_id: number,user_id: number) => {
+export const getFlaggedJobByJob_idUser_id = async (
+  job_id: number,
+  user_id: number
+) => {
   return (await api.get(`jobs/flag?job_id=${job_id}&user_id=${user_id}`))
     ?.data as any;
 };
 
-export const getFollowersByBusiness_id = async (user_id: number,business_id: number) => {
+export const getFollowersByBusiness_id = async (
+  user_id: number,
+  business_id: number
+) => {
   // return (await api.get(`business/followers?business_id=${business_id}`))
-  return (await api.get(`business/followers?user_id=${user_id}&business_id=${business_id}`))
-
-    ?.data as BusinessFollowersResponse;
+  return (
+    await api.get(
+      `business/followers?user_id=${user_id}&business_id=${business_id}`
+    )
+  )?.data as BusinessFollowersResponse;
 };
 
 export const FlagJobApi = async (payload: Partial<FlagJob>) => {
@@ -273,7 +304,6 @@ export const FlagJobApi = async (payload: Partial<FlagJob>) => {
 export const FlagSellerApi = async (payload: Partial<FlagSeller>) => {
   return (await api.post("/sellers/flag/toggle", payload))?.data as Response;
 };
-
 
 export const ApplyForJobApi = async (payload: Partial<FlagJob>) => {
   return (await api.post("/jobs/application", payload))?.data as Response;
@@ -384,7 +414,6 @@ export const handleCopyLink = (textToCopy: string) => {
     });
 };
 
-
 export const getJobBYBusinessId = async (id: number) => {
   return (await api.get(`jobs?business_id=${id}`))?.data as JobResponse;
 };
@@ -396,14 +425,25 @@ export const UpdateJob = async (payload: Partial<JobDatum>) => {
   return (await api.patch(`jobs/${payload.id}`, payload, {}))?.data as Response;
 };
 
-export const getAllApplication = async (page: number,job_id:number,status:number) => {
-  return (await api.get(`jobs/application?page=${page}&job_id=${job_id}&status=${status}`))?.data as any;
+export const getAllApplication = async (
+  page: number,
+  job_id: number,
+  status: number
+) => {
+  return (
+    await api.get(
+      `jobs/application?page=${page}&job_id=${job_id}&status=${status}`
+    )
+  )?.data as any;
 };
 export const getApplicationDetails = async (id: number) => {
   return (await api.get(`jobs/application/${id}`))?.data as ApplicantResponse;
 };
 
-export const updateApplicationStatus = async (payload: ApplicationStatusPayload, id: number) => {
+export const updateApplicationStatus = async (
+  payload: ApplicationStatusPayload,
+  id: number
+) => {
   const response = await api.patch(`jobs/application/${id}`, payload);
   return response.data;
 };
@@ -413,9 +453,10 @@ export const deleteAds = async ({ id }: { id: number }) => {
 };
 
 export const changePassword = async (payload: Partial<ChangePassword>) => {
-  return (await api.patch(`users/change-password`, payload, {}))?.data as Response;
+  return (await api.patch(`users/change-password`, payload, {}))
+    ?.data as Response;
 };
 
 export const deleteUser = async () => {
-  return (await api.delete(`/users/delete`))?.data ;
-};  
+  return (await api.delete(`/users/delete`))?.data;
+};

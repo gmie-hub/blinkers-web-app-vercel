@@ -21,7 +21,8 @@ const cardData = [
       />
     ),
     title: "Send Us An Email",
-    para: "blinkersnigeria@gmail.com",
+    para: "support@blinkersnigeria.com",
+    
   },
   {
     id: 2,
@@ -74,7 +75,7 @@ const ContactUs = () => {
         <div className={styles.mainContainer}>
           <div className={styles.leftSection}>
             <div className={styles.cardContainer}>
-              {cardData.map((item) => (
+              {cardData?.map((item) => (
                 <div key={item.id} className={styles.card}>
                   <div className={styles.icon}>{item.icon}</div>
                   <h3>{item.title}</h3>

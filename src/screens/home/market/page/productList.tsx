@@ -7,8 +7,8 @@ import favorite from "../../../../assets/Icon + container.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import { countUpTo } from "../../trend";
 import { useQueries } from "@tanstack/react-query";
-import { getAllMarket } from "../../../request";
-import { AxiosError } from "axios";
+// import { getAllMarket } from "../../../request";
+import axios, { AxiosError } from "axios";
 import LocationIcon from "../../../../assets/locationrelated.svg";
 import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use react-icons for the back icon
 import Button from "../../../../customs/button/button";
@@ -18,44 +18,115 @@ import { useEffect } from "react";
 
 interface ProductListProps {
   appliedSearchTerm: string;
-  setAppliedSearchTerm:any;
-  selectedItems:number[];
-  stateId:number;
-  lgaId:number;
-  setLgaId:any
-  setStateId :any
+  setAppliedSearchTerm: any;
+  selectedItems: number[];
+  stateId: number;
+  lgaId: number;
+  setLgaId: any;
+  setStateId: any;
+  setSelectedItems:any
 }
 
-const ProductList: React.FC<ProductListProps> = ({ appliedSearchTerm,setAppliedSearchTerm,stateId,lgaId ,setLgaId,setStateId}) => {
+const ProductList: React.FC<ProductListProps> = ({
+  appliedSearchTerm,
+  setAppliedSearchTerm,
+  stateId,
+  lgaId,
+  setLgaId,
+  setStateId,
+  selectedItems,
+  setSelectedItems
+}) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-  const { currentPage, setCurrentPage, onChange,pageNum } = usePagination()
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const { search } = useParams();
 
-useEffect(() => {
-  if (currentPage !== pageNum) {
-    setCurrentPage(pageNum);
-  }
-}, [pageNum, currentPage, setCurrentPage])
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage]);
 
+  const data = {
+    sub_category_id: selectedItems
+  };
+
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_GATEWAY_URL,
+    headers: {
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
+      Pragma: "no-cache",
+      Expires: "0",
+    },
+    params: data,
+  });
+
+  const getAllMarket = async (
+    page?: number,
+    search?: string | number,
+    state_id?: number,
+    local_government_area_id?: number
+  ) => {
+    let url = `/ads?per_page=${50}`;
+
+    const queryParams: string[] = [];
+
+    if (page !== undefined) {
+      queryParams.push(`page=${page}`);
+    }
+
+    if (search !== undefined && search !== "") {
+      queryParams.push(`search=${search}`);
+    }
+
+    if (state_id !== undefined && state_id !== 0) {
+      queryParams.push(`state_id=${state_id}`);
+    }
+
+    if (
+      local_government_area_id !== undefined &&
+      local_government_area_id !== 0
+    ) {
+      queryParams.push(`local_government_area_id=${local_government_area_id}`);
+    }
+
+    // if(sub_category_id !==undefined && sub_category_id.length !== 0){
+    //   queryParams.push(`sub_category_id=${sub_category_id}`);
+    // }
+
+    if (queryParams.length > 0) {
+      url += `&${queryParams.join("&")}`;
+    }
+
+    return (await api.get(url))?.data as AllProductaResponse;
+  };
 
   const [getAllMarketQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-market", currentPage, appliedSearchTerm,stateId,lgaId],
-        queryFn: () => getAllMarket(currentPage, appliedSearchTerm, stateId,lgaId),
+        queryKey: [
+          "get-all-market",
+          currentPage,
+          appliedSearchTerm,
+          stateId,
+          lgaId,
+          selectedItems,
+        ],
+        queryFn: () =>
+          getAllMarket(currentPage, appliedSearchTerm, stateId, lgaId),
         // retry: 0,
         refetchOnWindowFocus: true,
         // enabled: Boolean(currentPage && appliedSearchTerm),
       },
     ],
   });
-  useEffect(()=>{
-    if(search){
-      setAppliedSearchTerm(search)
+  useEffect(() => {
+    if (search) {
+      setAppliedSearchTerm(search);
     }
-
-  },[search])
+  }, [search]);
 
   const marketData = getAllMarketQuery?.data?.data?.data || [];
   const marketError = getAllMarketQuery?.error as AxiosError;
@@ -67,15 +138,17 @@ useEffect(() => {
     window.scrollTo(0, 0);
   };
 
-   const handleBack = () => {
-    appliedSearchTerm="";
-    setAppliedSearchTerm('')
-    // search = ""; 
-    setCurrentPage(1); 
-    navigate("/market"); 
-    getAllMarketQuery?.refetch(); 
-    setStateId(0)
-    setLgaId(0)
+  const handleBack = () => {
+    appliedSearchTerm = "";
+    setAppliedSearchTerm("");
+    // search = "";
+    setCurrentPage(1);
+    navigate("/market");
+    getAllMarketQuery?.refetch();
+    setStateId(0);
+    setLgaId(0);
+    setSelectedItems([])
+    
   };
 
   // const handlePageChange = (pageNum: number) => {
@@ -87,24 +160,24 @@ useEffect(() => {
   return (
     <>
       {getAllMarketQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getAllMarketQuery?.isError ? (
         <h1 className="error">{marketErrorMessage}</h1>
       ) : (
         <div>
-           { appliedSearchTerm?.length > 0 && marketData?.length > 0 &&  (
-              <div>
-                <Button
-                  type="button"
-                  className="buttonStyle"
-                  onClick={handleBack}
-                  text="view all"
-                  icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
-                />
-                <br />
-                <br />
-              </div>
-            )}
+          {appliedSearchTerm?.length > 0 && marketData?.length > 0 && (
+            <div>
+              <Button
+                type="button"
+                className="buttonStyle"
+                onClick={handleBack}
+                text="view all"
+                icon={<img src={FaArrowLeft} alt="FaArrowLeft" />}
+              />
+              <br />
+              <br />
+            </div>
+          )}
           <section className={styles.promoImageContainer}>
             {marketData && marketData?.length > 0 ? (
               marketData?.map((item, index) => (
@@ -145,17 +218,18 @@ useEffect(() => {
                     <span style={{ color: "#222222", fontWeight: "600" }}>
                       {/* ₦{item?.price} */}
                       {item?.discount_price === "" ? (
-                      <span>{`₦${item?.price}`}</span>
-                    ) : (
-                      <span
-                        className={styles.canceledText}
-                      >{`₦${item?.price}`} </span>
-                    )}
-                         <span> {item?.discount_price &&
-                        `₦${item?.discount_price} `}</span>
-                   
+                        <span>{`₦${item?.price}`}</span>
+                      ) : (
+                        <span className={styles.canceledText}>
+                          {`₦${item?.price}`}{" "}
+                        </span>
+                      )}
+                      <span>
+                        {" "}
+                        {item?.discount_price && `₦${item?.discount_price} `}
+                      </span>
                     </span>
-               
+
                     <div className={styles.starWrapper}>
                       {countUpTo(
                         parseInt(item?.averageRating),

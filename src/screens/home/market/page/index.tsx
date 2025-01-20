@@ -37,6 +37,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [lgaId, setLgaId] = useState(0);
   const navigate = useNavigate();
 
+  console.log(selectedItems,'selectedItems')
   const handleStateChange = (value: number, setFieldValue: any) => {
     console.log("Selected State ID:", value);
     setStateId(value);
@@ -165,6 +166,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     navigate("/market");
     setStateId(0);
     setLgaId(0);
+    setSelectedItems([])
   };
 
   return (
@@ -313,6 +315,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                 lgaId={lgaId}
                 setStateId={setStateId}
                 setLgaId={setLgaId}
+                setSelectedItems={setSelectedItems}
               />
             </div>
           </div>
