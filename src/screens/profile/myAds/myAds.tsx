@@ -60,7 +60,7 @@ const MyAds = () => {
             setIsDeleteSucessful(true);
 
             queryClient.refetchQueries({
-              queryKey: ["get-all-jobs"],
+              queryKey: ["get-my-market"],
             });
           },
         }
@@ -236,7 +236,7 @@ const MyAds = () => {
         handleClick={() => {
           setIsDeleteSucessful(false);
         }}
-        text={"Ad Updated Successfully"}
+        text={"Ad Deleted Successfully"}
       />
     </div>
   );

@@ -1,5 +1,4 @@
-import { formatDistanceToNow ,format, parseISO} from "date-fns";
-
+import { formatDistanceToNow, format, parseISO } from "date-fns";
 
 export const getTimeAgo = (postedDate: string | null | undefined): string => {
   if (!postedDate || postedDate?.trim() === "") {
@@ -15,11 +14,8 @@ export const getTimeAgo = (postedDate: string | null | undefined): string => {
   return `${formatDistanceToNow(date, { addSuffix: true })}`;
 };
 
-
 export const formatAmount = (amount: number | string) =>
   `₦${Number(amount)?.toLocaleString()}`;
-
-
 
 export function convertDate(dateString: string | null) {
   if (!dateString) return "";
@@ -44,8 +40,6 @@ export function getTimeFromDate(dateString: string | null): string {
   return `${hours}:${minutes}${period}`;
 }
 
-
-
 export function formatDateToMonthYear(dateString: string | null): string {
   if (!dateString) return "";
 
@@ -53,8 +47,18 @@ export function formatDateToMonthYear(dateString: string | null): string {
   if (isNaN(date.getTime())) return ""; // Check for invalid date
 
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   const month = months[date.getMonth()];
@@ -70,8 +74,18 @@ export function formatDateToDayMonthYear(dateString: string | null): string {
   if (isNaN(date.getTime())) return ""; // Check for invalid date
 
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   const month = months[date.getMonth()];
@@ -82,27 +96,30 @@ export function formatDateToDayMonthYear(dateString: string | null): string {
   const suffix = (day: number): string => {
     if (day >= 11 && day <= 13) return "th"; // Special case for 11th, 12th, 13th
     switch (day % 10) {
-      case 1: return "st";
-      case 2: return "nd";
-      case 3: return "rd";
-      default: return "th";
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
     }
   };
 
   return `${day}${suffix(day)} of ${month}, ${year}`;
 }
 
-
 export const formatDateOnly = (dateString: string | null) => {
-  if (!dateString) return ''; // Return an empty string or handle it as needed
+  if (!dateString) return ""; // Return an empty string or handle it as needed
 
   const dateTimeObject = parseISO(dateString);
 
   if (isNaN(dateTimeObject.getTime())) {
     // Handle invalid date (parseISO returns Invalid Date)
-    return ''; // Return an empty string or handle it as needed
+    return ""; // Return an empty string or handle it as needed
   }
 
   // return format(dateObject, "dd-MM-yyyy");
-  return format(dateTimeObject, 'dd-MMM-yyyy');
+  return format(dateTimeObject, "dd-MMM-yyyy");
 };
