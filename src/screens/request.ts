@@ -83,6 +83,8 @@ export const getRecommededAds = async () => {
   return (await api.get(`/recommendations?type=${"ads"}`))?.data as any;
 };
 
+
+
 export const getPromotedAds = async () => {
   return (await api.get(`/banners`))?.data as any;
 };
