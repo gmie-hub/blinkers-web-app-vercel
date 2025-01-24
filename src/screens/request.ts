@@ -188,7 +188,7 @@ export const createAds = async (payload: FormData) => {
 
 export const UpdateAds = async (id: string | number, payload: FormData) => {
   return (
-    await api.patch(`1ads/${id}`, payload, {
+    await api.patch(`ads/${id}`, payload, {
       headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data as Response;
@@ -248,6 +248,24 @@ export const deleteAdsGalarybyId = async ({
     })
   )?.data as any;
 };
+
+export const deleteAdsVideobyId = async ({
+  add_id,
+  video_ids,
+}: {
+  add_id: number | string;
+  video_ids: number[];
+}) => {
+  return (
+    await api.delete(`ads/image`, {
+      data: {
+        add_id, // Sending business_id and ids in the body
+        video_ids,
+      },
+    })
+  )?.data as any;
+};
+
 
 export const getAdsByUserId = async (user_id: number, page: number) => {
   return (await api.get(`/ads?user_id=${user_id}&page=${page}&per_page=${50}`))

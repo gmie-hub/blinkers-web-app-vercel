@@ -238,6 +238,7 @@ interface ProductDatum {
   views: number;
   averageRating: string;
   user_id: number;
+  add_videos:any
 }
 
 interface RelatedProduct {

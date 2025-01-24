@@ -7,6 +7,7 @@ import Button from "../../../customs/button/button";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteAdsGalarybyId,
+  deleteAdsVideobyId,
   getAllCategory,
   getAllState,
   getLGAbyStateId,
@@ -225,8 +226,37 @@ const EditAdz = () => {
     try {
       await deleteGalaryMutation.mutateAsync(
         {
-          add_id: id!, // Ensure id is available
+          add_id: parseInt(id!), // Ensure id is available
           image_ids: imageIds,
+        },
+        {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message,
+            });
+            queryClient.refetchQueries({
+              queryKey: ["get-product-details"],
+            });
+          },
+        }
+      );
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
+
+  const deleteVideoMutation = useMutation({ mutationFn: deleteAdsVideobyId });
+
+  const DeleteVideoHandler = async (videoIds: number[]) => {
+    try {
+      await deleteVideoMutation.mutateAsync(
+        {
+          add_id: id!, // Ensure id is available
+          video_ids: videoIds,
         },
         {
           onSuccess: (data) => {
@@ -350,12 +380,11 @@ const EditAdz = () => {
       UpdateAds(id, payload),
     mutationKey: ["edit-ads"],
   });
-  
 
   const editAdsHandler = async (values: FormikValues) => {
     const formData = new FormData();
     const descriptionTags = [];
-  
+
     if (values.Used) {
       descriptionTags.push("USED");
     }
@@ -365,7 +394,7 @@ const EditAdz = () => {
     if (values.PayOnDelivery) {
       descriptionTags.push("PAY ON DELIVERY");
     }
-  
+
     formData.append("category_id", values?.category_id);
     formData.append("sub_category_id", values?.sub_category_id);
     formData.append("title", values?.title);
@@ -377,15 +406,18 @@ const EditAdz = () => {
     formData.append("description", values?.description);
     formData.append("state_id", values?.state_id);
     formData.append("technical_details", values?.technical_details);
-    formData.append("local_government_area_id", values?.local_government_area_id);
+    formData.append(
+      "local_government_area_id",
+      values?.local_government_area_id
+    );
     formData.append("pickup_address", values.pickup_address);
     formData.append("pickup_lat", values.pickup_lat);
     formData.append("pickup_lng", values.pickup_lng);
-  
+
     if (uploadFeature) {
       formData.append("add_featured_image", uploadFeature);
     }
-  
+
     try {
       await updateAdsMutation.mutateAsync(
         { id: productDetailsData?.id!, payload: formData },
@@ -405,7 +437,6 @@ const EditAdz = () => {
       });
     }
   };
-  
 
   const validationSchema = Yup.object().shape({
     category_id: Yup.string().required("required"),
@@ -416,7 +447,7 @@ const EditAdz = () => {
     // .required("Price is required")
     // .typeError("Price must be a valid number") // Ensures the value is a number
     // .positive("Price must be a positive number") // Optional: ensures the number is positive
-    // .integer("Price must be an integer"), 
+    // .integer("Price must be an integer"),
     // discount_price: Yup.string().required("required"),
     description: Yup.string().required("required"),
     state_id: Yup.string().required("required"),
@@ -449,7 +480,6 @@ const EditAdz = () => {
             PayOnDelivery:
               productDetailsData?.description_tags?.includes("PAY ON DELIVERY"),
             price: productDetailsData?.price || "",
- 
 
             discount_price: productDetailsData?.discount_price || "",
             category_id: productDetailsData?.category_id || "",
@@ -482,43 +512,23 @@ const EditAdz = () => {
                       }
                     />
                     <Upload
-                      placeHolder="upload your photos"
+                      placeHolder={UploadGalleryMutation?.isPending ? "Loading... " :"upload your photos"}
                       name="imageFile"
                       // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
                     />
                     <Upload
-                      placeHolder="upload your Videos"
+                      placeHolder={UploadVideoMutation?.isPending ? "loading..." : "upload your Videos"}
                       name="videoFile"
                       onChange={(e) => handleVideoChange(e, setFieldValue)}
                     />
                   </div>
                   <h3>Uploaded Media</h3>
                   {uploadFeature && (
-                  <div>
-                    <h3>Feature Image</h3>
-                    <img
-                      src={URL.createObjectURL(uploadFeature)}
-                      alt="Feature Preview"
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <br />
-                    <button onClick={handleRemoveFeature}>Cancel</button>
-                  </div>
-                )}
-
-                  {/* 
-                  {uploadFeature && (
                     <div>
                       <h3>Feature Image</h3>
                       <img
-                        // src={productDetailsData?.add_images?.}
                         src={URL.createObjectURL(uploadFeature)}
-
                         alt="Feature Preview"
                         style={{
                           width: "150px",
@@ -529,55 +539,7 @@ const EditAdz = () => {
                       <br />
                       <button onClick={handleRemoveFeature}>Cancel</button>
                     </div>
-                  )} */}
-
-                  {/* { uploads?.length > 0 && <h3>Images</h3>}
-
-                  <div
-                    style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
-                  >
-                    {uploads?.map((file, index) => (
-                      <div key={index} style={{ textAlign: "center" }}>
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`Upload ${index + 1}`}
-                          style={{
-                            width: "150px",
-                            height: "150px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <br />
-                        <button onClick={() => handleRemoveUpload(index)}>
-                          Cancel
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-
-                  {uploadVideos?.length > 0 && <h3>Videos</h3>}
-
-                  <div
-                    style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
-                  >
-                    {uploadVideos.map((file, index) => (
-                      <div key={index} style={{ textAlign: "center" }}>
-                        <video
-                          src={URL.createObjectURL(file)}
-                          controls
-                          style={{
-                            width: "200px",
-                            height: "150px",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <br />
-                        <button onClick={() => handleRemoveVideo(index)}>
-                          Cancel
-                        </button>
-                      </div>
-                    ))}
-                  </div> */}
+                  )}
 
                   <div className={styles.imageContainer}>
                     {productDetailsData?.add_images?.map((image, index) => (
@@ -597,6 +559,29 @@ const EditAdz = () => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                  <br />
+
+                  <div className={styles.imageContainer}>
+                    {productDetailsData?.add_videos?.map(
+                      (image: any, index: number) => (
+                        <div key={index} className={styles.imageWrapper}>
+                         
+                          <video
+                            className={styles.imageAds}
+                            src={image?.add_video}
+                            controls
+                            
+                          />
+                          <div
+                            className={styles.favoriteIcon}
+                            onClick={() => DeleteVideoHandler([image?.id])} // Your delete logic can be handled here
+                          >
+                            <img width={30} src={DeleteIcon} alt="Favorite" />
+                          </div>
+                        </div>
+                      )
+                    )}
                   </div>
 
                   <div className={styles.inputRow}>
@@ -697,13 +682,13 @@ const EditAdz = () => {
                       disabled={false}
                       text="Cancel"
                       className="buttonStyle"
-                      onClick={()=>navigate(-1)}
+                      onClick={() => navigate(-1)}
                     />
                     <Button
                       variant="green"
                       type="submit"
                       disabled={updateAdsMutation?.isPending}
-                      text={updateAdsMutation?.isPending ? 'loading' : "Submit"}
+                      text={updateAdsMutation?.isPending ? "loading" : "Submit"}
                       className="buttonStyle"
                     />
                   </section>

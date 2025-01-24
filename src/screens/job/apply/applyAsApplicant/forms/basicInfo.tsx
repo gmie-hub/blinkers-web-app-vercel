@@ -165,7 +165,7 @@ const BasicInfoForm: FC<ComponentProps> = ({
                 <input
                   name="profile_image"
                   type="file"
-                  id="fileI nput"
+                  id="fileInput"
                   style={{ display: "none" }}
                   onChange={(e) => handleFileChange(e, setFieldValue)}
                 />

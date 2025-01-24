@@ -11,14 +11,47 @@ import { createBusiness, getAllCategory } from "../../../request";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { App } from "antd";
 import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import { errorMessage } from "../../../../utils/errorMessage";
+import CameraIcon from "../../../../assets/camera.svg";
+import Profile from "../../../../assets/Avatarprofile.svg";
 
 const AddBusiness = () => {
   const [upload, setUpload] = useState<File | null>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
   const { notification } = App.useApp();
   const [searchValue, setSearchValue] = useState("");
+  const [previewImage, setPreviewImage] = useState<string | null>(null); // For preview
+  const [profileImage, setProfileImage] = useState<any>(null);
+
+  const handleFileBusinessChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: Function
+  ) => {
+    if (!e.target?.files) return;
+    const selectedFile = e.target?.files[0];
+
+    // Define valid file types
+    const validFileTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+    ];
+
+    // Validate if the file type is valid
+    if (!validFileTypes.includes(selectedFile.type)) {
+      notification.error({
+        message: "Invalid File Type",
+        description:
+          "The logo field must be a file of type: jpg, jpeg, png, gif, docx, doc, ppt.",
+      });
+      return;
+    }
+    setFieldValue("profile_image", selectedFile);
+    setProfileImage(selectedFile);
+    setPreviewImage(URL.createObjectURL(selectedFile)); // Generate preview URL
+  };
 
   const handleSearchChange = (value: string) => {
     console.log("Search Query:", value); // Access the search query value here
@@ -72,7 +105,10 @@ const AddBusiness = () => {
     formData.append("name", values?.BusinessName);
     formData.append("address", values?.BusinessAddress);
     if (upload) {
-      formData.append("logo", upload);
+      formData.append("doc", upload);
+    }
+    if (profileImage) {
+      formData.append("logo", profileImage);
     }
     formData.append("email", values?.email);
     formData.append("category_id", values?.category);
@@ -99,7 +135,7 @@ const AddBusiness = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description:errorMessage(error) || "An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
     }
   };
@@ -122,13 +158,12 @@ const AddBusiness = () => {
   ];
 
   const validationSchema = Yup.object().shape({
-    BusinessName: Yup.string().required('required'),
-    BusinessAddress: Yup.string().required('required'),
-    email: Yup.string().required('required'),
-    imageLogo: Yup.string().required('required'),
-    category: Yup.string().required('required')
+    BusinessName: Yup.string().required("required"),
+    BusinessAddress: Yup.string().required("required"),
+    email: Yup.string().required("required"),
+    imageLogo: Yup.string().required("required"),
+    category: Yup.string().required("required"),
   });
-
 
   return (
     <div className="wrapper">
@@ -161,12 +196,43 @@ const AddBusiness = () => {
                 createBusinessHandler(values, resetForm);
               }}
               enableReinitialize={true}
-
               validationSchema={validationSchema}
             >
               {({ setFieldValue }) => {
                 return (
                   <Form>
+                    <div className={styles.abs}>
+
+                      <img
+                        src={
+                          previewImage
+                            ? previewImage
+                            :  Profile
+                        }
+                        alt="profile"
+                        className={styles.profile}
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          document.getElementById("fileInput")?.click()
+                        }
+                      />
+                      <img
+                        src={CameraIcon}
+                        alt="Camera"
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          document.getElementById("fileInput")?.click()
+                        }
+                      />
+                    </div>
+                    <input
+                      name="profile_image"
+                      type="file"
+                      id="fileInput"
+                      style={{ display: "none" }}
+                      onChange={(e) => handleFileBusinessChange(e, setFieldValue)}
+                    />
+
                     <div className={styles.inputContainer}>
                       <Input
                         name="BusinessName"
@@ -204,7 +270,7 @@ const AddBusiness = () => {
                       <div>
                         <p>
                           Upload a document to prove that you’re the owner of
-                          this business (CAC, Business letterhead etc.)
+                          this business (CAC)
                         </p>
 
                         <br />
