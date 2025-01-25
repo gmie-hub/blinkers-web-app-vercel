@@ -186,10 +186,10 @@ export const createAds = async (payload: FormData) => {
 //   }))?.data as Response;
 // };
 
-export const UpdateAds = async (id: string | number, payload: FormData) => {
+export const UpdateAds = async (id: string | number, payload: ProductDatum) => {
   return (
     await api.patch(`ads/${id}`, payload, {
-      headers: { "Content-Type": "multipart/form-data" },
+      // headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data as Response;
 };
@@ -257,7 +257,7 @@ export const deleteAdsVideobyId = async ({
   video_ids: number[];
 }) => {
   return (
-    await api.delete(`ads/image`, {
+    await api.delete(`ads/video`, {
       data: {
         add_id, // Sending business_id and ids in the body
         video_ids,

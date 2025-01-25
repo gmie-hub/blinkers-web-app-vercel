@@ -376,15 +376,72 @@ const EditAdz = () => {
   // }, [uploadFeature]);
 
   const updateAdsMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string | number; payload: FormData }) =>
+    mutationFn: ({ id, payload }: { id: string | number; payload: any }) =>
       UpdateAds(id, payload),
     mutationKey: ["edit-ads"],
   });
 
-  const editAdsHandler = async (values: FormikValues) => {
-    const formData = new FormData();
-    const descriptionTags = [];
+  // const editAdsHandler = async (values: FormikValues) => {
+  //   const formData = new FormData();
+  //   const descriptionTags = [];
 
+  //   if (values.Used) {
+  //     descriptionTags.push("USED");
+  //   }
+  //   if (values.New) {
+  //     descriptionTags.push("NEW");
+  //   }
+  //   if (values.PayOnDelivery) {
+  //     descriptionTags.push("PAY ON DELIVERY");
+  //   }
+
+  //   formData.append("category_id", values?.category_id);
+  //   formData.append("sub_category_id", values?.sub_category_id);
+  //   formData.append("title", values?.title);
+  //   formData.append("price", values?.price);
+  //   formData.append("discount_price", values?.discount_price);
+  //   descriptionTags.forEach((tag, index) => {
+  //     formData.append(`description_tags[${index}]`, tag);
+  //   });
+  //   formData.append("description", values?.description);
+  //   formData.append("state_id", values?.state_id);
+  //   formData.append("technical_details", values?.technical_details);
+  //   formData.append(
+  //     "local_government_area_id",
+  //     values?.local_government_area_id
+  //   );
+  //   formData.append("pickup_address", values.pickup_address);
+  //   formData.append("pickup_lat", values.pickup_lat);
+  //   formData.append("pickup_lng", values.pickup_lng);
+
+  //   if (uploadFeature) {
+  //     formData.append("add_featured_image", uploadFeature);
+  //   }
+
+  //   try {
+  //     await updateAdsMutation.mutateAsync(
+  //       { id: productDetailsData?.id!, payload: formData },
+  //       {
+  //         onSuccess: (data) => {
+  //           notification.success({
+  //             message: "Success",
+  //             description: data?.message,
+  //           });
+  //         },
+  //       }
+  //     );
+  //   } catch (error: any) {
+  //     notification.error({
+  //       message: "Error",
+  //       description: errorMessage(error) || "An error occurred",
+  //     });
+  //   }
+  // };
+
+
+    const UpdateAdsHandler = async (values: FormikValues, ) => {
+    const descriptionTags: string[] = [];
+  
     if (values.Used) {
       descriptionTags.push("USED");
     }
@@ -394,38 +451,37 @@ const EditAdz = () => {
     if (values.PayOnDelivery) {
       descriptionTags.push("PAY ON DELIVERY");
     }
+    const parsePrice = (price: string | number) =>
+      Math.floor(Number(price?.toString().replace(/,/g, "")));
 
-    formData.append("category_id", values?.category_id);
-    formData.append("sub_category_id", values?.sub_category_id);
-    formData.append("title", values?.title);
-    formData.append("price", values?.price);
-    formData.append("discount_price", values?.discount_price);
-    descriptionTags.forEach((tag, index) => {
-      formData.append(`description_tags[${index}]`, tag);
-    });
-    formData.append("description", values?.description);
-    formData.append("state_id", values?.state_id);
-    formData.append("technical_details", values?.technical_details);
-    formData.append(
-      "local_government_area_id",
-      values?.local_government_area_id
-    );
-    formData.append("pickup_address", values.pickup_address);
-    formData.append("pickup_lat", values.pickup_lat);
-    formData.append("pickup_lng", values.pickup_lng);
-
-    if (uploadFeature) {
-      formData.append("add_featured_image", uploadFeature);
-    }
-
+    const payload = {
+      category_id: values?.category_id,
+      sub_category_id: values?.sub_category_id,
+      title: values?.title,
+      price: parsePrice(values?.price),
+      discount_price:parsePrice(values?.discount_price),
+      description_tags: descriptionTags,
+      description: values?.description,
+      state_id: values?.state_id,
+      technical_details: values?.technical_details,
+      local_government_area_id: values?.local_government_area_id,
+      pickup_address: values?.pickup_address,
+      pickup_lat: values?.pickup_lat,
+      pickup_lng: values?.pickup_lng,
+      add_featured_image: uploadFeature || null,
+    };
+  
     try {
       await updateAdsMutation.mutateAsync(
-        { id: productDetailsData?.id!, payload: formData },
+        { id: productDetailsData?.id!, payload },
         {
           onSuccess: (data) => {
             notification.success({
               message: "Success",
               description: data?.message,
+            });
+            queryClient.refetchQueries({
+              queryKey: ["get-product-details"],
             });
           },
         }
@@ -437,7 +493,6 @@ const EditAdz = () => {
       });
     }
   };
-
   const validationSchema = Yup.object().shape({
     category_id: Yup.string().required("required"),
     sub_category_id: Yup.string().required("required"),
@@ -492,7 +547,7 @@ const EditAdz = () => {
             technical_details: productDetailsData?.technical_details || "",
           }}
           onSubmit={(values) => {
-            editAdsHandler(values);
+            UpdateAdsHandler(values);
           }}
           validationSchema={validationSchema}
           enableReinitialize
