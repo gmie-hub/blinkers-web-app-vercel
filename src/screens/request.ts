@@ -186,9 +186,9 @@ export const createAds = async (payload: FormData) => {
 //   }))?.data as Response;
 // };
 
-export const UpdateAds = async (id: string | number, payload: ProductDatum) => {
+export const UpdateAds = async (id: string | number, payload: FormData) => {
   return (
-    await api.patch(`ads/${id}`, payload, {
+    await api.post(`ads/${id}`, payload, {
       // headers: { "Content-Type": "multipart/form-data" },
     })
   )?.data as Response;
