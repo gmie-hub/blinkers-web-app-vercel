@@ -11,6 +11,7 @@ import { AxiosError } from "axios";
 import { getTrendingAds } from "../request";
 import { useQueries } from "@tanstack/react-query";
 import CustomSpin from "../../customs/spin";
+import { sanitizeUrlParam } from "../../utils";
 
 export function countUpTo(
   num: number,
@@ -49,8 +50,8 @@ const Trends = () => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   };
 
-  const handleNavigateToProductDetails = (id: number) => {
-    navigate(`/product-details/${id}`);
+  const handleNavigateToProductDetails = (id: number,title:string,description:string ) => {
+    navigate(`/product-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
     window.scrollTo(0, 0);
   };
 
@@ -69,7 +70,7 @@ const Trends = () => {
             {trendData &&
               trendData?.length > 0 &&
               trendData?.slice(0, 2)?.map((item: any, index: number) => (
-                <div onClick={() => handleNavigateToProductDetails(item?.id)} className={styles.trendImage} key={item?.id || index}>
+                <div onClick={() => handleNavigateToProductDetails(item?.id, item?.title, item?.description)} className={styles.trendImage} key={item?.id || index}>
                   <div className={styles.favoriteIcon}>
                     <Image
                       width={30}
@@ -147,7 +148,7 @@ const Trends = () => {
           <div className={styles.middleSectionTrend}>
             {trendData[3] && (
               <div
-                onClick={() => handleNavigateToProductDetails(trendData[3]?.id)}
+                onClick={() => handleNavigateToProductDetails(trendData[3]?.id,trendData[3]?.title, trendData[3]?.description )}
                 className={styles.trendImage}
                 key={trendData[3].id}
               >
@@ -229,7 +230,7 @@ const Trends = () => {
             {trendData &&
               trendData?.length > 0 &&
               trendData?.slice(4, 6)?.map((item: any, index: number) => (
-                <div onClick={() => handleNavigateToProductDetails(item?.id)}  className={styles.trendImage} key={item?.id || index}>
+                <div onClick={() => handleNavigateToProductDetails(item?.id, item?.title, item?.description)}  className={styles.trendImage} key={item?.id || index}>
                   <div className={styles.favoriteIcon}>
                     <Image
                       width={30}

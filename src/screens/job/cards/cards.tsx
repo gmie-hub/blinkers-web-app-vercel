@@ -10,6 +10,7 @@ import Button from "../../../customs/button/button";
 import CustomSpin from "../../../customs/spin";
 import usePagination from "../../../hooks/usePagnation";
 import { useEffect } from "react";
+import { sanitizeUrlParam } from "../../../utils";
 
 interface Props {
   searchTerm: string;
@@ -26,8 +27,8 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
   }, [pageNum, currentPage, setCurrentPage])
   
   
-  const handleNavigateDetails = (id: number) => {
-    navigate(`/job-details/${id}`);
+  const handleNavigateDetails = (id: number,title:string, description:string) => {
+    navigate(`/job-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
     window.scrollTo(0, 0);
   };
 
@@ -81,7 +82,7 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
             {JobData && JobData?.length > 0 ? (
               JobData?.map((item) => (
                 <div
-                  onClick={() => handleNavigateDetails(item?.id)}
+                  onClick={() => handleNavigateDetails(item?.id, item?.title, item?.description)}
                   className={styles.chooseCard}
                   key={item.id}
                 >

@@ -15,6 +15,7 @@ import FaArrowLeft from "../../assets/backArrow.svg";
 import usePagination from "../../hooks/usePagnation";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
+import { sanitizeUrlParam } from "../../utils";
 
 const Directory = () => {
   const navigate = useNavigate();
@@ -40,8 +41,8 @@ const Directory = () => {
     setAppliedSearchTerm(searchTerm);
   };
 
-  const handleNavigateDirectory = (id: number) => {
-    navigate(`/directory-details/${id}`);
+  const handleNavigateDirectory = (id: number,name :string, about:string) => {
+    navigate(`/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`);
     window.scroll(0,0)
   };
 
@@ -160,7 +161,7 @@ const Directory = () => {
                   <div
                     className={styles.promoImage}
                     key={index}
-                    onClick={() => handleNavigateDirectory(item?.id)}
+                    onClick={() => handleNavigateDirectory(item?.id,item?.name, item?.about)}
                   >
                     <img
                       src={item?.logo}

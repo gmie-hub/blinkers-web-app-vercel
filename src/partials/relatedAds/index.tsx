@@ -11,6 +11,7 @@ import { getProductDetails } from "../../screens/request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../customs/routeIndicator";
 import CustomSpin from "../../customs/spin";
+import { sanitizeUrlParam } from "../../utils";
 
 interface Props {
   limit?: number;
@@ -19,6 +20,8 @@ interface Props {
 
 const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
   const { id } = useParams();
+
+
   const navigate = useNavigate();
 
   const [getProductDetailsQuery] = useQueries({
@@ -34,7 +37,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
   });
 
   const handleNavigateToProductDetails = (id: number) => {
-    navigate(`/product-details/${id}`);
+    navigate(`/product-details/${id}/${sanitizeUrlParam(productDetailsData?.title)}/${sanitizeUrlParam(productDetailsData?.description)}`);
     window.scrollTo(0, 0);
   };
 

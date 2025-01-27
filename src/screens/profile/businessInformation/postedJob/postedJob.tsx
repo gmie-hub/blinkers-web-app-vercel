@@ -37,6 +37,7 @@ export default function JobPosted() {
   const handleNavigateToViewJobDetails = 
     (jobId: number) => {
       navigate(`/view-job-details/${jobId}`);
+
     }
   
 

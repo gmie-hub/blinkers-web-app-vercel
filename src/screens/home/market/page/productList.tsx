@@ -15,6 +15,7 @@ import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
 import { useEffect } from "react";
+import { sanitizeUrlParam } from "../../../../utils";
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -133,8 +134,8 @@ const ProductList: React.FC<ProductListProps> = ({
   const marketErrorMessage =
     marketError?.message || "An error occurred. Please try again later.";
 
-  const handleNavigateToProductDetails = (id: number) => {
-    navigate(`/product-details/${id}`);
+  const handleNavigateToProductDetails = (id: number, title:string,description:string) => {
+    navigate(`/product-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
     window.scrollTo(0, 0);
   };
 
@@ -184,7 +185,7 @@ const ProductList: React.FC<ProductListProps> = ({
                 <div
                   className={styles.promoImage}
                   key={index}
-                  onClick={() => handleNavigateToProductDetails(item?.id)}
+                  onClick={() => handleNavigateToProductDetails(item?.id,item?.title,item?.description)}
                 >
                   <div className={styles.favoriteIcon}>
                     <img width={30} src={favorite} alt="Favorite" />
