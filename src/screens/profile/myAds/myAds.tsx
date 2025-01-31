@@ -226,6 +226,7 @@ const MyAds = () => {
         description="All details about this Ad will be deleted along with the user applications."
         confirmText="Yes, Delete Ad"
         cancelText="No, Go Back"
+        disabled={deleteAdsMutation?.isPending}
       />
 
       <ModalContent

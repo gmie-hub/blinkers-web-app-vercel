@@ -3,72 +3,47 @@ import styles from "./review.module.scss";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import { AxiosError } from "axios";
-import { useQueries } from "@tanstack/react-query";
-import { getAllReviews } from "../../../request";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { getAllReviews, replyReview } from "../../../request";
 import { formatDateOnly, getTimeFromDate } from "../../../../utils/formatTime";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../../utils/store";
 import Input from "../../../../customs/input/input";
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, FormikValues } from "formik";
 import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import { useState } from "react";
+import { App } from "antd";
 
 export default function Reviews() {
   const user = useAtomValue(userAtom);
-
+  const { notification } = App.useApp();
+  const queryClient = useQueryClient();
   const [activeReview, setActiveReview] = useState<number | null>(null); // Track the active review index
 
   const handleReviewClick = (index: number) => {
     setActiveReview((prev) => (prev === index ? null : index)); // Toggle the active review
   };
 
-  const mockReviewsData = {
-    data: {
-      data: [
-        {
-          id: 1,
-          updated_at: "2025-01-10T15:45:00Z",
-          rating: 4,
-          review: "Great service! Will definitely recommend to others.",
-        },
-        {
-          id: 2,
-          updated_at: "2025-01-12T10:30:00Z",
-          rating: 5,
-          review: "Absolutely fantastic experience. Exceeded my expectations!",
-        },
-        {
-          id: 3,
-          updated_at: "2025-01-13T08:15:00Z",
-          rating: 3,
-          review: "It was okay, but there's room for improvement.",
-        },
-        {
-          id: 4,
-          updated_at: "2025-01-14T19:00:00Z",
-          rating: 2,
-          review: "Not satisfied. The service was below average.",
-        },
-      ],
-    },
-  };
 
   const [getAllBusinessReviewQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-business-review"],
+        // queryFn: () => getAllReviews("14"),
         queryFn: () => getAllReviews(user?.business?.id?.toString()!),
+
         retry: 0,
         refetchOnWindowFocus: false,
-        enabled: !!user?.business?.id,
+        // enabled: !!user?.business?.id,
       },
     ],
   });
 
   const businessReviewData =
-    mockReviewsData?.data?.data || getAllBusinessReviewQuery?.data?.data?.data;
+    // mockReviewsData?.data?.data ||
+     getAllBusinessReviewQuery?.data?.data?.data;
   const businessReviewError = getAllBusinessReviewQuery?.error as AxiosError;
   const businessReviewErrorMessage =
     businessReviewError?.message ||
@@ -77,6 +52,49 @@ export default function Reviews() {
   const validationSchema = Yup.object().shape({
     reply: Yup.string().required("required"),
   });
+
+  const replyReviewMutation = useMutation({
+    mutationFn: ({
+      payload,
+      id,
+    }: {
+      payload: ReplyReviewPayload;
+      id: number;
+    }) => replyReview(payload, id),
+    mutationKey: ["reply-review"],
+  });
+
+  const replyReviewHandler = async (values: FormikValues, id: number) => {
+    const payload: ReplyReviewPayload = {
+      owner_comment: values?.reply,
+    };
+
+    try {
+      await replyReviewMutation.mutateAsync(
+        { payload, id },
+        {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message || "ads rejected successfully",
+            });
+            queryClient.refetchQueries({
+              queryKey: ["get-business-review"],
+            });
+            setActiveReview(null)
+            // handleCloseModal()
+          },
+        }
+      );
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description:
+          error?.message || "An error occurred while rejecting the application",
+      });
+    }
+  };
+
   return (
     <>
       {getAllBusinessReviewQuery?.isLoading ? (
@@ -105,29 +123,38 @@ export default function Reviews() {
                     <img width={13} src={Star} alt="Star" />
                   )}
                 </div>
-                <div style={{display:'flex',justifyContent:'space-between'}}>
+                <div className={styles.flex}>
+                  <div>
                   <p>{item?.review}</p>
 
+                  {item?.owner_comment && (
+                    <p>My response:  { item?.owner_comment}</p>
 
-                  <Button
-                   onClick={() => handleReviewClick(index)}
-                    variant="green"
-                    type="button"
-                    disabled={false}
-                    text="Reply"
-                    className="buttonStyle"
-                  />
+                  )}
+
+                  </div>
+
+                
+                  {activeReview !== index && ( // Hide the reply button when activeReview is set
+                    <Button
+                      onClick={() => handleReviewClick(index)}
+                      variant="green"
+                      type="button"
+                      disabled={false}
+                      text={item?.owner_comment ? 'Edit Response' : "Reply"}
+                      className={styles.buttonStyle}
+                    />
+                  )}
                 </div>
 
                 {activeReview === index && ( // Show input and button only for the active review
                   <Formik
                     initialValues={{
-                      reply: "",
+                      reply:item?.owner_comment ||  "",
                     }}
-                    onSubmit={( ) => {
-                      // handleReplySubmit(values, item.id); // Handle the reply submission
-                      // resetForm();
-                    }}
+                    onSubmit={(values) =>
+                      replyReviewHandler(values, item?.id!)
+                    }
                     validationSchema={validationSchema}
                   >
                     {({ handleSubmit }) => (
@@ -140,7 +167,7 @@ export default function Reviews() {
                         <div className={styles.btnRight}>
                           <Button
                             variant="green"
-                            type="button"
+                            type="submit"
                             disabled={false}
                             text="Send"
                             className="buttonStyle"

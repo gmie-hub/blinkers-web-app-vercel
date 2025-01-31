@@ -187,19 +187,19 @@ const YourProfile = ({ profileData }: Props) => {
                 <p style={{ fontWeight: "bold" }}>Edit Profile</p>
 
                 <div className={styles.abs}>
-                  <img
-                    src={
-                      previewImage
-                        ? previewImage
-                        : profileData?.profile_image || Profile
-                    }
-                    alt="profile"
-                    className={styles.profile}
-                    style={{ cursor: "pointer" }}
-                    onClick={() =>
-                      document.getElementById("fileInput")?.click()
-                    }
-                  />
+                    <img
+                      src={
+                        previewImage
+                          ? previewImage
+                          : profileData?.profile_image || Profile
+                      }
+                      alt="profile"
+                      className={styles.profile}
+                      style={{ cursor: "pointer" }}
+                      onClick={() =>
+                        document.getElementById("fileInput")?.click()
+                      }
+                    />
                   <img
                     src={CameraIcon}
                     alt="Camera"

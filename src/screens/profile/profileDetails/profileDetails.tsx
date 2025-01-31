@@ -132,12 +132,13 @@ const ProfileDetails = () => {
         open={isDeleteModal}
         handleCancel={() => setIsDeleteModal(false)}
         title="Are You Sure You Want to Delete Your Account?"
-        confirmText="Yes, Submit"
+        confirmText={deleteUserMutation?.isPending ? 'loading...' :  "Yes, Submit"}
         cancelText="No, Go Back"
         handleConfirm={
           DeleteUserHandler
         }
         icon={<img src={DeleteIcon} alt="DeleteIcon" />}
+        disabled={deleteUserMutation?.isPending}
       />
 
      

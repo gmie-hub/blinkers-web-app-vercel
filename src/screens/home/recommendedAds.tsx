@@ -24,12 +24,12 @@ const RecommendedAds = () => {
     ],
   });
 
-  const recommededData = getRecommededAdsQuery?.data?.data || [];
+  const recommededData = getRecommededAdsQuery?.data?.data?.data || [];
   const recommededError = getRecommededAdsQuery?.error as AxiosError;
   const recommededErrorMessage =
     recommededError?.message || "An error occurred. Please try again later.";
 
-  console.log(recommededData[0]?.recommendable?.title, "recommededData Data");
+  console.log(recommededData, "recommededData Data");
 
   const totalPages = Math.ceil(recommededData.length / pageSize);
 

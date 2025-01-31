@@ -54,7 +54,29 @@
   display: flex;
   justify-content: right;
   margin-block-start: 1.6rem;
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     justify-content: center;
+    margin-top: 2rem;
   }
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 600px) {
+   flex-direction: column;
+
+  }
+}
+
+.buttonStyle {
+  // min-width: 22rem;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    min-width: 22rem;
+    width: 0 !important;
+  }
+  // @media screen and (max-width: 768px) {
+  //   width: 100% !important;
+  // }
 }

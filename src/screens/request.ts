@@ -480,3 +480,12 @@ export const changePassword = async (payload: Partial<ChangePassword>) => {
 export const deleteUser = async () => {
   return (await api.delete(`/users/delete`))?.data;
 };
+
+
+export const replyReview = async (
+  payload: ReplyReviewPayload,
+  id: number
+) => {
+  const response = await api.patch(`/business/reviews/${id}`, payload);
+  return response.data;
+};

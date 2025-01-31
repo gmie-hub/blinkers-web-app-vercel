@@ -292,8 +292,9 @@ const JobDetails = () => {
         handleConfirm={DeleteJobHandler}
         title="Are You Sure You Want to Delete This Job?"
         description="All details about this job will be deleted along with the user applications."
-        confirmText="Yes, Delete Job"
+        confirmText={deleteJobMutation?.isPending ? 'loading...' : "Yes, Delete Job"}
         cancelText="No, Go Back"
+        disabled={deleteJobMutation?.isPending}
       />
 
       <ModalContent

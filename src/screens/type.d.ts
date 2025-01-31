@@ -568,3 +568,7 @@ interface ChangePassword {
   password: string;
   confirm_password:string;
 }
+interface ReplyReviewPayload {
+  status?: string;
+  owner_comment?: string;
+}

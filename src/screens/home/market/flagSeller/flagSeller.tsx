@@ -115,10 +115,11 @@ const FlagSellerContent = ({ handleCloseModal,sellerId,hasUserFlaggedSeller }: P
                 open={isDeleteModal}
                 handleCancel={() => setIsDeleteModal(false)}
                 title="Are You Sure You Want to Flag this Seller?"
-                confirmText="Yes, Submit"
+                confirmText={flagSellerMutation?.isPending ? 'loading...': "Yes, Submit"}
                 cancelText="No, Go Back"
                 handleConfirm={() => flagSellerHandler(values)} // Use Formik's submitForm
                 icon={<img src={DeleteIcon} alt="DeleteIcon" />}
+                disabled={flagSellerMutation?.isPending}
               />
             </Form>
           )}
