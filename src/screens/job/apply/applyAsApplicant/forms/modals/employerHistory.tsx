@@ -38,7 +38,7 @@ const EmpHistory: FC<ComponentProps> = ({
     start_date: Yup.date()
       .required("Start Date is required")
       .max(new Date(), "Start Date cannot be in the future"),
-    // end_date: Yup.date()
+    end_date: Yup.date().min(Yup.ref("start_date"), "End Date must be after Start Date"),
     //   .nullable()
     //   .when("current_work", {
     //     is: false, // Only validate `end_date` if `current_work` is false

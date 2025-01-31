@@ -36,7 +36,7 @@ const SellerSignUp = () => {
   const SignUpHandler = async (values: FormikValues) => {
     const payload: Partial<SellerSignUpData> = {
       name: user?.name,
-      number: user?.number,
+      // number: user?.number,
       address: values?.address,
       address_lat: user?.address,
       address_long: user?.address,

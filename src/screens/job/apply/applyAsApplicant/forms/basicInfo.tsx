@@ -101,7 +101,7 @@ const BasicInfoForm: FC<ComponentProps> = ({
           queryClient.refetchQueries({
             queryKey: ["get-all-jobs"],
           });
-          // handleNext();
+          handleNext();
         },
       });
     } catch (error: any) {

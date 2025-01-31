@@ -48,6 +48,8 @@ const EducationModal: FC<ComponentProps> = ({
     field_of_study: Yup.string().required("Field of study is required"),
     Grade: Yup.string().required("Grade is required"),
     start_date: Yup.date().required("Start date is required").nullable(),
+    end_date: Yup.date().min(Yup.ref("start_date"), "End Date must be after Start Date"),
+
     // end_date: Yup.date().when('studying', {
     //   is: false,
     //   then: Yup.date().required("End date is required").nullable(),

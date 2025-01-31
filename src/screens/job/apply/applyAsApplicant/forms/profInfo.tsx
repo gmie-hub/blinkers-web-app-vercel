@@ -84,7 +84,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
   const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
 
-  console.log(selectedIndustries, "selectedItemsselectedItems");
 
   // A function to handle the uploaded file
   const handleCoverLetterUpload = (file: any) => {
@@ -175,7 +174,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       },
     ],
   });
-  console.log(searchTerm,'searchTerm')
 
   const industryData = getAllIndustriesQuery?.data?.data?.data || [];
 
@@ -317,7 +315,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       );
       formData.append(`employment_history[${index}][location]`, item?.location);
       formData.append(
-        `employment_history[${index}].employment_type]`,
+        `employment_history[${index}][employment_type]`,
         item?.employment_type
       );
       formData.append(
@@ -385,9 +383,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           setUser((prevUser: any) => ({
             ...prevUser,
             is_applicant: true,
-            applicantId: data?.id,
+            applicantId: data?.data?.id,
           }));
-          console.log(data);
+          console.log(data?.id, ' registr as an applicnat');
         },
       });
       setSelectedIndustries([]);
@@ -398,6 +396,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           errorMessage(error) ||
           "An error occurred while submitting your information.",
       });
+
+      console.log('jumm')
+
     }
   };
 
@@ -417,7 +418,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const updateInfoHandler = async (values: FormikValues, data: Payload) => {
     // Create a plain object to store the data
 
-    console.log(values);
 
     const payload: Record<string, any> = {
       specialization: values?.specialization,
@@ -502,10 +502,8 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           queryClient.refetchQueries({
             queryKey: ["get-applicant"],
           });
-          setUser((prevUser: any) => ({
-            ...prevUser,
-            is_applicant: true,
-          }));
+          
+          
         },
       });
       setSelectedIndustries([]);
@@ -525,6 +523,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const validationSchema = Yup.object().shape({
     // cv: Yup.mixed().required("Cover letter is required"),
     specialization: Yup.string().required("required"),
+      
   });
   const handleCheckboxChange = (id: string, checked: boolean) => {
     setSelectedIndustries((prev) =>
@@ -559,6 +558,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           initialValues={{
             cv: applicantDetailsData?.cv_url || "",
             specialization: applicantDetailsData?.specialization || "",
+
           }}
           enableReinitialize={true}
           onSubmit={(values, { resetForm }) => {

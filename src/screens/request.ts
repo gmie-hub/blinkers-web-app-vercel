@@ -66,7 +66,7 @@ export const getProductDetails = async (id: number) => {
 };
 
 export const getSubCategory = async (id: number) => {
-  return (await api.get(`categories/sub?category_id=${id}`))
+  return (await api.get(`categories/sub?category_id=${id}&per_page=${500}`))
     ?.data as CategoryResponse;
 };
 export const getAllCategory = async (search?: string | number) => {
