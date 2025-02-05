@@ -17,9 +17,9 @@ import SearchableSelect from "../../../../customs/searchableSelect/searchableSel
 import { useNavigate } from "react-router-dom";
 
 const PriceOptions = [
-  { key: 1, value: "Low To High" },
-  { key: 2, value: "High To Low" },
-  { key: 3, value: "Discounted" },
+  { key: "asc", value: "Low To High" },
+  { key: 'desc', value:"High To Low" }
+  // { key: 3, value: "Discounted" },
 ];
 
 interface Props {
@@ -37,6 +37,12 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [lgaId, setLgaId] = useState(0);
   const navigate = useNavigate();
 
+
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
+
+  const handleCheckboxPriceChange = (optionKey: string) => {
+    setSelectedPrice((prevSelected) => (prevSelected === optionKey ? null : optionKey));
+  };
   console.log(selectedItems,'selectedItems')
   const handleStateChange = (value: number, setFieldValue: any) => {
     console.log("Selected State ID:", value);
@@ -167,6 +173,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     setStateId(0);
     setLgaId(0);
     setSelectedItems([])
+    setSelectedPrice("")
   };
 
   return (
@@ -182,7 +189,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         console.log(values);
       }}
     >
-      {({ values, setFieldValue }) => (
+      {({  setFieldValue }) => (
         <Form>
           <div className={styles.container}>
             <div className={styles.leftSide}>
@@ -199,12 +206,12 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       preview={false}
                     />
                   </div>
-                  <Checkbox
+                  {/* <Checkbox
                     label="Nearby Me"
                     name="nearby_me"
                     isChecked={values.nearby_me}
                     // onChange={(e: any) => handleCheckboxChange(e, "Nearby Me")}
-                  />
+                  /> */}
 
                   <p className={styles.subjectBg}>CATEGORIES</p>
 
@@ -264,7 +271,19 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                   <div>
                     <p className={styles.subjectBg}>Price</p>
                     <ul className={styles.itemList}>
-                      {PriceOptions.map((option: any, index: number) => (
+      {PriceOptions.map((option, index) => (
+        <li key={index}>
+          <input
+            type="checkbox"
+            checked={selectedPrice === option.key}
+            onChange={() => handleCheckboxPriceChange(option.key)}
+          />
+          <label>{option.value}</label>
+        </li>
+      ))}
+    </ul>
+                    {/* <ul className={styles.itemList}>
+                      {PriceOptions?.map((option: any, index: number) => (
                         <li key={index}>
                           <Checkbox
                             label={option.value}
@@ -276,7 +295,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                           />
                         </li>
                       ))}
-                    </ul>
+                    </ul> */}
                   </div>
                   <div style={{ marginBlockStart: "2rem" }}>
                     {/* <Button text="Apply Filter" /> */}
@@ -316,6 +335,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                 setStateId={setStateId}
                 setLgaId={setLgaId}
                 setSelectedItems={setSelectedItems}
+                selectedPrice={selectedPrice}
               />
             </div>
           </div>

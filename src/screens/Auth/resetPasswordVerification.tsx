@@ -219,7 +219,7 @@ const ResetPasswordVerificationCode = () => {
   const verifyOtpHandler = async (values: FormValues) => {
     const payload: any = {
 
-      otp: parseInt(values.code.join("")),
+      otp: values.code.join(""),
       // pin_id: savedPin || "",
         // "is_email": true
 
@@ -332,11 +332,12 @@ const ResetPasswordVerificationCode = () => {
                 onClick={() => handleResendClick("Sms")}
                 disabled={resendOptMutation?.isPending || timeLeft > 0}
                 type="button"
-                text={
-                  route === "Sms" && resendOptMutation?.isPending
-                    ? "loading..."
-                    : "Resend Code via sms"
-                }
+                text="Resend Code"
+                // {
+                //   route === "Sms" && resendOptMutation?.isPending
+                //     ? "loading..."
+                //     : "Resend Code via sms"
+                // }
                 className={styles.buttonOtp}
               />
 

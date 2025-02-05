@@ -26,6 +26,7 @@ interface ProductListProps {
   setLgaId: any;
   setStateId: any;
   setSelectedItems:any
+  selectedPrice?:any
 }
 
 const ProductList: React.FC<ProductListProps> = ({
@@ -36,7 +37,10 @@ const ProductList: React.FC<ProductListProps> = ({
   setLgaId,
   setStateId,
   selectedItems,
-  setSelectedItems
+  setSelectedItems,
+  selectedPrice,
+  
+
 }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
@@ -68,7 +72,8 @@ const ProductList: React.FC<ProductListProps> = ({
     page?: number,
     search?: string | number,
     state_id?: number,
-    local_government_area_id?: number
+    local_government_area_id?: number,
+    order?:string,
   ) => {
     let url = `/ads?per_page=${50}`;
 
@@ -92,6 +97,15 @@ const ProductList: React.FC<ProductListProps> = ({
     ) {
       queryParams.push(`local_government_area_id=${local_government_area_id}`);
     }
+    if(order !==undefined && order !==''){
+      queryParams.push(`sort=${'price'}`);
+
+     }
+     if(order !==undefined && order !==''){
+      queryParams.push(`order=${order}`);
+
+     }
+   
 
     // if(sub_category_id !==undefined && sub_category_id.length !== 0){
     //   queryParams.push(`sub_category_id=${sub_category_id}`);
@@ -114,9 +128,10 @@ const ProductList: React.FC<ProductListProps> = ({
           stateId,
           lgaId,
           selectedItems,
+          selectedPrice,
         ],
         queryFn: () =>
-          getAllMarket(currentPage, appliedSearchTerm, stateId, lgaId),
+          getAllMarket(currentPage, appliedSearchTerm, stateId, lgaId,selectedPrice),
         // retry: 0,
         refetchOnWindowFocus: true,
         // enabled: Boolean(currentPage && appliedSearchTerm),

@@ -23,9 +23,9 @@ const VerificationCode = () => {
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const { notification } = App.useApp();
   const navigate = useNavigate();
-  // const { email } = useParams<{ email: string }>();
+  const { email } = useParams<{ email: string }>();
   const { phoneNumber } = useParams<{ phoneNumber: string }>(); 
-
+console.log(phoneNumber,email, 'jum')
   const [route, setRoute] = useState("SMS");
 console.log(route,'eroute')
   // useEffect(() => {
@@ -230,7 +230,7 @@ console.log(route,'eroute')
 
   const verifyOtpHandler = async (values: FormValues) => {
     const payload: any = {
-      otp: parseInt(values.code.join("")), 
+      otp: values.code.join(""), 
       // is_email: true 
       // ...(route === "Whatsapp" && { pin_id: savedPin }), 
       // pin_id: savedPin || "",

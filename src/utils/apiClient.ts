@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { logout } from "./logout";
 
 export const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_GATEWAY_URL,
@@ -43,6 +44,7 @@ api.interceptors.request.use(
 );
 api.interceptors.response.use(null, function (error) {
   if (error?.response?.status === 401 || error?.response?.status === 403) {
+    logout()
   }
 
   return Promise.reject(error);

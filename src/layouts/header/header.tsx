@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Modal, Dropdown, Menu } from "antd";
 import BlinkersLogo from "../../assets/Logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ import ProfileIcon from "../../assets/Avatarprofile.svg";
 import { userAtom } from "../../utils/store";
 import { useAtom, } from "jotai";
 import { logout } from "../../utils/logout";
+import { isCurrentDateGreaterThan } from "../../utils";
+import { jwtDecode } from "jwt-decode";
 
 const Header = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
@@ -22,11 +24,27 @@ const Header = () => {
   
 
 
+
+  const token = user?.security_token
+
+  useEffect(() => {
+    try {
+      const decoded: any = jwtDecode(token!);
+      const date = new Date(decoded.exp * 1000);
+      const expDate = date?.toUTCString()
+      if (isCurrentDateGreaterThan(expDate)) {
+        logout();
+        console.log('jummy')
+}      } catch (error) {
+
+      console.error("Invalid token", error);
+    }
+  }, [token]);
+
   const handleNavigateToLogin = () => {
     navigate("/login");
   };
 
-  console.log( user?.role === '2',' user?.business === null')
   const handleNavigateToSell = () => {
     if(user?.role === '2' || user?.business !== null){
       navigate("/create-ad")

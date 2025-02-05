@@ -25,3 +25,20 @@ export function sanitizeUrlParam(param: any): string {
       .replace(/[^a-zA-Z0-9-]/g, ''); // Remove special characters (optional)
   }
   
+
+  
+
+export function isCurrentDateGreaterThan(targetDateString: any) {
+  // Get the current date and time
+  var currentDate = new Date();
+
+  // Convert the target date string to a Date object
+  var targetDate = new Date(targetDateString);
+
+  // Compare the current date with the target date
+  if (currentDate > targetDate) {
+    return true;
+  } else {
+    return false;
+  }
+}

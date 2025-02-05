@@ -24,6 +24,7 @@ import { errorMessage } from "../../utils/errorMessage";
 import { useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-input-2";
+import { logout } from "../../utils/logout";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,18 +39,31 @@ const Login = () => {
   const queryParams = new URLSearchParams(location.search);
   const redirectPath = queryParams.get("redirect");
 
-  const handleNavigateToVerifyOtp = (email: string) => {
-    navigate(`/verification-code/${email}`);
+  // const handleNavigateToVerifyOtp = (phoneNumber: string) => {
+  //   navigate(`/verification-code/${phoneNumber}`);
+  // };
+  const handleNavigateToVerifyOtp = (email: string, phoneNumber:string) => {
+    navigate(`/verification-code/${email}/${phoneNumber}`);
   };
 
-  /* eslint-enable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    if (user?.email && user?.email !== "") {
-      navigate("/jobs");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, user?.email]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  // /* eslint-enable react-hooks/exhaustive-deps */
+  // useEffect(() => {
+  //   if (user?.email && user?.email !== "") {
+  //     navigate("/");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user, user?.email]);
+  // /* eslint-enable react-hooks/exhaustive-deps */
+
+  //  /* eslint-enable react-hooks/exhaustive-deps */
+  //  useEffect(() => {
+  //   if (user?.role && (user?.role === '1' || user?.role === '4')) {
+  //   //  logout()
+  //   navigate("/jobsss");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user, user?.role]);
+  // /* eslint-enable react-hooks/exhaustive-deps */
 
   const loginMutation = useMutation({
     mutationFn: LoginApiCall,
@@ -73,7 +87,7 @@ const Login = () => {
           });
           const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
           localStorage.setItem("savedPinSignUp", pin);
-          console.log(pin, 'kik')
+          console.log(data?.data?.role, 'kik')
 
           const userResponse = {
             ...data, // Spread all matching properties
@@ -86,7 +100,14 @@ const Login = () => {
 
           // resetForm();
           if (data?.message === "OTP sent, please verify your account.") {
-            handleNavigateToVerifyOtp(formData?.email || formData?.phoneNumber);
+            handleNavigateToVerifyOtp(data?.data?.user?.email,data?.data?.user?.number);
+          }
+          if(data?.data?.role === '1' || data?.data?.role === '4'){
+            notification.success({
+              message: "Success",
+              description: 'admin cant login on client side',
+            });
+            logout()
           }
            else navigate(redirectPath ? redirectPath : "/");
         },
