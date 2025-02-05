@@ -29,7 +29,7 @@ import { logout } from "../../utils/logout";
 const Login = () => {
   const navigate = useNavigate();
   const { notification } = App.useApp();
-  const [user, setUser] = useAtom(userAtom);
+  const [, setUser] = useAtom(userAtom);
   const [activeKey, setActiveKey] = useState("1");
 
   const [formData, setFormData] = useState({
