@@ -299,7 +299,7 @@ const Trends = () => {
                 </div>
               ))}
           </div>
-          <div>
+          <div style={{display:'flex', justifyContent:'center'}}>
             <Button
               type="button"
               variant="green"

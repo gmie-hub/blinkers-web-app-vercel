@@ -19,7 +19,7 @@ import { routes } from "../../routes";
 import { useMutation } from "@tanstack/react-query";
 import { LoginApiCall } from "./request";
 import { userAtom } from "../../utils/store";
-import { useAtom } from "jotai";
+import { useAtom, } from "jotai";
 import { errorMessage } from "../../utils/errorMessage";
 import { useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";

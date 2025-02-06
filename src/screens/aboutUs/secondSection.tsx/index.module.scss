@@ -25,6 +25,12 @@
   row-gap: 6.8rem;
   @media (max-width: 600px) {
     row-gap: 1.6rem;
+
+
+    flex-direction: column;
+      align-items: center; // Centers cards on small screens
+    
+
   }
   
 }
@@ -40,14 +46,15 @@
   /* Adjust card width if there's only one card */
   @media (max-width: 820px) {
 
-    max-width: calc(50% - 2.4rem);
-    width: 50%; // On medium screens (tablet or small desktop), show 2 cards per row
+    width: calc(50% - 2.4rem);
+    width: 47%; // On medium screens (tablet or small desktop), show 2 cards per row
   }
 
   
 
   @media (max-width: 600px) {
-    width: 100%; // On small screens (mobile), show 1 card per row
+    width: 100% !important;  
+    flex: 1 1 100%; 
   }
 }
 
@@ -88,11 +95,14 @@
 
   @media (max-width: 820px) {
     flex: 1 1 calc(50% - 2.4rem); /* 2 cards per row on medium screens */
-    max-width:50%
+    max-width:50% !important
 }
 
+
+ 
   @media (max-width: 600px) {
-    width: 100%; // On small screens (mobile), show 1 card per row
+    min-width: 100% !important;  
+    flex: 1 1 100%; 
   }
 }
 
@@ -113,6 +123,10 @@
   font-weight: 600;
   color: var(--color-header-text);
   padding-block-end: 3.2rem;
+  @media (max-width: 600px) {
+    font-size: 3rem;
+  }
+
 }
 
 .leftSection {

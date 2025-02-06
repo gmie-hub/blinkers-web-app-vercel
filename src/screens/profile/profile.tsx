@@ -47,7 +47,7 @@ const Profile = () => {
     },
     {
       key: "5",
-      label: "My Details",
+      label: "My Application Details",
       children: <MyDetails  showRouteIndicator={false}/>,
     },
     {
