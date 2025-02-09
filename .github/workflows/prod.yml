@@ -60,7 +60,7 @@ jobs:
         EOF
 
         rsync -avz --delete-after \
-          ./build/ $SERVER_USER@$SERVER_IP:/var/www/blinkers-web-app-admin/build
+          ./dist/ $SERVER_USER@$SERVER_IP:/var/www/blinkers-web-app/dist
 
         ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
           sudo systemctl restart nginx

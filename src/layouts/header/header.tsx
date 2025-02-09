@@ -10,7 +10,7 @@ import NotyIcon from "../../assets/notyIcon.svg";
 import ChatIcon from "../../assets/chatyicon.svg";
 import ProfileIcon from "../../assets/Avatarprofile.svg";
 import { userAtom } from "../../utils/store";
-import { useAtom, } from "jotai";
+import { useAtom } from "jotai";
 import { logout } from "../../utils/logout";
 import { isCurrentDateGreaterThan } from "../../utils";
 import { jwtDecode } from "jwt-decode";
@@ -21,22 +21,19 @@ const Header = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [user] = useAtom(userAtom);
-  
 
-
-
-  const token = user?.security_token
+  const token = user?.security_token;
 
   useEffect(() => {
     try {
       const decoded: any = jwtDecode(token!);
       const date = new Date(decoded.exp * 1000);
-      const expDate = date?.toUTCString()
+      const expDate = date?.toUTCString();
       if (isCurrentDateGreaterThan(expDate)) {
         logout();
-        console.log('jummy')
-}      } catch (error) {
-
+        console.log("jummy");
+      }
+    } catch (error) {
       console.error("Invalid token", error);
     }
   }, [token]);
@@ -46,13 +43,11 @@ const Header = () => {
   };
 
   const handleNavigateToSell = () => {
-    if(user?.role === '2' || user?.business !== null){
-      navigate("/create-ad")
-    }
-    else{
+    if (user?.role === "2" || user?.business !== null) {
+      navigate("/create-ad");
+    } else {
       // navigate("/seller-signUp");
       navigate("/seller-verification");
-
     }
   };
 
@@ -60,7 +55,6 @@ const Header = () => {
     // if(user?.business === null)
     navigate("/profile");
   };
-
 
   const handleCategoryClick = () => {
     setIsCardVisible(!isCardVisible);
@@ -77,7 +71,7 @@ const Header = () => {
         View Profile
       </Menu.Item>
       <Menu.Item key="2" onClick={logout}>
-        Logout
+        Logouts
       </Menu.Item>
     </Menu>
   );
@@ -92,17 +86,13 @@ const Header = () => {
       </button>
 
       {/* Navigation Links */}
-      <div
-        className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}
-      >
+      <div className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}>
         <NavLink
           onClick={() => {
             setIsMenuOpen(false);
           }}
           to=""
-          className={({ isActive }) =>
-            isActive ? styles.activeNavLink : styles.navLink
-          }
+          className={({ isActive }) => (isActive ? styles.activeNavLink : styles.navLink)}
         >
           Home
         </NavLink>
@@ -124,9 +114,7 @@ const Header = () => {
             }}
             key={item.id}
             to={item.route}
-            className={({ isActive }) =>
-              isActive ? styles.activeNavLink : styles.navLink
-            }
+            className={({ isActive }) => (isActive ? styles.activeNavLink : styles.navLink)}
           >
             {item.name}
           </NavLink>
@@ -136,28 +124,14 @@ const Header = () => {
         {user?.email !== undefined && isMenuOpen && (
           <>
             <div className={styles.loggedInIcons}>
-              <img
-                src={NotyIcon}
-                alt="Notifications"
-                className={styles.chatIcon}
-              />
+              <img src={NotyIcon} alt="Notifications" className={styles.chatIcon} />
               <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
               <Dropdown overlay={profileMenu} trigger={["click"]}>
-                <img
-                  src={ProfileIcon}
-                  alt="Profile"
-                  className={styles.profileIcon}
-                  style={{ cursor: "pointer" }}
-                />
+                <img src={ProfileIcon} alt="Profile" className={styles.profileIcon} style={{ cursor: "pointer" }} />
               </Dropdown>
             </div>
             <div className={styles.mobileButtonWrapper}>
-              <Button
-                onClick={
-                  handleNavigateToSell
-                }
-                className={styles.btn}
-              >
+              <Button onClick={handleNavigateToSell} className={styles.btn}>
                 Sell
               </Button>
             </div>
@@ -179,31 +153,19 @@ const Header = () => {
 
       {/* Right Nav - Shown only on large screens */}
       <div className={styles.rightNav}>
-        {user?.email !== undefined  && (
+        {user?.email !== undefined && (
           <div className={styles.loggedInIcons}>
-            <img
-              src={NotyIcon}
-              alt="Notifications"
-              className={styles.chatIcon}
-            />
+            <img src={NotyIcon} alt="Notifications" className={styles.chatIcon} />
             <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
             <Dropdown overlay={profileMenu} trigger={["click"]}>
-              <img
-                src={ProfileIcon}
-                alt="Profile"
-                className={styles.profileIcon}
-                style={{ cursor: "pointer" }}
-              />
+              <img src={ProfileIcon} alt="Profile" className={styles.profileIcon} style={{ cursor: "pointer" }} />
             </Dropdown>
-            <Button
-              onClick={handleNavigateToSell}
-              className={`${styles.btn} ${styles.sellButton}`}
-            >
+            <Button onClick={handleNavigateToSell} className={`${styles.btn} ${styles.sellButton}`}>
               Sell
             </Button>
           </div>
         )}
-        {user?.email === undefined  && (
+        {user?.email === undefined && (
           <Button onClick={handleNavigateToLogin} className={styles.btn}>
             Get Started
           </Button>
