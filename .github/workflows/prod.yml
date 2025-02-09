@@ -17,19 +17,22 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20.9.0'
+        cache: 'yarn'
 
     - name: Create .env
       run: |
         echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" > .env
         cat .env  # Debugging step to verify contents
 
-    - name: Install Dependencies
-      run: npm ci --legacy-peer-deps 
+    - name: Clean Install Dependencies
+      run: |
+        rm -rf node_modules yarn.lock
+        yarn install --check-files 
 
     - name: Build React App
       run: |
         export CI=false 
-        npm run build  
+        yarn build  
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.7.0
