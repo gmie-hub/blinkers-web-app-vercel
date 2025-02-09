@@ -71,7 +71,7 @@ const Header = () => {
         View Profile
       </Menu.Item>
       <Menu.Item key="2" onClick={logout}>
-        Logout
+        Logouts
       </Menu.Item>
     </Menu>
   );
