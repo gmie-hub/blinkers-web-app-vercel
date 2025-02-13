@@ -1,6 +1,5 @@
 import Icon from "/Container.svg";
 import styles from "./sellersProfile.module.scss";
-import Reviews from "../market/productDetails/tabs/businessReview";
 import Button from "../../../customs/button/button";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";

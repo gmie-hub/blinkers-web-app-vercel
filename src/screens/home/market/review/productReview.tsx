@@ -5,7 +5,7 @@ import StarIcon from "../../../../assets/Vector.svg";
 import { Image } from "antd";
 import BackIncon from "../../../../assets/back.svg";
 import { AxiosError } from "axios";
-import { getAllReviews, getAllSellerReviews } from "../../../request";
+import {  getAllSellerReviews } from "../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";

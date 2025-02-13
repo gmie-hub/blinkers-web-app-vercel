@@ -11,7 +11,7 @@ import DoneIcon from "../../../../assets/Done.svg";
 import * as Yup from 'yup';
 import BackIcon from "../../../../assets/back.svg";
 import { useMutation } from "@tanstack/react-query";
-import { WriteReviewApi, WriteSellerReviewApi } from "../../../request";
+import {  WriteSellerReviewApi } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../../utils/errorMessage";
