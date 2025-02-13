@@ -114,6 +114,8 @@ export default function Reviews() {
                     <span>{formatDateOnly(item?.updated_at || "")}</span>
                     <div></div>
                     <span>{getTimeFromDate(item?.updated_at || "")}</span>
+                    <p>{item?.user?.name}</p>
+
                   </div>
                 </div>
                 <div className={styles.starWrapper}>

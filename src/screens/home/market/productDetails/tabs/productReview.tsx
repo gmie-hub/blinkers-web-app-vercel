@@ -5,7 +5,7 @@ import StarIcon from "../../../../../assets/Vector.svg";
 import ArrowIcon from "../../../../../assets/arrow-right-green.svg";
 import { Image } from "antd";
 import Button from "../../../../../customs/button/button";
-import { getAllReviews } from "../../../../request";
+import {  getAllSellerReviews } from "../../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { convertDate, getTimeFromDate } from "../../../../../utils/formatTime";
@@ -20,17 +20,20 @@ export default function ProductReviews({
   limit?: number;
 }) {
   const navigate = useNavigate();
+  const { user_id } = useParams();
   const { id } = useParams();
+  const idToUse =user_id ? user_id : id
+
 
   // Fetch reviews
   const [getAllReviewQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-review", id],
-        queryFn: () => getAllReviews(id!),
+        queryKey: ["get-all-review", idToUse],
+        queryFn: () => getAllSellerReviews(idToUse! ),
         retry: 0,
         refetchOnWindowFocus: false,
-        enabled:!!id
+        enabled:!!idToUse 
 
       },
     ],
@@ -44,14 +47,12 @@ export default function ProductReviews({
   // Dynamically set limit to reviewData.length if limit is undefined
   const calculatedLimit = limit ?? reviewData.length;
   const businessReviewData =
-    reviewData &&
-    reviewData?.length > 0 &&
     reviewData?.slice(0, calculatedLimit);
 
   console.log(businessReviewData, "businessReviewData");
 
   const handleNavigateProductReview = () => {
-    navigate(`/product-review/${id}`);
+    navigate(`/product-review/${idToUse}`);
     window.scrollTo(0, 0);
   };
 
@@ -114,7 +115,7 @@ function ReviewCard({ item }: { item: ReviewDatum }) {
           <div></div>
           <span>{getTimeFromDate(item?.created_at) || ""}</span>
         </div>
-        <span>{"N/A"}</span>
+        <span>{item?.from_user?.name}</span>
       </div>
       <div className={styles.starWrapper}>
         {countUpTo(

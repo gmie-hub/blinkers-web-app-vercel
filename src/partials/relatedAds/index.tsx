@@ -36,8 +36,8 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
     ],
   });
 
-  const handleNavigateToProductDetails = (id: number) => {
-    navigate(`/product-details/${id}/${sanitizeUrlParam(productDetailsData?.title)}/${sanitizeUrlParam(productDetailsData?.description)}`);
+  const handleNavigateToProductDetails = (id: number, user_id:number) => {
+    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(productDetailsData?.title)}/${sanitizeUrlParam(productDetailsData?.description)}`);
     window.scrollTo(0, 0);
   };
 
@@ -70,7 +70,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
               relatedAdssData?.length > 0 &&
               relatedAdssData?.map((item, index) => (
                 <div
-                  onClick={() => handleNavigateToProductDetails(item.id)}
+                  onClick={() => handleNavigateToProductDetails(item?.id, item?.user_id)}
                   className={styles.promoImage}
                   key={index}
                 >

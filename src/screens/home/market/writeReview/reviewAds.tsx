@@ -11,7 +11,7 @@ import DoneIcon from "../../../../assets/Done.svg";
 import * as Yup from 'yup';
 import BackIcon from "../../../../assets/back.svg";
 import { useMutation } from "@tanstack/react-query";
-import { WriteReviewApi } from "../../../request";
+import { WriteReviewApi, WriteSellerReviewApi } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../../utils/errorMessage";
@@ -36,7 +36,7 @@ const WriteReviewAds = () => {
   };
 
   const WriteReviewMutation = useMutation({
-    mutationFn: WriteReviewApi,
+    mutationFn: WriteSellerReviewApi,
     mutationKey: ["write-review"],
   });
 
@@ -45,10 +45,10 @@ const WriteReviewAds = () => {
     resetForm: () => void
   ) => {
     const payload = {
-      review: values?.review,
+      to_user_id: id,
+      from_user_id: user?.id,
       rating: currentRating,
-      user_id: user?.id,
-      business_id: id,
+      review: values?.review,
     };
 
     try {

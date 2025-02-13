@@ -72,6 +72,9 @@ interface ReviewDatum {
   rating: number;
   review: string;
   created_at: stringg;
+  user?:UserData;
+  from_user?:any;
+
 }
 interface ReviewData {
   data: ReviewDatum[];
@@ -114,6 +117,7 @@ interface FollowBusinessDatum {
   id: number;
   updated_at: string;
   user_id: number;
+  follower_id?:number
 }
 
 interface BusinessFollowersResponse extends Response {
@@ -251,6 +255,7 @@ interface RelatedProduct {
   created_at: string;
   local_govt?: local_govt;
   state?: state;
+  user_id:number
 }
 
 interface local_govt {
@@ -296,6 +301,7 @@ interface Applicant {
   updated_at: string;
   skills;
   user?: UserLogin;
+  industries?:IndustriesData
 }
 
 // interface Education {
@@ -356,7 +362,11 @@ interface UserData {
   updated_at: string;
   website_address: string | null;
   applicant?: Applicant;
-  total_ads:number 
+  total_ads:number ;
+  industries:any;
+  total_followers:number;
+  total_ads:number;
+  total_rating:number;
 }
 
 interface UserDataResponse extends Response {

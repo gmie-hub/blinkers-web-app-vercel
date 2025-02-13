@@ -17,6 +17,7 @@ import ProductReview from "./screens/home/market/review/productReview";
 import SellersProfile from "./screens/home/sellersProfile/sellersProfile";
 import SellersPostedAds from "./screens/home/sellersProfile/postedAds/adsPostedbySeller";
 import WriteReview from "./screens/home/market/writeReview/reviewBusiness";
+import WriteReviewForUser from "./screens/home/market/writeReview/reviewAds";
 import SubmittedSuccessfully from "./customs/detailsubmitted";
 import Login from "./screens/Auth/login";
 import SignUp from "./screens/Auth/signUp";
@@ -64,6 +65,9 @@ function App() {
     { path: routes.page.sellersProfile, element: <SellersProfile /> },
     { path: routes.page.posetedAdsBySeller, element: <SellersPostedAds /> },
     { path: routes.page.writeReviewForBusiness, element: <WriteReview /> },
+    { path: routes.page.writeReviewSeller, element: <WriteReviewForUser /> },
+
+    
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },

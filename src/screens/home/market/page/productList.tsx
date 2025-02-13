@@ -149,8 +149,8 @@ const ProductList: React.FC<ProductListProps> = ({
   const marketErrorMessage =
     marketError?.message || "An error occurred. Please try again later.";
 
-  const handleNavigateToProductDetails = (id: number, title:string,description:string) => {
-    navigate(`/product-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
+  const handleNavigateToProductDetails = (id: number, user_id:number,title:string,description:string) => {
+    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
     window.scrollTo(0, 0);
   };
 
@@ -200,7 +200,7 @@ const ProductList: React.FC<ProductListProps> = ({
                 <div
                   className={styles.promoImage}
                   key={index}
-                  onClick={() => handleNavigateToProductDetails(item?.id,item?.title,item?.description)}
+                  onClick={() => handleNavigateToProductDetails(item?.id,item?.user_id,item?.title,item?.description)}
                 >
                   <div className={styles.favoriteIcon}>
                     <img width={30} src={favorite} alt="Favorite" />

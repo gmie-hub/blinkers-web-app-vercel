@@ -77,6 +77,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const [filePrevieCoverLetterUrl, setFilePreviewCoverLetterUrl] = useState<
     string | null
   >(null);
+
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const queryClient = useQueryClient();
@@ -182,6 +183,14 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const applicantDetailsErrorMessage =
     applicantDetailsError?.message ||
     "An error occurred. Please try again later.";
+    const initialSelectedIndustries = applicantDetailsData?.industries?.map((industry: any) => 
+      industry.id.toString()
+    ) || [];
+
+    useEffect(()=>{
+      setSelectedIndustries(initialSelectedIndustries)
+
+    },[applicantDetailsData] )
 
   useEffect(() => {
     // if (

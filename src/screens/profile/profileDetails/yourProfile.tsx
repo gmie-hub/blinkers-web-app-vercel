@@ -153,7 +153,7 @@ const YourProfile = ({ profileData }: Props) => {
     }
   };
   const validationSchema = Yup.object().shape({
-    address: Yup.string().required("required").max(55),
+    // address: Yup.string().required("required").max(55),
   });
 
   return (

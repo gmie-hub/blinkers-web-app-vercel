@@ -126,7 +126,8 @@ export interface UserLogin {
   updated_at: string;
   website_address?: string;
   applicantId?:number;
-  applicant?:Applicant
+  applicant?:Applicant;
+  follower_id?:number
 }
 
 export const userAtom = atomWithStorage<UserLogin | undefined | null>(

@@ -5,7 +5,7 @@ import StarIcon from "../../../../assets/Vector.svg";
 import { Image } from "antd";
 import BackIncon from "../../../../assets/back.svg";
 import { AxiosError } from "axios";
-import { getAllReviews } from "../../../request";
+import { getAllReviews, getAllSellerReviews } from "../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";
@@ -26,7 +26,7 @@ export default function AllProductReviews() {
       queries: [
         {
           queryKey: ["get-all-review", id],
-          queryFn: () => getAllReviews(id!),
+          queryFn: () => getAllSellerReviews(id!),
           retry: 0,
           refetchOnWindowFocus: false,
           enabled:!!id
@@ -69,8 +69,8 @@ export default function AllProductReviews() {
                       <div></div>
                       <span>{convertDate(item?.created_at) || ""}</span>
                     </div>
-                    <span>{item?.review || ""}</span>
-                  </div>
+                    <span>{item?.from_user?.name}</span>
+                    </div>
                   <div className={styles.starWrapper}>
                     {countUpTo(
                       item?.rating || 0,

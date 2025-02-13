@@ -59,6 +59,8 @@ const Profile = () => {
       key: "7",
       label: "Favorites",
       children: <MyFavorite />,
+      // children: <Reviews />,
+
       
     },
     {

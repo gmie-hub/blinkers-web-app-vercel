@@ -280,7 +280,6 @@ const CreateAdz = () => {
         message: "Error",
         description: errorMessage(error) || "An error occurred",
       });
-      resetForm();
       clearFile();
     }
   };

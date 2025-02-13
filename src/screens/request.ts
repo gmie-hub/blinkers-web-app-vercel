@@ -8,6 +8,14 @@ export const getAllReviews = async (id: string, page?: number) => {
 
   return (await api.get(url))?.data as ReviewResponse;
 };
+export const getAllSellerReviews = async (id: string, page?: number) => {
+  const url = page
+    ? `reviews/user?to_user_id=${id}&per_page=${page}`
+    : `reviews/user?to_user_id=${id}`;
+
+  return (await api.get(url))?.data as ReviewResponse;
+};
+
 
 // export const getAllJobs = async (page: number, search?: string | number) => {
 //   return (await api.get(`jobs?page=${page}&search=${search}`))
@@ -161,6 +169,10 @@ export const FollowSeller = async (payload: Partial<FollowBusiness>) => {
 
 export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
   return (await api.post("business/reviews", payload, {}))?.data as any;
+};
+
+export const WriteSellerReviewApi = async (payload: Partial<ReviewDatum>) => {
+  return (await api.post("reviews/user", payload, {}))?.data as any;
 };
 
 export const createBusiness = async (payload: FormData) => {

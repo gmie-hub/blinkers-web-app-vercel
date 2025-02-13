@@ -70,6 +70,9 @@ export default function AllReviews() {
                       <span>{convertDate(item?.created_at) || ""}</span>
                       <div></div>
                       <span>{convertDate(item?.created_at) || ""}</span>
+                      <p>{item?.user?.name}</p>
+
+
                     </div>
                     <span>{item?.review || ""}</span>
                   </div>

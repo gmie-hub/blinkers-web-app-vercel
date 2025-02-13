@@ -100,6 +100,7 @@ const Login = () => {
 
           // resetForm();
           if (data?.message === "OTP sent, please verify your account.") {
+            
             handleNavigateToVerifyOtp(data?.data?.user?.email,data?.data?.user?.number);
           }
           if(data?.data?.role === '1' || data?.data?.role === '4'){
@@ -109,7 +110,9 @@ const Login = () => {
             });
             logout()
           }
-           else navigate(redirectPath ? redirectPath : "/");
+           if (data?.message !== "OTP sent, please verify your account." && (data?.data?.role !== '1' || data?.data?.role !== '4')){
+             navigate(redirectPath ? redirectPath : "/")
+            }
         },
       });
     } catch (error: any) {

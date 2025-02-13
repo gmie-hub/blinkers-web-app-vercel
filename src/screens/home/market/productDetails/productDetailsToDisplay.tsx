@@ -104,12 +104,16 @@ const Main = () => {
   );
 
   const isUserFollowingBusiness = getBusinessFollowersQuery?.data?.data?.data?.some(
-    (item) => item?.user_id === user?.id
+    (item) => item?.follower_id === user?.id
   );
 
+
+
   const isUserFollowingSeller = getSellersFollowersQuery?.data?.data?.data?.some(
-    (item) => item?.user_id === user?.id
+    (item) => item?.follower_id === user?.id
   );
+  console.log(isUserFollowingSeller, 'isUserFollowingBusiness')
+
 
   const productDetailsData = getProductDetailsQuery?.data?.data;
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
@@ -121,7 +125,6 @@ const Main = () => {
   const profileDetailsData = getUserDetailsQuery?.data?.data;
 
 
-  console.log(profileDetailsData,'jum')
   useEffect(() => {
     if (getProductDetailsQuery) {
       setBusinessId(productDetailsData?.business_id!);

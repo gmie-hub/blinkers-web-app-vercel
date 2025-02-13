@@ -34,6 +34,7 @@ import { errorMessage } from "../../../utils/errorMessage";
 import { useState } from "react";
 import FlagSeller from "../market/flagSeller/flagSeller";
 import ProfileIcon from "../../../assets/Avatarprofile.svg";
+import ProductReviews from "../market/productDetails/tabs/productReview";
 
 const SellerProfile = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const SellerProfile = () => {
   };
 
   const handleNavigateToWriteReview = () => {
-    navigate(`/write-review/${id}`);
+    navigate(`/review-seller/${id}`);
     window.scrollTo(0, 0);
   };
 
@@ -82,7 +83,7 @@ const SellerProfile = () => {
   });
 
   const hasUserFlaggedSeller = getSellersFollowersQuery?.data?.data?.data?.some(
-    (item) => item?.user_id === user?.id
+    (item) => item?.follower_id === user?.id
   );
 
   const sellersDetailsData = getSellersDetailsQuery?.data?.data;
@@ -170,7 +171,7 @@ const SellerProfile = () => {
 
                       <div className={styles.detailsflex}>
                         <p className={styles.name}>
-                          {sellersDetailsData?.store_name}
+                          {sellersDetailsData?.name}
                         </p>
                         <div className={styles.starWrapper}>
                           <span className={styles.star}>
@@ -180,19 +181,19 @@ const SellerProfile = () => {
                               alt="StarYellow"
                               preview={false}
                             />
-                            {/* ({sellersDetailsData?.total_rating}
+                            ({sellersDetailsData?.total_rating}
                             {sellersDetailsData &&
                             sellersDetailsData?.total_rating < 2
                               ? " rating"
                               : " ratings"}
-                            ) */}
+                            )
                             <span className={styles.dot}></span>{" "}
                             <span>
-                              {/* {sellersDetailsData?.total_followers}{" "}
+                              {sellersDetailsData?.total_followers}{" "}
                               {sellersDetailsData &&
                               sellersDetailsData?.total_followers < 2
                                 ? "Follower"
-                                : "Followers"} */}
+                                : "Followers"}
                             </span>
                           </span>
                         </div>
@@ -338,11 +339,11 @@ const SellerProfile = () => {
               </div>
               <div className={styles.rightSection}>
                 {/* {hasReviews !== 0 && ( */}
-                {/* <div className={styles.reviewbtn}>
+                <div className={styles.reviewbtn}>
                 <p className={styles.title}> Review</p>
 
-                <div
-                  onClick={handleNavigateToReview}
+                {/* <div
+                  // onClick={handleNavigateToReview}
                   className={styles.btnWrapper}
                 >
                   <p className={styles.btn}>See All</p>
@@ -352,10 +353,10 @@ const SellerProfile = () => {
                     alt="ArrowIcon"
                     preview={false}
                   />
-                </div>
-              </div> */}
+                </div> */}
+              </div>
                 {/* )} */}
-                <Reviews canSeeAllBtn={false} limit={4} />
+                <ProductReviews  limit={4} />
               </div>
             </div>
             <div>
