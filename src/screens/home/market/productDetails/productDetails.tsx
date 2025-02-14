@@ -299,6 +299,9 @@ const BigScreen = ({
                     {productDetailsData?.local_govt?.local_government_area}
                   </p>
                 </div>
+
+
+                
                 {/* business profile */}
                 {businessDetailsData && businessDetailsData ? (
                   <div className={styles.card}>
