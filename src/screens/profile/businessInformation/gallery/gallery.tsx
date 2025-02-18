@@ -69,13 +69,13 @@ export default function Gallery({ businessDetailsData }: GalleryProps) {
 
       {/* Videos Section */}
       <Card style={styles.card}>
-      <Card style={styles.subCard}>
+      {/* <Card style={styles.subCard}>
           <div className={styles.spaceBtn }>
           <h4>Videos</h4>
           <p className={styles.seeAll}>See All</p>
           </div>
 
-        </Card>
+        </Card> */}
 
         {businessDetailsData?.gallery &&
         businessDetailsData?.gallery.filter((item: gallery) => isVideo(item?.url))?.length > 0 ? (

@@ -7,7 +7,7 @@ interface GalleryViewProps {
   onClose: () => void; // Function to close the gallery view
 }
 
-const GalleryView: React.FC<GalleryViewProps> = ({ businessDetailsData, type, }) => {
+const GalleryView: React.FC<GalleryViewProps> = ({ businessDetailsData, type,onClose }) => {
   // Function to check if the file is an image
   const isImage = (url: string) => /\.(jpg|jpeg|png|svg|gif)$/i.test(url);
 
@@ -20,11 +20,11 @@ const GalleryView: React.FC<GalleryViewProps> = ({ businessDetailsData, type, })
 
   return (
     <div className={styles.fullGallery}>
-      {/* <p onClick={onClose} className={styles.closeButton}><BackIcon/> Back</p> */}
+      <h1 onClick={onClose} className={styles.closeButton}>{'< Back'}</h1>
     
    
         <p className={'line'} >
-        {type === 'images' ? 'Images' : 'Viewing Videos'}
+        {type === 'images' ? 'Images' : 'Videos'}
       </p>
       
       <br />

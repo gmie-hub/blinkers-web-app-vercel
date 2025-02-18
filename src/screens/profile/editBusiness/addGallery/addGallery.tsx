@@ -200,8 +200,8 @@ const busId =user?.business?.id
                 {/* Filter and display only images */}
                 <div className={styles.imageRow}>
                   {businessDetailsData?.gallery
-                    .filter((item: gallery) => isImage(item?.url)) // Filter only images
-                    .map((item: gallery, index: number) => (
+                    ?.filter((item: gallery) => isImage(item?.url)) // Filter only images
+                    ?.map((item: gallery, index: number) => (
                       <div key={index} className={styles.imageContainer}>
                         <img
                           className={styles.image}
@@ -251,8 +251,8 @@ const busId =user?.business?.id
                 {/* Filter and display only videos */}
                 <div className={styles.imageRow}>
                   {businessDetailsData?.gallery
-                    .filter((item: gallery) => isVideo(item?.url)) // Filter only videos
-                    .map((item: gallery, index: number) => (
+                    ?.filter((item: gallery) => isVideo(item?.url)) // Filter only videos
+                    ?.map((item: gallery, index: number) => (
                       <div key={index} className={styles.imageContainer}>
                         <video
                           className={styles.image}

@@ -105,8 +105,11 @@
   .imageContainer {
     position: relative; /* Allows the RemoveIcon to be positioned relative to this container */
     width: calc(33.33% - 10px); /* 33.33% for 3 images per row */
-    height: auto; /* Height will adjust automatically */
+    // height: auto; /* Height will adjust automatically */
   
+    position: relative;
+    height: 16.3rem;
+
     @media (max-width: 768px) {
       width: calc(50% - 5px); /* 50% width for 2 images per row on mobile */
     }
