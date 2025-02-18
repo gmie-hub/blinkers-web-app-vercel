@@ -10,57 +10,57 @@ import { useQueries } from "@tanstack/react-query";
 import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
-
+import { useEffect } from "react";
 
 export default function AllReviews() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { currentPage, setCurrentPage, onChange } = usePagination();
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
 
-  const handleNavigateToBack = 
-    () => {
-      navigate(-1);
-      window.scrollTo(0, 0);
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
     }
+  }, [pageNum, currentPage, setCurrentPage]);
 
+  const handleNavigateToBack = () => {
+    navigate(-1);
+    window.scrollTo(0, 0);
+  };
 
-    const [getAllReviewQuery] = useQueries({
-      queries: [
-        {
-          queryKey: ["get-all-review", id,currentPage],
-          queryFn: () => getAllReviews(id!,currentPage),
-          retry: 0,
-          refetchOnWindowFocus: false,
-          enabled:!!id
+  const [getAllReviewQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-all-review", id, currentPage],
+        queryFn: () => getAllReviews(id!, currentPage),
+        retry: 0,
+        refetchOnWindowFocus: false,
+        enabled: !!id,
+      },
+    ],
+  });
 
-        },
-      ],
-    });
-  
-    const reviewData = getAllReviewQuery?.data?.data?.data || [];
-    const reviewError = getAllReviewQuery?.error as AxiosError;
-    const reviewErrorMessage =
-      reviewError?.message || "An error occurred. Please try again later.";
-  
-  
-      
+  const reviewData = getAllReviewQuery?.data?.data?.data || [];
+  const reviewError = getAllReviewQuery?.error as AxiosError;
+  const reviewErrorMessage =
+    reviewError?.message || "An error occurred. Please try again later.";
 
   return (
     <div className="wrapper">
-        <div onClick={handleNavigateToBack} className={styles.back}>
-          <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
-          <p >Back</p>
-        </div>
-      
-        <div className={styles.reviweWrapper}>
+      <div onClick={handleNavigateToBack} className={styles.back}>
+        <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
+        <p>Back</p>
+      </div>
+
+      <div className={styles.reviweWrapper}>
         <div className={styles.promoHead}>
-            <p>Reviews</p>
-          </div>
-          {getAllReviewQuery?.isLoading ? (
-         <CustomSpin />
-      ) : getAllReviewQuery?.isError ? (
-        <h1 className="error">{reviewErrorMessage}</h1>
-      ) : (
+          <p>Reviews</p>
+        </div>
+        {getAllReviewQuery?.isLoading ? (
+          <CustomSpin />
+        ) : getAllReviewQuery?.isError ? (
+          <h1 className="error">{reviewErrorMessage}</h1>
+        ) : (
           <div className={styles.wrappers}>
             {reviewData && reviewData?.length > 0 ? (
               reviewData?.map((item, index) => (
@@ -71,8 +71,6 @@ export default function AllReviews() {
                       <div></div>
                       <span>{convertDate(item?.created_at) || ""}</span>
                       <p>{item?.user?.name}</p>
-
-
                     </div>
                     <span>{item?.review || ""}</span>
                   </div>
@@ -100,24 +98,21 @@ export default function AllReviews() {
               <p>No reviews available.</p>
             )}
           </div>
-      )}
-        </div>
-        <Pagination
-              current={currentPage}
-              total={getAllReviewQuery?.data?.data?.total}
-              pageSize={20} // Items per page
-              onChange={(page) => {
-                setCurrentPage(page);
-                onChange(page);
-              }}
-              showSizeChanger={false}
-              style={{
-                marginTop: "20px",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            />
+        )}
+      </div>
+      <Pagination
+        current={currentPage}
+        total={getAllReviewQuery?.data?.data?.total}
+        pageSize={20} // Items per page
+        onChange={onChange}
+        showSizeChanger={false}
+        style={{
+          marginTop: "20px",
+          textAlign: "center",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      />
     </div>
   );
 }
@@ -131,4 +126,3 @@ function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
   }
   return result; // Return the array
 }
-

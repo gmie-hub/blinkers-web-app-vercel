@@ -3,15 +3,16 @@ import api from "../utils/apiClient";
 
 export const getAllReviews = async (id: string, page?: number) => {
   const url = page
-    ? `business/reviews?business_id=${id}&page=${page}`
-    : `business/reviews?business_id=${id}`;
+    ? `business/reviews?business_id=${id}&page=${page}&per_page=${5}`
+    : `business/reviews?business_id=${id}&per_page=${5}`;
 
   return (await api.get(url))?.data as ReviewResponse;
 };
 export const getAllSellerReviews = async (id: string, page?: number) => {
   const url = page
-    ? `reviews/user?to_user_id=${id}&per_page=${page}`
-    : `reviews/user?to_user_id=${id}`;
+    ? `reviews/user?to_user_id=${id}&page=${page}&per_page=${5}`
+    : `reviews/user?to_user_id=${id}&per_page=${5}`;
+   
 
   return (await api.get(url))?.data as ReviewResponse;
 };

@@ -2,18 +2,29 @@ import styles from "./review.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
-import { Image } from "antd";
+import { Image, Pagination } from "antd";
 import BackIncon from "../../../../assets/back.svg";
 import { AxiosError } from "axios";
 import {  getAllSellerReviews } from "../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";
+import usePagination from "../../../../hooks/usePagnation";
+import { useEffect } from "react";
 
 
 export default function AllProductReviews() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { currentPage, setCurrentPage, onChange ,pageNum} = usePagination();
+
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage])
+  
+
 
   const handleNavigateToBack = 
     () => {
@@ -25,8 +36,8 @@ export default function AllProductReviews() {
     const [getAllReviewQuery] = useQueries({
       queries: [
         {
-          queryKey: ["get-all-review", id],
-          queryFn: () => getAllSellerReviews(id!),
+          queryKey: ["get-all-review", id,currentPage],
+          queryFn: () => getAllSellerReviews(id!, currentPage),
           retry: 0,
           refetchOnWindowFocus: false,
           enabled:!!id
@@ -99,6 +110,19 @@ export default function AllProductReviews() {
           
       )}
         </div>
+        <Pagination
+              current={currentPage}
+              total={getAllReviewQuery?.data?.data?.total} // Total number of items
+              pageSize={20} // Number of items per page
+              onChange={onChange} // Handle page change
+              showSizeChanger={false} // Hide the option to change the page size
+              style={{
+                marginTop: "20px",
+                textAlign: "center", // Center the pagination
+                display: "flex",
+                justifyContent: "center", // Ensure the pagination is centered
+              }}
+            />
         
     </div>
   );
