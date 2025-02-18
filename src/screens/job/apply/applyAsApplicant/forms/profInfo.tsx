@@ -1,4 +1,4 @@
-import { ErrorMessage, Form, Formik, FormikValues } from "formik";
+import {  Form, Formik, FormikValues } from "formik";
 import styles from "./styles.module.scss";
 import { FC, useEffect, useState } from "react";
 import Input from "../../../../../customs/input/input";
@@ -577,7 +577,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           }}
           validationSchema={validationSchema}
         >
-          {({ setFieldValue }) => (
+          {({ setFieldValue ,touched,errors}) => (
             <Form>
               <div className={styles.inputContainer}>
                 <Input
@@ -677,9 +677,11 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                     onChange={(e) => handleFileChange(e, setFieldValue)}
                   />
                 )}
-                    <ErrorMessage name="cv" component="div" className="error" />
+                    {/* <ErrorMessage name="cv" component="div" className="error" /> */}
 
-
+                    {errors.cv && touched.cv && (
+                      <div  className='error'>{'Please Upload Cv'}</div>
+                    )}
                 {uploadMode === false && (
                   <Button
                     variant="white"
