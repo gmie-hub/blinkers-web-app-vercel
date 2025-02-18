@@ -317,7 +317,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({
       .required("required")
       .url('Please enter a valid URL'),
     facebook: Yup.string()
-      .required("")
+      .required("required")
       .url('Please enter a valid URL'),
   });
 

@@ -1,4 +1,4 @@
-import { Form, Formik, FormikValues } from "formik";
+import { ErrorMessage, Form, Formik, FormikValues } from "formik";
 import styles from "./styles.module.scss";
 import { FC, useEffect, useState } from "react";
 import Input from "../../../../../customs/input/input";
@@ -530,7 +530,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    // cv: Yup.mixed().required("Cover letter is required"),
+    cv: Yup.mixed().required("CV is required"),
     specialization: Yup.string().required("required"),
       
   });
@@ -677,6 +677,8 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                     onChange={(e) => handleFileChange(e, setFieldValue)}
                   />
                 )}
+                    <ErrorMessage name="cv" component="div" className="error" />
+
 
                 {uploadMode === false && (
                   <Button

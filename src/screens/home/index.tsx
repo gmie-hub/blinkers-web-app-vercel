@@ -14,12 +14,13 @@ const Home = () => {
       <PictureBg />
       <div className='wrapper'>
         <Directory />
-        <MoreThanMarket />
         <PromotedAds />
         <RecommendedAds />
+        <Trends />
+        <MoreThanMarket />
         <Access />
         <GetStarted />
-        <Trends />
+      
       </div>
     </section>
   );
