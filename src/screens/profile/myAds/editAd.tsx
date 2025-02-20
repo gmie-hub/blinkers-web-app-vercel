@@ -375,6 +375,14 @@ const EditAdz = () => {
   //   }
   // }, [uploadFeature]);
 
+  useEffect(() => {
+    setStateId(productDetailsData?.state_id!);
+  }, [productDetailsData?.state_id]);
+
+  useEffect(() => {
+    setCategoryId(productDetailsData?.category_id!);
+  }, [productDetailsData?.category_id]);
+
   const updateAdsMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string | number; payload: FormData }) =>
       UpdateAds(id, payload),
