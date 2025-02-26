@@ -75,7 +75,7 @@ const ProductList: React.FC<ProductListProps> = ({
     local_government_area_id?: number,
     order?:string,
   ) => {
-    let url = `/ads?per_page=${50}`;
+    let url = `/ads/all?per_page=${50}`;
   
 
     const queryParams: string[] = [];
@@ -209,16 +209,16 @@ const ProductList: React.FC<ProductListProps> = ({
                     <img width={30} src={favorite} alt="Favorite" />
                   </div>
                   {/* Image for the product */}
-                  <img
+                  {/* <img
                     className={styles.proImage}
                     src={item?.add_images[0]?.add_image || Product3}
                     alt="Product"
-                  />
-                   {/* <img
+                  /> */}
+                   <img
                     className={styles.proImage}
                     src={item?.cover_image_url ||  Product3}
                     alt="Product"
-                  /> */}
+                  />
                   
                   <div className={styles.productList}>
                     <p style={{ color: "#4F4F4F" }}>
