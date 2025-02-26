@@ -44,7 +44,8 @@ api.interceptors.request.use(
 );
 api.interceptors.response.use(null, function (error) {
   if (error?.response?.status === 401 || error?.response?.status === 403) {
-    logout()
+    // logout()
+    console.log('token')
   }
 
   return Promise.reject(error);
