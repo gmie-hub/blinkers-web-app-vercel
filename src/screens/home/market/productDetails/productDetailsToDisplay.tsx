@@ -65,7 +65,7 @@ const Main = () => {
         queryFn: ()=> getFollowersByUser_id(user?.id!,sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled:!!sellerId
+        enabled:!!user?.id
       },
       {
         queryKey: ["get-business-details",],
@@ -79,7 +79,7 @@ const Main = () => {
         queryFn: () => getFollowersByBusiness_id(user?.id!,businessId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!businessId,
+        enabled:  !!user?.id,
       },
       {
         queryKey: ["get-sellers-details", sellerId],

@@ -108,7 +108,9 @@ const BigScreen = ({
 
   const handleNavigateToSellersProfile = () => {
     if (businessDetailsData && businessDetailsData?.id !== undefined) {
-      navigate(`/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}/${businessDetailsData?.about}`);
+      navigate(
+        `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}/${businessDetailsData?.about}`
+      );
     } else {
       navigate(`/sellers-profile/${profileDetailsData?.id}`);
     }
@@ -116,7 +118,7 @@ const BigScreen = ({
   };
 
   const relatedAdsData = productDetailsData?.related_ads;
-  console.log(profileDetailsData,'profileDetailsData')
+  console.log(profileDetailsData, "profileDetailsData");
 
   const handleNavigateToRelatedAds = () => {
     navigate(`/related-ads/${id}`);
@@ -195,12 +197,12 @@ const BigScreen = ({
 
             <div className={styles.leftContainer}>
               <div>
-               <button
+                <button
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
                   className={styles.arrowButton}
                 >
-               ↑  
+                  ↑
                 </button>
 
                 <div className={styles.firstSideLeft}>
@@ -225,8 +227,8 @@ const BigScreen = ({
                   disabled={currentIndex + maxVisibleImages >= images.length}
                   className={styles.arrowButton}
                 >
-                    ↓
-              </button>
+                  ↓
+                </button>
               </div>
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
@@ -300,8 +302,6 @@ const BigScreen = ({
                   </p>
                 </div>
 
-
-                
                 {/* business profile */}
                 {businessDetailsData && businessDetailsData ? (
                   <div className={styles.card}>

@@ -76,6 +76,7 @@ const ProductList: React.FC<ProductListProps> = ({
     order?:string,
   ) => {
     let url = `/ads?per_page=${50}`;
+  
 
     const queryParams: string[] = [];
 
@@ -149,6 +150,8 @@ const ProductList: React.FC<ProductListProps> = ({
   const marketErrorMessage =
     marketError?.message || "An error occurred. Please try again later.";
 
+
+    console.log(getAllMarketQuery?.data?.data?.data , 'marketData')
   const handleNavigateToProductDetails = (id: number, user_id:number,title:string,description:string) => {
     navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
     window.scrollTo(0, 0);
@@ -211,6 +214,12 @@ const ProductList: React.FC<ProductListProps> = ({
                     src={item?.add_images[0]?.add_image || Product3}
                     alt="Product"
                   />
+                   {/* <img
+                    className={styles.proImage}
+                    src={item?.cover_image_url ||  Product3}
+                    alt="Product"
+                  /> */}
+                  
                   <div className={styles.productList}>
                     <p style={{ color: "#4F4F4F" }}>
                       {item?.title && item?.title?.length > 20

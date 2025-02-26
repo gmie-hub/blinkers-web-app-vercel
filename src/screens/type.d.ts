@@ -87,6 +87,7 @@ interface ReviewResponse extends Response {
 interface AllBusinessesResponse extends Response {
   data: AllBusinessesData;
 }
+
 interface AllProductaResponse extends Response {
   data: AllProductData;
 }
@@ -242,7 +243,8 @@ interface ProductDatum {
   views: number;
   averageRating: string;
   user_id: number;
-  add_videos:any
+  add_videos:any;
+  cover_image_url:string
 }
 
 interface RelatedProduct {
