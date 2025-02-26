@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { logout } from "./logout";
+// import { logout } from "./logout";
 
 export const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_GATEWAY_URL,
