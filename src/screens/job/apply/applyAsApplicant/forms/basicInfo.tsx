@@ -11,7 +11,6 @@ import Button from "../../../../../customs/button/button";
 import { App } from "antd";
 import Camera from "../../../../../assets/camera.svg";
 import Profile from "../../../../../assets/Avatarprofile.svg";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { errorMessage } from "../../../../../utils/errorMessage";
 import { basicInfoApi } from "../../../../request";
