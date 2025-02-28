@@ -3,8 +3,8 @@ import { Image } from "antd";
 import Product2 from "../../assets/Image.svg";
 import location from "../../assets/location.svg";
 import Button from "../../customs/button/button";
-import Star from "../../assets/Vector.svg";
-import StarYellow from "../../assets/staryellow.svg";
+// import Star from "../../assets/Vector.svg";
+// import StarYellow from "../../assets/staryellow.svg";
 import favorite from "../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
@@ -121,7 +121,7 @@ const Trends = () => {
                       )}
                     </span>
 
-                    <div className={styles.starWrapper}>
+                    {/* <div className={styles.starWrapper}>
                       {countUpTo(
                         item?.rating || 0,
                         <Image
@@ -138,7 +138,7 @@ const Trends = () => {
                         />
                       )}
                       <span>(20)</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}
@@ -199,7 +199,7 @@ const Trends = () => {
                       >{`₦${trendData[3]?.price}`}</span>
                     )}
                   </span>
-                  <div className={styles.starWrapper}>
+                  {/* <div className={styles.starWrapper}>
                     {countUpTo(
                       trendData[3]?.rating || 0,
                       <Image
@@ -211,7 +211,7 @@ const Trends = () => {
                       <Image width={20} src={Star} alt="Star" preview={false} />
                     )}
                     <span>(20)</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )}
@@ -277,7 +277,7 @@ const Trends = () => {
                         >{`₦${item?.price}`}</span>
                       )}
                     </span>
-                    <div className={styles.starWrapper}>
+                    {/* <div className={styles.starWrapper}>
                       {countUpTo(
                         item?.rating || 0,
                         <Image
@@ -294,7 +294,7 @@ const Trends = () => {
                         />
                       )}
                       <span>(20)</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}

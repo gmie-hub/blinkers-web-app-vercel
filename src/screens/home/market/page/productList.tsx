@@ -1,11 +1,11 @@
 import styles from "./index.module.scss";
 import { Image, Pagination } from "antd";
-import Star from "../../../../assets/Vector.svg";
-import StarYellow from "../../../../assets/staryellow.svg";
+// import Star from "../../../../assets/Vector.svg";
+// import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
 import favorite from "../../../../assets/Icon + container.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import { countUpTo } from "../../trend";
+// import { countUpTo } from "../../trend";
 import { useQueries } from "@tanstack/react-query";
 // import { getAllMarket } from "../../../request";
 import axios, { AxiosError } from "axios";
@@ -255,7 +255,7 @@ const ProductList: React.FC<ProductListProps> = ({
                       </span>
                     </span>
 
-                    <div className={styles.starWrapper}>
+                    {/* <div className={styles.starWrapper}>
                       {countUpTo(
                         parseInt(item?.averageRating),
                         <Image
@@ -272,7 +272,7 @@ const ProductList: React.FC<ProductListProps> = ({
                         />
                       )}
                       <span>({item?.averageRating})</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))

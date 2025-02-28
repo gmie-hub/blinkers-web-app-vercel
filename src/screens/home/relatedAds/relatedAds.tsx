@@ -2,9 +2,9 @@ import styles from "./relatedAds.module.scss";
 import { Image } from "antd";
 import Product2 from "../../../assets/Image.svg";
 import Product3 from "../../../assets/Image (1).svg";
-import { countUpTo } from "../trend";
-import Star from "../../../assets/Vector.svg";
-import StarYellow from "../../../assets/staryellow.svg";
+// import { countUpTo } from "../trend";
+// import Star from "../../../assets/Vector.svg";
+// import StarYellow from "../../../assets/staryellow.svg";
 import BackIncon from "../../../assets/back.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -75,7 +75,7 @@ const PromotedAds = () => {
                 <p>{card.title}</p>
                 <p>{card.location}</p>
                 <p>{card.amount}</p>
-                <div className={styles.starWrapper}>
+                {/* <div className={styles.starWrapper}>
                   {countUpTo(
                     card?.rating || 0,
                     <Image
@@ -87,7 +87,7 @@ const PromotedAds = () => {
                     <Image width={20} src={Star} alt="Star" preview={false} />
                   )}{" "}
                   <span>(20)</span>
-                </div>
+                </div> */}
               </div>
             </div>
           ))}
