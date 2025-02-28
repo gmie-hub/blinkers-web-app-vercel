@@ -277,7 +277,7 @@ const Trends = () => {
                         >{`₦${item?.price}`}</span>
                       )}
                     </span>
-                    {/* <div className={styles.starWrapper}>
+                    <div className={styles.starWrapper}>
                       {countUpTo(
                         item?.rating || 0,
                         <Image
@@ -294,7 +294,7 @@ const Trends = () => {
                         />
                       )}
                       <span>(20)</span>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               ))}
