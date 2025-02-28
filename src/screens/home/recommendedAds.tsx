@@ -5,7 +5,7 @@ import RightIcon from "../../assets/arrow-right.svg";
 import { useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import {  getRecommededAds } from "../request";
+import { getRecommededAds } from "../request";
 import CustomSpin from "../../customs/spin";
 
 // Main component
@@ -106,7 +106,10 @@ const RecommendedAds = () => {
               currentData?.map((item: any, index: number) => (
                 <div className={styles.promoImage} key={index}>
                   <img
-                    src={item && item?.recommendable?.add_images[0]?.add_image}
+                    src={item && item?.recommendable?.
+                      cover_image_url
+                      }
+                    // src={item && item?.recommendable?.add_images[0]?.add_image}
                     alt={"recommendedimg"}
                     // className={styles.trendingProductImage}
                     className={styles.proImage}
@@ -114,7 +117,8 @@ const RecommendedAds = () => {
 
                   <div className={styles.productList}>
                     <p style={{ color: "#4F4F4F" }}>
-                      {item?.recommendable?.title && item?.recommendable?.title?.length > 20
+                      {item?.recommendable?.title &&
+                      item?.recommendable?.title?.length > 20
                         ? `${item?.recommendable?.title?.slice(0, 20)}...`
                         : item?.recommendable?.title}
                     </p>

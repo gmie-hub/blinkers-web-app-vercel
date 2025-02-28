@@ -82,7 +82,7 @@ const Trends = () => {
                   <img
                     // width={"100%"}
                     className={styles.trendingProductImage}
-                    src={item?.add_images?.[0]?.add_image || Product2}
+                    src={item?.cover_image_url || Product2}
                     alt={item?.title || "Product Image"}
                     // preview={false}
                   />
@@ -163,7 +163,7 @@ const Trends = () => {
                 <img
                   // width={"100%"}
                   className={styles.trendingProductImage}
-                  src={trendData[3]?.add_images?.[0]?.add_image || Product2}
+                  src={trendData[3]?.cover_image_url || Product2}
                   alt={trendData[3]?.title || "Product Image"}
                   // preview={false}
                 />
@@ -242,7 +242,7 @@ const Trends = () => {
                   <img
                     // width={"100%"}
                     className={styles.trendingProductImage}
-                    src={item?.add_images?.[0]?.add_image || Product2}
+                    src={item?.cover_image_url || Product2}
                     alt={item?.title || "Product Image"}
                     // preview={false}
                   />
@@ -277,7 +277,7 @@ const Trends = () => {
                         >{`₦${item?.price}`}</span>
                       )}
                     </span>
-                    <div className={styles.starWrapper}>
+                    {/* <div className={styles.starWrapper}>
                       {countUpTo(
                         item?.rating || 0,
                         <Image
@@ -294,7 +294,7 @@ const Trends = () => {
                         />
                       )}
                       <span>(20)</span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}
