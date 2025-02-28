@@ -57,7 +57,6 @@ const PromotedAds = () => {
     setCurrentPage(page);
   };
 
-  console.log(promotedData?.length, "promoted Data");
   return (
     <div className={styles.promoWrapper}>
       <div className={styles.promoHead}>

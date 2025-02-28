@@ -43,16 +43,13 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const handleCheckboxPriceChange = (optionKey: string) => {
     setSelectedPrice((prevSelected) => (prevSelected === optionKey ? null : optionKey));
   };
-  console.log(selectedItems,'selectedItems')
   const handleStateChange = (value: number, setFieldValue: any) => {
-    console.log("Selected State ID:", value);
     setStateId(value);
     setLgaId(0);
     setFieldValue("lga", "");
   };
 
   const handleLgaChange = (value: number) => {
-    console.log("Selected State ID:", value);
     setLgaId(value);
     // setFieldValue("lga", "")
   };

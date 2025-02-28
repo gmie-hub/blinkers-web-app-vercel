@@ -151,7 +151,6 @@ const ProductList: React.FC<ProductListProps> = ({
     marketError?.message || "An error occurred. Please try again later.";
 
 
-    console.log(getAllMarketQuery?.data?.data?.data , 'marketData')
   const handleNavigateToProductDetails = (id: number, user_id:number,title:string,description:string) => {
     navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
     window.scrollTo(0, 0);

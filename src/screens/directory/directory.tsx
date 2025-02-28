@@ -117,7 +117,7 @@ const Directory = () => {
               />
             </SearchInput>
           </div>
-          <div style={{display:'flex', justifyContent:'center', marginBlockStart:'2.4rem'}}>
+          <div style={{display:'flex', justifyContent:'center', marginBlockStart:'2.4rem',marginInline:'2rem'}}>
           <Button
             type="button"
             variant="white"

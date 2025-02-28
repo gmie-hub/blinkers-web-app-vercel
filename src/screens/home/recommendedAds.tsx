@@ -29,7 +29,6 @@ const RecommendedAds = () => {
   const recommededErrorMessage =
     recommededError?.message || "An error occurred. Please try again later.";
 
-  console.log(recommededData, "recommededData Data");
 
   const totalPages = Math.ceil(recommededData.length / pageSize);
 
@@ -41,10 +40,7 @@ const RecommendedAds = () => {
     recommededData?.length > 0 &&
     recommededData?.slice(startIndex, endIndex);
 
-  console.log(
-    currentData[0]?.recommendable?.add_images[0],
-    "currentDatacurrentData?.recommendable"
-  );
+
 
   // Handle left button click (Previous)
   const handlePrev = () => {
@@ -115,14 +111,14 @@ const RecommendedAds = () => {
                     className={styles.proImage}
                   />
 
-                  <div className={styles.productList}>
+                  {/* <div className={styles.productList}>
                     <p style={{ color: "#4F4F4F" }}>
                       {item?.recommendable?.title &&
                       item?.recommendable?.title?.length > 20
                         ? `${item?.recommendable?.title?.slice(0, 20)}...`
                         : item?.recommendable?.title}
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               ))}
           </section>
