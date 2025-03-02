@@ -105,7 +105,8 @@ const PromotedAds = () => {
                   key={index}
                 >
                   <img
-                    src={item?.image}
+                    // src={item?.image}
+                    src={item?.cover_image_url}
                     alt={item?.title}
                     className={styles.proImage}                   />
                 </div>
