@@ -1,10 +1,12 @@
 import styles from "./index.module.scss";
-import { Image } from "antd";
+import { Image, Modal } from "antd";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import cardIcon from "../../assets/image 21.svg";
 import Image4 from "../../assets/image 23.svg";
 import Image8 from "../../assets/image 27.svg";
 import Image24 from "../../assets/image 28 (1).svg";
+import CategoriesCard from "./category";
+import { useState } from "react";
 
 const cardData = [
   {
@@ -13,7 +15,7 @@ const cardData = [
     title: "Categories",
     content: "Browse diverse product categories to find exactly what you need.",
     route: "/market", // Route for this card
-    placeholder:"Search Categories..."
+    placeholder: "Search Categories...",
   },
   {
     id: 2,
@@ -21,18 +23,16 @@ const cardData = [
     title: "Directory",
     content:
       "Discover businesses and services in our comprehensive global directory",
-    route: "/directory", 
-    placeholder:"Search Directory..."
-
+    route: "/directory",
+    placeholder: "Search Directory...",
   },
   {
     id: 3,
     icon: <Image src={Image8} alt="cardIcon" preview={false} />,
     title: "Jobs",
     content: "Find and apply for job opportunities that match your skills",
-    route: "/jobs", 
-    placeholder:"Search Jobs..."
-
+    route: "/jobs",
+    placeholder: "Search Jobs...",
   },
   {
     id: 4,
@@ -41,28 +41,48 @@ const cardData = [
     content:
       "Explore products and services worldwide to connect with sellers directly",
     route: "/market",
-    placeholder:"Search Market..."
-
+    placeholder: "Search Market...",
   },
 ];
 
 const HomeDirectory = () => {
   const navigate = useNavigate(); // Hook for navigation
+  const [isCardVisible, setIsCardVisible] = useState(false);
 
-  const handleNavigate = (route: string, query: string = "") => {
-    const fullRoute = query ? `${route}/${query}` : route;
-    navigate(fullRoute); 
-    window.scrollTo(0, 0); 
+  // const handleCategoryClick = () => {
+  //   const newValue = !isCardVisible;
+  //   localStorage.setItem("categoriesClicked", String(newValue));
+  //   setIsCardVisible(newValue);
+
+  //   // Dispatch a custom event for local storage updates
+  //   window.dispatchEvent(new Event("storageUpdated"));
+  // };
+
+
+  // const handleNavigate = (route: string, query: string = "") => {
+  //   const fullRoute = query ? `${route}/${query}` : route;
+  //   navigate(fullRoute);
+  //   window.scrollTo(0, 0);
+  // };
+
+  const handleNavigate = (route: string,title: string, query: string = "", ) => {
+    if (title === "Categories") {
+      setIsCardVisible(true)
+    } else {
+      const fullRoute = query ? `${route}/${query}` : route;
+      navigate(fullRoute);
+      window.scrollTo(0, 0);
+    }
   };
 
-
-
   return (
+    <>
+    
     <div className={styles.directryContainer}>
       {cardData?.length &&
         cardData?.map((card, index) => (
           <div
-          onClick={()=>handleNavigate(card?.route)}
+            onClick={() => handleNavigate(card?.route,card?.title)}
             className={styles.directryCard}
             key={card.id}
             style={{
@@ -77,7 +97,8 @@ const HomeDirectory = () => {
             }}
           >
             <div>{card.icon}</div>
-            <h3 className={styles.dirTitle}
+            <h3
+              className={styles.dirTitle}
               style={{
                 color:
                   index === 0
@@ -106,6 +127,20 @@ const HomeDirectory = () => {
           </div>
         ))}
     </div>
+
+    <Modal
+        open={isCardVisible}
+        onCancel={()=>setIsCardVisible(false)}
+        footer={null}
+        closable={false}
+        centered
+        width={1300}
+        style={{ top: "40px" }}
+        bodyStyle={{ paddingBlockStart: "5px" }}
+      >
+        <CategoriesCard handleClose={() => setIsCardVisible(false)} />
+      </Modal>
+    </>
   );
 };
 

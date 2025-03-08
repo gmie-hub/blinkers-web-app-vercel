@@ -244,7 +244,8 @@ interface ProductDatum {
   averageRating: string;
   user_id: number;
   add_videos:any;
-  cover_image_url:string
+  cover_image_url:string;
+  image_url:string
 }
 
 interface RelatedProduct {
@@ -274,6 +275,7 @@ interface add_imagesDatum {
   add_id: number;
   id: number;
   is_featured: number;
+  image_url:string;
 }
 
 interface ProffessionDetails {

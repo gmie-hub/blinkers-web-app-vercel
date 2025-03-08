@@ -68,7 +68,7 @@ const PromotedAds = () => {
 
         {/* Display the promo images */}
         <section className={styles.promoImageContainer}>
-          {cardData.map((card) => (
+          {cardData?.map((card) => (
             <div className={styles.promoImage} key={card.id}>
               {card.icon}
               <div className={styles.productList}>
