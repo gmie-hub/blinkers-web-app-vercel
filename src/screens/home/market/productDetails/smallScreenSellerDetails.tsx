@@ -208,8 +208,8 @@ const SmallScreen = ({
                       <Image
                         width={"6.3rem"}
                         height={"5.4rem"}
-                        src={dress.image_url}
-                        alt={dress.image_url}
+                        src={dress?.image_url || dress?.add_image}
+                        alt={dress?.image_url || dress?.add_image }
                         preview={true}
                       />
                     </div>
@@ -247,7 +247,7 @@ const SmallScreen = ({
                   <Image
                     width={"100%"}
                     //   maxWidth={10}
-                    src={productDetailsData?.add_images[0]?.image_url}
+                    src={productDetailsData?.add_images[0]?.image_url || productDetailsData?.add_images[0]?.add_image}
                     alt="Product2"
                     preview={false}
                     // alt={"my-product"}

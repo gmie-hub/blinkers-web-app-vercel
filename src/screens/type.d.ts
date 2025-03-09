@@ -276,6 +276,7 @@ interface add_imagesDatum {
   id: number;
   is_featured: number;
   image_url:string;
+  
 }
 
 interface ProffessionDetails {

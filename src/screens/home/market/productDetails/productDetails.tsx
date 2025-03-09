@@ -214,8 +214,8 @@ const BigScreen = ({
                           <Image
                             width={"12rem"}
                             height={"12rem"}
-                            src={dress?.image_url}
-                            alt={dress?.image_url}
+                            src={dress?.image_url || dress?.add_image}
+                            alt={dress?.image_url || dress?.add_image}
                             preview={true}
                           />
                         </div>
@@ -251,8 +251,8 @@ const BigScreen = ({
 
                   <img
                     width={"100%"}
-                    src={productDetailsData?.add_images[0]?.image_url}
-                    alt={productDetailsData?.add_images[0]?.image_url}
+                    src={productDetailsData?.add_images[0]?.image_url ||productDetailsData?.add_images[0]?.add_image }
+                    alt={productDetailsData?.add_images[0]?.image_url || productDetailsData?.add_images[0]?.add_image}
                     // preview={false}
                     className={styles.productImage}
                   />

@@ -79,7 +79,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
                   </div>
                   <img
                     className={styles.proImage}
-                    src={item?.add_images[0]?.image_url}
+                    src={item?.add_images[0]?.image_url || item?.add_images[0]?.add_image }
                     alt={item.title}
                   />
                   <div className={styles.productList}>
