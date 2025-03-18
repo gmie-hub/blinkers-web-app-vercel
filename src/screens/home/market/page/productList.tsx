@@ -1,7 +1,7 @@
 import styles from "./index.module.scss";
 import { Image, Pagination } from "antd";
-// import Star from "../../../../assets/Vector.svg";
-// import StarYellow from "../../../../assets/staryellow.svg";
+import Star from "../../../../assets/Vector.svg";
+import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
 import favorite from "../../../../assets/Icon + container.svg";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,6 +16,7 @@ import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
 import { useEffect } from "react";
 import { sanitizeUrlParam } from "../../../../utils";
+import { countUpTo } from "../../trend";
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -254,9 +255,9 @@ const ProductList: React.FC<ProductListProps> = ({
                       </span>
                     </span>
 
-                    {/* <div className={styles.starWrapper}>
+                    <div className={styles.starWrapper}>
                       {countUpTo(
-                        parseInt(item?.averageRating),
+                        parseInt(item?.average_rating),
                         <Image
                           width={20}
                           src={StarYellow}
@@ -270,8 +271,8 @@ const ProductList: React.FC<ProductListProps> = ({
                           preview={false}
                         />
                       )}
-                      <span>({item?.averageRating})</span>
-                    </div> */}
+                      <span>({item?.total_rating})</span>
+                    </div>
                   </div>
                 </div>
               ))

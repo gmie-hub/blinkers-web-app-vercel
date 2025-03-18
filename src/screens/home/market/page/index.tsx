@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 const PriceOptions = [
   { key: "asc", value: "Low To High" },
-  { key: 'desc', value:"High To Low" }
+  { key: "desc", value: "High To Low" },
   // { key: 3, value: "Discounted" },
 ];
 
@@ -37,11 +37,12 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [lgaId, setLgaId] = useState(0);
   const navigate = useNavigate();
 
-
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
 
   const handleCheckboxPriceChange = (optionKey: string) => {
-    setSelectedPrice((prevSelected) => (prevSelected === optionKey ? null : optionKey));
+    setSelectedPrice((prevSelected) =>
+      prevSelected === optionKey ? null : optionKey
+    );
   };
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
@@ -169,8 +170,8 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     navigate("/market");
     setStateId(0);
     setLgaId(0);
-    setSelectedItems([])
-    setSelectedPrice("")
+    setSelectedItems([]);
+    setSelectedPrice("");
   };
 
   return (
@@ -186,7 +187,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         console.log(values);
       }}
     >
-      {({  setFieldValue }) => (
+      {({ setFieldValue }) => (
         <Form>
           <div className={styles.container}>
             <div className={styles.leftSide}>
@@ -262,23 +263,25 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       label="Lga"
                       options={lgaOptions}
                       placeholder="Select LGA"
-                      onChange={(value: any) => handleLgaChange(value)} // Update stateId here
+                      onChange={(value) => handleLgaChange(value)} // Update stateId here
                     />
                   </div>
                   <div>
                     <p className={styles.subjectBg}>Price</p>
                     <ul className={styles.itemList}>
-      {PriceOptions.map((option, index) => (
-        <li key={index}>
-          <input
-            type="checkbox"
-            checked={selectedPrice === option.key}
-            onChange={() => handleCheckboxPriceChange(option.key)}
-          />
-          <label>{option.value}</label>
-        </li>
-      ))}
-    </ul>
+                      {PriceOptions.map((option, index) => (
+                        <li key={index}>
+                          <input
+                            type="checkbox"
+                            checked={selectedPrice === option.key}
+                            onChange={() =>
+                              handleCheckboxPriceChange(option.key)
+                            }
+                          />
+                          <label>{option.value}</label>
+                        </li>
+                      ))}
+                    </ul>
                     {/* <ul className={styles.itemList}>
                       {PriceOptions?.map((option: any, index: number) => (
                         <li key={index}>

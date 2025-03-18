@@ -243,9 +243,12 @@ interface ProductDatum {
   views: number;
   averageRating: string;
   user_id: number;
-  add_videos:any;
+  add_videos:string;
   cover_image_url:string;
-  image_url:string
+  image_url:string;
+  average_rating:string;
+  total_rating:string;
+
 }
 
 interface RelatedProduct {

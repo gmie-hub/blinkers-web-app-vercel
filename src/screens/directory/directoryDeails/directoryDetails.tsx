@@ -88,7 +88,7 @@ const NotClaim = () => {
       },
       {
         queryKey: ["get-business-followers", id],
-        queryFn: () => getFollowersByBusiness_id(user?.id!,parseInt(id!),),
+        queryFn: () => getFollowersByBusiness_id(user?.id!, parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!id,
@@ -334,7 +334,7 @@ const NotClaim = () => {
                         <p>{businessDetailsData?.phone || "N/A"}</p>
                       </div>
                     </div>
-                    {businessDetailsData?.business_status === '2'&& (
+                    {businessDetailsData?.business_status === "2" && (
                       <>
                         <div className={styles.info}>
                           <Image
@@ -354,7 +354,7 @@ const NotClaim = () => {
                       </>
                     )}
 
-                    {businessDetailsData?.business_status !== '2' &&
+                    {businessDetailsData?.business_status !== "2" &&
                       // user?.id === businessDetailsData?.user_id! &&
                       user?.claim_status?.toLowerCase() !== "successful" && (
                         <div className={styles.chatBtn}>
@@ -370,8 +370,7 @@ const NotClaim = () => {
                             }
                           />
                         </div>
-                      )
-                    }
+                      )}
 
                     <div className={styles.social}>
                       <Image

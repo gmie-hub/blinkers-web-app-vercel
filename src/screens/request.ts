@@ -67,7 +67,7 @@ export const getIndustries = async (search?: string) => {
     : `industries?per_page=${500}`;
   // const url = `industries?per_page=${500}&search$=${search}`
 
-  return (await api.get(url))?.data as any;
+  return (await api.get(url))?.data ;
 };
 
 export const getProductDetails = async (id: number) => {
@@ -86,16 +86,16 @@ export const getAllCategory = async (search?: string | number) => {
 };
 
 export const getTrendingAds = async () => {
-  return (await api.get(`ads/trending`))?.data as any;
+  return (await api.get(`ads/trending`))?.data ;
 };
 export const getRecommededAds = async () => {
-  return (await api.get(`/recommendations?type=${"ads"}`))?.data as any;
+  return (await api.get(`/recommendations?type=${"ads"}`))?.data ;
 };
 
 
 
 export const getPromotedAds = async () => {
-  return (await api.get(`/banners`))?.data as any;
+  return (await api.get(`/banners`))?.data ;
 };
 
 export const getAllBusiness = async (
@@ -108,11 +108,11 @@ export const getAllBusiness = async (
     url += `&page=${page}`;
   }
 
-  return (await api.get(url))?.data as any;
+  return (await api.get(url))?.data ;
 };
 
 export const getMyAdzByUserId = async (user_id: number) => {
-  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}`))?.data as any;
+  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}`))?.data ;
 };
 
 export const getAllMarket = async (
@@ -156,24 +156,24 @@ export const getAllMarket = async (
 };
 
 export const CreateJob = async (payload: Partial<JobDatum>) => {
-  return (await api.post("jobs", payload, {}))?.data as any;
+  return (await api.post("jobs", payload, {}))?.data ;
 };
 
 export const FollowBusiness = async (payload: Partial<FollowBusiness>) => {
   return (await api.post("business/followers/toggle", payload, {}))
-    ?.data as any;
+    ?.data ;
 };
 
 export const FollowSeller = async (payload: Partial<FollowBusiness>) => {
-  return (await api.post("followers/handle-action", payload, {}))?.data as any;
+  return (await api.post("followers/handle-action", payload, {}))?.data ;
 };
 
 export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
-  return (await api.post("business/reviews", payload, {}))?.data as any;
+  return (await api.post("business/reviews", payload, {}))?.data ;
 };
 
 export const WriteSellerReviewApi = async (payload: Partial<ReviewDatum>) => {
-  return (await api.post("reviews/user", payload, {}))?.data as any;
+  return (await api.post("reviews/user", payload, {}))?.data ;
 };
 
 export const createBusiness = async (payload: FormData) => {
@@ -259,7 +259,7 @@ export const deleteAdsGalarybyId = async ({
         image_ids,
       },
     })
-  )?.data as any;
+  )?.data ;
 };
 
 export const deleteAdsVideobyId = async ({
@@ -276,7 +276,7 @@ export const deleteAdsVideobyId = async ({
         video_ids,
       },
     })
-  )?.data as any;
+  )?.data ;
 };
 
 
@@ -315,7 +315,7 @@ export const getFlaggedJobByJob_idUser_id = async (
   user_id: number
 ) => {
   return (await api.get(`jobs/flag?job_id=${job_id}&user_id=${user_id}`))
-    ?.data as any;
+    ?.data ;
 };
 
 export const getFollowersByBusiness_id = async (
@@ -369,7 +369,7 @@ export const deleteGalarybyId = async ({
         ids,
       },
     })
-  )?.data as any;
+  )?.data ;
 };
 
 export const employmentTypeData = [
@@ -467,7 +467,7 @@ export const getAllApplication = async (
     await api.get(
       `jobs/application?page=${page}&job_id=${job_id}&status=${status}`
     )
-  )?.data as any;
+  )?.data ;
 };
 export const getApplicationDetails = async (id: number) => {
   return (await api.get(`jobs/application/${id}`))?.data as ApplicantResponse;

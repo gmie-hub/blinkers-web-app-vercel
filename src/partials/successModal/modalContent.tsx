@@ -1,45 +1,69 @@
-import Button from '../../customs/button/button';
-import styles from './index.module.scss';
-import { Modal } from 'antd';
+import Button from "../../customs/button/button";
+import styles from "./index.module.scss";
+import { Modal } from "antd";
 import { Image } from "antd";
 import DoneIcon from "../../assets/Done.svg";
+import { ReactNode } from "react";
 
 interface Props {
   handleCancel: () => void;
   handleClick: () => void;
+  handleClickBtn2:()=> void;
   open: boolean;
   text?: string;
-  heading?:string;
-  icon?:any;
-  BtnText?:string
-
+  heading?: string;
+  icon?: ReactNode;
+  BtnText?: string;
+  BtnText2?: string;
 }
 
-const ModalContent = ({open,heading, text,handleCancel,handleClick,icon, BtnText }: Props) => {
-
- 
-
+const ModalContent = ({
+  open,
+  heading,
+  text,
+  handleCancel,
+  handleClick,
+  handleClickBtn2,
+  icon,
+  BtnText,
+  BtnText2,
+}: Props) => {
   return (
-    <Modal
-      open={open}
-      onCancel={handleCancel}
-      centered
-      title=""
-      footer={null}
-    >
+    <Modal open={open} onCancel={handleCancel} centered title="" footer={null}>
       <section className={styles.ModalWrapper}>
-      {icon ? icon :<Image src={DoneIcon} alt={DoneIcon} preview={false} />}
-  {    heading && <h3>{heading}</h3>}
+        {icon ? icon : <Image src={DoneIcon} alt={DoneIcon} preview={false} />}
+        {heading && <h3>{heading}</h3>}
 
-      {  text && <p className={styles.ModalPara}>{text}</p>}
+        {text && <p className={styles.ModalPara}>{text}</p>}
         <div className={styles.btn}>
+        {BtnText2 &&
+            <Button
+            onClick={handleClickBtn2}
+            type="button"
+            text={BtnText2}
+            className={styles.btn}
+            variant={'white'}
+          />
+          }
           <Button
             onClick={handleClick}
             type="button"
-            text={ BtnText ? BtnText :'Okay' }
+            text={BtnText ? BtnText : "Okay"}
             className={styles.btn}
+
           />
+          
         </div>
+        {/* { BtnText2 &&
+          <div className={styles.btn}>
+            <Button
+              onClick={handleClick}
+              type="button"
+              text={BtnText2}
+              className={styles.btn}
+            />
+          </div>
+        } */}
       </section>
     </Modal>
   );

@@ -62,7 +62,7 @@ const Main = () => {
       },
       {
         queryKey: ["get-sellers-followers"],
-        queryFn: ()=> getFollowersByUser_id(user?.id!,sellerId!),
+        queryFn: ()=> getFollowersByUser_id(user?.id ?? 0,sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled:!!user?.id
@@ -76,7 +76,7 @@ const Main = () => {
       },
       {
         queryKey: ["get-business-followers", businessId],
-        queryFn: () => getFollowersByBusiness_id(user?.id!,businessId!),
+        queryFn: () => getFollowersByBusiness_id(user?.id ?? 0 ,businessId!),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled:  !!user?.id,
@@ -90,7 +90,7 @@ const Main = () => {
       },
       {
         queryKey: ["get-flagged-sellers"],
-        queryFn: ()=> getFlaggedSellerBySeller_idUser_id(user?.id!,sellerId!),
+        queryFn: ()=> getFlaggedSellerBySeller_idUser_id(user?.id ?? 0,sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled:!!sellerId
@@ -127,8 +127,8 @@ const Main = () => {
 
   useEffect(() => {
     if (getProductDetailsQuery) {
-      setBusinessId(productDetailsData?.business_id!);
-      setSellerId(productDetailsData?.user_id!);
+      setBusinessId(productDetailsData?.business_id ?? 0);
+      setSellerId(productDetailsData?.user_id ?? 0);
     }
   }, [
     getProductDetailsQuery,
@@ -161,7 +161,7 @@ const Main = () => {
           });
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description:errorMessage(error) || "An error occur",
@@ -209,7 +209,7 @@ const Main = () => {
           });
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description:errorMessage(error) || "An error occur",

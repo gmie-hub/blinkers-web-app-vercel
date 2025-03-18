@@ -21,7 +21,7 @@ import { LoginApiCall } from "./request";
 import { userAtom } from "../../utils/store";
 import { useAtom, } from "jotai";
 import { errorMessage } from "../../utils/errorMessage";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-input-2";
 import { logout } from "../../utils/logout";
@@ -32,10 +32,10 @@ const Login = () => {
   const [, setUser] = useAtom(userAtom);
   const [activeKey, setActiveKey] = useState("1");
 
-  const [formData, setFormData] = useState({
-    email: "",
-    phoneNumber: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   email: "",
+  //   phoneNumber: "",
+  // });
   const queryParams = new URLSearchParams(location.search);
   const redirectPath = queryParams.get("redirect");
 
@@ -115,7 +115,7 @@ const Login = () => {
             }
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",
@@ -185,18 +185,17 @@ const Login = () => {
             //   email: values?.email,
             //   phoneNumber: values?.phoneNumber,
             // });
-            console.log(formData?.email, "formData");
           }}
           validationSchema={getValidationSchema(activeKey)}
         >
-          {({ values }) => {
-            useEffect(() => {
-              setFormData({
-                ...formData,
-                email: values.email,
-                phoneNumber: values.phoneNumber,
-              });
-            }, [values.email, values.phoneNumber]);
+          {() => {
+            // useEffect(() => {
+            //   setFormData({
+            //     ...formData,
+            //     email: values.email,
+            //     phoneNumber: values.phoneNumber,
+            //   });
+            // }, [values.email, values.phoneNumber]);
 
             return (
               <Form className="fields">

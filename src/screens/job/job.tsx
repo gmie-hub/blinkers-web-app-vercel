@@ -50,9 +50,6 @@ const Jobs = () => {
     window.scrollTo(0, 0);
   };
 
-
-
-
   const handleNavigateAddBusiness = () => {
     if (!user) {
       notification.error({
@@ -65,20 +62,24 @@ const Jobs = () => {
         },
       });
     } else if (
+           
       user?.claim_status === null ||
       user?.claim_status?.toString() === "2" ||
-      user?.claim_status?.toLowerCase() === "rejected"
+      user?.claim_status?.toLowerCase() === "rejected" ||
+      user?.role === "3" 
+
     ) {
       setOpenAddBusiness(true);
-    } else if ( user?.claim_status?.toLowerCase() === "pending"){
+    } else if (
+      user?.claim_status?.toLowerCase() === "pending" &&
+      user?.role !== "2"
+    ) {
       notification.error({
         message: "Error",
-        description:"You are not allowed to post a job. Your business is still pending verification.",
+        description:
+          "You are not allowed to post a job. Your business is still pending verification.  ",
       });
-
-    }
-    else
-    {
+    } else {
       navigate(routes.job.postJob);
     }
 
@@ -88,6 +89,11 @@ const Jobs = () => {
   const handleCloseBusinessModal = () => {
     setOpenAddBusiness(false);
     navigate(routes.job.AddBusiness);
+  };
+
+  const handleNavigateTOSellerSignup = () => {
+    setOpenAddBusiness(false);
+    navigate(routes.auth.sellerVerification);
   };
 
   const resetSearchTerm = () => {
@@ -136,7 +142,7 @@ const Jobs = () => {
               onClick={handleNavigateAddBusiness}
             />
 
-            {((user &&  !user?.is_applicant) || !user) && (
+            {((user && !user?.is_applicant) || !user) && (
               <Button
                 icon={<Image src={job2} alt={job2} preview={false} />}
                 className={styles.WhiteButtonStyle}
@@ -145,8 +151,6 @@ const Jobs = () => {
                 onClick={handleNavigateRegisterAsAnApplicant}
               />
             )}
-          
-
           </div>
         </div>
         <JobLists
@@ -160,10 +164,13 @@ const Jobs = () => {
         open={openAddBusiness}
         handleCancel={() => setOpenAddBusiness(false)}
         handleClick={handleCloseBusinessModal}
+        handleClickBtn2={handleNavigateTOSellerSignup}
         BtnText="Add Business To Directory"
-        heading="Business Not Added To Directory"
+        BtnText2="Become a seller"
+
+        heading="Business Not Added To Directory "
         text={
-          "It looks like your business has not been registered in our directory, Add your business to the directory now to be able to post jobs."
+          "It looks like your business has not been registered in our directory and you are not also a seller, Add your business to the directory now or register as a seller to be able to post jobs."
         }
       />
       {/* <ModalContent
