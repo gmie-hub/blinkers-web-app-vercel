@@ -229,11 +229,16 @@ const ProductList: React.FC<ProductListProps> = ({
                     <div className={styles.info}>
                       <Image src={LocationIcon} alt="LocationIcon" />
                       <p>
-                        <span>
+                        {/* <span>
                           {item?.local_govt?.local_government_area &&
                             item?.local_govt?.local_government_area + ", "}
                         </span>
-                        <span>{item?.state?.state_name}</span>
+                        <span>{item?.state?.state_name}</span> */}
+                        <span>
+                        {item?.pickup_address && item?.pickup_address?.length > 32
+                        ? `${item?.pickup_address?.slice(0, 32)}...`
+                        : item?.pickup_address}
+                        </span>
                       </p>
                     </div>
                     {/* <span className={styles.trendingdiscount}>

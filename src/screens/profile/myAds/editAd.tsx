@@ -637,7 +637,7 @@ const EditAdz = () => {
 
                   <div className={styles.imageContainer}>
                     {productDetailsData?.add_videos?.map(
-                      (image: any, index: number) => (
+                      (image, index: number) => (
                         <div key={index} className={styles.imageWrapper}>
                          
                           <video

@@ -243,7 +243,7 @@ interface ProductDatum {
   views: number;
   averageRating: string;
   user_id: number;
-  add_videos:string;
+  add_videos:add_imagesDatum[];
   cover_image_url:string;
   image_url:string;
   average_rating:string;
@@ -279,6 +279,7 @@ interface add_imagesDatum {
   id: number;
   is_featured: number;
   image_url:string;
+  add_video:string;
   
 }
 
