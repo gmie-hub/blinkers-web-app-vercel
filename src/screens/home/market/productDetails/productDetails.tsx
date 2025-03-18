@@ -495,7 +495,7 @@ const BigScreen = ({
                     <p className={styles.seller}>Seller’s Information </p>
                     <div className={styles.flex}>
                       <Image
-                        src={profileDetailsData?.profile_image! || ProfileIcon}
+                        src={profileDetailsData?.profile_image || ProfileIcon}
                         alt="sellerslogo"
                         className={styles.sellerLogo}
                         preview={true}

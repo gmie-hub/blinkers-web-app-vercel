@@ -618,7 +618,7 @@ const EditAdz = () => {
                     {productDetailsData?.add_images?.map((image, index) => (
                       <div key={index} className={styles.imageWrapper}>
                         <img
-                          src={image?.add_image}
+                          src={image?.image_url || image?.add_image}
                           alt={`Product Image ${index + 1}`}
                           className={styles.imageAds}
                           // width={'100%'}
