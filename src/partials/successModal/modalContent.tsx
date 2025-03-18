@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 interface Props {
   handleCancel: () => void;
   handleClick: () => void;
-  handleClickBtn2:()=> void;
+  handleClickBtn2?:()=> void;
   open: boolean;
   text?: string;
   heading?: string;
