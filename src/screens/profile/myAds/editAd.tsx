@@ -107,46 +107,88 @@ const EditAdz = () => {
   const lgaData = getLGAQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data ?? [];
 
+  // const stateOptions: { value: number; label: string }[] = [
+  //   { value: 0, label: "Select State" }, // Default option
+  //   ...(stateData && stateData?.length > 0
+  //     ? stateData?.map((item: StateDatum) => ({
+  //         value: item?.id,
+  //         label: item?.state_name,
+  //       }))
+  //     : []),
+  // ];
   const stateOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select State" }, // Default option
-    ...(stateData && stateData?.length > 0
-      ? stateData?.map((item: StateDatum) => ({
-          value: item?.id,
-          label: item?.state_name,
+    ...(Array.isArray(stateData) && stateData.length > 0
+      ? stateData.map((item: StateDatum) => ({
+          value: item?.id ?? 0, // Fallback to 0 if undefined
+          label: item?.state_name ?? "Unknown State", // Fallback to a default label
         }))
       : []),
   ];
+  
 
   const lgaOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select Lga" }, // Default option
-    ...(lgaData && lgaData?.length > 0
-      ? lgaData?.map((item: LGADatum) => ({
-          value: item?.id,
-          label: item?.local_government_area,
+    ...(Array.isArray(lgaData) && lgaData.length > 0
+      ? lgaData.map((item: LGADatum) => ({
+          value: item?.id ?? 0, // Fallback to 0 if undefined
+          label: item?.local_government_area ?? "Unknown LGA", // Fallback to a default label
         }))
       : []),
   ];
+  
+
+  // const lgaOptions: { value: number; label: string }[] = [
+  //   { value: 0, label: "Select Lga" }, // Default option
+  //   ...(lgaData && lgaData?.length > 0
+  //     ? lgaData?.map((item: LGADatum) => ({
+  //         value: item?.id,
+  //         label: item?.local_government_area,
+  //       }))
+  //     : []),
+  // ];
 
   const categoryData = getAllCategoryQuery?.data?.data?.data ?? [];
 
   const categoryOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select Business" }, // Default option
-    ...(categoryData && categoryData?.length > 0
-      ? categoryData?.map((item: CategoryDatum) => ({
-          value: item?.id,
-          label: item?.title,
+    ...(Array.isArray(categoryData) && categoryData.length > 0
+      ? categoryData.map((item: CategoryDatum) => ({
+          value: item?.id ?? 0, // Default to 0 if undefined
+          label: item?.title ?? "Unknown Category", // Default label
         }))
       : []),
   ];
+  
   const subCategoryOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select Business" }, // Default option
-    ...(subCategory && subCategory?.length > 0
-      ? subCategory?.map((item: CategoryDatum) => ({
-          value: item?.id,
-          label: item?.title,
+    ...(Array.isArray(subCategory) && subCategory.length > 0
+      ? subCategory.map((item: CategoryDatum) => ({
+          value: item?.id ?? 0, // Default to 0 if undefined
+          label: item?.title ?? "Unknown Subcategory", // Default label
         }))
       : []),
   ];
+  
+
+  // const categoryOptions: { value: number; label: string }[] = [
+  //   { value: 0, label: "Select Business" }, // Default option
+  //   ...(categoryData && categoryData?.length > 0
+  //     ? categoryData?.map((item: CategoryDatum) => ({
+  //         value: item?.id,
+  //         label: item?.title,
+  //       }))
+  //     : []),
+  // ];
+  // const subCategoryOptions: { value: number; label: string }[] = [
+  //   { value: 0, label: "Select Business" }, // Default option
+  //   ...(subCategory && subCategory?.length > 0
+  //     ? subCategory?.map((item: CategoryDatum) => ({
+  //         value: item?.id,
+  //         label: item?.title,
+  //       }))
+  //     : []),
+  // ];
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,

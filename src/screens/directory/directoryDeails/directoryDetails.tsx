@@ -34,6 +34,7 @@ import { useAtomValue } from "jotai";
 import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import StarYellow from "../../../assets/staryellow.svg";
 import { errorMessage } from "../../../utils/errorMessage";
+import { groupBusinessHours } from "./displayBusinessHour";
 
 const NotClaim = () => {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ const NotClaim = () => {
       },
       {
         queryKey: ["get-business-followers", id],
-        queryFn: () => getFollowersByBusiness_id(user?.id!, parseInt(id!)),
+        queryFn: () => getFollowersByBusiness_id(user?.id ?? 0, parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!id,
@@ -321,7 +322,8 @@ const NotClaim = () => {
 
                         <div className={styles.open}>
                           <p>Opening Hours</p>
-                          <p>Monday - Fridays (10am- 11pm)</p>
+                          {/* <p>Monday - Fridays (10am- 11pm)</p> */}
+                          {groupBusinessHours(businessDetailsData?.business_hours || [])}
                         </div>
                       </div>
                       <div className={styles.info}>

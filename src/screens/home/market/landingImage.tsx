@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 
 const Market = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  let { search } = useParams();
+  const  { search } = useParams();
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +17,7 @@ const Market = () => {
 
   const handleSearch = () => {
     setAppliedSearchTerm(searchTerm); // Update appliedSearchTerm only on button click
-    setSearchTerm('')
+    // setSearchTerm('')
   };
   console.log("Search Term Sent:", searchTerm,appliedSearchTerm);
 

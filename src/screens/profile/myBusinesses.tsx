@@ -13,6 +13,7 @@ import { useState } from "react";
 import { AxiosError } from "axios";
 import CustomSpin from "../../customs/spin";
 import { useNavigate } from "react-router-dom";
+import { groupBusinessHours } from "../directory/directoryDeails/displayBusinessHour";
 
 const MyBusinesses = () => {
   const user = useAtomValue(userAtom);
@@ -66,11 +67,18 @@ const MyBusinesses = () => {
                   <p>{user?.business?.name}</p>
 
                   <div className={styles.info}>
-                    <Image src={TimeIcon} alt="TimeIcon" preview={false} />
-
+                    <Image
+                      src={TimeIcon}
+                      alt="TimeIcon"
+                      preview={false}
+                      width={24}
+                      height={24}
+                    />
                     <div className={styles.open}>
                       <p>Opening Hours</p>
-                      {/* <p>Monday - Fridays (10am- 11pm)</p> */}
+                      {groupBusinessHours(
+                        businessDetailsData?.business_hours || []
+                      )}
                     </div>
                   </div>
                   <div className={styles.info}>
@@ -78,15 +86,22 @@ const MyBusinesses = () => {
                       src={LocationIcon}
                       alt="LocationIcon"
                       preview={false}
-                      width={60}
+                      width={24}
+                      height={24}
                     />
-                    {user?.address}
+                    <p>{user?.address}</p>
                   </div>
                   <div className={styles.info}>
-                    <Image src={CallIcon} alt="CallIcon" preview={false} />
-
+                    <Image
+                      src={CallIcon}
+                      alt="CallIcon"
+                      preview={false}
+                      width={24}
+                      height={24}
+                    />
                     <p>{user?.number}</p>
                   </div>
+
                   <div style={{ marginBlockStart: "2.4rem" }}>
                     <Button
                       disabled={

@@ -205,7 +205,7 @@
   @media (max-width: 412px) {
     flex-direction: column;
 
-    & > div{
+    & > div {
       width: 100%;
     }
   }
@@ -297,7 +297,7 @@
 // }
 .imageSize {
   width: 80%;
-  // height: 20rem;
+  max-height: 20rem;
   // position: ;
   object-fit: cover;
 }
