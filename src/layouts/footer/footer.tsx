@@ -78,7 +78,7 @@ const Footer = () => {
             />
 
             <p>E-mail: blinkersnigeria@gmail.com</p>
-            <p>Phone: +2348155656205</p>
+            <p>Phone: +2348087396478</p>
             <p>
               Address: 18B, Onikepo Akande street, off Admiralty way, Lekki
               phase 1, Lagos, Nigeria

@@ -36,7 +36,7 @@ const cardData = [
       />
     ),
     title: "Call Us",
-    para: "+2348155656205",
+    para: "+2348087396478",
   },
   {
     id: 3,
