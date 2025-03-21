@@ -15,6 +15,10 @@ import * as Yup from "yup";
 import { errorMessage } from "../../../../utils/errorMessage";
 import CameraIcon from "../../../../assets/camera.svg";
 import Profile from "../../../../assets/Avatarprofile.svg";
+import { useAtom } from "jotai";
+import { userAtom } from "../../../../utils/store";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../../../routes";
 
 const AddBusiness = () => {
   const [upload, setUpload] = useState<File | null>(null);
@@ -23,7 +27,10 @@ const AddBusiness = () => {
   const [searchValue, setSearchValue] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null); // For preview
   const [profileImage, setProfileImage] = useState<any>(null);
+  const [user] = useAtom(userAtom);
+  const navigate = useNavigate()
 
+  
   const handleFileBusinessChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
@@ -61,6 +68,11 @@ const AddBusiness = () => {
   const clearFile = () => {
     setUpload(null);
   };
+  const handleNavigateToDir = ()=>{
+    setOpenSuccess(false)
+    navigate(routes.directory.directory)
+    
+  }
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -78,6 +90,7 @@ const AddBusiness = () => {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
       "application/msword", // doc
       "application/vnd.ms-powerpoint", // ppt
+      "application/pdf" // pdf
     ];
 
     // Validate if the file type is valid
@@ -101,7 +114,11 @@ const AddBusiness = () => {
     values: FormikValues,
     resetForm: () => void
   ) => {
+
     const formData = new FormData();
+
+    formData.append("user_id", user?.id?.toString() || '');
+
     formData.append("name", values?.BusinessName);
     formData.append("address", values?.BusinessAddress);
     if (upload) {
@@ -130,6 +147,7 @@ const AddBusiness = () => {
           resetForm();
           clearFile();
           setOpenSuccess(true);
+
         },
       });
     } catch (error: any) {
@@ -301,7 +319,7 @@ const AddBusiness = () => {
                           variant="green"
                           type="submit"
                           disabled={false}
-                          text="Submit Form"
+                          text={createBusinessMutation?.isPending ? 'loading...' : "Submit Form" }
                           className={styles.btn}
                         />
                       </div>
@@ -316,7 +334,7 @@ const AddBusiness = () => {
         <ModalContent
           open={openSuccess}
           handleCancel={() => setOpenSuccess(false)}
-          handleClick={() => setOpenSuccess(false)}
+          handleClick={handleNavigateToDir}
           heading={"Business Added Successfully"}
           text="We’ve received your details and once we verify it, you will be able to post jobs. We will contact you via email."
         />
