@@ -73,7 +73,7 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
           <div className={styles.cardContainer}>
             {/* Only map through the data if it's not empty */}
             {relatedJobsData && relatedJobsData.length > 0 ? (
-              relatedJobsData?.map((item: any, index: any) => (
+              relatedJobsData?.map((item: any, index: number) => (
                 <div
                   onClick={() => handleNavigateDetails(item?.id, item?.title, item?.description)}
                   className={styles.chooseCard}

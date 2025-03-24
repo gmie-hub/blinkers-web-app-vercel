@@ -14,12 +14,13 @@ import Input from "../../../../customs/input/input";
 import RelatedAds from "../../../../partials/relatedAds";
 import StarIcon from "../../../../assets/Vector.svg";
 import favorite from "../../../../assets/Icon + container.svg";
+import redFavorite from "../../../../assets/redfav.svg";
 import Details from "./tabs/details";
 import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
 import { countUpTo } from "../../trend";
-import {  useState } from "react";
+import { useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate, useParams } from "react-router-dom";
 import FlagSeller from "../flagSeller/flagSeller";
@@ -55,6 +56,8 @@ interface Props {
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
   hasUserFlaggedSeller?: boolean;
+  favAdvList?: AddToFav[];
+  addToFavHandler?: () => void;
 }
 
 const SmallScreen = ({
@@ -68,6 +71,8 @@ const SmallScreen = ({
   isUserFollowingSeller,
   profileDetailsData,
   hasUserFlaggedSeller,
+  favAdvList,
+  addToFavHandler,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -131,7 +136,10 @@ const SmallScreen = ({
     }
   };
 
-  const visibleImages = images && images?.length > 0 && images?.slice(currentIndex, currentIndex + maxVisibleImages);
+  const visibleImages =
+    images &&
+    images?.length > 0 &&
+    images?.slice(currentIndex, currentIndex + maxVisibleImages);
 
   return (
     <main>
@@ -193,29 +201,29 @@ const SmallScreen = ({
                 ))}
               </div> */}
 
-
-                 <div className={styles.firstSideLeft}>
-                 <button
+              <div className={styles.firstSideLeft}>
+                <button
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
                   className={styles.arrowButton}
                 >
                   &lt; {/* Left arrow */}
                 </button>
-                {visibleImages && visibleImages?.map((dress) => (
-                  <div key={dress.id} className={styles.dressCard}>
-                    <div>
-                      <Image
-                        width={"6.3rem"}
-                        height={"5.4rem"}
-                        src={dress?.image_url || dress?.add_image}
-                        alt={dress?.image_url || dress?.add_image }
-                        preview={true}
-                      />
+                {visibleImages &&
+                  visibleImages?.map((dress) => (
+                    <div key={dress.id} className={styles.dressCard}>
+                      <div>
+                        <Image
+                          width={"6.3rem"}
+                          height={"5.4rem"}
+                          src={dress?.image_url || dress?.add_image}
+                          alt={dress?.image_url || dress?.add_image}
+                          preview={true}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-                 <button
+                  ))}
+                <button
                   onClick={handleNext}
                   disabled={currentIndex + maxVisibleImages >= images.length}
                   className={styles.arrowButton}
@@ -226,15 +234,29 @@ const SmallScreen = ({
 
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
-                  <div className={styles.favoriteIcon}>
-                    <Image
+                  <div
+                    className={styles.favoriteIcon}
+                    onClick={addToFavHandler}
+                    // onClick={() => {
+                    //   if (addToFavHandler) {
+                    //     addToFavHandler(id);
+                    //   }
+                    // }}
+                  >
+                    <img
                       width={30}
-                      src={favorite}
+                      src={
+                        favAdvList?.some(
+                          (fav: AddToFav) =>
+                            fav.id?.toString() == id?.toString()
+                        )
+                          ? redFavorite
+                          : favorite
+                      }
                       alt="Favorite"
-                      preview={false}
                     />
                   </div>
-                  
+
                   {/* <Image
                   width={"58.6rem"}
                   // height={'58.6rem'}
@@ -247,7 +269,10 @@ const SmallScreen = ({
                   <Image
                     width={"100%"}
                     //   maxWidth={10}
-                    src={productDetailsData?.add_images[0]?.image_url || productDetailsData?.add_images[0]?.add_image}
+                    src={
+                      productDetailsData?.add_images[0]?.image_url ||
+                      productDetailsData?.add_images[0]?.add_image
+                    }
                     alt="Product2"
                     preview={false}
                     // alt={"my-product"}

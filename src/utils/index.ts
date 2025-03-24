@@ -7,7 +7,7 @@
 //   }
   
 
-export function sanitizeUrlParam(param: any): string {
+export function sanitizeUrlParam(param: string): string {
     // Handle null, undefined, and empty strings
     if (param == null || param === '') {
       return ''; // Return an empty string if input is null, undefined, or empty
@@ -28,12 +28,12 @@ export function sanitizeUrlParam(param: any): string {
 
   
 
-export function isCurrentDateGreaterThan(targetDateString: any) {
+export function isCurrentDateGreaterThan(targetDateString: string) {
   // Get the current date and time
-  var currentDate = new Date();
+  const currentDate = new Date();
 
   // Convert the target date string to a Date object
-  var targetDate = new Date(targetDateString);
+  const targetDate = new Date(targetDateString);
 
   // Compare the current date with the target date
   if (currentDate > targetDate) {

@@ -1,12 +1,13 @@
 import styles from "./index.module.scss";
-import { Image, Pagination } from "antd";
+import { App, Image, Pagination } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
 import favorite from "../../../../assets/Icon + container.svg";
+import redFavorite from "../../../../assets/redfav.svg";
 import { useNavigate, useParams } from "react-router-dom";
 // import { countUpTo } from "../../trend";
-import { useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 // import { getAllMarket } from "../../../request";
 import axios, { AxiosError } from "axios";
 import LocationIcon from "../../../../assets/locationrelated.svg";
@@ -17,6 +18,10 @@ import usePagination from "../../../../hooks/usePagnation";
 import { useEffect } from "react";
 import { sanitizeUrlParam } from "../../../../utils";
 import { countUpTo } from "../../trend";
+import { errorMessage } from "../../../../utils/errorMessage";
+import { AddToFav, getFavAds } from "../../../request";
+import { userAtom } from "../../../../utils/store";
+import { useAtomValue } from "jotai";
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -26,8 +31,8 @@ interface ProductListProps {
   lgaId: number;
   setLgaId: any;
   setStateId: any;
-  setSelectedItems:any
-  selectedPrice?:any
+  setSelectedItems: any;
+  selectedPrice?: any;
 }
 
 const ProductList: React.FC<ProductListProps> = ({
@@ -40,13 +45,14 @@ const ProductList: React.FC<ProductListProps> = ({
   selectedItems,
   setSelectedItems,
   selectedPrice,
-  
-
 }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const { search } = useParams();
+  const { notification } = App.useApp();
+  const user = useAtomValue(userAtom);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (currentPage !== pageNum) {
@@ -55,7 +61,7 @@ const ProductList: React.FC<ProductListProps> = ({
   }, [pageNum, currentPage, setCurrentPage]);
 
   const data = {
-    sub_category_id: selectedItems
+    sub_category_id: selectedItems,
   };
 
   const api = axios.create({
@@ -74,10 +80,9 @@ const ProductList: React.FC<ProductListProps> = ({
     search?: string | number,
     state_id?: number,
     local_government_area_id?: number,
-    order?:string,
+    order?: string
   ) => {
     let url = `/ads/all?per_page=${50}`;
-  
 
     const queryParams: string[] = [];
 
@@ -99,15 +104,12 @@ const ProductList: React.FC<ProductListProps> = ({
     ) {
       queryParams.push(`local_government_area_id=${local_government_area_id}`);
     }
-    if(order !==undefined && order !==''){
-      queryParams.push(`sort=${'price'}`);
-
-     }
-     if(order !==undefined && order !==''){
+    if (order !== undefined && order !== "") {
+      queryParams.push(`sort=${"price"}`);
+    }
+    if (order !== undefined && order !== "") {
       queryParams.push(`order=${order}`);
-
-     }
-   
+    }
 
     // if(sub_category_id !==undefined && sub_category_id.length !== 0){
     //   queryParams.push(`sub_category_id=${sub_category_id}`);
@@ -120,7 +122,8 @@ const ProductList: React.FC<ProductListProps> = ({
     return (await api.get(url))?.data as AllProductaResponse;
   };
 
-  const [getAllMarketQuery] = useQueries({
+
+  const [getAllMarketQuery,getAllFavAds] = useQueries({
     queries: [
       {
         queryKey: [
@@ -133,13 +136,28 @@ const ProductList: React.FC<ProductListProps> = ({
           selectedPrice,
         ],
         queryFn: () =>
-          getAllMarket(currentPage, appliedSearchTerm, stateId, lgaId,selectedPrice),
+          getAllMarket(
+            currentPage,
+            appliedSearchTerm,
+            stateId,
+            lgaId,
+            selectedPrice
+          ),
         // retry: 0,
         refetchOnWindowFocus: true,
         // enabled: Boolean(currentPage && appliedSearchTerm),
       },
+      {
+        queryKey: ["get-al-fav", user?.id],
+        queryFn: () => getFavAds((user?.id)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled:!!user?.id
+      },
     ],
   });
+  const favAdvList =getAllFavAds?.data?.data
+
   useEffect(() => {
     if (search) {
       setAppliedSearchTerm(search);
@@ -151,9 +169,17 @@ const ProductList: React.FC<ProductListProps> = ({
   const marketErrorMessage =
     marketError?.message || "An error occurred. Please try again later.";
 
-
-  const handleNavigateToProductDetails = (id: number, user_id:number,title:string,description:string) => {
-    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
+  const handleNavigateToProductDetails = (
+    id: number,
+    user_id: number,
+    title: string,
+    description: string
+  ) => {
+    navigate(
+      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+        title
+      )}/${sanitizeUrlParam(description)}`
+    );
     window.scrollTo(0, 0);
   };
 
@@ -166,8 +192,7 @@ const ProductList: React.FC<ProductListProps> = ({
     getAllMarketQuery?.refetch();
     setStateId(0);
     setLgaId(0);
-    setSelectedItems([])
-    
+    setSelectedItems([]);
   };
 
   // const handlePageChange = (pageNum: number) => {
@@ -175,6 +200,43 @@ const ProductList: React.FC<ProductListProps> = ({
   //   setCurrentPage(pageNum); // Update the state
   //   window.scrollTo(0, 0); // Scroll to the top of the page
   // };
+    const addToFavMutation = useMutation({
+      mutationFn: AddToFav,
+      mutationKey: ["add-fav"],
+    });   
+    const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
+
+
+    const addToFavHandler = async (id?: string) => {
+      if (!id) return;
+      const isFav = favIcons.includes(parseInt(id)); 
+      console.log( isFav , 'isFav')
+
+      const payload: Partial<AddToFav> = {
+        add_id: id,
+        status: isFav ? 0 : 1,
+
+      };
+
+    try {
+      await addToFavMutation.mutateAsync(payload, {
+        onSuccess: () => {
+          // notification.success({
+          //   message: "Success",
+          //   description: data?.message,
+          // });
+          queryClient.refetchQueries({
+            queryKey: ['get-al-fav'],
+          });
+        },
+      });
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
 
   return (
     <>
@@ -203,23 +265,32 @@ const ProductList: React.FC<ProductListProps> = ({
                 <div
                   className={styles.promoImage}
                   key={index}
-                  onClick={() => handleNavigateToProductDetails(item?.id,item?.user_id,item?.title,item?.description)}
+                  onClick={() =>
+                    handleNavigateToProductDetails(
+                      item?.id,
+                      item?.user_id,
+                      item?.title,
+                      item?.description
+                    )
+                  }
                 >
-                  <div className={styles.favoriteIcon}>
-                    <img width={30} src={favorite} alt="Favorite" />
+                  <div
+                    className={styles.favoriteIcon}
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevents click from bubbling to parent div
+                      addToFavHandler(item?.id?.toString());
+                    }}
+                  >
+                    <img width={30}  src={favAdvList?.some((fav:AddToFav) => fav.id === item.id) ? redFavorite : favorite} alt="Favorite" />
+                   
                   </div>
-                  {/* Image for the product */}
-                  {/* <img
+
+                  <img
                     className={styles.proImage}
-                    src={item?.add_images[0]?.add_image || Product3}
-                    alt="Product"
-                  /> */}
-                   <img
-                    className={styles.proImage}
-                    src={item?.cover_image_url ||  Product3}
+                    src={item?.cover_image_url || Product3}
                     alt="Product"
                   />
-                  
+
                   <div className={styles.productList}>
                     <p style={{ color: "#4F4F4F" }}>
                       {item?.title && item?.title?.length > 20
@@ -229,16 +300,16 @@ const ProductList: React.FC<ProductListProps> = ({
                     <div className={styles.info}>
                       <Image src={LocationIcon} alt="LocationIcon" />
                       <p>
-                        {/* <span>
+                        <span>
                           {item?.local_govt?.local_government_area &&
                             item?.local_govt?.local_government_area + ", "}
                         </span>
-                        <span>{item?.state?.state_name}</span> */}
-                        <span>
+                        <span>{item?.state?.state_name}</span>
+                        {/* <span>
                         {item?.pickup_address && item?.pickup_address?.length > 32
                         ? `${item?.pickup_address?.slice(0, 32)}...`
                         : item?.pickup_address}
-                        </span>
+                        </span> */}
                       </p>
                     </div>
                     {/* <span className={styles.trendingdiscount}>

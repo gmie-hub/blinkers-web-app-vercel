@@ -5,10 +5,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
+  AddToFav,
   FollowBusiness,
   FollowSeller,
   getApplicantsbyId,
   getBusinessById,
+  getFavAds,
   getFlaggedSellerBySeller_idUser_id,
   getFollowersByBusiness_id,
   getFollowersByUser_id,
@@ -17,7 +19,7 @@ import {
 import { App } from "antd";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import { userAtom } from "../../../../utils/store";
-import {  useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import CustomSpin from "../../../../customs/spin";
 import { errorMessage } from "../../../../utils/errorMessage";
 
@@ -32,7 +34,7 @@ const Main = () => {
   const [businessId, setBusinessId] = useState<null | number>();
   const [sellerId, setSellerId] = useState<null | number>();
 
-  console.log(sellerId,businessId, "sellerId");
+  console.log(sellerId, businessId, "sellerId");
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -51,6 +53,7 @@ const Main = () => {
     getUserDetailsQuery,
     getFlaggedSellerQuery,
 
+    getAllFavAdsQuery,
   ] = useQueries({
     queries: [
       {
@@ -62,13 +65,13 @@ const Main = () => {
       },
       {
         queryKey: ["get-sellers-followers"],
-        queryFn: ()=> getFollowersByUser_id(user?.id ?? 0,sellerId!),
+        queryFn: () => getFollowersByUser_id(user?.id ?? 0, sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled:!!user?.id
+        enabled: !!user?.id,
       },
       {
-        queryKey: ["get-business-details",],
+        queryKey: ["get-business-details"],
         queryFn: () => getBusinessById(businessId!),
         retry: 0,
         refetchOnWindowFocus: true,
@@ -76,10 +79,10 @@ const Main = () => {
       },
       {
         queryKey: ["get-business-followers", businessId],
-        queryFn: () => getFollowersByBusiness_id(user?.id ?? 0 ,businessId!),
+        queryFn: () => getFollowersByBusiness_id(user?.id ?? 0, businessId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled:  !!user?.id,
+        enabled: !!user?.id,
       },
       {
         queryKey: ["get-sellers-details", sellerId],
@@ -90,30 +93,75 @@ const Main = () => {
       },
       {
         queryKey: ["get-flagged-sellers"],
-        queryFn: ()=> getFlaggedSellerBySeller_idUser_id(user?.id ?? 0,sellerId!),
+        queryFn: () =>
+          getFlaggedSellerBySeller_idUser_id(user?.id ?? 0, sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled:!!sellerId
+        enabled: !!sellerId,
+      },
+      {
+        queryKey: ["get-al-fav", user?.id],
+        queryFn: () => getFavAds((user?.id)),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
       },
     ],
   });
+  const favAdvList = getAllFavAdsQuery?.data?.data;
 
-    
+  const addToFavMutation = useMutation({
+    mutationFn: AddToFav,
+    mutationKey: ["add-fav"],
+  });
+  const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
+  const isFav = favIcons.includes(parseInt(id!));
+  console.log(isFav, "isFav");
+
+  const addToFavHandler = async () => {
+    if (!id) return;
+    const isFav = favIcons.includes(parseInt(id!));
+    console.log(isFav, "isFav");
+
+    const payload: Partial<AddToFav> = {
+      add_id: id,
+      status: isFav ? 0 : 1,
+    };
+
+    try {
+      await addToFavMutation.mutateAsync(payload, {
+        onSuccess: () => {
+          // notification.success({
+          //   message: "Success",
+          //   description: data?.message,
+          // });
+          queryClient.refetchQueries({
+            queryKey: ["get-al-fav"],
+          });
+        },
+      });
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
+
   const hasUserFlaggedSeller = getFlaggedSellerQuery?.data?.data?.data?.some(
     (item) => item?.user_id === user?.id
   );
 
-  const isUserFollowingBusiness = getBusinessFollowersQuery?.data?.data?.data?.some(
-    (item) => item?.follower_id === user?.id
-  );
+  const isUserFollowingBusiness =
+    getBusinessFollowersQuery?.data?.data?.data?.some(
+      (item) => item?.follower_id === user?.id
+    );
 
-
-
-  const isUserFollowingSeller = getSellersFollowersQuery?.data?.data?.data?.some(
-    (item) => item?.follower_id === user?.id
-  );
-  console.log(isUserFollowingSeller, 'isUserFollowingBusiness')
-
+  const isUserFollowingSeller =
+    getSellersFollowersQuery?.data?.data?.data?.some(
+      (item) => item?.follower_id === user?.id
+    );
+  console.log(isUserFollowingSeller, "isUserFollowingBusiness");
 
   const productDetailsData = getProductDetailsQuery?.data?.data;
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
@@ -123,7 +171,6 @@ const Main = () => {
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   const profileDetailsData = getUserDetailsQuery?.data?.data;
-
 
   useEffect(() => {
     if (getProductDetailsQuery) {
@@ -146,7 +193,7 @@ const Main = () => {
     const payload: Partial<FollowBusiness> = {
       business_id: productDetailsData?.business_id || 0,
       user_id: user?.id,
-      action: isUserFollowingBusiness ? "unfollow": "follow",
+      action: isUserFollowingBusiness ? "unfollow" : "follow",
     };
 
     try {
@@ -164,8 +211,7 @@ const Main = () => {
     } catch (error) {
       notification.error({
         message: "Error",
-        description:errorMessage(error) || "An error occur",
-         
+        description: errorMessage(error) || "An error occur",
       });
     }
   };
@@ -185,7 +231,6 @@ const Main = () => {
     }
   };
 
-
   const followSellersMutation = useMutation({
     mutationFn: FollowSeller,
     mutationKey: ["follow-seller"],
@@ -194,7 +239,7 @@ const Main = () => {
   const followSellerHandler = async () => {
     const payload: Partial<FollowBusiness> = {
       user_id: sellerId!,
-      action: isUserFollowingSeller ? "unfollow": "follow",
+      action: isUserFollowingSeller ? "unfollow" : "follow",
     };
 
     try {
@@ -212,11 +257,10 @@ const Main = () => {
     } catch (error) {
       notification.error({
         message: "Error",
-        description:errorMessage(error) || "An error occur",
+        description: errorMessage(error) || "An error occur",
       });
     }
   };
-
 
   const handleFollowSeller = () => {
     if (!user) {
@@ -233,7 +277,6 @@ const Main = () => {
       followSellerHandler();
     }
   };
-
 
   return (
     <>
@@ -261,10 +304,12 @@ const Main = () => {
               businessDetailsData={businessDetailsData}
               profileDetailsData={profileDetailsData}
               hasUserFlaggedSeller={hasUserFlaggedSeller}
+              addToFavHandler={addToFavHandler}
+              favAdvList={favAdvList}
             /> // Render SmallScreen on small screens
           ) : (
             <BigScreen
-            handleFollowSeller={handleFollowSeller}
+              handleFollowSeller={handleFollowSeller}
               handleFollowBusiness={handleFollowBusiness}
               productDetailsData={productDetailsData}
               followSellersMutation={followSellersMutation?.isPending}
@@ -274,7 +319,8 @@ const Main = () => {
               businessDetailsData={businessDetailsData}
               profileDetailsData={profileDetailsData}
               hasUserFlaggedSeller={hasUserFlaggedSeller}
-
+              addToFavHandler={addToFavHandler}
+              favAdvList={favAdvList}
             /> // Render BigScreen on larger screens
           )}
         </div>

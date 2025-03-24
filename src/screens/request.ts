@@ -175,6 +175,13 @@ export const WriteReviewApi = async (payload: Partial<ReviewDatum>) => {
 export const WriteSellerReviewApi = async (payload: Partial<ReviewDatum>) => {
   return (await api.post("reviews/user", payload, {}))?.data ;
 };
+export const AddToFav = async (payload: Partial<AddToFav>) => {
+  return (await api.patch("ads/set-fav", payload, {}))?.data ;
+};
+
+export const getFavAds = async (user_id?:number) => {
+  return (await api.get(`ads/fav?user_id=${user_id}`))?.data ;
+};
 
 export const createBusiness = async (payload: FormData) => {
   return (

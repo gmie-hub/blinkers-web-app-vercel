@@ -216,6 +216,7 @@
   top: 1.5rem;
   right: 0rem;
   // z-index: 10;
+  cursor: pointer;
 
   position: absolute;
   // left: 7rem; // Adjust the position as needed
@@ -224,6 +225,9 @@
   justify-content: end;
 
   z-index: 10;
+
+
+
 }
 .tabs {
   //   display: flex;

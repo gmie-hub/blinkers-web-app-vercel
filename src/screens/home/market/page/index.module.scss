@@ -83,6 +83,7 @@
   top: 0.5rem;
   right: 0.5rem;
   z-index: 10;
+  cursor: pointer;
 }
 
 .rightSide {
@@ -95,6 +96,7 @@
 
 
 .promoImage {
+  cursor: pointer;
   box-shadow: 0px 4px 40px 0px #00990012;
   position: relative;
   width: calc(

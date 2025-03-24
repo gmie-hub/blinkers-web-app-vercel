@@ -16,6 +16,7 @@ import Input from "../../../../customs/input/input";
 import RelatedAds from "../../../../partials/relatedAds";
 import StarIcon from "../../../../assets/Vector.svg";
 import favorite from "../../../../assets/Icon + container.svg";
+import redFavorite from "../../../../assets/redfav.svg";
 import Details from "./tabs/details";
 import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
@@ -57,6 +58,8 @@ interface Props {
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
   hasUserFlaggedSeller?: boolean;
+  favAdvList?: AddToFav[];
+  addToFavHandler?: () => void;
 }
 const BigScreen = ({
   handleFollowSeller,
@@ -69,6 +72,8 @@ const BigScreen = ({
   businessDetailsData,
   profileDetailsData,
   hasUserFlaggedSeller,
+  favAdvList,
+  addToFavHandler,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -232,10 +237,24 @@ const BigScreen = ({
               </div>
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
-                  <div className={styles.favoriteIcon}>
+                  <div className={styles.favoriteIcon}
+                  onClick={addToFavHandler}
+                    // onClick={() => {
+                    //   if (addToFavHandler) {
+                    //     addToFavHandler(id);
+                    //   }
+                    // }}
+                    >
                     <Image
                       width={30}
-                      src={favorite}
+                      src={
+                        favAdvList?.some(
+                          (fav: AddToFav) =>
+                            fav.id?.toString() == id?.toString()
+                        )
+                          ? redFavorite
+                          : favorite
+                      }
                       alt="Favorite"
                       preview={false}
                     />
@@ -251,8 +270,14 @@ const BigScreen = ({
 
                   <img
                     width={"100%"}
-                    src={productDetailsData?.add_images[0]?.image_url ||productDetailsData?.add_images[0]?.add_image }
-                    alt={productDetailsData?.add_images[0]?.image_url || productDetailsData?.add_images[0]?.add_image}
+                    src={
+                      productDetailsData?.add_images[0]?.image_url ||
+                      productDetailsData?.add_images[0]?.add_image
+                    }
+                    alt={
+                      productDetailsData?.add_images[0]?.image_url ||
+                      productDetailsData?.add_images[0]?.add_image
+                    }
                     // preview={false}
                     className={styles.productImage}
                   />

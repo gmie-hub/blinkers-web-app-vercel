@@ -291,6 +291,7 @@ a:visited {
 .buttonStyle {
   min-width: 22rem;
   width: 100%;
+  cursor: pointer;
 
   @media screen and (min-width: 768px) {
     min-width: 22rem;

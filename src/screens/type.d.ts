@@ -73,7 +73,15 @@ interface ReviewDatum {
   review: string;
   created_at: stringg;
   user?:UserData;
-  from_user?:any;
+  from_user?:string;
+
+}
+
+interface AddToFav {
+  add_id: string;
+  status: number;
+  id:number;
+
 
 }
 interface ReviewData {

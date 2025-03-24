@@ -28,7 +28,7 @@ const EditBusinessForm = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["get-business-details"],
-    queryFn: () => getBusinessById(user?.business?.id!),
+    queryFn: () => getBusinessById(user?.business?.id ?? 0),
   });
 
   const businessDetailsData = data?.data
