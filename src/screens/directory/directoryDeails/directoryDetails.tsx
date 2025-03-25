@@ -9,7 +9,6 @@ import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
 import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
 import HouseLock from "../../../assets/House Lock.svg";
-import { countUpTo } from "../../home/trend";
 import shareIcon from "../../../assets/share 2.svg";
 import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
@@ -35,6 +34,7 @@ import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import StarYellow from "../../../assets/staryellow.svg";
 import { errorMessage } from "../../../utils/errorMessage";
 import { groupBusinessHours } from "./displayBusinessHour";
+import { countUpTo } from "../../../utils";
 
 const NotClaim = () => {
   const navigate = useNavigate();

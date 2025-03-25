@@ -26,7 +26,7 @@ const AddBusiness = () => {
   const { notification } = App.useApp();
   const [searchValue, setSearchValue] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null); // For preview
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState<null>(null);
   const [user] = useAtom(userAtom);
   const navigate = useNavigate()
 

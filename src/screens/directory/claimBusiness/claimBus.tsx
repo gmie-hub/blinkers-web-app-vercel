@@ -9,7 +9,6 @@ import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
 import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
 import DoneIcon from "../../../assets/Done.svg";
-import { countUpTo } from "../../home/trend";
 import HeadIcon from "../../../assets/Ehead.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
 import Upload from "../../../customs/upload/upload";
@@ -27,6 +26,7 @@ import * as Yup from "yup";
 import { errorMessage } from "../../../utils/errorMessage";
 import { AxiosError } from "axios";
 import CustomSpin from "../../../customs/spin";
+import { countUpTo } from "../../../utils";
 
 const ClaimBusiness = () => {
   const navigate = useNavigate();

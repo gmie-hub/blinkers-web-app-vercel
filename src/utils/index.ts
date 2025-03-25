@@ -42,3 +42,15 @@ export function isCurrentDateGreaterThan(targetDateString: string) {
     return false;
   }
 }
+export function countUpTo(
+  num: number,
+  element: JSX.Element,
+  element1: JSX.Element
+) {
+  const result = [];
+  for (let i = 1; i <= 5; i++) {
+    if (i > num) result?.push(element1);
+    else result?.push(element);
+  }
+  return result; // Return the array
+}

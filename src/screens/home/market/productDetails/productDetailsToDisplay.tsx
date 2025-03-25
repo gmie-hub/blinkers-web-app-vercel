@@ -10,7 +10,6 @@ import {
   FollowSeller,
   getApplicantsbyId,
   getBusinessById,
-  getFavAds,
   getFlaggedSellerBySeller_idUser_id,
   getFollowersByBusiness_id,
   getFollowersByUser_id,
@@ -53,7 +52,6 @@ const Main = () => {
     getUserDetailsQuery,
     getFlaggedSellerQuery,
 
-    getAllFavAdsQuery,
   ] = useQueries({
     queries: [
       {
@@ -99,33 +97,23 @@ const Main = () => {
         refetchOnWindowFocus: true,
         enabled: !!sellerId,
       },
-      {
-        queryKey: ["get-al-fav", user?.id],
-        queryFn: () => getFavAds((user?.id)),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!user?.id,
-      },
+   
     ],
   });
-  const favAdvList = getAllFavAdsQuery?.data?.data;
 
   const addToFavMutation = useMutation({
     mutationFn: AddToFav,
     mutationKey: ["add-fav"],
   });
-  const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
-  const isFav = favIcons.includes(parseInt(id!));
-  console.log(isFav, "isFav");
+  
 
   const addToFavHandler = async () => {
     if (!id) return;
-    const isFav = favIcons.includes(parseInt(id!));
-    console.log(isFav, "isFav");
+
 
     const payload: Partial<AddToFav> = {
       add_id: id,
-      status: isFav ? 0 : 1,
+      status: productDetailsData?.isFavourite ? 0 : 1,
     };
 
     try {
@@ -136,7 +124,7 @@ const Main = () => {
           //   description: data?.message,
           // });
           queryClient.refetchQueries({
-            queryKey: ["get-al-fav"],
+            queryKey: ["get-product-details"],
           });
         },
       });
@@ -305,7 +293,6 @@ const Main = () => {
               profileDetailsData={profileDetailsData}
               hasUserFlaggedSeller={hasUserFlaggedSeller}
               addToFavHandler={addToFavHandler}
-              favAdvList={favAdvList}
             /> // Render SmallScreen on small screens
           ) : (
             <BigScreen
@@ -320,7 +307,6 @@ const Main = () => {
               profileDetailsData={profileDetailsData}
               hasUserFlaggedSeller={hasUserFlaggedSeller}
               addToFavHandler={addToFavHandler}
-              favAdvList={favAdvList}
             /> // Render BigScreen on larger screens
           )}
         </div>

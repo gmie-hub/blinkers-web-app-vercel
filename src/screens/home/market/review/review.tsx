@@ -11,6 +11,7 @@ import { convertDate } from "../../../../utils/formatTime";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
 import { useEffect } from "react";
+import { countUpTo } from "../../../../utils";
 
 export default function AllReviews() {
   const navigate = useNavigate();
@@ -117,12 +118,3 @@ export default function AllReviews() {
   );
 }
 
-// Helper function to render stars based on the rating
-function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
-  const result = [];
-  for (let i = 1; i <= 5; i++) {
-    if (i > num) result.push(element1);
-    else result.push(element);
-  }
-  return result; // Return the array
-}

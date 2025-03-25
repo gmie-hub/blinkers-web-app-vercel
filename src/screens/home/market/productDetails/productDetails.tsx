@@ -21,7 +21,6 @@ import Details from "./tabs/details";
 import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
-import { countUpTo } from "../../trend";
 import { useEffect, useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,6 +34,7 @@ import {
 import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
+import { countUpTo } from "../../../../utils";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -58,7 +58,6 @@ interface Props {
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
   hasUserFlaggedSeller?: boolean;
-  favAdvList?: AddToFav[];
   addToFavHandler?: () => void;
 }
 const BigScreen = ({
@@ -72,7 +71,7 @@ const BigScreen = ({
   businessDetailsData,
   profileDetailsData,
   hasUserFlaggedSeller,
-  favAdvList,
+
   addToFavHandler,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
@@ -237,24 +236,18 @@ const BigScreen = ({
               </div>
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
-                  <div className={styles.favoriteIcon}
-                  onClick={addToFavHandler}
+                  <div
+                    className={styles.favoriteIcon}
+                    onClick={addToFavHandler}
                     // onClick={() => {
                     //   if (addToFavHandler) {
                     //     addToFavHandler(id);
                     //   }
                     // }}
-                    >
+                  >
                     <Image
                       width={30}
-                      src={
-                        favAdvList?.some(
-                          (fav: AddToFav) =>
-                            fav.id?.toString() == id?.toString()
-                        )
-                          ? redFavorite
-                          : favorite
-                      }
+                      src={productDetailsData?.isFavourite ? redFavorite : favorite}
                       alt="Favorite"
                       preview={false}
                     />

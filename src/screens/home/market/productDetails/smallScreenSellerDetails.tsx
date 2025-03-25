@@ -19,7 +19,6 @@ import Details from "./tabs/details";
 import Reviews from "./tabs/productReview";
 import EyeIcon from "../../../../assets/eye.svg";
 import TimeIcon from "../../../../assets/location-pin-svgrepo-com 2.svg";
-import { countUpTo } from "../../trend";
 import { useState } from "react";
 import ModalContent from "../../../../partials/successModal/modalContent";
 import { useNavigate, useParams } from "react-router-dom";
@@ -33,6 +32,7 @@ import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import ProfileIcon from "../../../../assets/Avatarprofile.svg";
+import { countUpTo } from "../../../../utils";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -56,7 +56,6 @@ interface Props {
   businessDetailsData?: AllBusinessesDatum;
   profileDetailsData?: UserData;
   hasUserFlaggedSeller?: boolean;
-  favAdvList?: AddToFav[];
   addToFavHandler?: () => void;
 }
 
@@ -71,7 +70,6 @@ const SmallScreen = ({
   isUserFollowingSeller,
   profileDetailsData,
   hasUserFlaggedSeller,
-  favAdvList,
   addToFavHandler,
 }: Props) => {
   const [activeKey, setActiveKey] = useState("1");
@@ -246,12 +244,7 @@ const SmallScreen = ({
                     <img
                       width={30}
                       src={
-                        favAdvList?.some(
-                          (fav: AddToFav) =>
-                            fav.id?.toString() == id?.toString()
-                        )
-                          ? redFavorite
-                          : favorite
+                        productDetailsData?.isFavourite ? redFavorite : favorite
                       }
                       alt="Favorite"
                     />

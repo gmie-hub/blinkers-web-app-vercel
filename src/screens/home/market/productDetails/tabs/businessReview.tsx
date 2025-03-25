@@ -10,6 +10,7 @@ import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { convertDate, getTimeFromDate } from "../../../../../utils/formatTime";
 import CustomSpin from "../../../../../customs/spin";
+import { countUpTo } from "../../../../../utils";
 
 // Reviews Component
 export default function Reviews({
@@ -191,7 +192,3 @@ function ReviewCard({ item }: { item: ReviewDatum }) {
 //   );
 // }
 
-// Helper function to render stars based on the rating
-function countUpTo(num: number, filled: JSX.Element, empty: JSX.Element) {
-  return Array.from({ length: 5 }, (_, i) => (i < num ? filled : empty));
-}

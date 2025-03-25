@@ -16,10 +16,9 @@ import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
 import { useEffect } from "react";
-import { sanitizeUrlParam } from "../../../../utils";
-import { countUpTo } from "../../trend";
+import { countUpTo, sanitizeUrlParam } from "../../../../utils";
 import { errorMessage } from "../../../../utils/errorMessage";
-import { AddToFav, getFavAds } from "../../../request";
+import { AddToFav } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 
@@ -71,6 +70,7 @@ const ProductList: React.FC<ProductListProps> = ({
       "Content-Type": "application/json",
       Pragma: "no-cache",
       Expires: "0",
+      Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
     },
     params: data,
   });
@@ -122,8 +122,7 @@ const ProductList: React.FC<ProductListProps> = ({
     return (await api.get(url))?.data as AllProductaResponse;
   };
 
-
-  const [getAllMarketQuery,getAllFavAds] = useQueries({
+  const [getAllMarketQuery] = useQueries({
     queries: [
       {
         queryKey: [
@@ -147,16 +146,8 @@ const ProductList: React.FC<ProductListProps> = ({
         refetchOnWindowFocus: true,
         // enabled: Boolean(currentPage && appliedSearchTerm),
       },
-      {
-        queryKey: ["get-al-fav", user?.id],
-        queryFn: () => getFavAds((user?.id)),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled:!!user?.id
-      },
     ],
   });
-  const favAdvList =getAllFavAds?.data?.data
 
   useEffect(() => {
     if (search) {
@@ -200,23 +191,18 @@ const ProductList: React.FC<ProductListProps> = ({
   //   setCurrentPage(pageNum); // Update the state
   //   window.scrollTo(0, 0); // Scroll to the top of the page
   // };
-    const addToFavMutation = useMutation({
-      mutationFn: AddToFav,
-      mutationKey: ["add-fav"],
-    });   
-    const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
+  const addToFavMutation = useMutation({
+    mutationFn: AddToFav,
+    mutationKey: ["add-fav"],
+  });
 
+  const addToFavHandler = async (id?: string, isFavourite?: boolean) => {
+    if (!id) return;
 
-    const addToFavHandler = async (id?: string) => {
-      if (!id) return;
-      const isFav = favIcons.includes(parseInt(id)); 
-      console.log( isFav , 'isFav')
-
-      const payload: Partial<AddToFav> = {
-        add_id: id,
-        status: isFav ? 0 : 1,
-
-      };
+    const payload: Partial<AddToFav> = {
+      add_id: id,
+      status: isFavourite ? 0 : 1,
+    };
 
     try {
       await addToFavMutation.mutateAsync(payload, {
@@ -226,7 +212,7 @@ const ProductList: React.FC<ProductListProps> = ({
           //   description: data?.message,
           // });
           queryClient.refetchQueries({
-            queryKey: ['get-al-fav'],
+            queryKey: ["get-all-market"],
           });
         },
       });
@@ -278,11 +264,15 @@ const ProductList: React.FC<ProductListProps> = ({
                     className={styles.favoriteIcon}
                     onClick={(event) => {
                       event.stopPropagation(); // Prevents click from bubbling to parent div
-                      addToFavHandler(item?.id?.toString());
+                      addToFavHandler(item?.id?.toString(), item?.isFavourite);
                     }}
                   >
-                    <img width={30}  src={favAdvList?.some((fav:AddToFav) => fav.id === item.id) ? redFavorite : favorite} alt="Favorite" />
-                   
+                    <img
+                      width={30}
+                      src={item?.isFavourite ? redFavorite : favorite}
+                     
+                      alt="Favorite"
+                    />
                   </div>
 
                   <img

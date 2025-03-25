@@ -5,13 +5,12 @@ import StarYellow from "../../assets/staryellow.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import favorite from "../../assets/Icon + container.svg";
 import LocationIcon from "../../assets/locationrelated.svg";
-import { countUpTo } from "../../screens/home/trend";
 import { useQueries } from "@tanstack/react-query";
 import { getProductDetails } from "../../screens/request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../customs/routeIndicator";
 import CustomSpin from "../../customs/spin";
-import { sanitizeUrlParam } from "../../utils";
+import { countUpTo, sanitizeUrlParam } from "../../utils";
 
 interface Props {
   limit?: number;
@@ -37,7 +36,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
   });
 
   const handleNavigateToProductDetails = (id: number, user_id:number) => {
-    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(productDetailsData?.title)}/${sanitizeUrlParam(productDetailsData?.description)}`);
+    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(productDetailsData?.title ?? '')}/${sanitizeUrlParam(productDetailsData?.description ?? '')}`);
     window.scrollTo(0, 0);
   };
 

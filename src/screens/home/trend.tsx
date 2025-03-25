@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image } from "antd";
+import { App, Image } from "antd";
 import Product2 from "../../assets/Image.svg";
 import location from "../../assets/location.svg";
 import Button from "../../customs/button/button";
@@ -7,29 +7,44 @@ import Button from "../../customs/button/button";
 // import StarYellow from "../../assets/staryellow.svg";
 import favorite from "../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
-import { getTrendingAds } from "../request";
-import { useQueries } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { AddToFav, getTrendingAds } from "../request";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import CustomSpin from "../../customs/spin";
 import { sanitizeUrlParam } from "../../utils";
-
-export function countUpTo(
-  num: number,
-  element: JSX.Element,
-  element1: JSX.Element
-) {
-  const result = [];
-  for (let i = 1; i <= 5; i++) {
-    if (i > num) result?.push(element1);
-    else result?.push(element);
-  }
-  return result; // Return the array
-}
+import redFavorite from "../../assets/redfav.svg";
+import { userAtom } from "../../utils/store";
+import { useAtomValue } from "jotai";
+import { errorMessage } from "../../utils/errorMessage";
 
 const Trends = () => {
   const navigate = useNavigate();
+  const user = useAtomValue(userAtom);
+  const { notification } = App.useApp();
+  const queryClient = useQueryClient();
 
-  const [getTrendingAdsQuery] = useQueries({
+  const favData = {
+    user_id: user?.id,
+  };
+
+  const getFavapi = axios.create({
+    baseURL: import.meta.env.VITE_GATEWAY_URL,
+    headers: {
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
+      Pragma: "no-cache",
+      Expires: "0",
+      Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
+    },
+    params: favData,
+  });
+
+  const getAllFav = async () => {
+    const url = `/ads/fav`;
+
+    return (await getFavapi.get(url))?.data;
+  };
+  const [getTrendingAdsQuery, getAllFavAds] = useQueries({
     queries: [
       {
         queryKey: ["get-trending-ads"],
@@ -37,8 +52,17 @@ const Trends = () => {
         retry: 0,
         refetchOnWindowFocus: true,
       },
+      {
+        queryKey: ["get-al-fav", user?.id],
+        queryFn: getAllFav,
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
+      },
     ],
   });
+
+  const favAdvList = getAllFavAds?.data?.data;
 
   const trendData = getTrendingAdsQuery?.data?.data || [];
   const trendError = getTrendingAdsQuery?.error as AxiosError;
@@ -50,9 +74,55 @@ const Trends = () => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   };
 
-  const handleNavigateToProductDetails = (id: number,user_id:number,title:string,description:string ) => {
-    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
+  const handleNavigateToProductDetails = (
+    id: number,
+    user_id: number,
+    title: string,
+    description: string
+  ) => {
+    navigate(
+      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+        title
+      )}/${sanitizeUrlParam(description)}`
+    );
     window.scrollTo(0, 0);
+  };
+
+  const addToFavMutation = useMutation({
+    mutationFn: AddToFav,
+    mutationKey: ["add-fav"],
+  });
+  const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
+  const isFav = favIcons.includes(parseInt("821"));
+
+  console.log(isFav, "isFavisFav");
+  const addToFavHandler = async (id?: string) => {
+    if (!id) return;
+    const isFav = favIcons.includes(parseInt(id));
+
+    const payload: Partial<AddToFav> = {
+      add_id: id,
+      status: isFav ? 0 : 1,
+    };
+
+    try {
+      await addToFavMutation.mutateAsync(payload, {
+        onSuccess: () => {
+          // notification.success({
+          //   message: "Success",
+          //   description: data?.message,
+          // });
+          queryClient.refetchQueries({
+            queryKey: ["get-al-fav"],
+          });
+        },
+      });
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
   };
 
   return (
@@ -61,7 +131,7 @@ const Trends = () => {
         <p className={styles.TrendsHead}>Trending Now</p>
       </div>
       {getTrendingAdsQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getTrendingAdsQuery?.isError ? (
         <h1 className="error">{trendErrorMessage}</h1>
       ) : (
@@ -70,11 +140,32 @@ const Trends = () => {
             {trendData &&
               trendData?.length > 0 &&
               trendData?.slice(0, 2)?.map((item: any, index: number) => (
-                <div onClick={() => handleNavigateToProductDetails(item?.id,item?.user_id, item?.title, item?.description)} className={styles.trendImage} key={item?.id || index}>
-                  <div className={styles.favoriteIcon}>
+                <div
+                  onClick={() =>
+                    handleNavigateToProductDetails(
+                      item?.id,
+                      item?.user_id,
+                      item?.title,
+                      item?.description
+                    )
+                  }
+                  className={styles.trendImage}
+                  key={item?.id || index}
+                >
+                  <div
+                    className={styles.favoriteIcon}
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevents click from bubbling to parent div
+                      addToFavHandler(item?.id?.toString());
+                    }}
+                  >
                     <Image
                       width={30}
-                      src={favorite}
+                      src={
+                        favIcons.includes(parseInt(item?.id))
+                          ? redFavorite
+                          : favorite
+                      }
                       alt="Favorite"
                       preview={false}
                     />
@@ -107,8 +198,7 @@ const Trends = () => {
                     </div>
 
                     <span className={styles.trendingdiscount}>
-                      {item?.discount_price &&
-                        `₦${item?.discount_price}`}
+                      {item?.discount_price && `₦${item?.discount_price}`}
                     </span>
 
                     <span>
@@ -148,14 +238,31 @@ const Trends = () => {
           <div className={styles.middleSectionTrend}>
             {trendData[3] && (
               <div
-                onClick={() => handleNavigateToProductDetails(trendData[3]?.id,trendData[3]?.user_id,trendData[3]?.title, trendData[3]?.description )}
+                onClick={() =>
+                  handleNavigateToProductDetails(
+                    trendData[3]?.id,
+                    trendData[3]?.user_id,
+                    trendData[3]?.title,
+                    trendData[3]?.description
+                  )
+                }
                 className={styles.trendImage}
                 key={trendData[3].id}
               >
-                <div className={styles.favoriteIcon}>
+                <div
+                  className={styles.favoriteIcon}
+                  onClick={(event) => {
+                    event.stopPropagation(); // Prevents click from bubbling to parent div
+                    addToFavHandler(trendData[3]?.id?.toString());
+                  }}
+                >
                   <Image
                     width={30}
-                    src={favorite}
+                    src={
+                      favIcons.includes(parseInt(trendData[3]?.id))
+                        ? redFavorite
+                        : favorite
+                    }
                     alt="Favorite"
                     preview={false}
                   />
@@ -230,11 +337,32 @@ const Trends = () => {
             {trendData &&
               trendData?.length > 0 &&
               trendData?.slice(4, 6)?.map((item: any, index: number) => (
-                <div onClick={() => handleNavigateToProductDetails(item?.id,item?.user_id, item?.title, item?.description)}  className={styles.trendImage} key={item?.id || index}>
-                  <div className={styles.favoriteIcon}>
+                <div
+                  onClick={() =>
+                    handleNavigateToProductDetails(
+                      item?.id,
+                      item?.user_id,
+                      item?.title,
+                      item?.description
+                    )
+                  }
+                  className={styles.trendImage}
+                  key={item?.id || index}
+                >
+                  <div
+                    className={styles.favoriteIcon}
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevents click from bubbling to parent div
+                      addToFavHandler(item?.id?.toString());
+                    }}
+                  >
                     <Image
                       width={30}
-                      src={favorite}
+                      src={
+                        favIcons.includes(parseInt(item?.id))
+                          ? redFavorite
+                          : favorite
+                      }
                       alt="Favorite"
                       preview={false}
                     />
@@ -265,8 +393,7 @@ const Trends = () => {
                     </div>
 
                     <span className={styles.trendingdiscount}>
-                      {item?.discount_price &&
-                        `₦${item?.discount_price} `}
+                      {item?.discount_price && `₦${item?.discount_price} `}
                     </span>
                     <span>
                       {item?.discount_price === "" ? (
@@ -299,7 +426,7 @@ const Trends = () => {
                 </div>
               ))}
           </div>
-          <div style={{display:'flex', justifyContent:'center'}}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <Button
               type="button"
               variant="green"

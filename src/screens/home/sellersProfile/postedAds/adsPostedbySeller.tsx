@@ -6,13 +6,13 @@ import Product3 from "../../../../assets/Image (1).svg";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import {  useParams } from "react-router-dom";
-import { countUpTo } from "../../trend";
 import { getAdsByUserId } from "../../../request";
 import usePagination from "../../../../hooks/usePagnation";
 import { useQueries } from "@tanstack/react-query";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import LocationIcon from "../../../../assets/locationrelated.svg";
 import { useEffect } from "react";
+import { countUpTo } from "../../../../utils";
 
 const SellersAds = ({
   limit,

@@ -15,6 +15,7 @@ import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import { useState } from "react";
 import { App } from "antd";
+import { countUpTo } from "../../../../utils";
 
 export default function Reviews() {
   const user = useAtomValue(userAtom);
@@ -260,11 +261,3 @@ export default function Reviews() {
   // );
 }
 
-function countUpTo(num: number, element: JSX.Element, element1: JSX.Element) {
-  const result = [];
-  for (let i = 1; i <= 5; i++) {
-    if (i > num) result.push(element1);
-    else result.push(element);
-  }
-  return result; // Return the array
-}
