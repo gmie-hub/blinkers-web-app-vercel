@@ -70,7 +70,7 @@ const ProductList: React.FC<ProductListProps> = ({
       "Content-Type": "application/json",
       Pragma: "no-cache",
       Expires: "0",
-      Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
+      // Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
     },
     params: data,
   });

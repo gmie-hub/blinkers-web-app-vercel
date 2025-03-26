@@ -1,49 +1,107 @@
 import styles from "./myFavorite.module.scss";
-import { useQueries } from "@tanstack/react-query";
-import {  getMyAdzByUserId } from "../../request";
-import { AxiosError } from "axios";
-import usePagination from "../../../hooks/usePagnation";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
 import { formatDateToMonthYear } from "../../../utils/formatTime";
-import {  Pagination } from "antd";
 import CustomSpin from "../../../customs/spin";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../utils/store";
 import favorite from "../../../assets/Icon + container.svg";
+import { AddToFav } from "../../request";
+import { App } from "antd";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const MyFavorite = () => {
-  const { currentPage, onChange } = usePagination();
   const user = useAtomValue(userAtom);
+  const { notification } = App.useApp();
+  const queryClient = useQueryClient();
 
+  const favData = {
+    user_id: user?.id,
+  };
+
+  const getFavapi = axios.create({
+    baseURL: import.meta.env.VITE_GATEWAY_URL,
+    headers: {
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
+      Pragma: "no-cache",
+      Expires: "0",
+      Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
+    },
+    params: favData,
+  });
+
+  const getAllFav = async () => {
+    const url = `/ads/fav`;
+
+    return (await getFavapi.get(url))?.data;
+  };
 
  
-  const [getAdsByUserIdQuery] = useQueries({
+  const [getAllFavAds] = useQueries({
     queries: [
       {
-        queryKey: ["get-my-market", user?.id],
-        queryFn: () => getMyAdzByUserId(user?.id!),
+        queryKey: ["get-al-fav", user?.id],
+        queryFn: getAllFav,
+        retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!user?.id,
       },
     ],
   });
 
-  const adsData = getAdsByUserIdQuery?.data?.data?.data || [];
-  const adsError = getAdsByUserIdQuery?.error as AxiosError;
-  const adsErrorMessage =
-    adsError?.message || "An error occurred. Please try again later.";
+  const favDataList = getAllFavAds?.data?.data || [];
+
+  const addToFavMutation = useMutation({
+    mutationFn: AddToFav,
+    mutationKey: ["add-fav"],
+  });
+
+  const addToFavHandler = async (id?: string) => {
+    if (!id) return;
+
+    const payload: Partial<AddToFav> = {
+      add_id: id,
+      status: 0 
+    };
+    try {
+      await addToFavMutation.mutateAsync(payload, {
+        onSuccess: () => {
+          // notification.success({
+          //   message: "Success",
+          //   description: data?.message,
+          // });
+          queryClient.refetchQueries({
+            queryKey: ["get-al-fav"],
+          });
+        },
+      });
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
+
+
+
+  const favError = getAllFavAds?.error as AxiosError;
+  const favErrorMessage =
+    favError?.message || "An error occurred. Please try again later.";
 
   return (
     <div className={styles.whyWrapper}>
-      {getAdsByUserIdQuery?.isLoading ? (
+      {getAllFavAds?.isLoading ? (
         <CustomSpin />
-      ) : getAdsByUserIdQuery?.isError ? (
-        <h1 className="error">{adsErrorMessage}</h1>
+      ) : getAllFavAds?.isError ? (
+        <h1 className="error">{favErrorMessage}</h1>
       ) : (
         <>
           <div className={styles.cardContainer}>
-            {adsData &&
-              adsData?.length > 0 &&
-              adsData?.map((item: ProductDatum, index: number) => {
+            {favDataList &&
+              favDataList?.length > 0 &&
+              favDataList?.map((item: ProductDatum, index: number) => {
 
                 return (
                   <div
@@ -66,7 +124,7 @@ const MyFavorite = () => {
                             : item?.title}
                         </h3>{" "}
                         <p className={styles.para}>
-                          {formatDateToMonthYear(item.created_at) || ""}
+                          {formatDateToMonthYear(item?.created_at) || ""}
                         </p>
                         <p className={styles.para}>
                           {item.local_govt?.local_government_area || ""},{" "}
@@ -90,7 +148,12 @@ const MyFavorite = () => {
                               `₦${item?.discount_price} `}
                           </span>
                         </span>
-                        <div>
+                        <div
+                        onClick={(event) => {
+                          event.stopPropagation(); // Prevents click from bubbling to parent div
+                          addToFavHandler(item?.id?.toString());
+                        }}
+                        >
                           <img src={favorite} alt="" />
                         </div>
 
@@ -102,19 +165,7 @@ const MyFavorite = () => {
               })}
           </div>
 
-          <Pagination
-            current={currentPage}
-            total={getAdsByUserIdQuery?.data?.data?.total} // Total number of items
-            pageSize={20} // Number of items per page
-            onChange={onChange} // Handle page change
-            showSizeChanger={false} // Hide the option to change the page size
-            style={{
-              marginTop: "20px",
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          />
+        
         </>
       )}
     </div>

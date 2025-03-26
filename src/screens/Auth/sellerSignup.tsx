@@ -33,7 +33,7 @@ const SellerSignUp = () => {
   });
 
 
-  const SignUpHandler = async (values: FormikValues) => {
+  const signUpHandler = async (values: FormikValues) => {
     const payload: Partial<SellerSignUpData> = {
       name: user?.name,
       // number: user?.number,
@@ -83,7 +83,7 @@ const SellerSignUp = () => {
             handleNavigateCreateAds();
           },
         });
-      } catch (error: any) {
+      } catch (error) {
         notification.error({
           message: "Error",
           description: errorMessage(error) || "An error occurred",
@@ -187,7 +187,7 @@ const SellerSignUp = () => {
             website_address: "",
           }}
           onSubmit={(values) => {
-            SignUpHandler(values);
+            signUpHandler(values);
           }}
           validationSchema={validationSchema}
         >

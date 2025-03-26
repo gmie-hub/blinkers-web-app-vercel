@@ -93,9 +93,7 @@ const Trends = () => {
     mutationKey: ["add-fav"],
   });
   const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
-  const isFav = favIcons.includes(parseInt("821"));
 
-  console.log(isFav, "isFavisFav");
   const addToFavHandler = async (id?: string) => {
     if (!id) return;
     const isFav = favIcons.includes(parseInt(id));

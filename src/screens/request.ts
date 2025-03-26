@@ -179,6 +179,9 @@ export const AddToFav = async (payload: Partial<AddToFav>) => {
   return (await api.patch("ads/set-fav", payload, {}))?.data ;
 };
 
+export const ContactUsApi = async (payload: Partial<ContactUs>) => {
+  return (await api.patch("contact-us", payload, {}))?.data ;
+};
 export const getFavAds = async (user_id?:number) => {
   return (await api.get(`ads/fav?user_id=${user_id}`))?.data ;
 };

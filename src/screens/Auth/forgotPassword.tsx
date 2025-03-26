@@ -56,7 +56,7 @@ const ForgotPassword = () => {
           resetForm();
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",

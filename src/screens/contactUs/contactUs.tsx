@@ -1,12 +1,15 @@
 import Icon from "/Container.svg";
 import styles from "./contactUs.module.scss";
-import { Image } from "antd";
-import { Form, Formik } from "formik";
+import { App, Image } from "antd";
+import { Form, Formik, FormikValues } from "formik";
 import Input from "../../customs/input/input";
 import Button from "../../customs/button/button";
 import cardIcon1 from "../../assets/Icon (5).svg";
 import cardIcon2 from "../../assets/Icon (6).svg";
 import cardIcon3 from "../../assets/Icon (7).svg";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ContactUsApi } from "../request";
+import { errorMessage } from "../../utils/errorMessage";
 
 const cardData = [
   {
@@ -55,6 +58,49 @@ const cardData = [
 ];
 
 const ContactUs = () => {
+  const { notification } = App.useApp();
+  const queryClient = useQueryClient();
+
+  
+  const contactUsMutation = useMutation({
+    mutationFn: ContactUsApi,
+    mutationKey: ["add-fav"],
+  });
+
+    const contactUsHandler = async (values: FormikValues) => {
+
+
+    const payload: Partial<ContactUs> = {
+      // id: values?.,
+      name: values?.namr,
+      // mobileNum:values?.,
+      // email: values?.email,
+      // subject: values?.Subject,
+      // message: values?.,
+  
+   
+   
+    };
+
+    try {
+      await contactUsMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+          queryClient.refetchQueries({
+            queryKey: ["get-al-fav"],
+          });
+        },
+      });
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
   return (
     <div className="wrapper">
       <div className={styles.container}>
@@ -87,8 +133,8 @@ const ContactUs = () => {
           <div className={styles.rightSection}>
             <Formik
               initialValues={{ message: "", selectedItems: [] }}
-              onSubmit={(values) => {
-                console.log(values);
+              onSubmit={(values,) => {
+                contactUsHandler(values);
               }}
             >
               <Form>
