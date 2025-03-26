@@ -15,7 +15,7 @@ import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use 
 import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import { countUpTo, sanitizeUrlParam } from "../../../../utils";
 import { AddToFav } from "../../../request";
 import { userAtom } from "../../../../utils/store";
@@ -53,9 +53,7 @@ const ProductList: React.FC<ProductListProps> = ({
   const user = useAtomValue(userAtom);
   const currentPath = location.pathname;
 
-  const handleLogin = () => {
-    navigate(`/login?redirect=${currentPath}`);
-  };
+ 
 
   useEffect(() => {
     if (currentPage !== pageNum) {
