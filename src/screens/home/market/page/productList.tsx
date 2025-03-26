@@ -19,8 +19,7 @@ import { useEffect } from "react";
 import { countUpTo, sanitizeUrlParam } from "../../../../utils";
 import { errorMessage } from "../../../../utils/errorMessage";
 import { AddToFav } from "../../../request";
-import { userAtom } from "../../../../utils/store";
-import { useAtomValue } from "jotai";
+
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -50,7 +49,6 @@ const ProductList: React.FC<ProductListProps> = ({
   const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const { search } = useParams();
   const { notification } = App.useApp();
-  const user = useAtomValue(userAtom);
   const queryClient = useQueryClient();
 
   useEffect(() => {
