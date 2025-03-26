@@ -19,6 +19,8 @@ import { useEffect } from "react";
 import { countUpTo, sanitizeUrlParam } from "../../../../utils";
 import { errorMessage } from "../../../../utils/errorMessage";
 import { AddToFav } from "../../../request";
+import { userAtom } from "../../../../utils/store";
+import { useAtomValue } from "jotai";
 
 
 interface ProductListProps {
@@ -50,6 +52,7 @@ const ProductList: React.FC<ProductListProps> = ({
   const { search } = useParams();
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
+  const user = useAtomValue(userAtom);
 
   useEffect(() => {
     if (currentPage !== pageNum) {
@@ -68,7 +71,6 @@ const ProductList: React.FC<ProductListProps> = ({
       "Content-Type": "application/json",
       Pragma: "no-cache",
       Expires: "0",
-      // Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
     },
     params: data,
   });
@@ -120,7 +122,30 @@ const ProductList: React.FC<ProductListProps> = ({
     return (await api.get(url))?.data as AllProductaResponse;
   };
 
-  const [getAllMarketQuery] = useQueries({
+
+  
+  const favData = {
+    user_id: user?.id,
+  };
+
+  const getFavapi = axios.create({
+    baseURL: import.meta.env.VITE_GATEWAY_URL,
+    headers: {
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
+      Pragma: "no-cache",
+      Expires: "0",
+      Authorization: `Bearer ${user?.security_token}`, // Get token from localStorage
+    },
+    params: favData,
+  });
+
+  const getAllFav = async () => {
+    const url = `/ads/fav`;
+
+    return (await getFavapi.get(url))?.data;
+  };
+  const [getAllMarketQuery, getAllFavAds] = useQueries({
     queries: [
       {
         queryKey: [
@@ -144,8 +169,18 @@ const ProductList: React.FC<ProductListProps> = ({
         refetchOnWindowFocus: true,
         // enabled: Boolean(currentPage && appliedSearchTerm),
       },
+      {
+        queryKey: ["get-al-fav", user?.id],
+        queryFn: getAllFav,
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
+      },
     ],
   });
+
+  const favAdvList = getAllFavAds?.data?.data;
+
 
   useEffect(() => {
     if (search) {
@@ -193,13 +228,17 @@ const ProductList: React.FC<ProductListProps> = ({
     mutationFn: AddToFav,
     mutationKey: ["add-fav"],
   });
+  const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
 
-  const addToFavHandler = async (id?: string, isFavourite?: boolean) => {
+
+  const addToFavHandler = async (id?: string, ) => {
     if (!id) return;
+    const isFav = favIcons.includes(parseInt(id));
+
 
     const payload: Partial<AddToFav> = {
       add_id: id,
-      status: isFavourite ? 0 : 1,
+      status: isFav ? 0 : 1,
     };
 
     try {
@@ -210,7 +249,7 @@ const ProductList: React.FC<ProductListProps> = ({
           //   description: data?.message,
           // });
           queryClient.refetchQueries({
-            queryKey: ["get-all-market"],
+            queryKey: ["get-al-fav"],
           });
         },
       });
@@ -262,12 +301,12 @@ const ProductList: React.FC<ProductListProps> = ({
                     className={styles.favoriteIcon}
                     onClick={(event) => {
                       event.stopPropagation(); // Prevents click from bubbling to parent div
-                      addToFavHandler(item?.id?.toString(), item?.isFavourite);
+                      addToFavHandler(item?.id?.toString());
                     }}
                   >
                     <img
                       width={30}
-                      src={item?.isFavourite ? redFavorite : favorite}
+                      src={favIcons.includes(item?.id) ? redFavorite : favorite}
                      
                       alt="Favorite"
                     />
