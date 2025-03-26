@@ -1,7 +1,7 @@
 import styles from "./directory.module.scss";
 import { Image, notification, Pagination } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
 import CallIcon from "../../assets/callrelated.svg";
@@ -20,9 +20,8 @@ import { sanitizeUrlParam } from "../../utils";
 const Directory = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  let { search } = useParams();
-  const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
-  const { currentPage, setCurrentPage, onChange ,pageNum} = usePagination();
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState( "");
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const currentPath = location.pathname;
   const user = useAtomValue(userAtom);
 
@@ -30,9 +29,7 @@ const Directory = () => {
     if (currentPage !== pageNum) {
       setCurrentPage(pageNum);
     }
-  }, [pageNum, currentPage, setCurrentPage])
-  
-  
+  }, [pageNum, currentPage, setCurrentPage]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
@@ -41,9 +38,13 @@ const Directory = () => {
     setAppliedSearchTerm(searchTerm);
   };
 
-  const handleNavigateDirectory = (id: number,name :string, about:string) => {
-    navigate(`/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`);
-    window.scroll(0,0)
+  const handleNavigateDirectory = (id: number, name: string, about: string) => {
+    navigate(
+      `/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(
+        about
+      )}`
+    );
+    window.scroll(0, 0);
   };
 
   const [getAllDirectoryQuery] = useQueries({
@@ -69,23 +70,32 @@ const Directory = () => {
     navigate("/directory");
     getAllDirectoryQuery?.refetch();
   };
-  const handleAddDirectory = () =>{
+  const handleAddDirectory = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
-    } 
-    else if(user?.business === null){
-      navigate('/job/add-business')
-    } else 
-    navigate("/profile/2")
-  }
+    } else if (user?.business === null) {
+      navigate("/job/add-business");
+    } else navigate("/profile/2");
+  };
 
   return (
     <div className="wrapper">
@@ -117,24 +127,34 @@ const Directory = () => {
               />
             </SearchInput>
           </div>
-          <div style={{display:'flex', justifyContent:'center', marginBlockStart:'2.4rem',marginInline:'2rem'}}>
-          <Button
-            type="button"
-            variant="white"
-            text={!user   ||  user?.claim_status === null ||
-              user?.claim_status?.toString() === "2" ||
-              user?.claim_status?.toLowerCase() === "rejected" ?
-               "Add your Business to Directory":  user?.claim_status?.toLowerCase()  === 'pending'?
-                'Your business is pending review' :   user?.business?.name}
-            className={styles.buttonStyle}
-            onClick={handleAddDirectory}
-          />
-        </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginBlockStart: "2.4rem",
+              marginInline: "2rem",
+            }}
+          >
+            <Button
+              type="button"
+              variant="white"
+              text={
+                !user ||
+                user?.claim_status === null ||
+                user?.claim_status?.toString() === "2" ||
+                user?.claim_status?.toLowerCase() === "rejected"
+                  ? "Add your Business to Directory"
+                  : user?.claim_status?.toLowerCase() === "pending"
+                  ? "Your business is pending review"
+                  : user?.business?.name
+              }
+              className={styles.buttonStyle}
+              onClick={handleAddDirectory}
+            />
+          </div>
         </div>
       </div>
       <div className={styles.whyWrapper}>
-      
-
         {getAllDirectoryQuery?.isLoading ? (
           <CustomSpin />
         ) : getAllDirectoryQuery?.isError ? (
@@ -161,7 +181,9 @@ const Directory = () => {
                   <div
                     className={styles.promoImage}
                     key={index}
-                    onClick={() => handleNavigateDirectory(item?.id,item?.name, item?.about)}
+                    onClick={() =>
+                      handleNavigateDirectory(item?.id, item?.name, item?.about)
+                    }
                   >
                     <img
                       src={item?.logo}

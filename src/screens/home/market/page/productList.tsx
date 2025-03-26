@@ -15,13 +15,11 @@ import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use 
 import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { countUpTo, sanitizeUrlParam } from "../../../../utils";
-import { errorMessage } from "../../../../utils/errorMessage";
 import { AddToFav } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
-
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -53,6 +51,11 @@ const ProductList: React.FC<ProductListProps> = ({
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
   const user = useAtomValue(userAtom);
+  const currentPath = location.pathname;
+
+  const handleLogin = () => {
+    navigate(`/login?redirect=${currentPath}`);
+  };
 
   useEffect(() => {
     if (currentPage !== pageNum) {
@@ -122,8 +125,6 @@ const ProductList: React.FC<ProductListProps> = ({
     return (await api.get(url))?.data as AllProductaResponse;
   };
 
-
-  
   const favData = {
     user_id: user?.id,
   };
@@ -181,7 +182,6 @@ const ProductList: React.FC<ProductListProps> = ({
 
   const favAdvList = getAllFavAds?.data?.data;
 
-
   useEffect(() => {
     if (search) {
       setAppliedSearchTerm(search);
@@ -230,11 +230,9 @@ const ProductList: React.FC<ProductListProps> = ({
   });
   const favIcons = favAdvList?.map((fav: AddToFav) => fav.id) || [];
 
-
-  const addToFavHandler = async (id?: string, ) => {
+  const addToFavHandler = async (id?: string) => {
     if (!id) return;
     const isFav = favIcons.includes(parseInt(id));
-
 
     const payload: Partial<AddToFav> = {
       add_id: id,
@@ -253,10 +251,28 @@ const ProductList: React.FC<ProductListProps> = ({
           });
         },
       });
-    } catch (error) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error) || "An error occurred",
+    } catch  {
+
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+          <br />
+          <Button
+            type="button"
+            onClick={() => {
+              notification.destroy();
+              navigate(`/login?redirect=${currentPath}`);
+            }}
+          >
+            Click here to Login
+          </Button>
+          </>
+          
+        ),
+        placement: "top",
+        duration: 3, // Auto close after 5 seconds
+        icon: null,
       });
     }
   };
@@ -307,7 +323,6 @@ const ProductList: React.FC<ProductListProps> = ({
                     <img
                       width={30}
                       src={favIcons.includes(item?.id) ? redFavorite : favorite}
-                     
                       alt="Favorite"
                     />
                   </div>

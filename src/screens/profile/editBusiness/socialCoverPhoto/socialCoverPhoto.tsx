@@ -110,6 +110,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({
         message: "Error",
         description:errorMessage(error) || "An error occurred",
       });
+      
     }
   };
 

@@ -105,14 +105,25 @@ const JobDetails = () => {
   };
   const handleFlagJob = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else if (user.is_applicant) {
       setFlagJob(true);

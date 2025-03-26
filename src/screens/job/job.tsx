@@ -35,14 +35,25 @@ const Jobs = () => {
 
   const handleNavigateRegisterAsAnApplicant = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else {
       navigate("/job/register-as-applicant");
@@ -52,22 +63,31 @@ const Jobs = () => {
 
   const handleNavigateAddBusiness = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else if (
-           
       user?.claim_status === null ||
       user?.claim_status?.toString() === "2" ||
       user?.claim_status?.toLowerCase() === "rejected" ||
-      user?.role === "3" 
-
+      user?.role === "3"
     ) {
       setOpenAddBusiness(true);
     } else if (
@@ -167,7 +187,6 @@ const Jobs = () => {
         handleClickBtn2={handleNavigateTOSellerSignup}
         BtnText="Add Business To Directory"
         BtnText2="Become a seller"
-
         heading="Business Not Added To Directory "
         text={
           "It looks like your business has not been registered in our directory and you are not also a seller, Add your business to the directory now or register as a seller to be able to post jobs."

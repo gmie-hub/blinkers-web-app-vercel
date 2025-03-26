@@ -73,10 +73,10 @@ const SellerProfile = () => {
       },
       {
         queryKey: ["get-sellers-followers", id],
-        queryFn: ()=> getFollowersByUser_id(user?.id!,parseInt(id!)),
+        queryFn: () => getFollowersByUser_id(user?.id!, parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled:!!id,
+        enabled: !!id,
       },
     ],
   });
@@ -88,57 +88,67 @@ const SellerProfile = () => {
   const sellersDetailsData = getSellersDetailsQuery?.data?.data;
   const sellersDetailsError = getSellersDetailsQuery?.error as AxiosError;
   const sellersDetailsErrorMessage =
-  sellersDetailsError?.message ||
+    sellersDetailsError?.message ||
     "An error occurred. Please try again later.";
 
-    const followSellersMutation = useMutation({
-      mutationFn: FollowSeller,
-      mutationKey: ["follow-seller"],
-    });
-  
-    const followSellerHandler = async () => {
-      const payload: Partial<FollowBusiness> = {
-        user_id: parseInt(id!),
-        action: hasUserFlaggedSeller ? "unfollow": "follow",
-      };
-  
-      try {
-        await followSellersMutation.mutateAsync(payload, {
-          onSuccess: (data) => {
-            notification.success({
-              message: "Success",
-              description: data?.message,
-            });
-            queryClient.refetchQueries({
-              queryKey: ["get-sellers-followers"],
-            });
-          },
-        });
-      } catch (error: any) {
-        notification.error({
-          message: "Error",
-          description:errorMessage(error) || "An error occur",
-        });
-      }
+  const followSellersMutation = useMutation({
+    mutationFn: FollowSeller,
+    mutationKey: ["follow-seller"],
+  });
+
+  const followSellerHandler = async () => {
+    const payload: Partial<FollowBusiness> = {
+      user_id: parseInt(id!),
+      action: hasUserFlaggedSeller ? "unfollow" : "follow",
     };
-  
-  
-    const handleFollowSeller = () => {
-      if (!user) {
-        notification.error({
-          message: "Log in required",
-          description: "You need to log in to access this page!",
-          placement: "top",
-          duration: 4,
-          onClose: () => {
-            navigate(`/login?redirect=${currentPath}`);
-          },
-        });
-      } else {
-        followSellerHandler();
-      }
-    };
-  
+
+    try {
+      await followSellersMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+          queryClient.refetchQueries({
+            queryKey: ["get-sellers-followers"],
+          });
+        },
+      });
+    } catch (error: any) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occur",
+      });
+    }
+  };
+
+  const handleFollowSeller = () => {
+    if (!user) {
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
+        placement: "top",
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
+      });
+    } else {
+      followSellerHandler();
+    }
+  };
+
   return (
     <>
       {getSellersDetailsQuery?.isLoading ? (
@@ -166,7 +176,11 @@ const SellerProfile = () => {
                 <div className={styles.card}>
                   <div>
                     <div className={styles.passport}>
-                      <img src={sellersDetailsData?.profile_image || ProfileIcon} alt="ProductIcon" className={styles.sellerLogo} />
+                      <img
+                        src={sellersDetailsData?.profile_image || ProfileIcon}
+                        alt="ProductIcon"
+                        className={styles.sellerLogo}
+                      />
 
                       <div className={styles.detailsflex}>
                         <p className={styles.name}>
@@ -185,8 +199,7 @@ const SellerProfile = () => {
                             sellersDetailsData?.total_rating < 2
                               ? " rating"
                               : " ratings"}
-                            )
-                            <span className={styles.dot}></span>{" "}
+                            )<span className={styles.dot}></span>{" "}
                             <span>
                               {sellersDetailsData?.total_followers}{" "}
                               {sellersDetailsData &&
@@ -205,7 +218,8 @@ const SellerProfile = () => {
                         )}
                       </p>
                       <p style={{ paddingBlock: "0.2rem" }}>
-                        Number of Ads Posted: <span> {sellersDetailsData?.total_ads}</span>{" "}
+                        Number of Ads Posted:{" "}
+                        <span> {sellersDetailsData?.total_ads}</span>{" "}
                       </p>
                     </div>
                   </div>
@@ -279,7 +293,9 @@ const SellerProfile = () => {
                     icon={
                       <Image src={FlagLogo} alt="FlagLogo" preview={false} />
                     }
-                    text={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
+                    text={
+                      hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"
+                    }
                     variant="redOutline"
                     onClick={() => {
                       setFlagSeller(true);
@@ -293,7 +309,6 @@ const SellerProfile = () => {
                       alt="WhatsappLogo"
                       preview={false}
                       style={{ cursor: "pointer" }}
-                      
                     />
                     <Image
                       src={InstagramIcon}
@@ -318,7 +333,10 @@ const SellerProfile = () => {
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         if (sellersDetailsData?.facebook_address) {
-                          window.open(sellersDetailsData.facebook_address, "_blank");
+                          window.open(
+                            sellersDetailsData.facebook_address,
+                            "_blank"
+                          );
                         }
                       }}
                     />
@@ -339,9 +357,9 @@ const SellerProfile = () => {
               <div className={styles.rightSection}>
                 {/* {hasReviews !== 0 && ( */}
                 <div className={styles.reviewbtn}>
-                <p className={styles.title}> Review</p>
+                  <p className={styles.title}> Review</p>
 
-                {/* <div
+                  {/* <div
                   // onClick={handleNavigateToReview}
                   className={styles.btnWrapper}
                 >
@@ -353,9 +371,9 @@ const SellerProfile = () => {
                     preview={false}
                   />
                 </div> */}
-              </div>
+                </div>
                 {/* )} */}
-                <ProductReviews  limit={4} />
+                <ProductReviews limit={4} />
               </div>
             </div>
             <div>
@@ -388,10 +406,13 @@ const SellerProfile = () => {
         onCancel={() => setFlagSeller(false)}
         centered
         title={hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"}
-
         footer={null}
       >
-        <FlagSeller hasUserFlaggedSeller={hasUserFlaggedSeller} sellerId={sellersDetailsData?.id}  handleCloseModal={() => setFlagSeller(false)} />
+        <FlagSeller
+          hasUserFlaggedSeller={hasUserFlaggedSeller}
+          sellerId={sellersDetailsData?.id}
+          handleCloseModal={() => setFlagSeller(false)}
+        />
       </Modal>
     </>
   );

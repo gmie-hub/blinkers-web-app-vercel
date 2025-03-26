@@ -54,10 +54,31 @@ const NotClaim = () => {
   //   console.log(hasReviews , "hasReviews")
 
   const handleClaim = () => {
-    // setShowContent(false); // Hide the review form
-    // setShowCard(true); // Show the card
-    navigate(`/claim-business/${id}`);
-    window.scrollTo(0, 0);
+    if (!user) {
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
+        placement: "top",
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
+      });
+    } else {
+      navigate(`/claim-business/${id}`);
+      window.scrollTo(0, 0);
+    }
   };
 
   //   navigate(`/related-businesses/${id}`);
@@ -131,7 +152,7 @@ const NotClaim = () => {
           });
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error),
@@ -140,14 +161,25 @@ const NotClaim = () => {
   };
   const handleFollowBusiness = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else {
       followBusinessHandler();
@@ -156,14 +188,25 @@ const NotClaim = () => {
 
   const handleNavigateToWriteReview = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else if (businessDetailsData?.business_status?.toString() !== "2") {
       notification.error({
@@ -323,7 +366,9 @@ const NotClaim = () => {
                         <div className={styles.open}>
                           <p>Opening Hours</p>
                           {/* <p>Monday - Fridays (10am- 11pm)</p> */}
-                          {groupBusinessHours(businessDetailsData?.business_hours || [])}
+                          {groupBusinessHours(
+                            businessDetailsData?.business_hours || []
+                          )}
                         </div>
                       </div>
                       <div className={styles.info}>

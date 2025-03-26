@@ -1,15 +1,24 @@
 import Icon from "/Container.svg";
 import styles from "./contactUs.module.scss";
 import { App, Image } from "antd";
-import { Form, Formik, FormikValues } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikValues,
+} from "formik";
 import Input from "../../customs/input/input";
 import Button from "../../customs/button/button";
 import cardIcon1 from "../../assets/Icon (5).svg";
 import cardIcon2 from "../../assets/Icon (6).svg";
 import cardIcon3 from "../../assets/Icon (7).svg";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { ContactUsApi } from "../request";
 import { errorMessage } from "../../utils/errorMessage";
+import * as Yup from "yup";
+import PhoneInput from "react-phone-input-2";
 
 const cardData = [
   {
@@ -18,14 +27,13 @@ const cardData = [
       <Image
         width="4rem"
         height={"4rem"}
-        src={cardIcon1 }
+        src={cardIcon1}
         alt="cardIcon"
         preview={false}
       />
     ),
     title: "Send Us An Email",
     para: "support@blinkersnigeria.com",
-    
   },
   {
     id: 2,
@@ -59,27 +67,24 @@ const cardData = [
 
 const ContactUs = () => {
   const { notification } = App.useApp();
-  const queryClient = useQueryClient();
 
-  
   const contactUsMutation = useMutation({
     mutationFn: ContactUsApi,
     mutationKey: ["add-fav"],
   });
-
-    const contactUsHandler = async (values: FormikValues) => {
-
-
+  const contactUsHandler = async (
+    values: FormikValues,
+     resetForm : any
+  ) => {
+  
+  // const contactUsHandler = async (values: FormikValues, resetForm) => {
     const payload: Partial<ContactUs> = {
       // id: values?.,
-      name: values?.namr,
-      // mobileNum:values?.,
-      // email: values?.email,
-      // subject: values?.Subject,
-      // message: values?.,
-  
-   
-   
+      name: values?.name,
+      mobileNum: values?.mobileNum,
+      email: values?.email,
+      subject: values?.subject,
+      message: values?.message,
     };
 
     try {
@@ -89,9 +94,8 @@ const ContactUs = () => {
             message: "Success",
             description: data?.message,
           });
-          queryClient.refetchQueries({
-            queryKey: ["get-al-fav"],
-          });
+          
+          resetForm()
         },
       });
     } catch (error) {
@@ -101,6 +105,18 @@ const ContactUs = () => {
       });
     }
   };
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("required"),
+    // mobileNum: Yup.string().required("required"),
+    email: Yup.string().required("required"),
+    subject: Yup.string().required("required"),
+    message: Yup.string().required("required"),
+    mobileNum: Yup.string()
+      .required("Phone number is required")
+      .matches(/^\d+$/, "Phone number must contain only digits"),
+  });
+
   return (
     <div className="wrapper">
       <div className={styles.container}>
@@ -132,30 +148,61 @@ const ContactUs = () => {
           </div>
           <div className={styles.rightSection}>
             <Formik
-              initialValues={{ message: "", selectedItems: [] }}
-              onSubmit={(values,) => {
-                contactUsHandler(values);
+              initialValues={{
+                message: "",
+                name: "",
+                email: "",
+                mobileNum: "",
+                subject: "",
               }}
+              onSubmit={(values, {resetForm}) => {
+                contactUsHandler(values,resetForm);
+              }}
+              enableReinitialize={true}
+              validationSchema={validationSchema}
             >
               <Form>
                 <div className={styles.inputContainer}>
                   <Input
-                    name="review"
+                    name="name"
                     placeholder="First name and last name"
                     label="Full Name"
                   />
                 </div>
                 <div className={styles.inputContainer}>
                   <Input
-                    name="Phone Number"
-                    label="Phone Number "
-                    placeholder="+1(555) 000-0000"
-                    className={styles.inputText}
+                    name="email"
+                    placeholder="Email Address"
+                    label="Email "
+                  />
+                </div>
+             
+                <div>
+                  <p className="label">Phone Number </p>
+                  <Field name="mobileNum">
+                    {({ field, form }: FieldProps) => (
+                      <PhoneInput
+                        country={"ng"} // Default country
+                        value={field.value} // Directly use Formik field's value
+                        onChange={(mobileNum) =>
+                          form.setFieldValue("mobileNum", mobileNum)
+                        } // Update Formik state
+                        inputStyle={{ width: "100%" }}
+                        preferredCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        onlyCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        placeholder="Enter phone numer"
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    name="mobileNum"
+                    component="div"
+                    className="error"
                   />
                 </div>
                 <div className={styles.inputContainer}>
                   <Input
-                    name="Subject"
+                    name="subject"
                     label="Subject"
                     placeholder="Subject"
                     className={styles.inputText}
@@ -163,7 +210,7 @@ const ContactUs = () => {
                 </div>
                 <div className={styles.inputContainer}>
                   <Input
-                    name="email"
+                    name="message"
                     label="Message"
                     placeholder="Write your message"
                     className={styles.inputText}
@@ -171,10 +218,8 @@ const ContactUs = () => {
                   />
                 </div>
                 <div className={styles.btn}>
-                <Button  text="Submit Form"  />
-
+                  <Button type="submit" text="Submit Form" />
                 </div>
-
               </Form>
             </Formik>
           </div>

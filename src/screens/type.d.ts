@@ -238,7 +238,7 @@ interface ProductDatum {
   description_tags?: string[];
   discount_price?: string | null;
   from_date?: string | null;
-  id: number;
+  id: number ;
   isFavourite: boolean;
   is_admin_ad: number;
   local_government_area_id?: number | null;

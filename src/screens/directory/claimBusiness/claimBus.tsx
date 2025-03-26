@@ -76,6 +76,7 @@ const ClaimBusiness = () => {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
       "application/msword", // doc
       "application/vnd.ms-powerpoint", // ppt
+      "application/pdf", // PDF
     ];
 
     // Validate if the file type is valid
@@ -368,7 +369,7 @@ const ClaimBusiness = () => {
                     type="submit"
                     text={
                       createBusinessMutation?.isPending
-                        ? "Loading"
+                        ? "Loading..."
                         : "Submit Form"
                     }
                   />

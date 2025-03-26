@@ -1,7 +1,7 @@
 import styles from "./index.module.scss";
 import { App, Image } from "antd";
 import Product2 from "../../assets/Image.svg";
-import location from "../../assets/location.svg";
+import locationIcon from "../../assets/location.svg";
 import Button from "../../customs/button/button";
 // import Star from "../../assets/Vector.svg";
 // import StarYellow from "../../assets/staryellow.svg";
@@ -15,13 +15,13 @@ import { sanitizeUrlParam } from "../../utils";
 import redFavorite from "../../assets/redfav.svg";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
-import { errorMessage } from "../../utils/errorMessage";
 
 const Trends = () => {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
+  const currentPath = location.pathname;
 
   const favData = {
     user_id: user?.id,
@@ -115,10 +115,26 @@ const Trends = () => {
           });
         },
       });
-    } catch (error) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error) || "An error occurred",
+    } catch  {
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
+        placement: "top",
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     }
   };
@@ -137,7 +153,7 @@ const Trends = () => {
           <div className={styles.leftSectionTrend}>
             {trendData &&
               trendData?.length > 0 &&
-              trendData?.slice(0, 2)?.map((item: any, index: number) => (
+              trendData?.slice(0, 2)?.map((item: ProductDatum, index: number) => (
                 <div
                   onClick={() =>
                     handleNavigateToProductDetails(
@@ -160,7 +176,7 @@ const Trends = () => {
                     <Image
                       width={30}
                       src={
-                        favIcons.includes(parseInt(item?.id))
+                        favIcons.includes(item?.id)
                           ? redFavorite
                           : favorite
                       }
@@ -183,7 +199,7 @@ const Trends = () => {
                         : item?.title}
                     </p>
                     <div className={styles.info}>
-                      <img src={location} alt="location" />
+                      <img src={locationIcon} alt="locationIcon" />
 
                       <p>
                         <span>
@@ -279,7 +295,7 @@ const Trends = () => {
                       : trendData[3]?.title}
                   </p>{" "}
                   <div className={styles.info}>
-                    <img src={location} alt="location" />
+                    <img src={locationIcon} alt="locationIcon" />
 
                     <p>
                       <span>
@@ -334,7 +350,7 @@ const Trends = () => {
           <div className={styles.rightSectionTrend}>
             {trendData &&
               trendData?.length > 0 &&
-              trendData?.slice(4, 6)?.map((item: any, index: number) => (
+              trendData?.slice(4, 6)?.map((item: ProductDatum, index: number) => (
                 <div
                   onClick={() =>
                     handleNavigateToProductDetails(
@@ -357,7 +373,7 @@ const Trends = () => {
                     <Image
                       width={30}
                       src={
-                        favIcons.includes(parseInt(item?.id))
+                        favIcons.includes(item?.id)
                           ? redFavorite
                           : favorite
                       }
@@ -379,7 +395,7 @@ const Trends = () => {
                         : item?.title}
                     </p>
                     <div className={styles.info}>
-                      <img src={location} alt="location" />
+                      <img src={locationIcon} alt="locationIcon" />
                       <p>
                         <span>
                           {item?.local_govt?.local_government_area &&

@@ -21,6 +21,7 @@ import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import CustomSpin from "../../../../customs/spin";
 import { errorMessage } from "../../../../utils/errorMessage";
+import Button from "../../../../customs/button/button";
 
 const Main = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
@@ -51,7 +52,6 @@ const Main = () => {
     getBusinessFollowersQuery,
     getUserDetailsQuery,
     getFlaggedSellerQuery,
-
   ] = useQueries({
     queries: [
       {
@@ -97,7 +97,6 @@ const Main = () => {
         refetchOnWindowFocus: true,
         enabled: !!sellerId,
       },
-   
     ],
   });
 
@@ -105,11 +104,9 @@ const Main = () => {
     mutationFn: AddToFav,
     mutationKey: ["add-fav"],
   });
-  
 
   const addToFavHandler = async () => {
     if (!id) return;
-
 
     const payload: Partial<AddToFav> = {
       add_id: id,
@@ -128,10 +125,26 @@ const Main = () => {
           });
         },
       });
-    } catch (error) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error) || "An error occurred",
+    } catch {
+      notification.open({
+        message: "You need to logged in to save an item",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
+        placement: "top",
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     }
   };
@@ -205,14 +218,25 @@ const Main = () => {
   };
   const handleFollowBusiness = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else {
       followBusinessHandler();
@@ -252,14 +276,25 @@ const Main = () => {
 
   const handleFollowSeller = () => {
     if (!user) {
-      notification.error({
-        message: "Log in required",
-        description: "You need to log in to access this page!",
+      notification.open({
+        message: "You need to log in to complete this action.",
+        description: (
+          <>
+            <br />
+            <Button
+              type="button"
+              onClick={() => {
+                notification.destroy();
+                navigate(`/login?redirect=${currentPath}`);
+              }}
+            >
+              Click here to Login
+            </Button>
+          </>
+        ),
         placement: "top",
-        duration: 4,
-        onClose: () => {
-          navigate(`/login?redirect=${currentPath}`);
-        },
+        duration: 4, // Auto close after 5 seconds
+        icon: null,
       });
     } else {
       followSellerHandler();
