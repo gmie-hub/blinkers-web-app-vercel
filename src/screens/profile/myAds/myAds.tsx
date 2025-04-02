@@ -31,12 +31,6 @@ const MyAds = () => {
   console.log(indexData, "indexData");
 
   // Check if an ad has expired
-  const isExpired = (createdAt: string): boolean => {
-    const expirationDate = new Date(createdAt);
-    const today = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 30); // 30 days expiration logic
-    return today > expirationDate;
-  };
 
   const handleEditAds = (id: number) => {
     navigate(`/edit-ad/${id}`);
@@ -65,7 +59,7 @@ const MyAds = () => {
           },
         }
       );
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",
@@ -87,7 +81,7 @@ const MyAds = () => {
     queries: [
       {
         queryKey: ["get-my-market",user?.id],
-        queryFn: () => getMyAdzByUserId(user?.id!),
+        queryFn: () => getMyAdzByUserId(user?.id),
         refetchOnWindowFocus: true,
         enabled:!!user?.id
       },
@@ -111,7 +105,7 @@ const MyAds = () => {
             {adsData &&
               adsData?.length > 0 &&
               adsData?.map((item: ProductDatum, index: number) => {
-                const expired = isExpired("item?.created_at");
+                const expired =item?.status ===4;
 
                 return (
                   <div
@@ -219,7 +213,7 @@ const MyAds = () => {
       <ReusableModal
         open={isDeleteModal}
         handleCancel={handleCloseDelete}
-        handleConfirm={() => DeleteAdsHandler(indexData?.id!)}
+        handleConfirm={() => DeleteAdsHandler(indexData?.id || 0)}
         title={`Are you sure you want to delete ${
           indexData?.title || "this item"
         }?`}

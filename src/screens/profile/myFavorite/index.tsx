@@ -1,7 +1,10 @@
 import styles from "./myFavorite.module.scss";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { formatDateToMonthYear } from "../../../utils/formatTime";
+import {
+  formatDateOnly,
+  getTimeFromDate,
+} from "../../../utils/formatTime";
 import CustomSpin from "../../../customs/spin";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../utils/store";
@@ -10,7 +13,7 @@ import { AddToFav } from "../../request";
 import { App } from "antd";
 import { errorMessage } from "../../../utils/errorMessage";
 
-const MyFavorite = () => {
+const MyFavorites = () => {
   const user = useAtomValue(userAtom);
   const { notification } = App.useApp();
   const queryClient = useQueryClient();
@@ -37,7 +40,6 @@ const MyFavorite = () => {
     return (await getFavapi.get(url))?.data;
   };
 
- 
   const [getAllFavAds] = useQueries({
     queries: [
       {
@@ -62,7 +64,7 @@ const MyFavorite = () => {
 
     const payload: Partial<AddToFav> = {
       add_id: id,
-      status: 0 
+      status: 0,
     };
     try {
       await addToFavMutation.mutateAsync(payload, {
@@ -84,8 +86,6 @@ const MyFavorite = () => {
     }
   };
 
-
-
   const favError = getAllFavAds?.error as AxiosError;
   const favErrorMessage =
     favError?.message || "An error occurred. Please try again later.";
@@ -102,7 +102,6 @@ const MyFavorite = () => {
             {favDataList &&
               favDataList?.length > 0 &&
               favDataList?.map((item: ProductDatum, index: number) => {
-
                 return (
                   <div
                     className={`${styles.chooseCard}                   }`}
@@ -124,7 +123,12 @@ const MyFavorite = () => {
                             : item?.title}
                         </h3>{" "}
                         <p className={styles.para}>
-                          {formatDateToMonthYear(item?.created_at) || ""}
+                          {formatDateOnly(item?.favCreatedAt) || ""}
+
+                          <span>
+                            {" "}
+                            {getTimeFromDate(item?.favCreatedAt) || ""}
+                          </span>
                         </p>
                         <p className={styles.para}>
                           {item.local_govt?.local_government_area || ""},{" "}
@@ -149,27 +153,23 @@ const MyFavorite = () => {
                           </span>
                         </span>
                         <div
-                        onClick={(event) => {
-                          event.stopPropagation(); // Prevents click from bubbling to parent div
-                          addToFavHandler(item?.id?.toString());
-                        }}
+                          onClick={(event) => {
+                            event.stopPropagation(); // Prevents click from bubbling to parent div
+                            addToFavHandler(item?.id?.toString());
+                          }}
                         >
                           <img src={favorite} alt="" />
                         </div>
-
-
                       </div>
                     </div>
                   </div>
                 );
               })}
           </div>
-
-        
         </>
       )}
     </div>
   );
 };
 
-export default MyFavorite;
+export default MyFavorites;

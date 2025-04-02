@@ -21,6 +21,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-google-recaptcha": "^3.1.0",
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^6.27.0",
     "sass": "^1.80.6",
@@ -41,7 +42,7 @@
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10"
   },
-   "resolutions": {
+  "resolutions": {
     "eslint": "^8.57.1"
   }
 }

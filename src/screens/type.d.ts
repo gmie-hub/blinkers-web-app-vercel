@@ -229,6 +229,7 @@ interface AllProductData {
   total: number;
 }
 interface ProductDatum {
+  favCreatedAt:string
   category:CategoryDatum
   business_id?: number | null;
   category_id: number;

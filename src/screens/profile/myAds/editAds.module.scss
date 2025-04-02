@@ -55,7 +55,10 @@
 .buttonGroup {
   display: flex;
   justify-content: center;
-  gap:2rem
+  gap:2rem;
+  @media screen and (max-width: 480px) {
+flex-direction: column;
+  }
 }
 
 

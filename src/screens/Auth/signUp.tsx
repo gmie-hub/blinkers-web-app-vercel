@@ -19,32 +19,42 @@ import { useMutation } from "@tanstack/react-query";
 import { errorMessage } from "../../utils/errorMessage";
 import { SignUpCall } from "./request";
 import PhoneInput from "react-phone-input-2";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CountryData } from "react-phone-input-2"; // Import the CountryData type
+// import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUp = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-
-  console.log(countryCode, 'countryCode');
-  console.log(phoneNumber, 'num');
+  const [recaptchaToken, setRecaptchaToken] = useState(""); // State for reCAPTCHA
+  const recaptchaRef = useRef<ReCAPTCHA | null>(null); // Reference for reCAPTCHA
 
   const SignUpMutation = useMutation({
     mutationFn: SignUpCall,
     mutationKey: ["sign-up"],
   });
 
-  const handleNavigateToVerifyOtp = (email: string, phoneNumber:string) => {
+  const handleNavigateToVerifyOtp = (email: string, phoneNumber: string) => {
     navigate(`/verification-code/${email}/${phoneNumber}`);
   };
 
-  const SignUpHandler = async (values: FormikValues, resetForm: any) => {
+  const SignUpHandler = async (values: FormikValues, resetForm: () => void) => {
+    if (!recaptchaToken) {
+      notification.error({
+        message: "Error",
+        description: "Please verify the reCAPTCHA.",
+      });
+      return;
+    }
+
+    setRecaptchaToken("djj");
     const payload: Partial<signUp> = {
       name: values?.name,
       country_code: countryCode, // Use the updated country code
-      number: countryCode+values.phoneNumber,
+      number: countryCode + values.phoneNumber,
       address: values.address,
       address_lat: values.address,
       address_long: values?.address,
@@ -62,18 +72,21 @@ const SignUp = () => {
           });
           const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
 
-          handleNavigateToVerifyOtp(values?.email,countryCode+values?.phoneNumber);
+          handleNavigateToVerifyOtp(
+            values?.email,
+            countryCode + values?.phoneNumber
+          );
           localStorage.setItem("savedPinSignUp", pin);
 
           resetForm(); // Reset the form on success
+          recaptchaRef.current?.reset(); // Reset reCAPTCHA
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
-        description:    errorMessage(error) || "An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
-
     }
   };
 
@@ -94,6 +107,11 @@ const SignUp = () => {
       .required("Confirm password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
   });
+
+  const handleRecaptcha = (token: string | null) => {
+    setRecaptchaToken(token);
+  };
+
 
   return (
     <section className={styles.container}>
@@ -127,10 +145,11 @@ const SignUp = () => {
           onSubmit={(values, { resetForm }) => {
             SignUpHandler(values, resetForm);
             // resetForm();
-            console.log(values,)
-
+            console.log(values);
           }}
           validationSchema={validationSchema}
+
+          
         >
           {() => {
             return (
@@ -142,7 +161,7 @@ const SignUp = () => {
 
                   <Field
                     name="phoneNumber"
-                    render={({  form }: FieldProps) => (
+                    render={({ form }: FieldProps) => (
                       <PhoneInput
                         country={"ng"} // Default country
                         value={`${countryCode}${phoneNumber}`} // Concatenate the country code and phone number
@@ -156,8 +175,8 @@ const SignUp = () => {
                           form.setFieldValue("country_code", dialCode); // Update Formik country_code field
                         }}
                         inputStyle={{ width: "100%" }}
-                        preferredCountries={["ng", "gb", "gh", "cm",'lr']} 
-                        onlyCountries={["ng", "gb", "gh", "cm",'lr']} 
+                        preferredCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        onlyCountries={["ng", "gb", "gh", "cm", "lr"]}
                         placeholder="Enter phone numer"
                       />
                     )}
@@ -168,6 +187,7 @@ const SignUp = () => {
                     className="error"
                   />
                 </div>
+
                 <Input
                   name="email"
                   label="Email Address"
@@ -202,6 +222,14 @@ const SignUp = () => {
                   text={SignUpMutation?.isPending ? "Submitting..." : "Submit"}
                   type="submit"
                   className={styles.button}
+                />
+
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} // Replace with your Site Key
+                  // onChange={(token: string) => setRecaptchaToken(token || "")}
+                  onChange={handleRecaptcha}
+                      
                 />
 
                 <span style={{ display: "flex" }}>

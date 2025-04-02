@@ -41,7 +41,7 @@ const   Button: FC<ButtonProps> = ({
   const buttonStyle = variantList[variant] || variantList.green; // Fallback to green if variant is invalid
 
   return (
-    <button className={classNames(className, buttonStyle)} onClick={onClick} type={type} disabled={disabled}>
+    <button style={{cursor:'pointer'}} className={classNames(className, buttonStyle)} onClick={onClick} type={type} disabled={disabled}>
       <span>
         {isLoading ? (
           <Spin size="small" className='spinColor' />

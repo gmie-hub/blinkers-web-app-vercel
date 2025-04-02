@@ -111,7 +111,7 @@ export const getAllBusiness = async (
   return (await api.get(url))?.data ;
 };
 
-export const getMyAdzByUserId = async (user_id: number) => {
+export const getMyAdzByUserId = async (user_id?: number) => {
   return (await api.get(`/ads?per_page=${30}&user_id=${user_id}`))?.data ;
 };
 
@@ -464,6 +464,9 @@ export const getJobBYBusinessId = async (id: number) => {
 export const deleteJob = async ({ id }: { id: number }) => {
   return (await api.delete(`jobs/${id}`))?.data as JobDatum;
 };
+
+
+
 export const UpdateJob = async (payload: Partial<JobDatum>) => {
   return (await api.patch(`jobs/${payload.id}`, payload, {}))?.data as Response;
 };
