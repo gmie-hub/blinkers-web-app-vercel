@@ -8,7 +8,7 @@ import job1 from "../../assets/job1.svg";
 import job2 from "../../assets/job2.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import ModalContent from "../../partials/successModal/modalContent";
-import warn from "../../assets/warning-circle-svgrepo-com 2.svg";
+import warn from "../../assets/warned.svg"
 import JobLists from "./cards/cards";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
