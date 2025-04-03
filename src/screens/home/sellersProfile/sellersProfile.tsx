@@ -72,11 +72,11 @@ const SellerProfile = () => {
         enabled: !!id,
       },
       {
-        queryKey: ["get-sellers-followers", id],
-        queryFn: () => getFollowersByUser_id(user?.id!, parseInt(id!)),
+        queryKey: ["get-sellers-followers", ],
+        queryFn: () => getFollowersByUser_id(user?.id ?? 0 , parseInt(id!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!id,
+        enabled: Boolean(user?.id) && Boolean(parseInt(id!)), 
       },
     ],
   });

@@ -79,7 +79,10 @@ const SignUp = () => {
           localStorage.setItem("savedPinSignUp", pin);
 
           resetForm(); // Reset the form on success
-          recaptchaRef.current?.reset(); // Reset reCAPTCHA
+          (recaptchaRef.current as unknown as { reset: () => void })?.reset();
+
+
+          // recaptchaRef.current?.reset(); // Reset reCAPTCHA
         },
       });
     } catch (error) {

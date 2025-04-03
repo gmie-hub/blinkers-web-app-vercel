@@ -305,7 +305,7 @@ export const getBusinessById = async (id: number) => {
 };
 export const getFollowersByUser_id = async (
   follower_id: number,
-  user_id: number
+  user_id?: number
 ) => {
   return (
     await api.get(`followers?follower_id=${follower_id}&user_id=${user_id}`)
