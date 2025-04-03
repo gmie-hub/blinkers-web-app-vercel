@@ -81,7 +81,6 @@ const SignUp = () => {
           resetForm(); // Reset the form on success
           (recaptchaRef.current as unknown as { reset: () => void })?.reset();
 
-
           // recaptchaRef.current?.reset(); // Reset reCAPTCHA
         },
       });
@@ -115,7 +114,10 @@ const SignUp = () => {
     setRecaptchaToken(token!);
   };
 
-  console.log(import.meta.env.VITE_RECAPTCHA_SITE_KEY,'import.meta.env.VITE_RECAPTCHA_SITE_KEY')
+  console.log(
+    import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+    "import.meta.env.VITE_RECAPTCHA_SITE_KEY"
+  );
 
   return (
     <section className={styles.container}>
@@ -152,8 +154,6 @@ const SignUp = () => {
             console.log(values);
           }}
           validationSchema={validationSchema}
-
-          
         >
           {() => {
             return (
@@ -221,19 +221,18 @@ const SignUp = () => {
                   className={styles.inputText}
                 />
 
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6Lf3uT4pAAAAAKVYam6VG86MN63MQrYS34_1Hc67'} // Replace with your Site Key
+                  // onChange={(token: string) => setRecaptchaToken(token || "")}
+                  onChange={handleRecaptcha}
+                />
+
                 <Button
                   disabled={SignUpMutation?.isPending}
                   text={SignUpMutation?.isPending ? "Submitting..." : "Submit"}
                   type="submit"
                   className={styles.button}
-                />
-
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} // Replace with your Site Key
-                  // onChange={(token: string) => setRecaptchaToken(token || "")}
-                  onChange={handleRecaptcha}
-
                 />
 
                 <span style={{ display: "flex" }}>
