@@ -180,7 +180,7 @@ const BigScreen = ({
             <div className={styles.accessories}>
               <p className={styles.subjectBg}>
                 {productDetailsData?.category?.title}
-              </p>{" "}
+              </p>
               <div className={styles.eye}>
                 <Image src={TimeIcon} alt={TimeIcon} preview={false} />
                 <p>
@@ -247,7 +247,9 @@ const BigScreen = ({
                   >
                     <Image
                       width={30}
-                      src={productDetailsData?.isFavourite ? redFavorite : favorite}
+                      src={
+                        productDetailsData?.isFavourite ? redFavorite : favorite
+                      }
                       alt="Favorite"
                       preview={false}
                     />
@@ -419,18 +421,23 @@ const BigScreen = ({
                           }
                         }}
                       />
-                      <Image
-                        src={FaceBookStoreIcon}
-                        alt="FaceBookStoreIcon"
-                        preview={false}
-                        // width={40}
-                        height={32}
-                        onClick={() => {
-                          if (businessDetailsData?.facebook) {
-                            window.open(businessDetailsData.facebook, "_blank");
-                          }
-                        }}
-                      />
+                      {businessDetailsData?.facebook !== null && (
+                        <Image
+                          src={FaceBookStoreIcon}
+                          alt="FaceBookStoreIcon"
+                          preview={false}
+                          // width={40}
+                          height={32}
+                          onClick={() => {
+                            if (businessDetailsData?.facebook) {
+                              window.open(
+                                businessDetailsData.facebook,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
                       <Image
                         src={BrowseLogo}
                         alt="BrowseLogo"
@@ -595,21 +602,23 @@ const BigScreen = ({
                           }
                         }}
                       />
-                      <Image
-                        src={FaceBookStoreIcon}
-                        alt="FaceBookStoreIcon"
-                        preview={false}
-                        // width={40}
-                        height={32}
-                        onClick={() => {
-                          if (profileDetailsData?.facebook_address) {
-                            window.open(
-                              profileDetailsData.facebook_address,
-                              "_blank"
-                            );
-                          }
-                        }}
-                      />
+                      {profileDetailsData?.facebook_address !== null && (
+                        <Image
+                          src={FaceBookStoreIcon}
+                          alt="FaceBookStoreIcon"
+                          preview={false}
+                          // width={40}
+                          height={32}
+                          onClick={() => {
+                            if (profileDetailsData?.facebook_address) {
+                              window.open(
+                                profileDetailsData.facebook_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
                       <Image
                         src={BrowseLogo}
                         alt="BrowseLogo"
