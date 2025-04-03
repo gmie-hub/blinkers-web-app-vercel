@@ -109,7 +109,7 @@ const SignUp = () => {
   });
 
   const handleRecaptcha = (token: string | null) => {
-    setRecaptchaToken(token);
+    setRecaptchaToken(token!);
   };
 
 
@@ -229,7 +229,7 @@ const SignUp = () => {
                   sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} // Replace with your Site Key
                   // onChange={(token: string) => setRecaptchaToken(token || "")}
                   onChange={handleRecaptcha}
-                      
+
                 />
 
                 <span style={{ display: "flex" }}>
