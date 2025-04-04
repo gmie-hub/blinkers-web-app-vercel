@@ -218,7 +218,7 @@ const SignUp = () => {
                   type="password"
                   className={styles.inputText}
                 />
-                <br />
+                {/* <br /> */}
 
                 {/* <ReCAPTCHA
                   ref={recaptchaRef}
