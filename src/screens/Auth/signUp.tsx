@@ -19,18 +19,18 @@ import { useMutation } from "@tanstack/react-query";
 import { errorMessage } from "../../utils/errorMessage";
 import { SignUpCall } from "./request";
 import PhoneInput from "react-phone-input-2";
-import { useRef, useState } from "react";
+import {  useState } from "react";
 import { CountryData } from "react-phone-input-2"; // Import the CountryData type
 // import ReCAPTCHA from "react-google-recaptcha";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUp = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const [countryCode, setCountryCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [recaptchaToken, setRecaptchaToken] = useState(""); // State for reCAPTCHA
-  const recaptchaRef = useRef<ReCAPTCHA | null>(null); // Reference for reCAPTCHA
+  // const [recaptchaToken, setRecaptchaToken] = useState(""); // State for reCAPTCHA
+  // const recaptchaRef = useRef<ReCAPTCHA | null>(null); // Reference for reCAPTCHA
 
   const SignUpMutation = useMutation({
     mutationFn: SignUpCall,
@@ -42,15 +42,14 @@ const SignUp = () => {
   };
 
   const SignUpHandler = async (values: FormikValues, resetForm: () => void) => {
-    if (!recaptchaToken) {
-      notification.error({
-        message: "Error",
-        description: "Please verify the reCAPTCHA.",
-      });
-      return;
-    }
+    // if (!recaptchaToken) {
+    //   notification.error({
+    //     message: "Error",
+    //     description: "Please verify the reCAPTCHA.",
+    //   });
+    //   return;
+    // }
 
-    setRecaptchaToken("djj");
     const payload: Partial<signUp> = {
       name: values?.name,
       country_code: countryCode, // Use the updated country code
@@ -79,9 +78,8 @@ const SignUp = () => {
           localStorage.setItem("savedPinSignUp", pin);
 
           resetForm(); // Reset the form on success
-          (recaptchaRef.current as unknown as { reset: () => void })?.reset();
+          // (recaptchaRef.current as unknown as { reset: () => void })?.reset();
 
-          // recaptchaRef.current?.reset(); // Reset reCAPTCHA
         },
       });
     } catch (error) {
@@ -110,9 +108,9 @@ const SignUp = () => {
       .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
-  const handleRecaptcha = (token: string | null) => {
-    setRecaptchaToken(token!);
-  };
+  // const handleRecaptcha = (token: string | null) => {
+  //   setRecaptchaToken(token!);
+  // };
 
   console.log(
     import.meta.env.VITE_RECAPTCHA_SITE_KEY,
@@ -222,12 +220,12 @@ const SignUp = () => {
                 />
                 <br />
 
-                <ReCAPTCHA
+                {/* <ReCAPTCHA
                   ref={recaptchaRef}
                   sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY } // Replace with your Site Key
                   // onChange={(token: string) => setRecaptchaToken(token || "")}
                   onChange={handleRecaptcha}
-                />
+                /> */}
 
                 <Button
                   disabled={SignUpMutation?.isPending}
