@@ -402,7 +402,6 @@ const NotClaim = () => {
                     )}
 
                     {businessDetailsData?.business_status !== "2" &&
-                      // user?.id === businessDetailsData?.user_id! &&
                       user?.claim_status?.toLowerCase() !== "successful" && (
                         <div className={styles.chatBtn}>
                           <Button

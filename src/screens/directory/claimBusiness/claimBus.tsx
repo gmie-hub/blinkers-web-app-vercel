@@ -318,8 +318,8 @@ const ClaimBusiness = () => {
                     <Image src={HeadIcon} alt="HeadIcon" preview={false} />
 
                     <div className={styles.open}>
-                      <p>Ogunsola Omorinsola</p>
-                      <p>ogunsolaomorinsola@gmail.com</p>
+                      <p>{user?.name}</p>
+                      <p>{user?.email}</p>
                     </div>
                   </div>
 

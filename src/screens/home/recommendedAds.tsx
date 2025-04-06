@@ -7,11 +7,14 @@ import { useQueries } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { getRecommededAds } from "../request";
 import CustomSpin from "../../customs/spin";
+import { useNavigate } from "react-router-dom";
+import { sanitizeUrlParam } from "../../utils";
 
 // Main component
 const RecommendedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4; // Number of items to display per page
+  const navigate = useNavigate();
 
   const [getRecommededAdsQuery] = useQueries({
     queries: [
@@ -59,6 +62,21 @@ const RecommendedAds = () => {
   // Handle dot click to jump to the respective page
   const handleDotClick = (page: number) => {
     setCurrentPage(page);
+  };
+
+
+  const handleNavigateToProductDetails = (
+    id: number,
+    user_id: number,
+    title: string,
+    description: string
+  ) => {
+    navigate(
+      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+        title
+      )}/${sanitizeUrlParam(description)}`
+    );
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -109,6 +127,7 @@ const RecommendedAds = () => {
                     alt={"recommendedimg"}
                     // className={styles.trendingProductImage}
                     className={styles.proImage}
+                   onClick={()=> handleNavigateToProductDetails(item?.id,item?.recommendable?.user_id,item?.recommendable?.title,item?.recommendable?.description)}
                   />
 
                   {/* <div className={styles.productList}>

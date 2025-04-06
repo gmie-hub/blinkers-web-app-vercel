@@ -204,7 +204,7 @@ console.log(route,'eroute')
 
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description:errorMessage(error) || "An error occurred",

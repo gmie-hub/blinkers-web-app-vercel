@@ -304,12 +304,13 @@ const SellerProfile = () => {
                   {/* </div> */}
 
                   <div className={styles.social}>
+                    { sellersDetailsData?.whatsapp_address &&
                     <Image
                       src={WhatsappLogo}
                       alt="WhatsappLogo"
                       preview={false}
                       style={{ cursor: "pointer" }}
-                    />
+                    />}{ sellersDetailsData?.instagram_address && 
                     <Image
                       src={InstagramIcon}
                       alt="InstagramIcon"
@@ -323,7 +324,8 @@ const SellerProfile = () => {
                           );
                         }
                       }}
-                    />
+                    />}{
+                      sellersDetailsData?.facebook_address &&
                     <Image
                       src={FaceBookStoreIcon}
                       alt="FaceBookStoreIcon"
@@ -339,19 +341,21 @@ const SellerProfile = () => {
                           );
                         }
                       }}
-                    />
+                    />}
+                    { sellersDetailsData?.website_address &&
                     <Image
                       src={BrowseLogo}
                       alt="BrowseLogo"
                       preview={false}
                       style={{ cursor: "pointer" }}
-                      // onClick={() => {
-                      //   if (sellersDetailsData?.website) {
-                      //     window.open(sellersDetailsData.website, "_blank");
-                      //   }
-                      // }}
-                    />
+                      onClick={() => {
+                        if (sellersDetailsData?.website_address) {
+                          window.open(sellersDetailsData.website_address, "_blank");
+                        }
+                      }}
+                    />}
                   </div>
+
                 </div>
               </div>
               <div className={styles.rightSection}>

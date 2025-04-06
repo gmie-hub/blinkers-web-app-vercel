@@ -33,7 +33,7 @@ const EducationModal: FC<ComponentProps> = ({
     institution: indexData?.institution || "",
     degree: indexData?.degree || "",
     field_of_study: indexData?.field_of_study || "",
-    Grade: indexData?.degree || "",
+    // Grade: indexData?.degree || "",
     start_date: convertDate(indexData?.start_date) || "",
     end_date: convertDate(indexData?.end_date) || "",
     studying:
@@ -46,7 +46,7 @@ const EducationModal: FC<ComponentProps> = ({
     institution: Yup.string().required("Institution name is required"),
     degree: Yup.string().required("Degree is required"),
     field_of_study: Yup.string().required("Field of study is required"),
-    Grade: Yup.string().required("Grade is required"),
+    // Grade: Yup.string().required("Grade is required"),
     start_date: Yup.date().required("Start date is required").nullable(),
     end_date: Yup.date().min(Yup.ref("start_date"), "End Date must be after Start Date"),
 
@@ -110,7 +110,7 @@ const EducationModal: FC<ComponentProps> = ({
                 type="text"
               />
 
-              <Input name="Grade" label="Grade" type="text" />
+              {/* <Input name="Grade" label="Grade" type="text" /> */}
 
               <Input
                 name="start_date"

@@ -155,7 +155,7 @@ const Header = () => {
       <div className={styles.rightNav}>
         {user?.email !== undefined && (
           <div className={styles.loggedInIcons}>
-            <img src={NotyIcon} alt="Notifications" className={styles.chatIcon} />
+            {/* <img src={NotyIcon} alt="Notifications" className={styles.chatIcon} /> */}
             <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
             <Dropdown overlay={profileMenu} trigger={["click"]}>
               <img src={ProfileIcon} alt="Profile" className={styles.profileIcon} style={{ cursor: "pointer" }} />

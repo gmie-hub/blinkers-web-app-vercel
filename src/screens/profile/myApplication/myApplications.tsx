@@ -27,7 +27,7 @@ const MyApplications = () => {
     queries: [
       {
         queryKey: ["get-all-jobs", currentPage,activeKey, user?.id],
-        queryFn: () => getMyApplications(currentPage, user?.id ?? 0,parseInt(activeKey!)),
+        queryFn: () => getMyApplications(currentPage, user?.applicantId ?? 0,parseInt(activeKey!)),
         retry: 0,
         refetchOnWindowFocus: false,
         enabled:!!user?.id

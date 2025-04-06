@@ -398,30 +398,37 @@ const BigScreen = ({
                       )}
                     </div>
                     <div className={styles.social}>
-                      <Image
-                        src={WhatsappLogo}
-                        alt="WhatsappLogo"
-                        preview={false}
-                        onClick={() => {
-                          if (businessDetailsData?.whatsapp) {
-                            window.open(businessDetailsData.whatsapp, "_blank");
-                          }
-                        }}
-                      />
-                      <Image
-                        src={InstagramIcon}
-                        alt="InstagramIcon"
-                        preview={false}
-                        onClick={() => {
-                          if (businessDetailsData?.instagram) {
-                            window.open(
-                              businessDetailsData.instagram,
-                              "_blank"
-                            );
-                          }
-                        }}
-                      />
-                      {businessDetailsData?.facebook !== null && (
+                      {businessDetailsData.whatsapp && (
+                        <Image
+                          src={WhatsappLogo}
+                          alt="WhatsappLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (businessDetailsData?.whatsapp) {
+                              window.open(
+                                businessDetailsData.whatsapp,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                      {businessDetailsData?.instagram && (
+                        <Image
+                          src={InstagramIcon}
+                          alt="InstagramIcon"
+                          preview={false}
+                          onClick={() => {
+                            if (businessDetailsData?.instagram) {
+                              window.open(
+                                businessDetailsData.instagram,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                      {businessDetailsData?.facebook && (
                         <Image
                           src={FaceBookStoreIcon}
                           alt="FaceBookStoreIcon"
@@ -438,16 +445,21 @@ const BigScreen = ({
                           }}
                         />
                       )}
-                      <Image
-                        src={BrowseLogo}
-                        alt="BrowseLogo"
-                        preview={false}
-                        onClick={() => {
-                          if (businessDetailsData?.website) {
-                            window.open(businessDetailsData.website, "_blank");
-                          }
-                        }}
-                      />
+                      {businessDetailsData?.website && (
+                        <Image
+                          src={BrowseLogo}
+                          alt="BrowseLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (businessDetailsData?.website) {
+                              window.open(
+                                businessDetailsData.website,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
                     </div>
                     <Button
                       icon={<img src={CallLogo} alt="success" />}
@@ -584,25 +596,37 @@ const BigScreen = ({
                       )}
                     </div>
                     <div className={styles.social}>
+                      {
                       <Image
                         src={WhatsappLogo}
                         alt="WhatsappLogo"
                         preview={false}
-                      />
-                      <Image
-                        src={InstagramIcon}
-                        alt="InstagramIcon"
-                        preview={false}
                         onClick={() => {
-                          if (profileDetailsData?.instagram_address) {
+                          if (profileDetailsData?.whatsapp_address) {
                             window.open(
-                              profileDetailsData?.instagram_address,
+                              profileDetailsData.whatsapp_address,
                               "_blank"
                             );
                           }
                         }}
                       />
-                      {profileDetailsData?.facebook_address !== null && (
+}
+                      {profileDetailsData?.instagram_address && (
+                        <Image
+                          src={InstagramIcon}
+                          alt="InstagramIcon"
+                          preview={false}
+                          onClick={() => {
+                            if (profileDetailsData?.instagram_address) {
+                              window.open(
+                                profileDetailsData?.instagram_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                      {profileDetailsData?.facebook_address && (
                         <Image
                           src={FaceBookStoreIcon}
                           alt="FaceBookStoreIcon"
@@ -619,6 +643,7 @@ const BigScreen = ({
                           }}
                         />
                       )}
+                      {  profileDetailsData?.website_address &&  
                       <Image
                         src={BrowseLogo}
                         alt="BrowseLogo"
@@ -626,12 +651,12 @@ const BigScreen = ({
                         onClick={() => {
                           if (profileDetailsData?.website_address) {
                             window.open(
-                              profileDetailsData.website_address,
+                              profileDetailsData?.website_address,
                               "_blank"
                             );
                           }
                         }}
-                      />
+                      />}
                     </div>
                     <Button
                       icon={<img src={CallLogo} alt="success" />}

@@ -33,12 +33,12 @@ export const getAllState = async () => {
 };
 export const getMyApplications = async (
   page: number,
-  user_id: number,
+  applicantId: number,
   status: number
 ) => {
   return (
     await api.get(
-      `jobs/application?page=${page}&user_id=${user_id}&status=${status}`
+      `jobs/application?page=${page}&applicant_id=${applicantId}&status=${status}`
     )
   )?.data as ApplicantResponse;
 };

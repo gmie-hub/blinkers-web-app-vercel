@@ -400,6 +400,7 @@ interface UserData {
   total_followers:number;
   total_ads:number;
   total_rating:number;
+  whatsapp_address:string;
 }
 
 interface UserDataResponse extends Response {

@@ -236,7 +236,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
 
   const sections = [
     {
-      title: "Employment History",
+      title: "Employment History (Optional)",
       key: "employment",
       description:
         "Add your qualifications to showcase your valuable work experiences.",
@@ -246,7 +246,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       modalTitle: "Add Employment History",
     },
     {
-      title: "Education",
+      title: "Education (Optional)",
       key: "education",
       description: "Add your academic qualifications.",
       onOpen: () => setOpenModals((prev) => ({ ...prev, education: true })),
@@ -255,7 +255,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       modalTitle: "Add Education",
     },
     {
-      title: "Cover Letter",
+      title: "Cover Letter (Optional)",
       key: "coverLetter",
       description:
         "Share your motivations, and what makes you the best candidate for the job.",
@@ -265,7 +265,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       modalTitle: "Upload Or Add Cover Letter",
     },
     {
-      title: "Skills",
+      title: "Skills (Optional)",
       key: "skills",
       description:
         "Highlight your skillset to demonstrate your capabilities and strengths in various areas.",
@@ -275,7 +275,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
       modalTitle: "Add Skills",
     },
     {
-      title: "Links",
+      title: "Links  (Optional)",
       key: "links",
       description: "Add your links, social media, portfolio, CV etc.",
       onOpen: () => setOpenModals((prev) => ({ ...prev, links: true })),
@@ -353,7 +353,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         `education[${index}][field_of_study]`,
         item?.field_of_study
       );
-      formData.append(`education[${index}][grade]`, item?.Grade);
+      // formData.append(`education[${index}][grade]`, item?.Grade);
       formData.append(`education[${index}][start_date]`, item?.start_date);
       if (item?.end_date) {
         formData.append(`education[${index}][end_date]`, item?.end_date);
@@ -462,7 +462,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         institution: item?.institution,
         degree: item?.degree,
         field_of_study: item?.field_of_study,
-        grade: item?.Grade,
+        // grade: item?.Grade,
         start_date: item?.start_date,
         // end_date: item?.end_date ,
         studying: item?.studying ? "1" : "0",
@@ -542,10 +542,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     );
   };
 
-  // Filtered Industries based on search term
-  // const filteredIndustries = industryData && industryData?.length > 0 && industryData?.filter((option: any) =>
-  //   option?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-  // );
 
   const filteredIndustries =
   industryData &&
