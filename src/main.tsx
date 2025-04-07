@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { Theme } from "./themes/themes.tsx";
 import { App as AntdApp } from 'antd';
+import { HelmetProvider } from 'react-helmet-async';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +26,11 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Theme>
           <AntdApp notification={{ placement: "top" }}>
+          <HelmetProvider>
+
             <App />
+            </HelmetProvider>
+
           </AntdApp>
         </Theme>
       </BrowserRouter>

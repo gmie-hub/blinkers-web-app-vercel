@@ -35,6 +35,7 @@ import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import { countUpTo } from "../../../../utils";
+import { Helmet } from "react-helmet-async";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -173,6 +174,12 @@ const BigScreen = ({
 
   return (
     <main>
+      <Helmet>
+        <title>{productDetailsData?.title}</title>
+        <meta property="og:title" content={productDetailsData?.title} />
+        <meta property="og:description" content={productDetailsData?.description} />
+        <meta property="og:image" content={productDetailsData?.add_images[0]?.image_url } />
+      </Helmet>
       <div className="wrapper">
         <div className={styles.container}>
           <div className={styles.leftSide}>
@@ -597,20 +604,20 @@ const BigScreen = ({
                     </div>
                     <div className={styles.social}>
                       {
-                      <Image
-                        src={WhatsappLogo}
-                        alt="WhatsappLogo"
-                        preview={false}
-                        onClick={() => {
-                          if (profileDetailsData?.whatsapp_address) {
-                            window.open(
-                              profileDetailsData.whatsapp_address,
-                              "_blank"
-                            );
-                          }
-                        }}
-                      />
-}
+                        <Image
+                          src={WhatsappLogo}
+                          alt="WhatsappLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (profileDetailsData?.whatsapp_address) {
+                              window.open(
+                                profileDetailsData.whatsapp_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      }
                       {profileDetailsData?.instagram_address && (
                         <Image
                           src={InstagramIcon}
@@ -643,20 +650,21 @@ const BigScreen = ({
                           }}
                         />
                       )}
-                      {  profileDetailsData?.website_address &&  
-                      <Image
-                        src={BrowseLogo}
-                        alt="BrowseLogo"
-                        preview={false}
-                        onClick={() => {
-                          if (profileDetailsData?.website_address) {
-                            window.open(
-                              profileDetailsData?.website_address,
-                              "_blank"
-                            );
-                          }
-                        }}
-                      />}
+                      {profileDetailsData?.website_address && (
+                        <Image
+                          src={BrowseLogo}
+                          alt="BrowseLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (profileDetailsData?.website_address) {
+                              window.open(
+                                profileDetailsData?.website_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
                     </div>
                     <Button
                       icon={<img src={CallLogo} alt="success" />}
