@@ -20,15 +20,15 @@ import { useMutation } from "@tanstack/react-query";
 import { errorMessage } from "../../utils/errorMessage";
 import { ForgotPasswordCall } from "./request";
 import { useState } from "react";
-import PhoneInput from "react-phone-input-2";
+import PhoneInput, { CountryData } from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-
 
 const ForgotPassword = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState("1");
-
+  const [countryCode, setCountryCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const handleNavigateToVerifyOtp = (email: string) => {
     navigate(`/reset-password-verification-code/${email}`);
   };
@@ -43,26 +43,28 @@ const ForgotPassword = () => {
     resetForm: () => void
   ) => {
     try {
-      await ForgotPasswordMutation.mutateAsync(values.email || values.phoneNumber, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
-          localStorage.setItem("savedPin", pin);
+      await ForgotPasswordMutation.mutateAsync(
+        values.email || values.phoneNumber,
+        {
+          onSuccess: (data) => {
+            notification.success({
+              message: "Success",
+              description: data?.message,
+            });
+            const pin =
+              data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
+            localStorage.setItem("savedPin", pin);
 
-          handleNavigateToVerifyOtp(values?.email || values?.phoneNumber);
-          resetForm();
-        },
-      });
+            handleNavigateToVerifyOtp(values?.email || values?.phoneNumber);
+            resetForm();
+          },
+        }
+      );
     } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",
       });
-
-      
     }
   };
 
@@ -92,8 +94,9 @@ const ForgotPassword = () => {
     },
   ];
 
-  const handleTabChange = (key: string) => {
+  const handleTabChange = (key: string, resetForm: () => void) => {
     setActiveKey(key);
+    resetForm();
   };
 
   return (
@@ -123,11 +126,11 @@ const ForgotPassword = () => {
           }}
           validationSchema={getValidationSchema(activeKey)}
         >
-          {({ handleSubmit }) => (
+          {({ handleSubmit, resetForm }) => (
             <Form className="fields" onSubmit={handleSubmit}>
               <Tabs
                 defaultActiveKey="1"
-                onChange={handleTabChange}
+                onChange={(key) => handleTabChange(key, resetForm)}
                 items={items}
               />
               {activeKey === "1" ? (
@@ -138,7 +141,7 @@ const ForgotPassword = () => {
                 />
               ) : (
                 <div>
-                  <Field name="phoneNumber">
+                  {/* <Field name="phoneNumber">
                     {({ field , form }:FieldProps) => (
                       <PhoneInput
                         country={"ng"} // Default country
@@ -153,8 +156,29 @@ const ForgotPassword = () => {
 
                       />
                     )}
-                  </Field>
+                  </Field> */}
+                  <Field
+                    name="phoneNumber"
+                    render={({ form }: FieldProps) => (
+                      <PhoneInput
+                        country={"ng"} // Default country
+                        value={`${countryCode}${phoneNumber}`} // Concatenate the country code and phone number
+                        onChange={(phone: string, country: CountryData) => {
+                          const dialCode = country.dialCode; // Extract the dialCode from the country object
+                          const number = phone.replace(dialCode, "").trim(); // Remove the dial code from the phone number
 
+                          setCountryCode(dialCode); // Update country code state
+                          setPhoneNumber(number); // Update phone number state
+                          form.setFieldValue("phoneNumber", number); // Update Formik state
+                          form.setFieldValue("country_code", dialCode); // Update Formik country_code field
+                        }}
+                        inputStyle={{ width: "100%" }}
+                        preferredCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        onlyCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        placeholder="Enter phone numer"
+                      />
+                    )}
+                  />
                   <ErrorMessage
                     name="phoneNumber"
                     component="div"
@@ -186,4 +210,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-

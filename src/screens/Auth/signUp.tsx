@@ -53,7 +53,7 @@ const SignUp = () => {
     const payload: Partial<signUp> = {
       name: values?.name,
       country_code: countryCode, // Use the updated country code
-      number: countryCode + values.phoneNumber,
+      number:  values.phoneNumber,
       address: values.address,
       address_lat: values.address,
       address_long: values?.address,

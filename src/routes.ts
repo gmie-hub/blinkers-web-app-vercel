@@ -14,6 +14,9 @@ export const routes = {
     ContactUs: "/contact-us",
     AboutUS: "/about-us",
     faq: "/faq",
+    notifications:"/notifications",
+    viewNotification:"/notifications/:id"
+
     // homeMarket: "/market/:search?",
   },
   job: {

@@ -98,6 +98,14 @@ export const getPromotedAds = async () => {
   return (await api.get(`/banners`))?.data ;
 };
 
+export const getUserNotifications = async (id?: number, hasRead?:number) => {
+  return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}}`))?.data ;
+};
+export const getUserNotificationById = async (userId?:number, id?: number,) => {
+  return (await api.get(`user-notifications?user_id=${userId}&id=${id}`))?.data ;
+};
+
+
 export const getAllBusiness = async (
   search: number | string,
   page?: number
@@ -157,6 +165,9 @@ export const getAllMarket = async (
 
 export const CreateJob = async (payload: Partial<JobDatum>) => {
   return (await api.post("jobs", payload, {}))?.data ;
+};
+export const ReadNotification = async (payload:{ids:number[]}) => {
+  return (await api.post("user-notifications/read", payload, {}))?.data ;
 };
 
 export const FollowBusiness = async (payload: Partial<FollowBusiness>) => {

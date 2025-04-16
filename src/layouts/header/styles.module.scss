@@ -182,3 +182,25 @@ a {
   height: 4rem;
   cursor: pointer;
 }
+
+.notificationWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.chatIcon {
+  width: 30px; /* or your preferred size */
+  height: 30px;
+}
+
+.notifyBadge {
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 8px;
+  padding: 1px 5px;
+  border-radius: 100%;
+  font-weight: bold;
+}

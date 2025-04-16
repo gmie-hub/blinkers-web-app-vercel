@@ -14,6 +14,8 @@ import { useAtom } from "jotai";
 import { logout } from "../../utils/logout";
 import { isCurrentDateGreaterThan } from "../../utils";
 import { jwtDecode } from "jwt-decode";
+import { getUserNotifications, ReadNotification } from "../../screens/request";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
@@ -21,8 +23,24 @@ const Header = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [user] = useAtom(userAtom);
+  const queryClient = useQueryClient();
 
   const token = user?.security_token;
+
+  const [getAllUserNotificationQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-all-notification"],
+        queryFn: () => getUserNotifications(user?.id, 0),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+    ],
+  });
+  
+  const notifyData = getAllUserNotificationQuery?.data?.data?.data;
+const  notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
+
 
   useEffect(() => {
     try {
@@ -76,6 +94,73 @@ const Header = () => {
     </Menu>
   );
 
+
+    const notificationMenu = (
+      <Menu style={{ maxHeight: 250, overflowY: "auto", width: 300 }}>
+        {notifyData && notifyData.length > 0 ? (
+          <>
+            {notifyData.slice(0, 5).map((noty: NotificationDatum, index: number) => (
+              <Menu.Item key={index} onClick={()=>{navigate(`/notifications/${noty?.id}`)
+              readNotificationHandler(noty?.id)
+            }}>{noty.title}</Menu.Item>
+            ))}
+            {notifyData.length > 0 && (
+              <Menu.Item key="footer" disabled style={{ cursor: "default", padding: "8px 12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 500 }}>
+                  <span>Total: {notifyTotal}</span>
+                  <span
+                    style={{ color: "#1890ff", cursor: "pointer" }}
+                    onClick={() => navigate(`/notifications`)}
+                  >
+                    View All
+                  </span>
+                </div>
+              </Menu.Item>
+            )}
+          </>
+        ) : (
+          <>
+          <Menu.Item disabled>No new notifications</Menu.Item>
+          <Menu.Item > <span
+          style={{ color: "#1890ff", cursor: "pointer" }}
+          onClick={() => navigate(`/notifications`)}
+        >
+          View  previous Notificatons
+        </span></Menu.Item>
+        </>
+        )}
+      </Menu>
+    );
+    
+
+    const readNotificationMutation = useMutation({
+      mutationFn: ReadNotification,
+      mutationKey: ["read-notification"],
+    });
+    const readNotificationHandler = async (id:number) => {
+      const payload = {
+        ids: [id],
+      };
+    
+      try {
+        await readNotificationMutation.mutateAsync(payload, {
+          onSuccess: () => {
+            console.log("Notification marked as read");
+            // Maybe refetch notifications or show a success message
+            queryClient.refetchQueries({
+              queryKey: ["get-all-notification"],
+            });
+          },
+          onError: (error) => {
+            console.error("Error reading notification", error);
+          },
+        });
+      } catch (error) {
+        console.error("Unexpected error", error);
+      }
+    };
+    
+
   return (
     <nav className={styles.container}>
       <Image src={BlinkersLogo} className={styles.logo} preview={false} />
@@ -86,13 +171,17 @@ const Header = () => {
       </button>
 
       {/* Navigation Links */}
-      <div className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}>
+      <div
+        className={`${styles.middleNav} ${isMenuOpen ? styles.showMenu : ""}`}
+      >
         <NavLink
           onClick={() => {
             setIsMenuOpen(false);
           }}
           to=""
-          className={({ isActive }) => (isActive ? styles.activeNavLink : styles.navLink)}
+          className={({ isActive }) =>
+            isActive ? styles.activeNavLink : styles.navLink
+          }
         >
           Home
         </NavLink>
@@ -114,7 +203,9 @@ const Header = () => {
             }}
             key={item.id}
             to={item.route}
-            className={({ isActive }) => (isActive ? styles.activeNavLink : styles.navLink)}
+            className={({ isActive }) =>
+              isActive ? styles.activeNavLink : styles.navLink
+            }
           >
             {item.name}
           </NavLink>
@@ -124,10 +215,24 @@ const Header = () => {
         {user?.email !== undefined && isMenuOpen && (
           <>
             <div className={styles.loggedInIcons}>
-              <img src={NotyIcon} alt="Notifications" className={styles.chatIcon} />
+            <Dropdown overlay={notificationMenu} trigger={["click"]}>
+                <div className={styles.notificationWrapper} style={{ cursor: "pointer" }}>
+                  <img
+                    src={NotyIcon}
+                    alt="Notifications"
+                    className={styles.chatIcon}
+                  />
+                  {notifyTotal > 0 &&<span className={styles.notifyBadge}>{notifyTotal > 10 ? '9+' : notifyTotal }</span>}
+                  </div>
+              </Dropdown>
               <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
               <Dropdown overlay={profileMenu} trigger={["click"]}>
-                <img src={ProfileIcon} alt="Profile" className={styles.profileIcon} style={{ cursor: "pointer" }} />
+                <img
+                  src={ProfileIcon}
+                  alt="Profile"
+                  className={styles.profileIcon}
+                  style={{ cursor: "pointer" }}
+                />
               </Dropdown>
             </div>
             <div className={styles.mobileButtonWrapper}>
@@ -155,12 +260,46 @@ const Header = () => {
       <div className={styles.rightNav}>
         {user?.email !== undefined && (
           <div className={styles.loggedInIcons}>
-            {/* <img src={NotyIcon} alt="Notifications" className={styles.chatIcon} /> */}
+         {/* <Dropdown overlay={notificationMenu} trigger={["click"]}>
+                <div className={styles.notificationWrapper} style={{ cursor: "pointer" }}>
+                  <img
+                    src={NotyIcon}
+                    alt="Notifications"
+                    className={styles.chatIcon}
+                  />
+                  <span className={styles.notifyBadge}>{notifyTotal}</span>
+                </div>
+              </Dropdown> */}
+            <div className={styles.notificationWrapper}>
+            <Dropdown overlay={notificationMenu} trigger={["click"]}>
+                <div className={styles.notificationWrapper} style={{ cursor: "pointer" }}>
+                  <img
+                    src={NotyIcon}
+                    alt="Notifications"
+                    className={styles.chatIcon}
+                  />
+                  {notifyTotal > 0 &&<span className={styles.notifyBadge}>{notifyTotal > 10 ? '9+' : notifyTotal }</span>}
+                </div>
+              </Dropdown>
+              {/* <img
+                src={NotyIcon}
+                alt="Notifications"
+                className={styles.chatIcon}
+              /> */}
+            </div>
             <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
             <Dropdown overlay={profileMenu} trigger={["click"]}>
-              <img src={ProfileIcon} alt="Profile" className={styles.profileIcon} style={{ cursor: "pointer" }} />
+              <img
+                src={ProfileIcon}
+                alt="Profile"
+                className={styles.profileIcon}
+                style={{ cursor: "pointer" }}
+              />
             </Dropdown>
-            <Button onClick={handleNavigateToSell} className={`${styles.btn} ${styles.sellButton}`}>
+            <Button
+              onClick={handleNavigateToSell}
+              className={`${styles.btn} ${styles.sellButton}`}
+            >
               Sell
             </Button>
           </div>
@@ -187,6 +326,8 @@ const Header = () => {
       >
         <CategoriesCard handleClose={() => setIsCardVisible(false)} />
       </Modal>
+
+      
     </nav>
   );
 };

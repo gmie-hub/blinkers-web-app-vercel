@@ -1,4 +1,4 @@
-import {  Form, Formik, FormikValues } from "formik";
+import { Form, Formik, FormikValues } from "formik";
 import styles from "./styles.module.scss";
 import { FC, useEffect, useState } from "react";
 import Input from "../../../../../customs/input/input";
@@ -25,8 +25,10 @@ import {
 import { useAtom } from "jotai";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
+  getAllState,
   getApplicantsbyId,
   getIndustries,
+  getLGAbyStateId,
   ProfInfoApi,
 } from "../../../../request";
 import {
@@ -43,6 +45,7 @@ import CustomSpin from "../../../../../customs/spin";
 import api from "../../../../../utils/apiClient";
 // import { Dropdown, Space } from "antd";
 import { errorMessage } from "../../../../../utils/errorMessage";
+import SearchableSelect from "../../../../../customs/searchableSelect/searchableSelect";
 
 interface Payload {
   skills?: SkillsData[];
@@ -84,7 +87,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   // const [emp, setEmp] = useState([] as EmploymentHistory[]);
 
   const [uploadedCoverLetter, setUploadedCoverLetter] = useState(null);
-
 
   // A function to handle the uploaded file
   const handleCoverLetterUpload = (file: any) => {
@@ -158,7 +160,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     setOpenModals((prev) => ({ ...prev, [sectionKey]: false }));
   };
 
-  const [getApplicantQuery, getAllIndustriesQuery] = useQueries({
+  const [getApplicantQuery, getAllIndustriesQuery, getStateQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-applicant"],
@@ -168,29 +170,45 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
         enabled: !!user?.id,
       },
       {
-        queryKey: ["get-all-industries",searchTerm],
+        queryKey: ["get-all-industries", searchTerm],
         queryFn: () => getIndustries(searchTerm),
         retry: 0,
         refetchOnWindowFocus: false,
       },
+      {
+        queryKey: ["get-all-state"],
+        queryFn: getAllState,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
     ],
   });
-
+  const stateData = getStateQuery?.data?.data?.data ?? [];
   const industryData = getAllIndustriesQuery?.data?.data?.data || [];
+
+  const stateOptions: { value: string; label: string }[] = [
+    { value: "", label: "Select State" }, // Default option
+    ...(Array.isArray(stateData) && stateData.length > 0
+      ? stateData.map((item: StateDatum) => ({
+          value: item?.state_name ?? 0, // Fallback to 0 if undefined
+          label: item?.state_name ?? "Unknown State", // Fallback to a default label
+        }))
+      : []),
+  ];
 
   const applicantDetailsData = getApplicantQuery?.data?.data?.applicant;
   const applicantDetailsError = getApplicantQuery?.error as AxiosError;
   const applicantDetailsErrorMessage =
     applicantDetailsError?.message ||
     "An error occurred. Please try again later.";
-    const initialSelectedIndustries = applicantDetailsData?.industries?.map((industry: any) => 
+  const initialSelectedIndustries =
+    applicantDetailsData?.industries?.map((industry: any) =>
       industry.id.toString()
     ) || [];
 
-    useEffect(()=>{
-      setSelectedIndustries(initialSelectedIndustries)
-
-    },[applicantDetailsData] )
+  useEffect(() => {
+    setSelectedIndustries(initialSelectedIndustries);
+  }, [applicantDetailsData]);
 
   useEffect(() => {
     // if (
@@ -311,6 +329,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     }
 
     formData.append("specialization", values?.specialization);
+    formData.append("preferred_location", values?.preferred_location);
 
     empHistoryInfoData?.forEach((item: EmploymentHistory, index: number) => {
       formData.append(
@@ -394,20 +413,17 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
             is_applicant: true,
             applicantId: data?.data?.id,
           }));
-          console.log(data?.id, ' registr as an applicnat');
+          console.log(data?.id, " registr as an applicnat");
         },
       });
       setSelectedIndustries([]);
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description:
           errorMessage(error) ||
           "An error occurred while submitting your information.",
       });
-
-      console.log('jumm')
-
     }
   };
 
@@ -427,9 +443,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const updateInfoHandler = async (values: FormikValues, data: Payload) => {
     // Create a plain object to store the data
 
-
     const payload: Record<string, any> = {
       specialization: values?.specialization,
+      preferred_location: values?.preferred_location,
       industry_ids: [],
       employment_history: [],
       education: [],
@@ -511,8 +527,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           queryClient.refetchQueries({
             queryKey: ["get-applicant"],
           });
-          
-          
         },
       });
       setSelectedIndustries([]);
@@ -532,8 +546,9 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
   const validationSchema = Yup.object().shape({
     cv: Yup.mixed().required("CV is required"),
     specialization: Yup.string().required("required"),
-      
+    preferred_location: Yup.string().required("required"),
   });
+
   const handleCheckboxChange = (id: string, checked: boolean) => {
     setSelectedIndustries((prev) =>
       checked
@@ -542,15 +557,14 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
     );
   };
 
-
   const filteredIndustries =
-  industryData &&
-  industryData?.length > 0 &&
-  industryData
-    ?.filter((option: any) =>
-      option?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-    )
-    ?.sort((a: any, b: any) => a?.name?.localeCompare(b?.name));
+    industryData &&
+    industryData?.length > 0 &&
+    industryData
+      ?.filter((option: any) =>
+        option?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+      )
+      ?.sort((a: any, b: any) => a?.name?.localeCompare(b?.name));
 
   return (
     <section>
@@ -563,7 +577,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           initialValues={{
             cv: applicantDetailsData?.cv_url || "",
             specialization: applicantDetailsData?.specialization || "",
-
+            preferred_location: applicantDetailsData?.preferred_location || "",
           }}
           enableReinitialize={true}
           onSubmit={(values, { resetForm }) => {
@@ -573,7 +587,7 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
           }}
           validationSchema={validationSchema}
         >
-          {({ setFieldValue ,touched,errors}) => (
+          {({ setFieldValue, touched, errors }) => (
             <Form>
               <div className={styles.inputContainer}>
                 <Input
@@ -604,7 +618,6 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                             setSearchTerm(e.target.value);
                             console.log("Search Term:", e.target.value); // Logs the current value
                           }}
-                        
                         />
                       </div>
                       <div style={{ maxHeight: "200px", overflowY: "auto" }}>
@@ -612,30 +625,39 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                       </div>
                     </div>
                   )}
-                  showSearch={false}  
+                  showSearch={false}
                 >
-                  
-                  {filteredIndustries && filteredIndustries?.length > 0  && filteredIndustries?.map((option: any) => (
-                    <Select.Option
-                      key={option?.id?.toString()}
-                      value={option?.id?.toString()}
-                    >
-                      <Checkbox
-                        checked={selectedIndustries?.includes(
-                          option?.id?.toString()
-                        )}
-                        onChange={(e) =>
-                          handleCheckboxChange(
-                            option?.id?.toString(),
-                            e.target.checked
-                          )
-                        }
+                  {filteredIndustries &&
+                    filteredIndustries?.length > 0 &&
+                    filteredIndustries?.map((option: any) => (
+                      <Select.Option
+                        key={option?.id?.toString()}
+                        value={option?.id?.toString()}
                       >
-                        {option?.name}
-                      </Checkbox>
-                    </Select.Option>
-                  ))}
+                        <Checkbox
+                          checked={selectedIndustries?.includes(
+                            option?.id?.toString()
+                          )}
+                          onChange={(e) =>
+                            handleCheckboxChange(
+                              option?.id?.toString(),
+                              e.target.checked
+                            )
+                          }
+                        >
+                          {option?.name}
+                        </Checkbox>
+                      </Select.Option>
+                    ))}
                 </Select>
+
+                <SearchableSelect
+                  name="preferred_location"
+                  label="Location"
+                  options={stateOptions}
+                  placeholder="Select State"
+                />
+
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <img src={Folder} alt="Folder" />
                   <p className="label">Upload CV</p>
@@ -673,11 +695,11 @@ const ProfInfoForm: FC<{ onPrev: () => void }> = ({ onPrev }) => {
                     onChange={(e) => handleFileChange(e, setFieldValue)}
                   />
                 )}
-                    {/* <ErrorMessage name="cv" component="div" className="error" /> */}
+                {/* <ErrorMessage name="cv" component="div" className="error" /> */}
 
-                    {errors.cv && touched.cv && (
-                      <div  className='error'>{'Please Upload Cv'}</div>
-                    )}
+                {errors.cv && touched.cv && (
+                  <div className="error">{"Please Upload Cv"}</div>
+                )}
                 {uploadMode === false && (
                   <Button
                     variant="white"

@@ -401,6 +401,7 @@ interface UserData {
   total_ads:number;
   total_rating:number;
   whatsapp_address:string;
+  preferred_location:string;
 }
 
 interface UserDataResponse extends Response {
@@ -615,4 +616,27 @@ interface ChangePassword {
 interface ReplyReviewPayload {
   status?: string;
   owner_comment?: string;
+}
+
+interface NotificationDatum {
+  channel: string;
+created_at: string;
+description: string;
+id: number;
+status: string;
+title: string;
+type: string;
+updated_at: string;
+group:string[];
+user_ids?: number[];
+is_read?:number;
+}
+interface NotificationData{
+  data:NotificationDatum[]
+}
+
+
+interface NotificationResponse extends Response {
+  data: NotificationData;
+  total:number
 }

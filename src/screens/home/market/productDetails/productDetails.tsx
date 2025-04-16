@@ -109,7 +109,7 @@ const BigScreen = ({
   const handleTabChange = (key: string) => {
     setActiveKey(key);
   };
-  console.log(businessDetailsData?.id, "businessDetailsData?.id ");
+  console.log(productDetailsData?.add_images[0]?.image_url, "jum?.id ");
 
   const handleNavigateToSellersProfile = () => {
     if (businessDetailsData && businessDetailsData?.id !== undefined) {
@@ -603,7 +603,7 @@ const BigScreen = ({
                       )}
                     </div>
                     <div className={styles.social}>
-                      {
+                      { profileDetailsData?.whatsapp_address &&
                         <Image
                           src={WhatsappLogo}
                           alt="WhatsappLogo"

@@ -27,6 +27,8 @@ const Jobs = () => {
     setSearchTerm(e.target.value); // Update the search query state
   };
 
+  console.log(   ( user?.claim_status !== 'successful' ), 'user &&   ( user?.claim_status !==')
+
   const handleSearch = () => {
     setAppliedSearchTerm(searchTerm);
     console.log("Search Term Sent:", searchTerm);
@@ -83,23 +85,17 @@ const Jobs = () => {
         duration: 4, // Auto close after 5 seconds
         icon: null,
       });
-    } else if (
-      user?.claim_status === null ||
-      user?.claim_status?.toString() === "2" ||
-      user?.claim_status?.toLowerCase() === "rejected" ||
+    } 
+     if (
+      // user?.claim_status === null ||
+      // user?.claim_status?.toString() === "2" ||
+      // user?.claim_status?.toLowerCase() === "rejected" ||
+      user?.claim_status !== 'successful' &&
       user?.role === "3"
     ) {
       setOpenAddBusiness(true);
-    } else if (
-      user?.claim_status?.toLowerCase() === "pending" &&
-      user?.role !== "2"
-    ) {
-      notification.error({
-        message: "Error",
-        description:
-          "You are not allowed to post a job. Your business is still pending verification.  ",
-      });
-    } else {
+    } 
+    if( user?.claim_status === 'successful' || user?.role === "2"){
       navigate(routes.job.postJob);
     }
 

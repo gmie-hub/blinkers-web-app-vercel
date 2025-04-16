@@ -14,6 +14,7 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import {
   CreateJob,
   employmentTypeData,
+  getAllState,
   getIndustries,
   getJobDetails,
   jobTypeData,
@@ -41,32 +42,39 @@ export default function PostJobs() {
     navigate(-1);
   };
 
-  
-
-  const [getJobDetailsQuery,getAllIndustriesQuery] = useQueries({
-    queries: [
-      {
-        queryKey: ["get-jobs-details"],
-        queryFn: () => getJobDetails(parseInt(id!)),
-        retry: 0,
-        refetchOnWindowFocus: false,
-        enabled: !!id,
-      },
-      {
-        queryKey: ['get-all-industries'],
-        queryFn: () => getIndustries(),
-        retry: 0,
-        refetchOnWindowFocus: false,
-      },
-    ],
-  });
+  const [getJobDetailsQuery, getAllIndustriesQuery, getStateQuery] = useQueries(
+    {
+      queries: [
+        {
+          queryKey: ["get-jobs-details"],
+          queryFn: () => getJobDetails(parseInt(id!)),
+          retry: 0,
+          refetchOnWindowFocus: false,
+          enabled: !!id,
+        },
+        {
+          queryKey: ["get-all-industries"],
+          queryFn: () => getIndustries(),
+          retry: 0,
+          refetchOnWindowFocus: false,
+        },
+        {
+          queryKey: ["get-all-state"],
+          queryFn: getAllState,
+          retry: 0,
+          refetchOnWindowFocus: true,
+        },
+      ],
+    }
+  );
 
   const JobDetailsData = getJobDetailsQuery?.data?.data;
+  const stateData = getStateQuery?.data?.data?.data ?? [];
 
   const industryData = getAllIndustriesQuery?.data?.data?.data || [];
 
   const allIndustriesOptions: { value: string; label: string }[] = [
-    { value: 0, label: 'Select Industry' },
+    { value: 0, label: "Select Industry" },
     ...(industryData?.length > 0
       ? industryData?.map((item: IndustriesDatum) => ({
           value: item?.id?.toString(),
@@ -74,7 +82,15 @@ export default function PostJobs() {
         }))
       : []),
   ];
-
+  const stateOptions: { value: string; label: string }[] = [
+    { value: "", label: "Select State" }, // Default option
+    ...(Array.isArray(stateData) && stateData.length > 0
+      ? stateData.map((item: StateDatum) => ({
+          value: item?.state_name ?? 0, // Fallback to 0 if undefined
+          label: item?.state_name ?? "Unknown State", // Fallback to a default label
+        }))
+      : []),
+  ];
 
   const createJobMutation = useMutation({
     mutationFn: CreateJob,
@@ -123,7 +139,7 @@ export default function PostJobs() {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description: errorMessage(error) ||"An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
     }
   };
@@ -184,9 +200,7 @@ export default function PostJobs() {
     mutationFn: UpdateJob,
     mutationKey: ["edit-jobs"],
   });
-  const EditJobHandler = async (
-    values: FormikValues,
-  ) => {
+  const EditJobHandler = async (values: FormikValues) => {
     const payload: Partial<JobDatum> = {
       id: parseInt(id!) ?? 0,
       title: values?.title,
@@ -217,10 +231,10 @@ export default function PostJobs() {
           // navigate(routes?.jobs?.jobs);
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
-        description:errorMessage(error) || "An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
     }
   };
@@ -242,7 +256,6 @@ export default function PostJobs() {
         </div>
         <section>
           <Formik
-           
             initialValues={{
               business_id: JobDetailsData?.business_id,
               title: JobDetailsData?.title || "",
@@ -262,9 +275,7 @@ export default function PostJobs() {
                 JobDetailsData?.status?.toString() === "1" ? true : false, // <-- Ensures boolean value
             }}
             onSubmit={(values, { resetForm }) => {
-              id
-                ? EditJobHandler(values)
-                : CreateJobHandler(values, resetForm);
+              id ? EditJobHandler(values) : CreateJobHandler(values, resetForm);
             }}
             enableReinitialize={true}
             validationSchema={validationSchema}
@@ -282,13 +293,11 @@ export default function PostJobs() {
                       onChange={handleChange}
                     />
 
-                    <Input
+                    <SearchableSelect
                       name="location"
                       label="Location"
-                      placeholder="Lagos. Nigeria"
-                      type="text"
-                      //   value={values.location}
-                      onChange={handleChange}
+                      options={stateOptions}
+                      placeholder="Select State"
                     />
 
                     <SearchableSelect
@@ -353,7 +362,7 @@ export default function PostJobs() {
                       onChange={handleChange}
                     />
 
-                    <Editor
+                    {/* <Editor
                       name="description"
                       label="Job Description"
                       initialData={values.description}
@@ -361,9 +370,16 @@ export default function PostJobs() {
                         const data = editor.getData();
                         setFieldValue("description", data);
                       }}
+                    /> */}
+                    <Input
+                      name="description"
+                      type="textarea"
+                      label="Job Description"
+                      placeholder="Job Description"
+                      className={styles.inputText}
                     />
 
-                    <Editor
+                    {/* <Editor
                       name="responsibilities"
                       label="Key Responsibilities"
                       initialData={values?.responsibilities}
@@ -371,9 +387,16 @@ export default function PostJobs() {
                         const data = editor.getData();
                         setFieldValue("responsibilities", data);
                       }}
+                    /> */}
+                    <Input
+                      name="responsibilities"
+                      type="textarea"
+                      label="Key Responsibilities"
+                      placeholder="Key Responsibilities"
+                      className={styles.inputText}
                     />
 
-                    <Editor
+                    {/* <Editor
                       name="qualifications"
                       label="Qualifications"
                       initialData={values?.qualifications}
@@ -381,9 +404,16 @@ export default function PostJobs() {
                         const data = editor?.getData();
                         setFieldValue("qualifications", data);
                       }}
+                    /> */}
+                    <Input
+                      name="qualifications"
+                      type="textarea"
+                      label="Qualifications"
+                      placeholder="Qualifications"
+                      className={styles.inputText}
                     />
 
-                    <Editor
+                    {/* <Editor
                       name="benefits"
                       label="Benefits"
                       initialData={values.benefits}
@@ -391,6 +421,13 @@ export default function PostJobs() {
                         const data = editor.getData();
                         setFieldValue("benefits", data);
                       }}
+                    /> */}
+                    <Input
+                      name="benefits"
+                      type="textarea"
+                      label="Benefits"
+                      placeholder="Benefits"
+                      className={styles.inputText}
                     />
 
                     <div className="switchWrapper">
@@ -421,7 +458,6 @@ export default function PostJobs() {
                         }
                         // text={id ? "Save Changes" : "Post Job"}
                         className={styles.btn}
-
                         text={
                           id
                             ? editJobMutation?.isPending

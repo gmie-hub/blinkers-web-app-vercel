@@ -50,6 +50,8 @@ import EditAds from "./screens/profile/myAds/editAd";
 import MyAds from "./screens/profile/myAds/myAds";
 import MyApplicantsDetails from "./screens/profile/myApplication/myApplicationDetails";
 import SellerVerification from "./screens/Auth/sellerVerificationModal";
+import Notification from "./screens/notification";
+import ViewNotification from "./screens/notification/viewNotification";
 
 
 function App() {
@@ -71,6 +73,9 @@ function App() {
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },
+    { path: routes.page.notifications, element: <Notification /> },
+    { path: routes.page.viewNotification, element: <ViewNotification /> },
+
     { path: routes.directory.directory, element: <Directory /> },
     { path: routes.directory.homeDirectory, element: <Directory /> },
 

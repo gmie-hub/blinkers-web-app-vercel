@@ -3,7 +3,7 @@ import styles from "./card.module.scss";
 import { useQueries } from "@tanstack/react-query";
 import { getAllJobs } from "../../request";
 import { AxiosError } from "axios";
-import { Pagination } from "antd";
+import { Pagination, Image } from "antd";
 import { getTimeAgo } from "../../../utils/formatTime";
 import FaArrowLeft from "../../../assets/backArrow.svg";
 import Button from "../../../customs/button/button";
@@ -11,6 +11,7 @@ import CustomSpin from "../../../customs/spin";
 import usePagination from "../../../hooks/usePagnation";
 import { useEffect } from "react";
 import { sanitizeUrlParam } from "../../../utils";
+import LocationIcon from "../../../assets/locationrelated.svg";
 
 interface Props {
   searchTerm: string;
@@ -19,16 +20,23 @@ interface Props {
 
 const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
   const navigate = useNavigate();
-  const { currentPage, setCurrentPage, onChange ,pageNum} = usePagination();
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   useEffect(() => {
     if (currentPage !== pageNum) {
       setCurrentPage(pageNum);
     }
-  }, [pageNum, currentPage, setCurrentPage])
-  
-  
-  const handleNavigateDetails = (id: number,title:string, description:string) => {
-    navigate(`/job-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
+  }, [pageNum, currentPage, setCurrentPage]);
+
+  const handleNavigateDetails = (
+    id: number,
+    title: string,
+    description: string
+  ) => {
+    navigate(
+      `/job-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(
+        description
+      )}`
+    );
     window.scrollTo(0, 0);
   };
 
@@ -82,7 +90,13 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
             {JobData && JobData?.length > 0 ? (
               JobData?.map((item) => (
                 <div
-                  onClick={() => handleNavigateDetails(item?.id, item?.title, item?.description)}
+                  onClick={() =>
+                    handleNavigateDetails(
+                      item?.id,
+                      item?.title,
+                      item?.description
+                    )
+                  }
                   className={styles.chooseCard}
                   key={item.id}
                 >
@@ -123,6 +137,12 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                     </span>
                   </div>
                   <p>{getTimeAgo(item?.created_at || "")}</p>
+                  {item?.location && (
+                    <div style={{ display: "flex" }}>
+                      <Image width={20} src={LocationIcon} alt="LocationIcon" />
+                      <p>{item?.location}</p>
+                    </div>
+                  )}
                 </div>
               ))
             ) : (

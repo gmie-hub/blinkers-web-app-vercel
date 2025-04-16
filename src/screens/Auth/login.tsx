@@ -23,7 +23,7 @@ import { useAtom, } from "jotai";
 import { errorMessage } from "../../utils/errorMessage";
 import {  useState } from "react";
 import "react-phone-input-2/lib/style.css";
-import PhoneInput from "react-phone-input-2";
+import PhoneInput, { CountryData } from "react-phone-input-2";
 import { logout } from "../../utils/logout";
 
 const Login = () => {
@@ -31,7 +31,8 @@ const Login = () => {
   const { notification } = App.useApp();
   const [, setUser] = useAtom(userAtom);
   const [activeKey, setActiveKey] = useState("1");
-
+  const [countryCode, setCountryCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   // const [formData, setFormData] = useState({
   //   email: "",
   //   phoneNumber: "",
@@ -151,8 +152,11 @@ const Login = () => {
     },
   ];
 
-  const handleTabChange = (key: string) => {
+  const handleTabChange = (key: string,resetForm: () => void) => {
     setActiveKey(key);
+    resetForm()
+    
+  
   };
 
   return (
@@ -188,7 +192,7 @@ const Login = () => {
           }}
           validationSchema={getValidationSchema(activeKey)}
         >
-          {() => {
+          {({resetForm} ) => {
             // useEffect(() => {
             //   setFormData({
             //     ...formData,
@@ -201,7 +205,8 @@ const Login = () => {
               <Form className="fields">
                 <Tabs
                   defaultActiveKey="1"
-                  onChange={handleTabChange}
+                  // onChange={handleTabChange}
+                  onChange={(key) => handleTabChange(key, resetForm)}
                   items={items}
                 />
                 {activeKey === "1" ? (
@@ -212,7 +217,7 @@ const Login = () => {
                   />
                 ) : (
                   <div>
-                    <Field name="phoneNumber">
+                    {/* <Field name="phoneNumber">
                       {({ field, form }: FieldProps) => (
                         <PhoneInput
                           country={"ng"} // Default country
@@ -226,7 +231,29 @@ const Login = () => {
                           placeholder="Enter phone numer"
                         />
                       )}
-                    </Field>
+                    </Field> */}
+                    <Field
+                    name="phoneNumber"
+                    render={({ form }: FieldProps) => (
+                      <PhoneInput
+                        country={"ng"} // Default country
+                        value={`${countryCode}${phoneNumber}`} // Concatenate the country code and phone number
+                        onChange={(phone: string, country: CountryData) => {
+                          const dialCode = country.dialCode; // Extract the dialCode from the country object
+                          const number = phone.replace(dialCode, "").trim(); // Remove the dial code from the phone number
+
+                          setCountryCode(dialCode); // Update country code state
+                          setPhoneNumber(number); // Update phone number state
+                          form.setFieldValue("phoneNumber", number); // Update Formik state
+                          form.setFieldValue("country_code", dialCode); // Update Formik country_code field
+                        }}
+                        inputStyle={{ width: "100%" }}
+                        preferredCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        onlyCountries={["ng", "gb", "gh", "cm", "lr"]}
+                        placeholder="Enter phone numer"
+                      />
+                    )}
+                  />
                     <ErrorMessage
                       name="phoneNumber"
                       component="div"
