@@ -21,7 +21,6 @@ import {
   LevelData,
   UpdateJob,
 } from "../../request";
-import Editor from "../../../customs/editor/editor";
 import RouteIndicator from "../../../customs/routeIndicator";
 import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";

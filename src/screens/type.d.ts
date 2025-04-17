@@ -335,6 +335,7 @@ interface Applicant {
   skills;
   user?: UserLogin;
   industries?:IndustriesData
+  preferred_location:string;
 }
 
 // interface Education {

@@ -28,7 +28,6 @@ import {
   getAllState,
   getApplicantsbyId,
   getIndustries,
-  getLGAbyStateId,
   ProfInfoApi,
 } from "../../../../request";
 import {
