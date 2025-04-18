@@ -1,13 +1,33 @@
 import { useState } from "react";
 import Icon from "/Container.svg";
 import styles from "./faq.module.scss";
+import { useCms } from "../profile/myApplication/getCms";
+import DOMPurify from "dompurify";
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
+  const { data } = useCms();
 
   const toggleFAQ = (uniqueKey: string | null) => {
     setActiveIndex((prevKey) => (prevKey === uniqueKey ? null : uniqueKey));
   };
+
+  const howToBuy = data?.data?.data[2]?.description;
+  const howToSell = data?.data?.data[3]?.description;
+
+  const Description = ({ description }: { description: string }) => {
+    // Sanitize the HTML to prevent XSS attacks
+    const sanitizedDescription = DOMPurify.sanitize(description);
+
+    return (
+      <div
+        style={{ paddingInlineStart: "1rem" }}
+        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+      />
+    );
+  };
+
+
 
   // General Questions
   const faqData = [
@@ -20,6 +40,16 @@ const FAQ = () => {
       question: "Is Blinkers free to use?",
       answer:
         "Yes, Blinkers offers a free plan that allows you to post one ad with up to 5 images. However, there are also paid subscription plans with more features.",
+    },
+    {
+      question: "How To Buy",
+      answer:
+      <Description description={howToBuy || ""} />
+    },
+    {
+      question: "How To Sell",
+      answer:
+      <Description description={howToSell || ""} />
     },
   ];
 
