@@ -7,6 +7,7 @@ import AppStore from "../../assets/apstore.svg";
 import GooglePlay from "../../assets/googleplay.svg";
 import Iphone from "../../assets/Iphone.svg";
 import { useNavigate } from "react-router-dom";
+import { routes } from "../../routes";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -104,16 +105,16 @@ const Footer = () => {
             >
               Contact Us
             </p>
-            <p>How to Buy</p>
-            <p>How to Sell</p>
+            <p  onClick={()=>{navigate(routes.page.howToBuy) ; window.scroll(0, 0)} }>How to Buy</p>
+            <p  onClick={()=>{navigate(routes.page.howToSell) ; window.scroll(0, 0)} }>How to Sell</p>
           </div>
         </div>
         <div className={styles.section2Item}>
           <div className={styles.list}>
             <h3 className={styles.title}>Quick Links</h3>
             <p>Privacy Policy</p>
-            <p>Terms and Conditions</p>
-            <p>Safety Tips</p>
+            <p onClick={()=>{navigate(routes.page.terms) ; window.scroll(0, 0)} }>Terms and Conditions</p>
+            <p  onClick={()=>{navigate(routes.page.safetyTips) ; window.scroll(0, 0)} }>Safety Tips</p>
             <p
               onClick={() => {
                 navigate("/faq");

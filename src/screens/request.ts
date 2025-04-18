@@ -310,6 +310,9 @@ export const getApplicantsbyId = async (id: number) => {
   return (await api.get(`/users/profile?user_id=${id}`))
     ?.data as UserDataResponse;
 };
+export const getAllCms = async () => {
+  return (await api.get(`cms`))?.data as CmsResponse ;
+};
 
 export const getBusinessById = async (id: number) => {
   return (await api.get(`/businesses/${id}`))?.data as BusinessDetailsResponse;

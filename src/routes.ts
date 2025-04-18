@@ -15,7 +15,11 @@ export const routes = {
     AboutUS: "/about-us",
     faq: "/faq",
     notifications:"/notifications",
-    viewNotification:"/notifications/:id"
+    viewNotification:"/notifications/:id",
+    terms:"/terms-conditions",
+    safetyTips:"/safety-tips",
+    howToBuy:"/how-to-buy",
+    howToSell:"/how-to-sell"
 
     // homeMarket: "/market/:search?",
   },

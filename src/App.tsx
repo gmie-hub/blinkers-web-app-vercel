@@ -52,6 +52,10 @@ import MyApplicantsDetails from "./screens/profile/myApplication/myApplicationDe
 import SellerVerification from "./screens/Auth/sellerVerificationModal";
 import Notification from "./screens/notification";
 import ViewNotification from "./screens/notification/viewNotification";
+import TermsCondition from "./screens/footerPages/termsCondition";
+import SafetyTips from "./screens/footerPages/safetyTips";
+import HowToBuy from "./screens/footerPages/howTobuy";
+import HowToSell from "./screens/footerPages/howToSell";
 
 
 function App() {
@@ -68,6 +72,10 @@ function App() {
     { path: routes.page.posetedAdsBySeller, element: <SellersPostedAds /> },
     { path: routes.page.writeReviewForBusiness, element: <WriteReview /> },
     { path: routes.page.writeReviewSeller, element: <WriteReviewForUser /> },
+    { path: routes.page.terms, element: <TermsCondition /> },
+    { path: routes.page.safetyTips, element: <SafetyTips /> },
+    { path: routes.page.howToBuy, element: <HowToBuy /> },
+    { path: routes.page.howToSell, element: <HowToSell /> },
 
     
     { path: routes.page.ContactUs, element: <ContactUs /> },
