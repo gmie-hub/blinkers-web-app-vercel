@@ -98,7 +98,7 @@ const AboutUs = () => {
              :
               <>
                 <p>
-                  Blinkers Business Directory Ltd. Is the owner of the Blinkers
+                   Blinkers Business Directory Ltd. Is the owner of the Blinkers
                   mobile application and website, which lists all businesses in
                   Nigeria. It is your one-stop platform for buying, selling, and
                   discovering products and services, as well as connecting with
