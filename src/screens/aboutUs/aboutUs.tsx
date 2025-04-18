@@ -66,12 +66,18 @@ const AboutUs = () => {
   const { data } = useCms();
 
   const cmsData = data?.data?.data[4]?.description;
+  const cmsDataTitle = data?.data?.data[4]?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks
     const sanitizedDescription = DOMPurify.sanitize(description);
 
-    return <div style={{ paddingInlineStart: '1rem' }} dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />;
+    return (
+      <div
+        style={{ paddingInlineStart: "1rem" }}
+        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+      />
+    );
   };
 
   return (
@@ -90,27 +96,9 @@ const AboutUs = () => {
 
         <div className={styles.mainContainer}>
           <div className={styles.leftSection}>
-            <h1>More Than A Market Place</h1>
+            <h1>{cmsDataTitle}</h1>
 
-            { cmsData ?
-                  <p>{<Description description={cmsData || ""} />}</p>
-
-             :
-              <>
-                <p>
-                   Blinkers Business Directory Ltd. Is the owner of the Blinkers
-                  mobile application and website, which lists all businesses in
-                  Nigeria. It is your one-stop platform for buying, selling, and
-                  discovering products and services, as well as connecting with
-                  businesses and job opportunities.
-                </p>
-                <p>
-                  We aim to bring people together from across the world to
-                  explore a wide variety of products, grow their businesses, and
-                  find employment opportunities in one convenient platform.
-                </p>
-              </>
-            }
+            <p>{<Description description={cmsData || ""} />}</p>
           </div>
           <div className={styles.rightSection}>
             <div className={styles.cardContainer}>

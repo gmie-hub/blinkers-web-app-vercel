@@ -6,6 +6,7 @@ const SafetyTips = () => {
   const { data } = useCms();
 
   const cmsData = data?.data?.data[1]?.description;
+  const cmsDataTitle = data?.data?.data[1]?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks
@@ -22,7 +23,7 @@ const SafetyTips = () => {
   return (
     <div className="wrapper">
       <RouteIndicator showBack />
-      <h3>Safety Tips</h3>
+      <h3>{cmsDataTitle}</h3>
       <br />
       <p>{<Description description={cmsData || ""} />}</p>
     </div>

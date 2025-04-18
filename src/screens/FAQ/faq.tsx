@@ -14,6 +14,8 @@ const FAQ = () => {
 
   const howToBuy = data?.data?.data[2]?.description;
   const howToSell = data?.data?.data[3]?.description;
+  const howToBuyTitle = data?.data?.data[2]?.title;
+  const howToSellTitle = data?.data?.data[3]?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks
@@ -42,12 +44,12 @@ const FAQ = () => {
         "Yes, Blinkers offers a free plan that allows you to post one ad with up to 5 images. However, there are also paid subscription plans with more features.",
     },
     {
-      question: "How To Buy",
+      question: howToBuyTitle,
       answer:
       <Description description={howToBuy || ""} />
     },
     {
-      question: "How To Sell",
+      question: howToSellTitle,
       answer:
       <Description description={howToSell || ""} />
     },

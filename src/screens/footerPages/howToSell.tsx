@@ -6,6 +6,7 @@ const HowToSell = () => {
   const { data } = useCms();
 
   const cmsData = data?.data?.data[3]?.description;
+  const cmsDataTitle = data?.data?.data[3]?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks
@@ -22,7 +23,7 @@ const HowToSell = () => {
   return (
     <div className="wrapper">
       <RouteIndicator showBack />
-      <h3>How TO Sell</h3>
+      <h3>{cmsDataTitle}</h3>
       <br />
       <p>{<Description description={cmsData || ""} />}</p>
     </div>
