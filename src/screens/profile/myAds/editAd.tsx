@@ -437,7 +437,6 @@ const EditAdz = () => {
     const descriptionTags = [];
 
     const parsePrice = (price: string | number) => Math.floor(Number(price?.toString().replace(/,/g, '')));
-    const status = 5
     if (values.Used) {
       descriptionTags.push("USED");
     }

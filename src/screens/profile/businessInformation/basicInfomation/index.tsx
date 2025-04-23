@@ -15,7 +15,6 @@ import Reviews from "../review/review";
 import CustomSpin from "../../../../customs/spin";
 import { routes } from "../../../../routes";
 import { useNavigate } from "react-router-dom";
-import JobPosted from "../postedJob/postedJob";
 
 interface BasicInformationProps {
   title?: string;
