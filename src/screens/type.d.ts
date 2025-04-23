@@ -656,3 +656,8 @@ interface NotificationResponse extends Response {
   data: NotificationData;
   total:number
 }
+
+interface AdsStatusPayload {
+  status: string;
+
+}

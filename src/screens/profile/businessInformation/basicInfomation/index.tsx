@@ -66,11 +66,11 @@ export default function Index({}: BasicInformationProps) {
       label: "Reviews",
       children: <Reviews />,
     },
-    {
-      key: "4",
-      label: "Jobs Posted",
-      children: <JobPosted />,
-    },
+    // {
+    //   key: "4",
+    //   label: "Jobs Posted",
+    //   children: <JobPosted />,
+    // },
   ];
 
   const handleTabChange = (key: string) => {

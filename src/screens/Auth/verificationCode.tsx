@@ -231,6 +231,7 @@ console.log(route,'eroute')
   const verifyOtpHandler = async (values: FormValues) => {
     const payload: any = {
       otp: values.code.join(""), 
+      email:email,
       // is_email: true 
       // ...(route === "Whatsapp" && { pin_id: savedPin }), 
       // pin_id: savedPin || "",

@@ -1,6 +1,6 @@
 // hooks/useJobDetails.ts
 import { useQuery } from "@tanstack/react-query";
-import { getAllCms } from "../../request";
+import { getAllCms } from "../screens/request";
 
 export const useCms = () => {
   return useQuery({

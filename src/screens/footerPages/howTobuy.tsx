@@ -1,5 +1,5 @@
 import RouteIndicator from "../../customs/routeIndicator/index.tsx";
-import { useCms } from "../profile/myApplication/getCms.tsx";
+import { useCms } from "../../hooks/getCms.tsx";
 import DOMPurify from "dompurify";
 
 const HowToBuy = () => {

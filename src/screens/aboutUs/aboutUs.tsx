@@ -8,7 +8,7 @@ import Image1 from "../../assets/about1.svg";
 import Image2 from "../../assets/about2.svg";
 import Image3 from "../../assets/about3.svg";
 import Image4 from "../../assets/about4.svg";
-import { useCms } from "../profile/myApplication/getCms.tsx";
+import { useCms } from "../../hooks/getCms.tsx";
 import DOMPurify from "dompurify";
 
 const cardData = [

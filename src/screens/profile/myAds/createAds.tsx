@@ -210,6 +210,13 @@ const CreateAdz = () => {
     setUploadFeature(null);
   };
 
+  const handleNavigateToProfile = () =>{
+    localStorage.setItem("activeTabKeyProfile", '7');
+
+    navigate('/profile')
+    window.scrollTo(0, 0);
+
+  }
   const createAdsMutation = useMutation({
     mutationFn: createAds,
   });
@@ -273,9 +280,10 @@ const CreateAdz = () => {
           });
           resetForm();
           clearFile();
+          handleNavigateToProfile()
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",

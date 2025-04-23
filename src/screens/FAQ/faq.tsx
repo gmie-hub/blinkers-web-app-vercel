@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "/Container.svg";
 import styles from "./faq.module.scss";
-import { useCms } from "../profile/myApplication/getCms";
+import { useCms } from "../../hooks/getCms";
 import DOMPurify from "dompurify";
 
 const FAQ = () => {

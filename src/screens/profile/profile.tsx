@@ -11,6 +11,7 @@ import ProfileDetails from "./profileDetails/profileDetails";
 import MyAds from "./myAds/myAds";
 import MyFavorite from "./myFavorite";
 import Notification from "../notification";
+import JobPosted from "./businessInformation/postedJob/postedJob";
 
 const Profile = () => {
   const { id } = useParams();
@@ -53,11 +54,16 @@ const Profile = () => {
     },
     {
       key: "6",
+      label: "Posted Job",
+      children: <JobPosted />,
+    },
+    {
+      key: "7",
       label: "My Ads",
       children: <MyAds />,
     },
     {
-      key: "7",
+      key: "8",
       label: "Favorites",
       children: <MyFavorite />,
       // children: <Reviews />,
@@ -65,12 +71,12 @@ const Profile = () => {
       
     },
     {
-      key: "8",
+      key: "9",
       label: "Notifications",
       children: <Notification  />,
     },
     {
-      key: "8",
+      key: "10",
       label: "Settings",
       // children: <Reviews limit={3} />,
     },

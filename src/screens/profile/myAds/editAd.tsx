@@ -437,7 +437,7 @@ const EditAdz = () => {
     const descriptionTags = [];
 
     const parsePrice = (price: string | number) => Math.floor(Number(price?.toString().replace(/,/g, '')));
-
+    const status = 5
     if (values.Used) {
       descriptionTags.push("USED");
     }
@@ -467,6 +467,8 @@ const EditAdz = () => {
       values?.local_government_area_id
     );
     formData.append("pickup_address", values.pickup_address);
+    formData.append("status", '5')
+
     // formData.append("pickup_lat", values.pickup_lat);
     // formData.append("pickup_lng", values.pickup_lng);
 
@@ -485,6 +487,8 @@ const EditAdz = () => {
               message: "Success",
               description: data?.message,
             });
+            navigate(-1)
+
           },
         }
       );

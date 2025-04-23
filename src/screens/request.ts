@@ -99,7 +99,7 @@ export const getPromotedAds = async () => {
 };
 
 export const getUserNotifications = async (id?: number, hasRead?:number) => {
-  return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}}`))?.data ;
+  return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}`))?.data ;
 };
 export const getUserNotificationById = async (userId?:number, id?: number,) => {
   return (await api.get(`user-notifications?user_id=${userId}&id=${id}`))?.data ;
@@ -119,9 +119,18 @@ export const getAllBusiness = async (
   return (await api.get(url))?.data ;
 };
 
-export const getMyAdzByUserId = async (user_id?: number) => {
-  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}`))?.data ;
+export const getMyAdzByUserId = async (user_id?: number, status?:number) => {
+  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}&status=${status}`))?.data ;
 };
+
+export const updateAdsStatus = async (
+  payload: AdsStatusPayload,
+  id: number
+) => {
+  const response = await api.patch(`/ads/${id}`, payload);
+  return response.data;
+};
+
 
 export const getAllMarket = async (
   page?: number,
