@@ -75,15 +75,7 @@ const BasicInfoForm: FC<ComponentProps> = ({
     const formData = new FormData();
 
     formData.append("name", values?.name);
-    // formData.append("last_name", values?.last_name);
-    // if(user?.email){
-    //   formData.append("email", user?.email);
-
-    // }
     formData.append("date_of_birth", values?.date_of_birth);
-    // if(user?.number){
-    // formData.append("phoneNumber", user?.number);
-    // }
     if (profileImage) {
       formData.append("profile_image", profileImage);
     }
@@ -103,7 +95,7 @@ const BasicInfoForm: FC<ComponentProps> = ({
           handleNext();
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       notification.error({
         message: "Error",
         description: errorMessage(error) || "An error occurred",

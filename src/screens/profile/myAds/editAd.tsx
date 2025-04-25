@@ -466,7 +466,7 @@ const EditAdz = () => {
       values?.local_government_area_id
     );
     formData.append("pickup_address", values.pickup_address);
-    formData.append("status", '5')
+    // formData.append("status", '5')
 
     // formData.append("pickup_lat", values.pickup_lat);
     // formData.append("pickup_lng", values.pickup_lng);

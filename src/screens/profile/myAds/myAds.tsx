@@ -31,7 +31,7 @@ const MyAds = () => {
 
   const [isDeleteSuccessful, setIsDeleteSucessful] = useState(false);
   const [indexData, setIndexData] = useState<ProductDatum>();
-  const [activeKey, setActiveKey] = useState("1");
+  const [activeKey, setActiveKey] = useState("5");
 
   console.log(indexData, "indexData");
 
@@ -113,6 +113,7 @@ const MyAds = () => {
     { key: "2", label: "Rejected" },
     { key: "4", label: "Inactive" },
     { key: "5", label: "Pending" },
+
   ];
   const handleTabChange = (key: string) => {
     setActiveKey(key);
