@@ -19,6 +19,7 @@ interface signUp {
   email: string;
   password: string;
   confirm_password: string;
+  register_method:string;
 }
 
 

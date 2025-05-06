@@ -60,6 +60,7 @@ const SignUp = () => {
       email: values?.email,
       password: values?.password,
       confirm_password: values.confirm_password,
+      register_method:'WEB'
     };
 
     try {
