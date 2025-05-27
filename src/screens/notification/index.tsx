@@ -94,9 +94,9 @@ const Notification = () => {
                 activeIndex === uniqueKey ? styles.active : ""
               }`}
               onClick={() => {toggleFAQ(uniqueKey);
-                if (item?.is_read === 0) {
-                    readNotificationHandler(item?.id);
-                  }
+                // if (item?.is_read === 0) {
+                //     readNotificationHandler(item?.id);
+                //   }
               }}
             >
               <div className={styles.questionRow}>

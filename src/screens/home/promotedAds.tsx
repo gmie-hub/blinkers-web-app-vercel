@@ -4,13 +4,15 @@ import LeftIcon from "../../assets/arrow-left.svg";
 import RightIcon from "../../assets/arrow-right.svg";
 import { useState } from "react";
 import { AxiosError } from "axios";
-import { useQueries } from "@tanstack/react-query";
-import { getPromotedAds } from "../request";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { getPromotedAds, getPromotedAdsById } from "../request";
 import CustomSpin from "../../customs/spin";
 
 const PromotedAds = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
+  const [selectedAdId, setSelectedAdId] = useState<number | null>(null);
+  const queryClient = useQueryClient();
 
   const [getPromotedAdsQuery] = useQueries({
     queries: [
@@ -19,6 +21,14 @@ const PromotedAds = () => {
         queryFn: getPromotedAds,
         retry: 0,
         refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: ["get-promoted-ads-id", selectedAdId],
+        queryFn: () => getPromotedAdsById(selectedAdId!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        // enabled: !!selectedAdId,
+        enabled: false,
       },
     ],
   });
@@ -55,6 +65,19 @@ const PromotedAds = () => {
   // Handle dot click to jump to the respective page
   const handleDotClick = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleAdClick = async (id: number, brandUrl: string) => {
+    setSelectedAdId(id);
+  
+    await queryClient.fetchQuery({
+      queryKey: ["get-promoted-ads-id", id],
+      queryFn: () => getPromotedAdsById(id),
+    });
+  
+    if (brandUrl) {
+      window.open(brandUrl, "_blank");
+    }
   };
 
   return (
@@ -100,7 +123,11 @@ const PromotedAds = () => {
               currentData?.map((item: any, index: number) => (
                 <div
                   style={{ cursor: "pointer" }}
-                  onClick={() => window.open(item?.brand_url, "_blank")}
+                  onClick={() => handleAdClick(item?.id,item?.brand_url)}
+                  // onClick={() => {
+                  //   // window.open(item?.brand_url, "_blank");
+                  //   setSelectedAdId(item?.id);
+                  // }}
                   className={styles.promoImage}
                   key={index}
                 >
@@ -108,7 +135,8 @@ const PromotedAds = () => {
                     // src={item?.image}
                     src={item?.cover_image_url}
                     alt={item?.title}
-                    className={styles.proImage}                   />
+                    className={styles.proImage}
+                  />
                 </div>
               ))}
           </section>

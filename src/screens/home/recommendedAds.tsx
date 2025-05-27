@@ -127,7 +127,7 @@ const RecommendedAds = () => {
                     alt={"recommendedimg"}
                     // className={styles.trendingProductImage}
                     className={styles.proImage}
-                   onClick={()=> handleNavigateToProductDetails(item?.id,item?.recommendable?.user_id,item?.recommendable?.title,item?.recommendable?.description)}
+                   onClick={()=> handleNavigateToProductDetails(item?.recommendable?.id,item?.recommendable?.user_id,item?.recommendable?.title,item?.recommendable?.description)}
                   />
 
                   {/* <div className={styles.productList}>

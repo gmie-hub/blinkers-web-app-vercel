@@ -97,6 +97,9 @@ export const getRecommededAds = async () => {
 export const getPromotedAds = async () => {
   return (await api.get(`/banners`))?.data ;
 };
+export const getPromotedAdsById = async (id?:number) => {
+  return (await api.get(`/banners/${id}`))?.data ;
+};
 
 export const getUserNotifications = async (id?: number, hasRead?:number) => {
   return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}`))?.data ;
