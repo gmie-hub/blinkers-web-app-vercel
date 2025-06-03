@@ -120,7 +120,7 @@ const PromotedAds = () => {
           <section className={styles.promoImageContainer}>
             {currentData &&
               currentData?.length > 0 &&
-              currentData?.map((item: any, index: number) => (
+              currentData?.map((item:any, index: number) => (
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => handleAdClick(item?.id,item?.brand_url)}
