@@ -117,7 +117,7 @@ const BigScreen = ({
         `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}/${businessDetailsData?.about}`
       );
     } else {
-      navigate(`/sellers-profile/${profileDetailsData?.id}`);
+      navigate(`/seller-profile/${profileDetailsData?.id}`);
     }
     window.scrollTo(0, 0);
   };

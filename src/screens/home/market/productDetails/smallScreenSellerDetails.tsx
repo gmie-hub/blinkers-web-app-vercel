@@ -100,7 +100,7 @@ const SmallScreen = ({
   };
 
   const handleNavigateToSellersProfile = () => {
-    navigate(`/sellers-profile`);
+    navigate(`/seller-profile/${profileDetailsData?.id}`);
     window.scrollTo(0, 0);
   };
 

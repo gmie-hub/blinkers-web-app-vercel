@@ -53,7 +53,7 @@ const SellerProfile = () => {
   // };
 
   const handleNavigateToSellersAds = () => {
-    navigate(`/sellers-posted-ads/${id}`);
+    navigate(`/seller-ads/${id}`);
     window.scrollTo(0, 0);
   };
 

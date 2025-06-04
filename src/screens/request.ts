@@ -109,22 +109,47 @@ export const getUserNotificationById = async (userId?:number, id?: number,) => {
 };
 
 
+// export const getAllBusiness = async (
+//   search: number | string,
+//   page?: number
+// ) => {
+//   let url = `/businesses?search=${search}`;
+
+//   if (page !== undefined) {
+//     url += `&page=${page}`;
+//   }
+
+//   return (await api.get(url))?.data ;
+// };
+
+// export const getMyAdzByUserId = async (user_id?: number, status?:number) => {
+//   return (await api.get(`/ads?per_page=${30}&user_id=${user_id}&status=${status}`))?.data ;
+// };
+
+
 export const getAllBusiness = async (
-  search: number | string,
+  search?: number | string,
   page?: number
 ) => {
-  let url = `/businesses?search=${search}`;
+  let url = `/businesses`;
 
-  if (page !== undefined) {
-    url += `&page=${page}`;
+  const params = new URLSearchParams();
+
+  if (search !== undefined && search !== null && `${search}`.trim() !== "") {
+    params.append("search", `${search}`);
   }
 
-  return (await api.get(url))?.data ;
+  if (page !== undefined) {
+    params.append("page", `${page}`);
+  }
+
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+
+  return (await api.get(url))?.data;
 };
 
-export const getMyAdzByUserId = async (user_id?: number, status?:number) => {
-  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}&status=${status}`))?.data ;
-};
 
 export const updateAdsStatus = async (
   payload: AdsStatusPayload,
