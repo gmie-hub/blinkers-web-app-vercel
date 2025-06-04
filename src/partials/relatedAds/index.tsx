@@ -36,7 +36,7 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
   });
 
   const handleNavigateToProductDetails = (id: number, user_id:number) => {
-    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(productDetailsData?.title ?? '')}/${sanitizeUrlParam(productDetailsData?.description ?? '')}`);
+    navigate(`/product-details/${id}/${user_id}/${sanitizeUrlParam(productDetailsData?.title ?? '')}}`);
     window.scrollTo(0, 0);
   };
 

@@ -3,7 +3,7 @@ export const routes = {
   page: {
     home: "/",
     market: "/market/:search?",
-    productDetails: "/product-details/:id/:user_id/:title?/:description?",
+    productDetails: "/product-details/:id/:user_id/:title?",
     relatedAds: "/related-ads/:id",
     review: "/review/:id",
     productReview: "/product-review/:id",
@@ -21,7 +21,7 @@ export const routes = {
     howToBuy:"/how-to-buy",
     howToSell:"/how-to-sell"
   },
-  job: {
+  job: {  
     job: "/jobs",
     homeJob: "/jobs/:search",
     jobDetails: "/job-details/:id/:title?/:description?",
