@@ -106,6 +106,8 @@ const PromotedAds = () => {
               currentPage === totalPages ? { backgroundColor: "#009900" } : {}
             }
           >
+
+            
             <Image src={RightIcon} alt="Right Arrow" preview={false} />
           </div>
         </div>
