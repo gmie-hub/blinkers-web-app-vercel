@@ -122,9 +122,9 @@ export const getUserNotificationById = async (userId?:number, id?: number,) => {
 //   return (await api.get(url))?.data ;
 // };
 
-// export const getMyAdzByUserId = async (user_id?: number, status?:number) => {
-//   return (await api.get(`/ads?per_page=${30}&user_id=${user_id}&status=${status}`))?.data ;
-// };
+export const getMyAdzByUserId = async (user_id?: number, status?:number) => {
+  return (await api.get(`/ads?per_page=${30}&user_id=${user_id}&status=${status}`))?.data ;
+};
 
 
 export const getAllBusiness = async (
