@@ -338,10 +338,10 @@ export const deleteAdsVideobyId = async ({
 };
 
 
-// export const getAdsByUserId = async (user_id: number, page: number) => {
-//   return (await api.get(`/ads?user_id=${user_id}&page=${page}&per_page=${50}`))
-//     ?.data as AllProductaResponse;
-// };
+export const getAdsByUserId = async (user_id: number, page: number) => {
+  return (await api.get(`/ads?user_id=${user_id}&page=${page}&per_page=${50}`))
+    ?.data as AllProductaResponse;
+};
 
 export const getApplicantsbyId = async (id: number) => {
   return (await api.get(`/users/profile?user_id=${id}`))
