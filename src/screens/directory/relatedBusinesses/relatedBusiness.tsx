@@ -21,9 +21,9 @@ const RelatedBusinesses = ({
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const handleNavigateDirectory = (id: number, name:string, about:string) => {
+  const handleNavigateDirectory = (id: number, name:string) => {
     // navigate(`/directory-details/${id}`);
-    navigate(`/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`);
+    navigate(`/directory-details/${id}/${sanitizeUrlParam(name)}`);
 
     window.scroll(0, 0);
   };
@@ -96,7 +96,7 @@ const RelatedBusinesses = ({
                 relatedBusinessData?.length > 0 &&
                 relatedBusinessData?.map((item: any, index: number) => (
                   <div
-                    onClick={() => handleNavigateDirectory(item?.id, item?.name, item?.about)}
+                    onClick={() => handleNavigateDirectory(item?.id, item?.name)}
                     className={styles.promoImage}
                     key={index}
                   >

@@ -114,7 +114,7 @@ const BigScreen = ({
   const handleNavigateToSellersProfile = () => {
     if (businessDetailsData && businessDetailsData?.id !== undefined) {
       navigate(
-        `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}/${businessDetailsData?.about}`
+        `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}`
       );
     } else {
       navigate(`/seller-profile/${profileDetailsData?.id}`);

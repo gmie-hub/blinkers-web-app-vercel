@@ -40,9 +40,7 @@ const Directory = () => {
 
   const handleNavigateDirectory = (id: number, name: string, about: string) => {
     navigate(
-      `/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(
-        about
-      )}`
+      `/directory-details/${id}/${sanitizeUrlParam(name)}`
     );
     window.scroll(0, 0);
   };
@@ -182,7 +180,7 @@ const Directory = () => {
                     className={styles.promoImage}
                     key={index}
                     onClick={() =>
-                      handleNavigateDirectory(item?.id, item?.name, item?.about)
+                      handleNavigateDirectory(item?.id, item?.name)
                     }
                   >
                     <img
