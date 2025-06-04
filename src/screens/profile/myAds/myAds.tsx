@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import { useQueries } from "@tanstack/react-query";
-import { deleteAds, getMyAdzByUserId, updateAdsStatus } from "../../request";
+import { deleteAds,  updateAdsStatus } from "../../request";
 import { AxiosError } from "axios";
 import usePagination from "../../../hooks/usePagnation";
 import { formatDateToMonthYear } from "../../../utils/formatTime";

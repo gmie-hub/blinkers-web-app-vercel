@@ -38,7 +38,7 @@ const Directory = () => {
     setAppliedSearchTerm(searchTerm);
   };
 
-  const handleNavigateDirectory = (id: number, name: string, about: string) => {
+  const handleNavigateDirectory = (id: number, name: string) => {
     navigate(
       `/directory-details/${id}/${sanitizeUrlParam(name)}`
     );
