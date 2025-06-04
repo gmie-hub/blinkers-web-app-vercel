@@ -50,7 +50,6 @@ const   Button: FC<ButtonProps> = ({
             {icon && <span className={style.icon}>{icon}</span>}
             {text && <span className={style.text}>{text}</span>}
             {AfterTexticon && <span className={style.icon}>{AfterTexticon}</span>}
-
           </>
         )}
 

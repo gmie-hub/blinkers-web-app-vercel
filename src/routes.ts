@@ -20,8 +20,6 @@ export const routes = {
     safetyTips:"/safety-tips",
     howToBuy:"/how-to-buy",
     howToSell:"/how-to-sell"
-
-    // homeMarket: "/market/:search?",
   },
   job: {
     job: "/jobs",
@@ -58,8 +56,6 @@ export const routes = {
     editAds: "/edit-ad/:id",
     myAds:'/my-ads',
     myapplicationDetails:'/my-application-details/:id/:applicationDetailsId'
-
-
   },
 
   auth: {
