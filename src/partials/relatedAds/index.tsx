@@ -40,6 +40,11 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
     window.scrollTo(0, 0);
   };
 
+  // const handleNavigateToProductDetails = (slug: string) => {
+  //   navigate(`/product-details/${slug}}`);
+  //   window.scrollTo(0, 0);
+  // };
+
   const productDetailsData = getProductDetailsQuery?.data?.data;
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
   const productDetailsErrorMessage =
@@ -70,6 +75,8 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
               relatedAdssData?.map((item, index) => (
                 <div
                   onClick={() => handleNavigateToProductDetails(item?.id, item?.user_id)}
+                  // onClick={() => handleNavigateToProductDetails(item?.slug)}
+
                   className={styles.promoImage}
                   key={index}
                 >

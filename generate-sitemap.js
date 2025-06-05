@@ -8,6 +8,7 @@ const routes = [
   "/",
   "/market/:search?",
   "/product-details/:id/:user_id/:title?/:description?",
+  "/product-details/slug",
   "/related-ads/:id",
   "/review/:id",
   "/product-review/:id",

@@ -285,7 +285,8 @@ interface RelatedProduct {
   created_at: string;
   local_govt?: local_govt;
   state?: state;
-  user_id:number
+  user_id:number;
+  slug:string
 }
 
 interface local_govt {

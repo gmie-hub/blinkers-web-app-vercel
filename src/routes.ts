@@ -4,6 +4,7 @@ export const routes = {
     home: "/",
     market: "/market/:search?",
     productDetails: "/product-details/:id/:user_id/:title?/:description?",
+    newproductDetails: "/product-details/slug",
     relatedAds: "/related-ads/:id",
     review: "/review/:id",
     productReview: "/product-review/:id",

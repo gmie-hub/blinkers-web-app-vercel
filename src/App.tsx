@@ -64,6 +64,8 @@ function App() {
     { path: routes.page.market, element: <Market /> },
     // { path: routes.page.homeMarket, element: <Market /> },
     { path: routes.page.productDetails, element: <ProductDetails /> },
+    // { path: routes.page.newproductDetails, element: <ProductDetails /> },
+
     { path: routes.page.relatedAds, element: <RelatedAds /> },
     { path: routes.page.review, element: <Review /> },
     { path: routes.page.productReview, element: <ProductReview /> },
