@@ -11,6 +11,7 @@ import ClaimBusiness from "./screens/directory/claimBusiness/claimBus";
 import RelatedBusinesses from "./screens/directory/relatedBusinesses/relatedBusiness";
 import Market from "./screens/home/market/market";
 import ProductDetails from "./screens/home/market/productDetails/productDetailsToDisplay";
+
 import RelatedAds from "../src/partials/relatedAds/index";
 import Review from "./screens/home/market/review/review";
 import ProductReview from "./screens/home/market/review/productReview";
@@ -64,7 +65,7 @@ function App() {
     { path: routes.page.market, element: <Market /> },
     // { path: routes.page.homeMarket, element: <Market /> },
     { path: routes.page.productDetails, element: <ProductDetails /> },
-    // { path: routes.page.newproductDetails, element: <ProductDetails /> },
+    { path: routes.page.newproductDetails, element: <ProductDetails /> },
 
     { path: routes.page.relatedAds, element: <RelatedAds /> },
     { path: routes.page.review, element: <Review /> },

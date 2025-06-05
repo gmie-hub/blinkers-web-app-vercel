@@ -505,7 +505,7 @@ const BigScreen = ({
                       }}
                     />
 
-                    <div className={styles.chatCart}>
+                    {/* <div className={styles.chatCart}>
                       <p className={styles.seller}>Chat with seller</p>
 
                       <div className={styles.starWrapper}>
@@ -525,7 +525,7 @@ const BigScreen = ({
                       <div className={styles.startChat}>
                         <Button text="Start Chat" />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 ) : (
                   //SellersProfile\\
@@ -705,7 +705,7 @@ const BigScreen = ({
                       }}
                     />
 
-                    <div className={styles.chatCart}>
+                    {/* <div className={styles.chatCart}>
                       <p className={styles.seller}>Chat with seller</p>
 
                       <div className={styles.starWrapper}>
@@ -725,7 +725,7 @@ const BigScreen = ({
                       <div className={styles.startChat}>
                         <Button text="Start Chat" />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 )}
 

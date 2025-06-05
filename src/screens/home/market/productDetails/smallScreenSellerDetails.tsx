@@ -596,7 +596,7 @@ const SmallScreen = ({
                     />
                   </div>
                 )}
-                <div className={styles.chatCart}>
+                {/* <div className={styles.chatCart}>
                   <p className={styles.seller}>Chat with seller</p>
 
                   <div className={styles.starWrapper}>
@@ -613,7 +613,7 @@ const SmallScreen = ({
                   <div className={styles.startChat}>
                     <Button text="Start Chat" />
                   </div>
-                </div>
+                </div> */}
               </Form>
             </Formik>
           </div>

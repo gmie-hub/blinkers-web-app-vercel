@@ -70,11 +70,11 @@ const Profile = () => {
 
       
     },
-    {
-      key: "9",
-      label: "Notifications",
-      children: <Notification  />,
-    },
+    // {
+    //   key: "9",
+    //   label: "Notifications",
+    //   children: <Notification  />,
+    // },
     {
       key: "10",
       label: "Settings",

@@ -6,7 +6,7 @@ import styles from "./styles.module.scss";
 import Button from "../../customs/button/button";
 import CategoriesCard from "../../screens/home/category";
 import Image8 from "../../assets/cat1.svg";
-import NotyIcon from "../../assets/notyIcon.svg";
+// import NotyIcon from "../../assets/notyIcon.svg";
 import ChatIcon from "../../assets/chatyicon.svg";
 import ProfileIcon from "../../assets/Avatarprofile.svg";
 import { userAtom } from "../../utils/store";
@@ -215,7 +215,7 @@ const  notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
         {user?.email !== undefined && isMenuOpen && (
           <>
             <div className={styles.loggedInIcons}>
-            <Dropdown overlay={notificationMenu} trigger={["click"]}>
+            {/* <Dropdown overlay={notificationMenu} trigger={["click"]}>
                 <div className={styles.notificationWrapper} style={{ cursor: "pointer" }}>
                   <img
                     src={NotyIcon}
@@ -224,7 +224,7 @@ const  notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
                   />
                   {notifyTotal > 0 &&<span className={styles.notifyBadge}>{notifyTotal > 10 ? '9+' : notifyTotal }</span>}
                   </div>
-              </Dropdown>
+              </Dropdown> */}
               <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
               <Dropdown overlay={profileMenu} trigger={["click"]}>
                 <img
@@ -271,7 +271,7 @@ const  notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
                 </div>
               </Dropdown> */}
             <div className={styles.notificationWrapper}>
-            <Dropdown overlay={notificationMenu} trigger={["click"]}>
+            {/* <Dropdown overlay={notificationMenu} trigger={["click"]}>
                 <div className={styles.notificationWrapper} style={{ cursor: "pointer" }}>
                   <img
                     src={NotyIcon}
@@ -280,7 +280,7 @@ const  notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
                   />
                   {notifyTotal > 0 &&<span className={styles.notifyBadge}>{notifyTotal > 10 ? '9+' : notifyTotal }</span>}
                 </div>
-              </Dropdown>
+              </Dropdown> */}
               {/* <img
                 src={NotyIcon}
                 alt="Notifications"
