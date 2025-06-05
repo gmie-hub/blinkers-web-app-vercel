@@ -10,7 +10,7 @@ import MyDetails from "../job/apply/applyAsApplicant/index";
 import ProfileDetails from "./profileDetails/profileDetails";
 import MyAds from "./myAds/myAds";
 import MyFavorite from "./myFavorite";
-import Notification from "../notification";
+// import Notification from "../notification";
 import JobPosted from "./businessInformation/postedJob/postedJob";
 
 const Profile = () => {
