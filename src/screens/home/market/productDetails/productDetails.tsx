@@ -35,7 +35,6 @@ import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import { countUpTo } from "../../../../utils";
-import { Helmet } from "react-helmet-async";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -174,12 +173,7 @@ const BigScreen = ({
 
   return (
     <main>
-      <Helmet>
-        <title>{productDetailsData?.title}</title>
-        <meta property="og:title" content={productDetailsData?.title} />
-        <meta property="og:description" content={productDetailsData?.description} />
-        <meta property="og:image" content={productDetailsData?.add_images[0]?.image_url } />
-      </Helmet>
+     
       <div className="wrapper">
         <div className={styles.container}>
           <div className={styles.leftSide}>
