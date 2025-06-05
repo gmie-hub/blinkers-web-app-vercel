@@ -69,7 +69,9 @@ const Main = () => {
         queryFn: () =>
           isId
             ? getProductDetails(parseInt(idOrSlug))
-            : getProductDetailsByslug(idOrSlug),
+            : 
+            
+            getProductDetailsByslug(idOrSlug),
 
         retry: 0,
         refetchOnWindowFocus: true,
@@ -177,9 +179,11 @@ const Main = () => {
     getSellersFollowersQuery?.data?.data?.data?.some(
       (item) => item?.follower_id === user?.id
     );
-  console.log(isUserFollowingSeller, "isUserFollowingBusiness");
+  console.log(getProductDetailsQuery?.data?.data, "isUserFollowingBusiness");
 
-  const productDetailsData = isId ?  getProductDetailsQuery?.data?.data : getProductDetailsQuery?.data?.data?.data[0];
+  const productDetailsData =   getProductDetailsQuery?.data?.data ;
+
+  // const productDetailsData = isId ?  getProductDetailsQuery?.data?.data : getProductDetailsQuery?.data?.data?.data[0];
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
   const productDetailsErrorMessage =
     productDetailsError?.message ||

@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import favorite from "../../assets/Icon + container.svg";
 import LocationIcon from "../../assets/locationrelated.svg";
 import { useQueries } from "@tanstack/react-query";
-import { getProductDetails } from "../../screens/request";
+import {  getProductDetailsByslug } from "../../screens/request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../customs/routeIndicator";
 import CustomSpin from "../../customs/spin";
@@ -27,10 +27,10 @@ const RelatedAds = ({ canSeeBtn = true, limit }: Props) => {
     queries: [
       {
         queryKey: ["get-product-details", id],
-        queryFn: () => getProductDetails(parseInt(id!)),
+        queryFn: () => getProductDetailsByslug(id!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!id,
+        enabled: false,
       },
     ],
   });
