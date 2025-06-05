@@ -18,6 +18,8 @@ interface Props {
 }
 
 const ModalContent = ({
+
+  
   open,
   heading,
   text,
