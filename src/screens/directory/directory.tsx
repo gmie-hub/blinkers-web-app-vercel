@@ -38,9 +38,9 @@ const Directory = () => {
     setAppliedSearchTerm(searchTerm);
   };
 
-  const handleNavigateDirectory = (id: number, name: string) => {
+  const handleNavigateDirectory = (id: number, name: string, about:string) => {
     navigate(
-      `/directory-details/${id}/${sanitizeUrlParam(name)}`
+      `/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`
     );
     window.scroll(0, 0);
   };
@@ -180,7 +180,7 @@ const Directory = () => {
                     className={styles.promoImage}
                     key={index}
                     onClick={() =>
-                      handleNavigateDirectory(item?.id, item?.name)
+                      handleNavigateDirectory(item?.id, item?.name,item?.about)
                     }
                   >
                     <img

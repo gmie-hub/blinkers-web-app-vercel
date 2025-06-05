@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 interface Props {
   handleCancel: () => void;
   handleClick: () => void;
-  handleClickBtn2?:()=> void;
+  handleClickBtn2?: () => void;
   open: boolean;
   text?: string;
   heading?: string;
@@ -18,8 +18,6 @@ interface Props {
 }
 
 const ModalContent = ({
-
-  
   open,
   heading,
   text,
@@ -38,23 +36,21 @@ const ModalContent = ({
 
         {text && <p className={styles.ModalPara}>{text}</p>}
         <div className={styles.btn}>
-        {BtnText2 &&
+          {BtnText2 && (
             <Button
-            onClick={handleClickBtn2}
-            type="button"
-            text={BtnText2}
-            className={styles.btn}
-            variant={'white'}
-          />
-          }
+              onClick={handleClickBtn2}
+              type="button"
+              text={BtnText2}
+              className={styles.btn}
+              variant={"white"}
+            />
+          )}
           <Button
             onClick={handleClick}
             type="button"
             text={BtnText ? BtnText : "Okay"}
             className={styles.btn}
-
           />
-          
         </div>
         {/* { BtnText2 &&
           <div className={styles.btn}>

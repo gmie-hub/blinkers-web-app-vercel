@@ -48,8 +48,8 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
     
 
 
-  const handleNavigateDetails = (id: number,title:string) => {
-    navigate(`/job-details/${id}/${sanitizeUrlParam(title)}`);
+  const handleNavigateDetails = (id: number,title:string,description:string) => {
+    navigate(`/job-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`);
 
     window.scrollTo(0, 0);
   };
@@ -75,7 +75,7 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
             {relatedJobsData && relatedJobsData.length > 0 ? (
               relatedJobsData?.map((item: any, index: number) => (
                 <div
-                  onClick={() => handleNavigateDetails(item?.id, item?.title)}
+                  onClick={() => handleNavigateDetails(item?.id, item?.title,item?.description)}
                   className={styles.chooseCard}
                   key={index}
                 >

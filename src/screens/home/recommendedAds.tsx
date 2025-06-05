@@ -69,10 +69,13 @@ const RecommendedAds = () => {
     id: number,
     user_id: number,
     title: string,
+    description:string,
   ) => {
     navigate(
       `/product-details/${id}/${user_id}/${sanitizeUrlParam(
         title
+      )}/${sanitizeUrlParam(
+        description
       )}}`
     );
     window.scrollTo(0, 0);
@@ -126,7 +129,7 @@ const RecommendedAds = () => {
                     alt={"recommendedimg"}
                     // className={styles.trendingProductImage}
                     className={styles.proImage}
-                   onClick={()=> handleNavigateToProductDetails(item?.recommendable?.id,item?.recommendable?.user_id,item?.recommendable?.title)}
+                   onClick={()=> handleNavigateToProductDetails(item?.recommendable?.id,item?.recommendable?.user_id,item?.recommendable?.title,item?.recommendable?.description)}
                   />
 
                   {/* <div className={styles.productList}>

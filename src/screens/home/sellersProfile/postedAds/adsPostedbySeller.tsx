@@ -1,18 +1,16 @@
-
-
 import styles from "./index.module.scss";
 import { Image, Pagination } from "antd";
 import Product3 from "../../../../assets/Image (1).svg";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
-import {  useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAdsByUserId } from "../../../request";
 import usePagination from "../../../../hooks/usePagnation";
 import { useQueries } from "@tanstack/react-query";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import LocationIcon from "../../../../assets/locationrelated.svg";
 import { useEffect } from "react";
-import { countUpTo } from "../../../../utils";
+import { countUpTo, sanitizeUrlParam } from "../../../../utils";
 
 const SellersAds = ({
   limit,
@@ -23,12 +21,13 @@ const SellersAds = ({
 }) => {
   const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentPage !== pageNum) {
       setCurrentPage(pageNum);
     }
-  }, [pageNum, currentPage, setCurrentPage])
+  }, [pageNum, currentPage, setCurrentPage]);
 
   const [getAllAdsBySellersQuery] = useQueries({
     queries: [
@@ -42,8 +41,22 @@ const SellersAds = ({
     ],
   });
 
-  console.log(getAllAdsBySellersQuery?.data?.data?.total)
+  console.log(getAllAdsBySellersQuery?.data?.data?.total);
   const adsPosted = getAllAdsBySellersQuery?.data?.data?.data || [];
+
+  const handleNavigateToProductDetails = (
+    id: number,
+    user_id: number,
+    title: string,
+    description: string
+  ) => {
+    navigate(
+      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+        title
+      )}/${sanitizeUrlParam(description)}}`
+    );
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div className="wrapper" style={{ marginBlock: "2rem" }}>
@@ -52,9 +65,7 @@ const SellersAds = ({
       <div>
         {showHeading && (
           <div className={styles.promoHead}>
-            <p style={{ paddingBlockEnd: "2.4rem" }}>
-              Ads Posted By Omorinsola’s Store
-            </p>
+            <p style={{ paddingBlockEnd: "2.4rem" }}>Ads Posted By {adsPosted[0]?.user?.name}</p>
           </div>
         )}
 
@@ -65,7 +76,18 @@ const SellersAds = ({
             adsPosted
               ?.slice(0, limit || adsPosted?.length)
               ?.map((item: ProductDatum, index: number) => (
-                <div className={styles.promoImage} key={index}>
+                <div
+                  className={styles.promoImage}
+                  key={index}
+                  onClick={() =>
+                    handleNavigateToProductDetails(
+                      item?.id,
+                      item?.user_id,
+                      item?.title,
+                      item?.description
+                    )
+                  }
+                >
                   <img
                     src={item?.add_images[0]?.add_image || Product3}
                     alt={item?.title || "Ad"}
@@ -131,22 +153,21 @@ const SellersAds = ({
         </section>
       </div>
 
-      {showHeading &&
-
-      <Pagination
-            current={currentPage}
-            total={getAllAdsBySellersQuery?.data?.data?.total} // Total number of items
-            pageSize={50} // Number of items per page
-            onChange={onChange} // Handle page change
-            showSizeChanger={false} // Hide the option to change the page size
-            style={{
-              marginTop: "20px",
-              textAlign: "center", // Center the pagination
-              display: "flex",
-              justifyContent: "center", // Ensure the pagination is centered
-            }}
-          />
-}
+      {showHeading && (
+        <Pagination
+          current={currentPage}
+          total={getAllAdsBySellersQuery?.data?.data?.total} // Total number of items
+          pageSize={50} // Number of items per page
+          onChange={onChange} // Handle page change
+          showSizeChanger={false} // Hide the option to change the page size
+          style={{
+            marginTop: "20px",
+            textAlign: "center", // Center the pagination
+            display: "flex",
+            justifyContent: "center", // Ensure the pagination is centered
+          }}
+        />
+      )}
     </div>
   );
 };

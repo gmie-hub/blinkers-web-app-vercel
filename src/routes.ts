@@ -3,7 +3,7 @@ export const routes = {
   page: {
     home: "/",
     market: "/market/:search?",
-    productDetails: "/product-details/:id/:user_id/:title?",
+    productDetails: "/product-details/:id/:user_id/:title?/:description?",
     relatedAds: "/related-ads/:id",
     review: "/review/:id",
     productReview: "/product-review/:id",
@@ -24,7 +24,7 @@ export const routes = {
   job: {  
     job: "/jobs",
     homeJob: "/jobs/:search",
-    jobDetails: "/job-details/:id/:title?",
+    jobDetails: "/job-details/:id/:title?/:description?",
     JobLikeThis: "/job/more-jobs-like-this/:id",
     images: "/images/:id",
     videos: "/videos/:id",
@@ -38,7 +38,7 @@ export const routes = {
   directory: {
     directory: "/directory",
     homeDirectory: "/directory/:search",
-    NotClaimed: "/directory-details/:id/:name",
+    NotClaimed: "/directory-details/:id/:name?/:about?",
     relatedBusinesses: "/related-businesses/:id",
     Subscription: "/subscription",
     SubscriptionPricing: "/subscription-pricing/:id",

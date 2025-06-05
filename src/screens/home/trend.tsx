@@ -78,10 +78,13 @@ const Trends = () => {
     id: number,
     user_id: number,
     title: string,
+    description:string,
   ) => {
     navigate(
       `/product-details/${id}/${user_id}/${sanitizeUrlParam(
         title
+      )}/${sanitizeUrlParam(
+        description
       )}}`
     );
     window.scrollTo(0, 0);
@@ -159,6 +162,7 @@ const Trends = () => {
                       item?.id,
                       item?.user_id,
                       item?.title,
+                      item?.description,
                     )
                   }
                   className={styles.trendImage}
@@ -255,6 +259,8 @@ const Trends = () => {
                     trendData[3]?.id,
                     trendData[3]?.user_id,
                     trendData[3]?.title,
+                    trendData[3]?.description,
+
                   )
                 }
                 className={styles.trendImage}
@@ -354,6 +360,7 @@ const Trends = () => {
                       item?.id,
                       item?.user_id,
                       item?.title,
+                      item?.description,
                     )
                   }
                   className={styles.trendImage}

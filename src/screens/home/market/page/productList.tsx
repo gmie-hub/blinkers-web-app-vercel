@@ -195,10 +195,13 @@ const ProductList: React.FC<ProductListProps> = ({
     id: number,
     user_id: number,
     title: string,
+    description:string,
   ) => {
     navigate(
       `/product-details/${id}/${user_id}/${sanitizeUrlParam(
         title
+      )}/${sanitizeUrlParam(
+        description
       )}`
     );
     window.scrollTo(0, 0);
@@ -306,6 +309,7 @@ const ProductList: React.FC<ProductListProps> = ({
                       item?.id,
                       item?.user_id,
                       item?.title,
+                      item?.description,
                     )
                   }
                 >
