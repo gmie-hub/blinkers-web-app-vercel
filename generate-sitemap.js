@@ -2,7 +2,7 @@ import { SitemapStream, streamToPromise } from "sitemap";
 import { Readable } from "stream";
 import { writeFile } from "fs/promises";
 
-const BASE_URL = "https://dev.blinkersnigeria.com/api/v2/";
+const BASE_URL = "https://www.blinkersnigeria.com";
 
 const routes = [
   "/",
