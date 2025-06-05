@@ -27,13 +27,23 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
     }
   }, [pageNum, currentPage, setCurrentPage]);
 
+  // const handleNavigateDetails = (
+  //   id: number,
+  //   title: string,
+  //   description:string,
+  // ) => {
+  //   navigate(
+  //     `/job-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`
+  //   );
+  //   window.scrollTo(0, 0);
+  // };
+
   const handleNavigateDetails = (
     id: number,
     title: string,
-    description:string,
   ) => {
     navigate(
-      `/job-details/${id}/${sanitizeUrlParam(title)}/${sanitizeUrlParam(description)}`
+      `/job-details/${id}/${sanitizeUrlParam(title)}`
     );
     window.scrollTo(0, 0);
   };
@@ -92,7 +102,6 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                     handleNavigateDetails(
                       item?.id,
                       item?.title,
-                      item?.description,
                     )
                   }
                   className={styles.chooseCard}

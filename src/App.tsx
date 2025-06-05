@@ -91,6 +91,8 @@ function App() {
     { path: routes.directory.homeDirectory, element: <Directory /> },
 
     { path: routes.directory.NotClaimed, element: <NotClaim /> },
+    { path: routes.directory.newNotClaimed, element: <NotClaim /> },
+
     { path: routes.directory.relatedBusinesses, element: <RelatedBusinesses /> },
     { path: routes.directory.SubscriptionPricing, element: <SubscriptionPricing /> },
     { path: routes.directory.ClaimBusiness, element: <ClaimBusiness /> },
@@ -104,6 +106,8 @@ function App() {
     { path: routes.job.homeJob, element: <Job /> },
 
     { path: routes.job.jobDetails, element: <JobDetails /> },
+    { path: routes.job.newjobDetails, element: <JobDetails /> },
+
     { path: routes.job.JobLikeThis, element: <JobLikeThis /> },
     { path: routes.job.images, element: <Images /> },
     { path: routes.job.videos, element: <Videos /> },

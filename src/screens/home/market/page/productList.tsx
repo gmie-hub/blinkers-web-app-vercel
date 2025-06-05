@@ -16,7 +16,7 @@ import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
 import { useEffect, } from "react";
-import { countUpTo, sanitizeUrlParam } from "../../../../utils";
+import { countUpTo} from "../../../../utils";
 import { AddToFav } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
@@ -191,21 +191,32 @@ const ProductList: React.FC<ProductListProps> = ({
   const marketErrorMessage =
     marketError?.message || "An error occurred. Please try again later.";
 
+  // const handleNavigateToProductDetails = (
+  //   id: number,
+  //   user_id: number,
+  //   title: string,
+  //   description:string,
+  // ) => {
+  //   navigate(
+  //     `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+  //       title
+  //     )}/${sanitizeUrlParam(
+  //       description
+  //     )}`
+  //   );
+  //   window.scrollTo(0, 0);
+  // };
+
   const handleNavigateToProductDetails = (
-    id: number,
-    user_id: number,
-    title: string,
-    description:string,
+    id: string,
+  
   ) => {
     navigate(
-      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
-        title
-      )}/${sanitizeUrlParam(
-        description
-      )}`
+      `/product-details/${id}`
     );
     window.scrollTo(0, 0);
   };
+  
 
   const handleBack = () => {
     appliedSearchTerm = "";
@@ -304,14 +315,22 @@ const ProductList: React.FC<ProductListProps> = ({
                 <div
                   className={styles.promoImage}
                   key={index}
-                  onClick={() =>
+                  // onClick={() =>
+                  //   handleNavigateToProductDetails(
+                  //     item?.id,
+                  //     item?.user_id,
+                  //     item?.title,
+                  //     item?.description,
+                  //   )
+                  // }
+
+                    onClick={() =>
                     handleNavigateToProductDetails(
-                      item?.id,
-                      item?.user_id,
-                      item?.title,
-                      item?.description,
+                      item?.slug,
+              
                     )
                   }
+
                 >
                   <div
                     className={styles.favoriteIcon}

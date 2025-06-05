@@ -14,6 +14,7 @@ import {
   getFollowersByBusiness_id,
   getFollowersByUser_id,
   getProductDetails,
+  getProductDetailsByslug,
 } from "../../../request";
 import { App } from "antd";
 import RouteIndicator from "../../../../customs/routeIndicator";
@@ -33,6 +34,14 @@ const Main = () => {
   const navigate = useNavigate();
   const [businessId, setBusinessId] = useState<null | number>();
   const [sellerId, setSellerId] = useState<null | number>();
+
+  const idOrSlug = id!;
+
+  const isId = /^\d+$/.test(idOrSlug);
+
+  console.log(isId, "jummy");
+  console.log("idOrSlug:", JSON.stringify(idOrSlug));
+
 
   console.log(sellerId, businessId, "sellerId");
   useEffect(() => {
@@ -56,13 +65,19 @@ const Main = () => {
     queries: [
       {
         queryKey: ["get-product-details", id],
-        queryFn: () => getProductDetails(parseInt(id!)),
+        // queryFn: () => getProductDetails(parseInt(id!)),
+        queryFn: () =>
+          isId
+            ? getProductDetails(parseInt(idOrSlug))
+            : getProductDetailsByslug(idOrSlug),
+
         retry: 0,
         refetchOnWindowFocus: true,
         enabled: !!id,
       },
+
       {
-        queryKey: ["get-sellers-followers"],
+        queryKey: ["get-sellers-followers", sellerId],
         queryFn: () => getFollowersByUser_id(user?.id ?? 0, sellerId!),
         retry: 0,
         refetchOnWindowFocus: true,
@@ -164,11 +179,13 @@ const Main = () => {
     );
   console.log(isUserFollowingSeller, "isUserFollowingBusiness");
 
-  const productDetailsData = getProductDetailsQuery?.data?.data;
+  const productDetailsData = isId ?  getProductDetailsQuery?.data?.data : getProductDetailsQuery?.data?.data?.data[0];
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
   const productDetailsErrorMessage =
     productDetailsError?.message ||
     "An error occurred. Please try again later.";
+
+
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   const profileDetailsData = getUserDetailsQuery?.data?.data;

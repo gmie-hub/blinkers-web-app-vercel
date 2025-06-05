@@ -84,7 +84,7 @@ const BigScreen = ({
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
 
-  console.log(businessDetailsData, "businessDetailsData");
+  console.log(productDetailsData, "productDetailsData");
 
   useEffect(() => {
     const handleResize = () => {
@@ -108,12 +108,22 @@ const BigScreen = ({
   const handleTabChange = (key: string) => {
     setActiveKey(key);
   };
-  console.log(productDetailsData?.add_images[0]?.image_url, "jum?.id ");
+
+  // const handleNavigateToSellersProfile = () => {
+  //   if (businessDetailsData && businessDetailsData?.id !== undefined) {
+  //     navigate(
+  //       `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}/${businessDetailsData?.about}`
+  //     );
+  //   } else {
+  //     navigate(`/seller-profile/${profileDetailsData?.id}`);
+  //   }
+  //   window.scrollTo(0, 0);
+  // };
 
   const handleNavigateToSellersProfile = () => {
     if (businessDetailsData && businessDetailsData?.id !== undefined) {
       navigate(
-        `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}/${businessDetailsData?.about}`
+        `/directory-details/${businessDetailsData?.id}/${businessDetailsData?.name}`
       );
     } else {
       navigate(`/seller-profile/${profileDetailsData?.id}`);
@@ -122,7 +132,6 @@ const BigScreen = ({
   };
 
   const relatedAdsData = productDetailsData?.related_ads;
-  console.log(profileDetailsData, "profileDetailsData");
 
   const handleNavigateToRelatedAds = () => {
     navigate(`/related-ads/${id}`);

@@ -38,12 +38,22 @@ const Directory = () => {
     setAppliedSearchTerm(searchTerm);
   };
 
-  const handleNavigateDirectory = (id: number, name: string, about:string) => {
+  // const handleNavigateDirectory = (id: number, name: string, about:string) => {
+  //   navigate(
+  //     `/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`
+  //   );
+  //   window.scroll(0, 0);
+  // };
+
+  const handleNavigateDirectory = (id: number, name: string) => {
     navigate(
-      `/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`
+      `/directory-details/${id}/${sanitizeUrlParam(name)}`
     );
     window.scroll(0, 0);
   };
+
+
+ 
 
   const [getAllDirectoryQuery] = useQueries({
     queries: [
@@ -180,8 +190,12 @@ const Directory = () => {
                     className={styles.promoImage}
                     key={index}
                     onClick={() =>
-                      handleNavigateDirectory(item?.id, item?.name,item?.about)
+                      handleNavigateDirectory(item?.id, item?.name)
                     }
+                    
+                    // onClick={() =>
+                    //   handleNavigateDirectory(item?.id, item?.name,item?.about)
+                    // }
                   >
                     <img
                       src={item?.logo}

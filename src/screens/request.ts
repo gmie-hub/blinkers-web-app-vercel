@@ -74,6 +74,11 @@ export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };
 
+export const getProductDetailsByslug = async (slug: string) => {
+  return (await api.get(`ads?slug=${slug}`))?.data as ProductDetailsResponse;
+};
+
+
 export const getSubCategory = async (id: number) => {
   return (await api.get(`categories/sub?category_id=${id}&per_page=${500}`))
     ?.data as CategoryResponse;

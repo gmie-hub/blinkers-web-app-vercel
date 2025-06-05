@@ -74,21 +74,33 @@ const Trends = () => {
     window.scrollTo(0, 0); // Scrolls to the top of the page
   };
 
+  // const handleNavigateToProductDetails = (
+  //   id: number,
+  //   user_id: number,
+  //   title: string,
+  //   description:string,
+  // ) => {
+  //   navigate(
+  //     `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+  //       title
+  //     )}/${sanitizeUrlParam(
+  //       description
+  //     )}}`
+  //   );
+  //   window.scrollTo(0, 0);
+  // };
+
+
   const handleNavigateToProductDetails = (
-    id: number,
-    user_id: number,
-    title: string,
-    description:string,
+    id: string,
+
   ) => {
     navigate(
-      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
-        title
-      )}/${sanitizeUrlParam(
-        description
-      )}}`
+      `/product-details/${id}`
     );
     window.scrollTo(0, 0);
   };
+
 
   const addToFavMutation = useMutation({
     mutationFn: AddToFav,
@@ -157,12 +169,19 @@ const Trends = () => {
               trendData?.length > 0 &&
               trendData?.slice(0, 2)?.map((item: ProductDatum, index: number) => (
                 <div
+                  // onClick={() =>
+                  //   handleNavigateToProductDetails(
+                  //     item?.id,
+                  //     item?.user_id,
+                  //     item?.title,
+                  //     item?.description,
+                  //   )
+                  // }
+
                   onClick={() =>
                     handleNavigateToProductDetails(
-                      item?.id,
-                      item?.user_id,
-                      item?.title,
-                      item?.description,
+                      item?.slug,
+                  
                     )
                   }
                   className={styles.trendImage}
@@ -254,12 +273,19 @@ const Trends = () => {
           <div className={styles.middleSectionTrend}>
             {trendData[3] && (
               <div
+                // onClick={() =>
+                //   handleNavigateToProductDetails(
+                //     trendData[3]?.id,
+                //     trendData[3]?.user_id,
+                //     trendData[3]?.title,
+                //     trendData[3]?.description,
+
+                //   )
+                // }
                 onClick={() =>
                   handleNavigateToProductDetails(
-                    trendData[3]?.id,
-                    trendData[3]?.user_id,
-                    trendData[3]?.title,
-                    trendData[3]?.description,
+                    trendData[3]?.slug,
+              
 
                   )
                 }
@@ -355,12 +381,18 @@ const Trends = () => {
               trendData?.length > 0 &&
               trendData?.slice(4, 6)?.map((item: ProductDatum, index: number) => (
                 <div
+                  // onClick={() =>
+                  //   handleNavigateToProductDetails(
+                  //     item?.id,
+                  //     item?.user_id,
+                  //     item?.title,
+                  //     item?.description,
+                  //   )
+                  // }
                   onClick={() =>
                     handleNavigateToProductDetails(
-                      item?.id,
-                      item?.user_id,
-                      item?.title,
-                      item?.description,
+                      item?.slug,
+                
                     )
                   }
                   className={styles.trendImage}

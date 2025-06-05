@@ -10,7 +10,7 @@ import { useQueries } from "@tanstack/react-query";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import LocationIcon from "../../../../assets/locationrelated.svg";
 import { useEffect } from "react";
-import { countUpTo, sanitizeUrlParam } from "../../../../utils";
+import { countUpTo } from "../../../../utils";
 
 const SellersAds = ({
   limit,
@@ -44,16 +44,26 @@ const SellersAds = ({
   console.log(getAllAdsBySellersQuery?.data?.data?.total);
   const adsPosted = getAllAdsBySellersQuery?.data?.data?.data || [];
 
+  // const handleNavigateToProductDetails = (
+  //   id: number,
+  //   user_id: number,
+  //   title: string,
+  //   description: string
+  // ) => {
+  //   navigate(
+  //     `/product-details/${id}/${user_id}/${sanitizeUrlParam(
+  //       title
+  //     )}/${sanitizeUrlParam(description)}}`
+  //   );
+  //   window.scrollTo(0, 0);
+  // };
+
   const handleNavigateToProductDetails = (
-    id: number,
-    user_id: number,
-    title: string,
-    description: string
+    id: string,
+ 
   ) => {
     navigate(
-      `/product-details/${id}/${user_id}/${sanitizeUrlParam(
-        title
-      )}/${sanitizeUrlParam(description)}}`
+      `/product-details/${id}`
     );
     window.scrollTo(0, 0);
   };
@@ -79,12 +89,18 @@ const SellersAds = ({
                 <div
                   className={styles.promoImage}
                   key={index}
+                  // onClick={() =>
+                  //   handleNavigateToProductDetails(
+                  //     item?.id,
+                  //     item?.user_id,
+                  //     item?.title,
+                  //     item?.description
+                  //   )
+                  // }
                   onClick={() =>
                     handleNavigateToProductDetails(
-                      item?.id,
-                      item?.user_id,
-                      item?.title,
-                      item?.description
+                      item?.slug,
+                    
                     )
                   }
                 >
