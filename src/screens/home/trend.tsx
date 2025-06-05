@@ -11,7 +11,6 @@ import axios, { AxiosError } from "axios";
 import { AddToFav, getTrendingAds } from "../request";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import CustomSpin from "../../customs/spin";
-import { sanitizeUrlParam } from "../../utils";
 import redFavorite from "../../assets/redfav.svg";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";

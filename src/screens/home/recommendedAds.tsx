@@ -8,7 +8,6 @@ import { AxiosError } from "axios";
 import { getRecommededAds } from "../request";
 import CustomSpin from "../../customs/spin";
 import { useNavigate } from "react-router-dom";
-import { sanitizeUrlParam } from "../../utils";
 
 // Main component
 const RecommendedAds = () => {
