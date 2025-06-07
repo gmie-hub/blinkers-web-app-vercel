@@ -9,7 +9,7 @@ import WhatsappLogo from "../../../assets/whatsapp.svg";
 import InstagramIcon from "../../../assets/instagram.svg";
 import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
 import BrowseLogo from "../../../assets/Icon (4).svg";
-import ChatIcon from "../../../assets/messages-2.svg";
+// import ChatIcon from "../../../assets/messages-2.svg";
 import FlagLogo from "../../../assets/flag.svg";
 import SellersAds from "./postedAds/adsPostedbySeller";
 import LocationIcon from "../../../assets/locationnot.svg";
