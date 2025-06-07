@@ -278,7 +278,7 @@ const SellerProfile = () => {
                     </div>{" "}
                   </div>
 
-                  <div className={styles.chatBtn}>
+                  {/* <div className={styles.chatBtn}>
                     <Button
                       variant="white"
                       icon={
@@ -286,7 +286,7 @@ const SellerProfile = () => {
                       }
                       text="  Chat With Seller"
                     />
-                  </div>
+                  </div> */}
 
                   {/* <div className={styles.flag}> */}
                   <Button
