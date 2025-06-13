@@ -31,6 +31,8 @@ const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   // const [recaptchaToken, setRecaptchaToken] = useState(""); // State for reCAPTCHA
   // const recaptchaRef = useRef<ReCAPTCHA | null>(null); // Reference for reCAPTCHA
+  const params = new URLSearchParams(window.location.href.split("?").pop());
+  const referralCode = params.get("referral_code");
 
   const SignUpMutation = useMutation({
     mutationFn: SignUpCall,
@@ -60,7 +62,8 @@ const SignUp = () => {
       email: values?.email,
       password: values?.password,
       confirm_password: values.confirm_password,
-      register_method:'WEB'
+      register_method:'WEB',
+      ...(referralCode && { referral_code: referralCode }),
     };
 
     try {

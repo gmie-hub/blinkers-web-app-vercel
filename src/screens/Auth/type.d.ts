@@ -20,6 +20,7 @@ interface signUp {
   password: string;
   confirm_password: string;
   register_method:string;
+  referral_code?:string
 }
 
 
