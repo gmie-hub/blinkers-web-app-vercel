@@ -61,34 +61,7 @@ const Details = ({ productDetailsData }: Props) => {
             }
           )}
 
-        {/* <div className={styles.row}>
-          <div className={styles.item}>
-            <p className={styles.label}>Brand</p>
-            <p className={styles.value}>Apple</p>
-          </div>
-          <div className={styles.item}>
-            <p className={styles.label}>Model</p>
-            <p className={styles.value}>iPhone 15 Pro Max</p>
-          </div>
-        </div>
-
-        <div className={styles.row}>
-          <div className={styles.item}>
-            <p className={styles.label}>Internal Storage</p>
-            <p className={styles.value}>128GB</p>
-          </div>
-          <div className={styles.item}>
-            <p className={styles.label}>Color</p>
-            <p className={styles.value}>Grey</p>
-          </div>
-        </div>
-
-        <div className={styles.row}>
-          <div className={styles.item}>
-            <p className={styles.label}>Dimension</p>
-            <p className={styles.value}>375 X 812</p>
-          </div>
-        </div> */}
+     
       </div>
 
       <div className={styles.para}>
