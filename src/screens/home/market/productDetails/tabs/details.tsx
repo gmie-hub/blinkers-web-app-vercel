@@ -8,28 +8,96 @@ const Details = ({ productDetailsData }: Props) => {
   return (
     <div>
       <div className={styles.flexContain}>
-        <p className={styles.subjectBg}>{ productDetailsData?.description_tags ||'New'}</p>
+        <p className={styles.subjectBg}>
+          {productDetailsData?.description_tags || "New"}
+        </p>
         <p className={styles.subjectBg}>PAY ON DELEVERY</p>
       </div>
+      <div className={styles.specContainer}>
+        <h2>Specifications</h2>
+
+        <div className={styles.row}>
+          <div className={styles.item}>
+            <p className={styles.label}>Category</p>
+            <p className={styles.value}>
+              {productDetailsData?.category?.title}
+            </p>
+          </div>
+          <div className={styles.item}>
+            <p className={styles.label}>Sub Category</p>
+            <p className={styles.value}>
+              {productDetailsData?.subcategory?.title}
+            </p>
+          </div>
+        </div>
+
+        {productDetailsData && productDetailsData?.specification_values?.length > 0 &&
+          productDetailsData.specification_values.map(
+            (item: any, index: number, array: any[]) => {
+              // Only start a new row on even indexes
+              if (index % 2 === 0) {
+                const nextItem = array[index + 1];
+
+                return (
+                  <div className={styles.row} key={item.id}>
+                    <div className={styles.item}>
+                      <p className={styles.label}>
+                        {item.specification?.title}
+                      </p>
+                      <p className={styles.value}>{item.value}</p>
+                    </div>
+                    {nextItem && (
+                      <div className={styles.item}>
+                        <p className={styles.label}>
+                          {nextItem.specification?.title}
+                        </p>
+                        <p className={styles.value}>{nextItem.value}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            }
+          )}
+
+        {/* <div className={styles.row}>
+          <div className={styles.item}>
+            <p className={styles.label}>Brand</p>
+            <p className={styles.value}>Apple</p>
+          </div>
+          <div className={styles.item}>
+            <p className={styles.label}>Model</p>
+            <p className={styles.value}>iPhone 15 Pro Max</p>
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.item}>
+            <p className={styles.label}>Internal Storage</p>
+            <p className={styles.value}>128GB</p>
+          </div>
+          <div className={styles.item}>
+            <p className={styles.label}>Color</p>
+            <p className={styles.value}>Grey</p>
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.item}>
+            <p className={styles.label}>Dimension</p>
+            <p className={styles.value}>375 X 812</p>
+          </div>
+        </div> */}
+      </div>
+
       <div className={styles.para}>
-        <h2>Specification</h2>
+        <h2>Description</h2>
         <p>{productDetailsData?.description}</p>
-        {/* <p>
-          This flare Sleeve midi dress is a must have in every woman's closet.
-          beautifully designed for a perfect fit to flatter your figure while
-          covered up. the pencil fit compliments the midi length for that classy
-          chic look. the flare sleeve is the center of attraction for this
-          dress, you can never go wrong in this beautiful piece, be it styled as
-          formal or occasion. this flare sleeve midi dress is made of solid
-          textured fabric, it contains polyester and spandex with an invisible
-          zipper to back for easy wear.{" "}
-        </p> */}
       </div>
       <div className={styles.para}>
         <h2> Technical Details</h2>
-        <p>
-        {productDetailsData?.technical_details }
-        </p>
+        <p>{productDetailsData?.technical_details}</p>
       </div>
     </div>
   );

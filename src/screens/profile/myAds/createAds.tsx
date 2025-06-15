@@ -1,4 +1,4 @@
-import { Form, Formik, FormikValues } from "formik";
+import { Field, Form, Formik, FormikValues } from "formik";
 import styles from "./editAds.module.scss";
 import { useMutation, useQueries } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
@@ -11,6 +11,7 @@ import {
   getAllCategory,
   getAllState,
   getLGAbyStateId,
+  getSpecSubCategory,
   getSubCategory,
   //   uploadAdsGallery,
   //   uploadAdsVideo,
@@ -22,6 +23,7 @@ import { App } from "antd";
 import { errorMessage } from "../../../utils/errorMessage";
 
 import * as Yup from "yup";
+import Select from "../../../customs/select/select";
 
 const CreateAdz = () => {
   const [stateId, setStateId] = useState(0);
@@ -30,12 +32,12 @@ const CreateAdz = () => {
   const [uploadFeature, setUploadFeature] = useState<File | null>(null);
   const [uploads, setUploads] = useState<File[]>([]);
   const [uploadVideos, setUploadVideos] = useState<File[]>([]);
+  const [subCategoryId, setSubCategoryId] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
 
-  console.log(uploadFeature, "jummy 4 oclos");
 
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
@@ -46,38 +48,54 @@ const CreateAdz = () => {
     setCategoryId(value);
     setFieldValue("sub_category_id", "");
   };
+  const handleSubCategoryChange = (value: number) => {
+    setSubCategoryId(value);
+  };
 
-  const [getStateQuery, getLGAQuery, getAllCategoryQuery, getSubCategoryQuery] =
-    useQueries({
-      queries: [
-        {
-          queryKey: ["get-all-state"],
-          queryFn: getAllState,
-          retry: 0,
-          refetchOnWindowFocus: true,
-        },
-        {
-          queryKey: ["get-all-lga", stateId],
-          queryFn: () => getLGAbyStateId(stateId!),
-          retry: 0,
-          refetchOnWindowFocus: true,
-          enabled: !!stateId,
-        },
-        {
-          queryKey: ["get-all-category"],
-          queryFn: () => getAllCategory(),
-          retry: 0,
-          refetchOnWindowFocus: true,
-        },
-        {
-          queryKey: ["get-sub-category", categoryId],
-          queryFn: () => getSubCategory(categoryId),
-          retry: 0,
-          refetchOnWindowFocus: true,
-          enabled: !!categoryId,
-        },
-      ],
-    });
+
+  const [
+    getStateQuery,
+    getLGAQuery,
+    getAllCategoryQuery,
+    getSubCategoryQuery,
+    getSpecificationQuery,
+  ] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-all-state"],
+        queryFn: getAllState,
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: ["get-all-lga", stateId],
+        queryFn: () => getLGAbyStateId(stateId!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!stateId,
+      },
+      {
+        queryKey: ["get-all-category"],
+        queryFn: () => getAllCategory(),
+        retry: 0,
+        refetchOnWindowFocus: true,
+      },
+      {
+        queryKey: ["get-sub-category", categoryId],
+        queryFn: () => getSubCategory(categoryId),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!categoryId,
+      },
+      {
+        queryKey: ["get-sub-category", subCategoryId],
+        queryFn: () => getSpecSubCategory(subCategoryId),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!subCategoryId,
+      },
+    ],
+  });
 
   const stateData = getStateQuery?.data?.data?.data ?? [];
   const lgaData = getLGAQuery?.data?.data?.data ?? [];
@@ -123,6 +141,8 @@ const CreateAdz = () => {
         }))
       : []),
   ];
+  const specifications =
+    getSpecificationQuery?.data?.data?.data[0]?.specifications;
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -210,13 +230,12 @@ const CreateAdz = () => {
     setUploadFeature(null);
   };
 
-  const handleNavigateToProfile = () =>{
-    localStorage.setItem("activeTabKeyProfile", '7');
+  const handleNavigateToProfile = () => {
+    localStorage.setItem("activeTabKeyProfile", "7");
 
-    navigate('/profile')
+    navigate("/profile");
     window.scrollTo(0, 0);
-
-  }
+  };
   const createAdsMutation = useMutation({
     mutationFn: createAds,
   });
@@ -266,10 +285,24 @@ const CreateAdz = () => {
     });
 
     uploadVideos.forEach((file, index: number) => {
-      console.log(file.type); // Log the file type
 
       formData.append(`add_video[${index}]`, file);
     });
+
+    
+
+    if ( getSpecificationQuery?.data?.data?.data  && getSpecificationQuery?.data?.data?.data?.length > 0) {
+  const specs = getSpecificationQuery.data.data.data[0].specifications;
+
+  specs.forEach((spec: any, index: number) => {
+    const specValue = values?.[`specifications`]?.[index]?.value;
+
+    if (specValue !== undefined && specValue !== null && specValue !== "") {
+      formData.append(`specifications[${index}][id]`, String(spec.id));
+      formData.append(`specifications[${index}][value]`, String(specValue));
+    }
+  });
+}
 
     try {
       await createAdsMutation.mutateAsync(formData, {
@@ -280,7 +313,7 @@ const CreateAdz = () => {
           });
           resetForm();
           clearFile();
-          handleNavigateToProfile()
+          handleNavigateToProfile();
         },
       });
     } catch (error) {
@@ -321,9 +354,12 @@ const CreateAdz = () => {
     setUploadVideos((prev) => prev.filter((_, i) => i !== index));
   };
 
+
   return (
     <section className="wrapper">
-      <Formik 
+      
+    
+      <Formik
         initialValues={{
           title: "",
           Used: false,
@@ -338,12 +374,17 @@ const CreateAdz = () => {
           local_government_area_id: "",
           description: "",
           technical_details: "",
+          specifications: specifications?.map((spec) => ({
+            id: spec.id,
+            value: "",
+          })) || [],
         }}
         onSubmit={(values, { resetForm }) => {
           createAdsHandler(values, resetForm);
+
         }}
         validationSchema={validationSchema}
-        enableReinitialize
+        // enableReinitialize
       >
         {({ handleChange, setFieldValue, values }) => {
           return (
@@ -477,6 +518,12 @@ const CreateAdz = () => {
                   />
                 </div>
                 <div className={styles.inputRow}>
+                  <Input
+                    name="pickup_address"
+                    label="Pickup address"
+                    type="text"
+                    placeholder="Pickup address"
+                  />
                   <SearchableSelect
                     name="category_id"
                     label="Category"
@@ -491,14 +538,50 @@ const CreateAdz = () => {
                     label="Sub Category"
                     options={subCategoryOptions}
                     placeholder="Select Sub Category"
+                    onChange={(value: any) =>
+                      handleSubCategoryChange(value)
+                    }
                   />
+                </div>
 
-                  <Input
-                    name="pickup_address"
-                    label="Pickup address"
-                    type="text"
-                    placeholder="Pickup address"
-                  />
+                <div className={styles.inputRowSpec}>
+                  {specifications &&
+                    specifications?.length > 0 &&
+                    specifications?.map((spec: any, index: number) => (
+                      <div key={spec.id} style={{ marginBottom: "1rem" }}>
+                        <Field
+                          type="hidden"
+                          name={`specifications[${index}].id`}
+                          value={spec.id}
+                        />
+                        {spec.type === "input" ? (
+                          <Input
+                            name={`specifications[${index}].value`}
+                            label={spec.title}
+                            placeholder="Discount Price"
+                            type="text"
+                            onChange={handleChange}
+                          />
+                        ) : spec.type === "dropdown" ? (
+                          <Select
+                            name={`specifications[${index}].value`}
+                            // name={`spec_${spec.title}`}
+                            label={spec.title}
+                            placeholder={`Select ${spec.title}`}
+                            options={JSON.parse(spec.options || "[]")?.map(
+                              (opt: string) => ({
+                                label: opt,
+                                value: opt,
+                              })
+                            )}
+                            onChange={handleChange}
+
+                            
+                            
+                          />
+                        ) : null}
+                      </div>
+                    ))}
                 </div>
                 <div className={styles.inputRow}>
                   <SearchableSelect
@@ -553,7 +636,9 @@ const CreateAdz = () => {
                     variant="green"
                     type="submit"
                     disabled={createAdsMutation?.isPending}
-                    text={createAdsMutation?.isPending ? "loading..." : "Submit"}
+                    text={
+                      createAdsMutation?.isPending ? "loading..." : "Submit"
+                    }
                     className="buttonStyle"
                   />
                 </section>

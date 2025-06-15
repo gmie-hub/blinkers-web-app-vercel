@@ -1,4 +1,4 @@
-import { Form, Formik, FormikValues } from "formik";
+import { Field, Form, Formik, FormikValues } from "formik";
 import styles from "./editAds.module.scss";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
@@ -12,6 +12,7 @@ import {
   getAllState,
   getLGAbyStateId,
   getProductDetails,
+  getSpecSubCategory,
   getSubCategory,
   UpdateAds,
   uploadAdsGallery,
@@ -26,6 +27,7 @@ import { errorMessage } from "../../../utils/errorMessage";
 import DeleteIcon from "../../../assets/deleteicon.svg";
 import CustomSpin from "../../../customs/spin";
 import * as Yup from "yup";
+import Select from "../../../customs/select/select";
 
 const EditAdz = () => {
   const { id } = useParams();
@@ -38,7 +40,10 @@ const EditAdz = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [subCategoryId, setSubCategoryId] = useState(0);
 
+
+  console.log(subCategoryId,'subCategoryId')
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
     setFieldValue("local_government_area_id", "");
@@ -55,6 +60,7 @@ const EditAdz = () => {
     getLGAQuery,
     getAllCategoryQuery,
     getSubCategoryQuery,
+    getSpecificationQuery,
   ] = useQueries({
     queries: [
       {
@@ -90,6 +96,13 @@ const EditAdz = () => {
         refetchOnWindowFocus: true,
         enabled: !!categoryId,
       },
+      {
+        queryKey: ["get-sub-category", subCategoryId],
+        queryFn: () => getSpecSubCategory(subCategoryId),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!subCategoryId,
+      },
     ],
   });
 
@@ -99,23 +112,16 @@ const EditAdz = () => {
     productDetailsError?.message ||
     "An error occurred. Please try again later.";
 
-  console.log(
-    productDetailsData?.add_images[0]?.add_image,
-    "productDetailsData"
-  );
+ 
   const stateData = getStateQuery?.data?.data?.data ?? [];
   const lgaData = getLGAQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data ?? [];
 
-  // const stateOptions: { value: number; label: string }[] = [
-  //   { value: 0, label: "Select State" }, // Default option
-  //   ...(stateData && stateData?.length > 0
-  //     ? stateData?.map((item: StateDatum) => ({
-  //         value: item?.id,
-  //         label: item?.state_name,
-  //       }))
-  //     : []),
-  // ];
+ useEffect(()=>{
+ setSubCategoryId(productDetailsData?.sub_category_id || 0)
+
+ },[productDetailsData])
+
   const stateOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select State" }, // Default option
     ...(Array.isArray(stateData) && stateData.length > 0
@@ -125,7 +131,6 @@ const EditAdz = () => {
         }))
       : []),
   ];
-  
 
   const lgaOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select Lga" }, // Default option
@@ -136,17 +141,8 @@ const EditAdz = () => {
         }))
       : []),
   ];
-  
 
-  // const lgaOptions: { value: number; label: string }[] = [
-  //   { value: 0, label: "Select Lga" }, // Default option
-  //   ...(lgaData && lgaData?.length > 0
-  //     ? lgaData?.map((item: LGADatum) => ({
-  //         value: item?.id,
-  //         label: item?.local_government_area,
-  //       }))
-  //     : []),
-  // ];
+ 
 
   const categoryData = getAllCategoryQuery?.data?.data?.data ?? [];
 
@@ -159,7 +155,7 @@ const EditAdz = () => {
         }))
       : []),
   ];
-  
+
   const subCategoryOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select Business" }, // Default option
     ...(Array.isArray(subCategory) && subCategory.length > 0
@@ -169,26 +165,7 @@ const EditAdz = () => {
         }))
       : []),
   ];
-  
 
-  // const categoryOptions: { value: number; label: string }[] = [
-  //   { value: 0, label: "Select Business" }, // Default option
-  //   ...(categoryData && categoryData?.length > 0
-  //     ? categoryData?.map((item: CategoryDatum) => ({
-  //         value: item?.id,
-  //         label: item?.title,
-  //       }))
-  //     : []),
-  // ];
-  // const subCategoryOptions: { value: number; label: string }[] = [
-  //   { value: 0, label: "Select Business" }, // Default option
-  //   ...(subCategory && subCategory?.length > 0
-  //     ? subCategory?.map((item: CategoryDatum) => ({
-  //         value: item?.id,
-  //         label: item?.title,
-  //       }))
-  //     : []),
-  // ];
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -262,6 +239,34 @@ const EditAdz = () => {
     setFieldValue("featureImage", selectedFile);
     setUploadFeature(selectedFile);
   };
+
+  // const handleSubCategoryChange = (value: number) => {
+  //   setSubCategoryId(value);
+  // };
+
+ const handleSubCategoryChange = async (value, setFieldValue) => {
+  setFieldValue("sub_category_id", value);
+
+  // 👇 Replace this with your actual fetch logic
+  const newSpecs = specifications || [];
+
+  // Preserve previously entered values
+  const currentValues = Formik.current?.values?.specifications || [];
+
+  const updatedSpecs = newSpecs.map((spec) => {
+    const existing = currentValues.find((s) => s.id === spec.id);
+    return {
+      id: spec.id,
+      value: existing?.value ?? "",
+    };
+  });
+
+  // setSpecifications(newSpecs); // updates fields
+  setFieldValue("specifications", updatedSpecs); // updates Formik state
+};
+
+
+
   const deleteGalaryMutation = useMutation({ mutationFn: deleteAdsGalarybyId });
 
   const DeleteGalaryHandler = async (imageIds: number[]) => {
@@ -430,13 +435,13 @@ const EditAdz = () => {
       UpdateAds(id, payload),
     mutationKey: ["edit-ads"],
   });
-  
 
   const UpdateAdsHandler = async (values: FormikValues) => {
     const formData = new FormData();
     const descriptionTags = [];
 
-    const parsePrice = (price: string | number) => Math.floor(Number(price?.toString().replace(/,/g, '')));
+    const parsePrice = (price: string | number) =>
+      Math.floor(Number(price?.toString().replace(/,/g, "")));
     if (values.Used) {
       descriptionTags.push("USED");
     }
@@ -452,9 +457,12 @@ const EditAdz = () => {
     formData.append("title", values?.title);
     // formData.append("price", values?.price);
     // formData.append("discount_price", values?.discount_price);
-    formData.append('price', parsePrice(values?.price).toString());
-    formData.append('discount_price', parsePrice(values?.discount_price).toString());
-  
+    formData.append("price", parsePrice(values?.price).toString());
+    formData.append(
+      "discount_price",
+      parsePrice(values?.discount_price).toString()
+    );
+
     descriptionTags.forEach((tag, index) => {
       formData.append(`description_tags[${index}]`, tag);
     });
@@ -474,8 +482,21 @@ const EditAdz = () => {
     if (uploadFeature) {
       formData.append("add_featured_image", uploadFeature);
     }
-    formData.append("_method", "patch")
+    formData.append("_method", "patch");
 
+    
+    if ( getSpecificationQuery?.data?.data?.data  && getSpecificationQuery?.data?.data?.data?.length > 0) {
+      const specs = getSpecificationQuery.data.data.data[0].specifications;
+    
+      specs.forEach((spec: any, index: number) => {
+        const specValue = values?.[`specifications`]?.[index]?.value;
+    
+        if (specValue !== undefined && specValue !== null && specValue !== "") {
+          formData.append(`specifications[${index}][id]`, String(spec.id));
+          formData.append(`specifications[${index}][value]`, String(specValue));
+        }
+      });
+    }
 
     try {
       await updateAdsMutation.mutateAsync(
@@ -486,8 +507,7 @@ const EditAdz = () => {
               message: "Success",
               description: data?.message,
             });
-            navigate(-1)
-
+            // navigate(-1);
           },
         }
       );
@@ -500,79 +520,20 @@ const EditAdz = () => {
   };
 
 
-  //   const UpdateAdsHandler = async (values: FormikValues, ) => {
-  //   const descriptionTags: string[] = [];
-  
-  //   if (values.Used) {
-  //     descriptionTags.push("USED");
-  //   }
-  //   if (values.New) {
-  //     descriptionTags.push("NEW");
-  //   }
-  //   if (values.PayOnDelivery) {
-  //     descriptionTags.push("PAY ON DELIVERY");
-  //   }
-  //   const parsePrice = (price: string | number) =>
-  //     Math.floor(Number(price?.toString().replace(/,/g, "")));
+  const specifications =
+    getSpecificationQuery?.data?.data?.data[0]?.specifications;
 
-  //   const payload = {
-  //     category_id: values?.category_id,
-  //     sub_category_id: values?.sub_category_id,
-  //     title: values?.title,
-  //     price: parsePrice(values?.price),
-  //     discount_price:parsePrice(values?.discount_price),
-  //     description_tags: descriptionTags,
-  //     description: values?.description,
-  //     state_id: values?.state_id,
-  //     technical_details: values?.technical_details,
-  //     local_government_area_id: values?.local_government_area_id,
-  //     pickup_address: values?.pickup_address,
-  //     pickup_lat: values?.pickup_lat,
-  //     pickup_lng: values?.pickup_lng,
-  //     add_featured_image: uploadFeature || null,
-  //   };
-  
-  //   try {
-  //     await updateAdsMutation.mutateAsync(
-  //       { id: productDetailsData?.id!, payload },
-  //       {
-  //         onSuccess: (data) => {
-  //           notification.success({
-  //             message: "Success",
-  //             description: data?.message,
-  //           });
-  //           queryClient.refetchQueries({
-  //             queryKey: ["get-product-details"],
-  //           });
-  //         },
-  //       }
-  //     );
-  //   } catch (error: any) {
-  //     notification.error({
-  //       message: "Error",
-  //       description: errorMessage(error) || "An error occurred",
-  //     });
-  //   }
-  // };
-  
-  
+    console.log(specifications,'specifications')
+
   const validationSchema = Yup.object().shape({
     category_id: Yup.string().required("required"),
     sub_category_id: Yup.string().required("required"),
     title: Yup.string().required("required"),
     price: Yup.string().required("required"),
-    // price: Yup.number()
-    // .required("Price is required")
-    // .typeError("Price must be a valid number") // Ensures the value is a number
-    // .positive("Price must be a positive number") // Optional: ensures the number is positive
-    // .integer("Price must be an integer"),
-    // discount_price: Yup.string().required("required"),
     description: Yup.string().required("required"),
     state_id: Yup.string().required("required"),
     local_government_area_id: Yup.string().required("required"),
     pickup_address: Yup.string().required("required"),
-    // state_id: Yup.string().required("required"),
-    // state_id: Yup.string().required("required"),
   });
 
   const handleRemoveFeature = () => {
@@ -582,6 +543,20 @@ const EditAdz = () => {
       fileInputRef.current.value = ""; // Reset the file input value
     }
   };
+
+  const specificationsstate = getSpecificationQuery?.data?.data?.data[0]?.specifications?.map(
+    (spec: any) => {
+      const matched = productDetailsData?.specification_values?.find(
+        (item: any) => item.specification_id === spec.id
+      );
+  
+      return {
+        ...spec,
+        value: matched?.value ?? '',
+      };
+    }
+  );
+  
 
   return (
     <section className="wrapper">
@@ -608,11 +583,16 @@ const EditAdz = () => {
               productDetailsData?.local_government_area_id || "",
             description: productDetailsData?.description || "",
             technical_details: productDetailsData?.technical_details || "",
+           
+            specifications: specificationsstate?.map((spec) => ({
+              id: spec.id,
+              value: spec.value ?? '',
+            })),
           }}
           onSubmit={(values) => {
             UpdateAdsHandler(values);
           }}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           enableReinitialize
         >
           {({ handleChange, setFieldValue, values }) => {
@@ -630,13 +610,21 @@ const EditAdz = () => {
                       }
                     />
                     <Upload
-                      placeHolder={UploadGalleryMutation?.isPending ? "Loading... " :"upload your photos"}
+                      placeHolder={
+                        UploadGalleryMutation?.isPending
+                          ? "Loading... "
+                          : "upload your photos"
+                      }
                       name="imageFile"
                       // label="Upload a document to prove that you’re the owner of this business (CAC, Business letterhead etc.)"
                       onChange={(e) => handleFileChange(e, setFieldValue)}
                     />
                     <Upload
-                      placeHolder={UploadVideoMutation?.isPending ? "loading..." : "upload your Videos"}
+                      placeHolder={
+                        UploadVideoMutation?.isPending
+                          ? "loading..."
+                          : "upload your Videos"
+                      }
                       name="videoFile"
                       onChange={(e) => handleVideoChange(e, setFieldValue)}
                     />
@@ -684,12 +672,10 @@ const EditAdz = () => {
                     {productDetailsData?.add_videos?.map(
                       (image, index: number) => (
                         <div key={index} className={styles.imageWrapper}>
-                         
                           <video
                             className={styles.imageAds}
                             src={image?.add_video}
                             controls
-                            
                           />
                           <div
                             className={styles.favoriteIcon}
@@ -726,6 +712,12 @@ const EditAdz = () => {
                     />
                   </div>
                   <div className={styles.inputRow}>
+                    <Input
+                      name="pickup_address"
+                      label="Pickup address"
+                      type="text"
+                      placeholder="Pickup address"
+                    />
                     <SearchableSelect
                       name="category_id"
                       label="Category"
@@ -740,14 +732,46 @@ const EditAdz = () => {
                       label="Sub Category"
                       options={subCategoryOptions}
                       placeholder="Select Sub Category"
+                      onChange={(value: any) => handleSubCategoryChange(value,setFieldValue)}
                     />
+                  </div>
 
-                    <Input
-                      name="pickup_address"
-                      label="Pickup address"
-                      type="text"
-                      placeholder="Pickup address"
-                    />
+                  <div className={styles.inputRowSpec}>
+                    {specifications &&
+                      specifications?.length > 0 &&
+                      specifications?.map((spec: any, index: number) => (
+                        <div key={spec.id} style={{ marginBottom: "1rem" }}>
+                          <Field
+                            type="hidden"
+                            name={`specifications[${index}].id`}
+                            value={spec.id}
+                          />
+                          {spec.type === "input" ? (
+                            <Input
+                              name={`specifications[${index}].value`}
+                              // name={`spec_${spec.title}`}
+                              label={spec.title}
+                              placeholder="Discount Price"
+                              type="text"
+                              onChange={handleChange}
+                            />
+                          ) : spec.type === "dropdown" ? (
+                            <Select
+                              name={`specifications[${index}].value`}
+                              // name={`spec_${spec.title}`}
+                              label={spec.title}
+                              placeholder={`Select ${spec.title}`}
+                              options={JSON.parse(spec.options || "[]")?.map(
+                                (opt: string) => ({
+                                  label: opt,
+                                  value: opt,
+                                })
+                              )}
+                              onChange={handleChange}
+                            />
+                          ) : null}
+                        </div>
+                      ))}
                   </div>
                   <div className={styles.inputRow}>
                     <SearchableSelect

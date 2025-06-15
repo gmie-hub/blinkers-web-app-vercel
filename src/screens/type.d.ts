@@ -229,6 +229,8 @@ interface AllProductData {
   total: number;
 }
 interface ProductDatum {
+  subcategory:CategoryDatum;
+  specification_values:any;
   data?:any;
   favCreatedAt:string
   category:CategoryDatum
@@ -480,6 +482,7 @@ interface CategoryData {
 }
 
 interface CategoryDatum {
+  specifications:any;
   id: number;
   slug: string;
   title: string;
