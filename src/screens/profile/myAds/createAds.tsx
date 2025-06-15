@@ -374,7 +374,7 @@ const CreateAdz = () => {
           local_government_area_id: "",
           description: "",
           technical_details: "",
-          specifications: specifications?.map((spec) => ({
+          specifications: specifications?.map((spec:any) => ({
             id: spec.id,
             value: "",
           })) || [],

@@ -732,7 +732,7 @@ const EditAdz = () => {
                       label="Sub Category"
                       options={subCategoryOptions}
                       placeholder="Select Sub Category"
-                      onChange={(value: any) => handleSubCategoryChange(value,setFieldValue)}
+                      onChange={(value: any) => handleSubCategoryChange(value)}
                     />
                   </div>
 
