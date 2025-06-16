@@ -16,7 +16,7 @@ import {
   //   uploadAdsGallery,
   //   uploadAdsVideo,
 } from "../../request";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Checkbox from "../../../customs/checkBox/checkbox";
 import Upload from "../../../customs/upload/upload";
 import { App } from "antd";
@@ -143,6 +143,9 @@ const CreateAdz = () => {
   ];
   const specifications =
     getSpecificationQuery?.data?.data?.data[0]?.specifications;
+
+  
+
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -383,7 +386,7 @@ const CreateAdz = () => {
           createAdsHandler(values, resetForm);
 
         }}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         // enableReinitialize
       >
         {({ handleChange, setFieldValue, values }) => {
@@ -543,7 +546,8 @@ const CreateAdz = () => {
                     }
                   />
                 </div>
-
+                {specifications &&
+                specifications?.length > 0 &&
                 <div className={styles.inputRowSpec}>
                   {specifications &&
                     specifications?.length > 0 &&
@@ -558,7 +562,7 @@ const CreateAdz = () => {
                           <Input
                             name={`specifications[${index}].value`}
                             label={spec.title}
-                            placeholder="Discount Price"
+                            placeholder={spec.title}
                             type="text"
                             onChange={handleChange}
                           />
@@ -582,7 +586,7 @@ const CreateAdz = () => {
                         ) : null}
                       </div>
                     ))}
-                </div>
+                </div>}
                 <div className={styles.inputRow}>
                   <SearchableSelect
                     name="state_id"

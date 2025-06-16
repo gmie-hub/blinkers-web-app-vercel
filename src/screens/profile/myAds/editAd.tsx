@@ -41,6 +41,7 @@ const EditAdz = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [subCategoryId, setSubCategoryId] = useState(0);
+  const [specificationState, setSpecificationsState] = useState(0);
 
 
   console.log(subCategoryId,'subCategoryId')
@@ -240,30 +241,33 @@ const EditAdz = () => {
     setUploadFeature(selectedFile);
   };
 
-  // const handleSubCategoryChange = (value: number) => {
-  //   setSubCategoryId(value);
-  // };
+  const handleSubCategoryChange = (value: number) => {
+    setSubCategoryId(value);
+  };
 
- const handleSubCategoryChange = async (value, setFieldValue) => {
-  setFieldValue("sub_category_id", value);
+  console.log(subCategoryId, 'djdj')
 
-  // 👇 Replace this with your actual fetch logic
-  const newSpecs = specifications || [];
 
-  // Preserve previously entered values
-  const currentValues = Formik.current?.values?.specifications || [];
+//  const handleSubCategoryChange = async (value, setFieldValue) => {
+//   setFieldValue("sub_category_id", value);
 
-  const updatedSpecs = newSpecs.map((spec:any) => {
-    const existing = currentValues.find((s:any) => s.id === spec.id);
-    return {
-      id: spec.id,
-      value: existing?.value ?? "",
-    };
-  });
+//   // 👇 Replace this with your actual fetch logic
+//   const newSpecs = specifications || [];
 
-  // setSpecifications(newSpecs); // updates fields
-  setFieldValue("specifications", updatedSpecs); // updates Formik state
-};
+//   // Preserve previously entered values
+//   const currentValues = Formik.current?.values?.specifications || [];
+
+//   const updatedSpecs = newSpecs.map((spec:any) => {
+//     const existing = currentValues.find((s:any) => s.id === spec.id);
+//     return {
+//       id: spec.id,
+//       value: existing?.value ?? "",
+//     };
+//   });
+
+//   // setSpecifications(newSpecs); // updates fields
+//   setFieldValue("specifications", updatedSpecs); // updates Formik state
+// };
 
 
 
@@ -593,7 +597,7 @@ const EditAdz = () => {
             UpdateAdsHandler(values);
           }}
           validationSchema={validationSchema}
-          enableReinitialize
+          // enableReinitialize
         >
           {({ handleChange, setFieldValue, values }) => {
             return (
@@ -735,7 +739,8 @@ const EditAdz = () => {
                       onChange={(value: any) => handleSubCategoryChange(value)}
                     />
                   </div>
-
+                  {specifications &&
+                  specifications?.length > 0 &&
                   <div className={styles.inputRowSpec}>
                     {specifications &&
                       specifications?.length > 0 &&
@@ -751,7 +756,7 @@ const EditAdz = () => {
                               name={`specifications[${index}].value`}
                               // name={`spec_${spec.title}`}
                               label={spec.title}
-                              placeholder="Discount Price"
+                              placeholder={spec.title}
                               type="text"
                               onChange={handleChange}
                             />
@@ -773,6 +778,9 @@ const EditAdz = () => {
                         </div>
                       ))}
                   </div>
+          }
+
+
                   <div className={styles.inputRow}>
                     <SearchableSelect
                       name="state_id"
