@@ -16,7 +16,7 @@ import {
   //   uploadAdsGallery,
   //   uploadAdsVideo,
 } from "../../request";
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import Checkbox from "../../../customs/checkBox/checkbox";
 import Upload from "../../../customs/upload/upload";
 import { App } from "antd";

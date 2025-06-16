@@ -1,4 +1,4 @@
-import { Field, Form, Formik, FormikValues } from "formik";
+import { Field, Form, Formik, FormikProps, FormikValues } from "formik";
 import styles from "./editAds.module.scss";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
@@ -41,7 +41,7 @@ const EditAdz = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [subCategoryId, setSubCategoryId] = useState(0);
-  const formikRef = useRef(null);
+const formikRef = useRef<FormikProps<any>>(null);
 
   console.log(subCategoryId,'subCategoryId')
   const handleStateChange = (value: number, setFieldValue: any) => {
@@ -578,7 +578,7 @@ const EditAdz = () => {
         }
       );
   
-      formikRef.current.setFieldValue('specifications', specificationsstate);
+      formikRef?.current?.setFieldValue('specifications', specificationsstate);
     }
   }, [productDetailsData, getSpecificationQuery?.data]);
   
