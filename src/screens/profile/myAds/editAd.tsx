@@ -41,8 +41,7 @@ const EditAdz = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [subCategoryId, setSubCategoryId] = useState(0);
-  const [specificationState, setSpecificationsState] = useState(0);
-
+  const formikRef = useRef(null);
 
   console.log(subCategoryId,'subCategoryId')
   const handleStateChange = (value: number, setFieldValue: any) => {
@@ -511,7 +510,7 @@ const EditAdz = () => {
               message: "Success",
               description: data?.message,
             });
-            // navigate(-1);
+            navigate(-1);
           },
         }
       );
@@ -548,18 +547,42 @@ const EditAdz = () => {
     }
   };
 
-  const specificationsstate = getSpecificationQuery?.data?.data?.data[0]?.specifications?.map(
-    (spec: any) => {
-      const matched = productDetailsData?.specification_values?.find(
-        (item: any) => item.specification_id === spec.id
+  // const specificationsstate = getSpecificationQuery?.data?.data?.data[0]?.specifications?.map(
+  //   (spec: any) => {
+  //     const matched = productDetailsData?.specification_values?.find(
+  //       (item: any) => item.specification_id === spec.id
+  //     );
+  
+  //     return {
+  //       ...spec,
+  //       value: matched?.value ?? '',
+  //     };
+  //   }
+  // );
+
+  useEffect(() => {
+    if (
+      formikRef.current &&
+      productDetailsData &&
+      getSpecificationQuery?.data?.data?.data[0]?.specifications
+    ) {
+      const specificationsstate = getSpecificationQuery?.data?.data?.data[0]?.specifications.map(
+        (spec: any) => {
+          const matched = productDetailsData.specification_values?.find(
+            (item: any) => item.specification_id === spec.id
+          );
+          return {
+            id: spec.id,
+            value: matched?.value ?? '',
+          };
+        }
       );
   
-      return {
-        ...spec,
-        value: matched?.value ?? '',
-      };
+      formikRef.current.setFieldValue('specifications', specificationsstate);
     }
-  );
+  }, [productDetailsData, getSpecificationQuery?.data]);
+  
+
   
 
   return (
@@ -570,6 +593,7 @@ const EditAdz = () => {
         <h1 className="error">{productDetailsErrorMessage}</h1>
       ) : (
         <Formik
+        innerRef={formikRef}
           initialValues={{
             title: productDetailsData?.title || "",
             Used: productDetailsData?.description_tags?.includes("USED"),
@@ -587,17 +611,17 @@ const EditAdz = () => {
               productDetailsData?.local_government_area_id || "",
             description: productDetailsData?.description || "",
             technical_details: productDetailsData?.technical_details || "",
-           
-            specifications: specificationsstate?.map((spec:any) => ({
-              id: spec.id,
-              value: spec.value ?? '',
-            })),
+            specifications:[],
+            // specifications: specificationsstate?.map((spec:any) => ({
+            //   id: spec.id,
+            //   value: spec.value ?? '',
+            // })),
           }}
           onSubmit={(values) => {
             UpdateAdsHandler(values);
           }}
           validationSchema={validationSchema}
-          // enableReinitialize
+          enableReinitialize
         >
           {({ handleChange, setFieldValue, values }) => {
             return (

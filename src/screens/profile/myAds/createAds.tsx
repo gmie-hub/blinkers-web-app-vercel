@@ -386,7 +386,7 @@ const CreateAdz = () => {
           createAdsHandler(values, resetForm);
 
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         // enableReinitialize
       >
         {({ handleChange, setFieldValue, values }) => {
