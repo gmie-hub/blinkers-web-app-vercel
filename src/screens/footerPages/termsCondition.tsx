@@ -5,8 +5,11 @@ import DOMPurify from "dompurify";
 const TermsCOnditions = () => {
   const { data } = useCms();
 
-  const cmsData = data?.data?.data[0]?.description;
-  const cmsDataTitle = data?.data?.data[0]?.title;
+  const cmsItem = data?.data?.data?.find((item: any) => item.id === 13);
+
+
+  const cmsData = cmsItem?.description;
+  const cmsDataTitle = cmsItem?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks

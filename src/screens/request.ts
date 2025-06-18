@@ -116,9 +116,25 @@ export const getPromotedAdsById = async (id?:number) => {
   return (await api.get(`/banners/${id}`))?.data ;
 };
 
-export const getUserNotifications = async (id?: number, hasRead?:number) => {
-  return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}`))?.data ;
+// export const getUserNotifications = async (id?: number, hasRead?:number) => {
+//   return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}`))?.data ;
+// };
+
+export const getUserNotifications = async (id?: number, hasRead?: number) => {
+  const queryParams = new URLSearchParams();
+
+  if (id !== undefined) {
+    queryParams.append("user_id", id.toString());
+  }
+
+  if (hasRead !== undefined) {
+    queryParams.append("is_read", hasRead.toString());
+  }
+
+  const queryString = queryParams.toString();
+  return (await api.get(`/user-notifications?${queryString}`))?.data;
 };
+
 export const getUserNotificationById = async (userId?:number, id?: number,) => {
   return (await api.get(`user-notifications?user_id=${userId}&id=${id}`))?.data ;
 };

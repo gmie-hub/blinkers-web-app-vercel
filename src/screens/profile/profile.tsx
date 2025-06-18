@@ -75,11 +75,11 @@ const Profile = () => {
     //   label: "Notifications",
     //   children: <Notification  />,
     // },
-    {
-      key: "10",
-      label: "Settings",
-      // children: <Reviews limit={3} />,
-    },
+    // {
+    //   key: "10",
+    //   label: "Settings",
+    //   // children: <Reviews limit={3} />,
+    // },
   ];
 
   const handleTabChange = (key: string) => {

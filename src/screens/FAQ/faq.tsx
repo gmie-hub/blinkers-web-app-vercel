@@ -12,11 +12,11 @@ const FAQ = () => {
     setActiveIndex((prevKey) => (prevKey === uniqueKey ? null : uniqueKey));
   };
 
-  const howToBuy = data?.data?.data[2]?.description;
-  const howToSell = data?.data?.data[3]?.description;
-  const howToBuyTitle = data?.data?.data[2]?.title;
-  const howToSellTitle = data?.data?.data[3]?.title;
-
+  const cmsItem = (id: number) => {
+    return data?.data?.data?.find((item: any) => item.id === id);
+  };
+  
+  
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks
     const sanitizedDescription = DOMPurify.sanitize(description);
@@ -29,102 +29,137 @@ const FAQ = () => {
     );
   };
 
-
-
   // General Questions
   const faqData = [
     {
-      question: "What is Blinkers?",
-      answer:
-        "Blinkers is a marketplace app where you can buy and sell a variety of items, from clothes and shoes to cars and real estate.",
+      question: cmsItem(14)?.title,
+      answer: (
+        <Description
+          description={( cmsItem(14)?.description) || ""}
+        />
+      ),
+      // "Blinkers is a marketplace app where you can buy and sell a variety of items, from clothes and shoes to cars and real estate.",
     },
     {
-      question: "Is Blinkers free to use?",
-      answer:
-        "Yes, Blinkers offers a free plan that allows you to post one ad with up to 5 images. However, there are also paid subscription plans with more features.",
+      question: cmsItem(15)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(15)?.description) || ""}
+        />
+      ),
     },
     {
-      question: howToBuyTitle,
-      answer:
-      <Description description={howToBuy || ""} />
+      question: cmsItem(11)?.title,
+      answer: <Description
+      description={(cmsItem(11)?.description) || ""}
+    />,
     },
     {
-      question: howToSellTitle,
-      answer:
-      <Description description={howToSell || ""} />
+      question: cmsItem(10)?.title,
+      answer: <Description
+      description={(cmsItem(10)?.description) || ""}
+    />,
     },
   ];
 
   // Subscription Plans
   const SubscriptionData = [
     {
-      question: "What are the different subscription plans?",
-      answer:
-        "Blinkers offers three subscription plans: Free, Gold, and Platinum.",
+      question: cmsItem(16)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(16)?.description) || ""}
+        />
+      ),
     },
     {
-      question: "What are the benefits of each plan?",
-      answer: [
-        "Free: Post 1 ad with 5 images.",
-
-        "Gold: Post 10 ads with 5 images each",
-        "Platinum: Post 20 ads with 10 images each.",
-      ],
+      question: cmsItem(17)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(17)?.description) || ""}
+        />
+      ),
     },
     {
-        question: "How can I upgrade my subscription?",
-        answer:
-          "Blinkers offers three subscription plans: Free, Gold, and Platinum.",
-      },
-      {
-        question: "What are the benefits of having more images in my ad?",
-        answer:
-          "Blinkers offers three subscription plans: Free, Gold, and Platinum.",
-      },
-      {
-        question: "How do I post an advertisement on Blinkers?",
-        answer:
-          "Blinkers offers three subscription plans: Free, Gold, and Platinum.",
-      },
-      {
-        question: "Is there a limit to the number of items I can sell on Blinkers?",
-        answer:
-          "Blinkers offers three subscription plans: Free, Gold, and Platinum.",
-      },
+      question: cmsItem(18)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(18)?.description) || ""}
+        />
+      ),
+    },
+    {
+      question: cmsItem(19)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(19)?.description) || ""}
+        />
+      ),
+    },
+    {
+      question: cmsItem(20)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(20)?.description) || ""}
+        />
+      ),
+    },
+    {
+      question:cmsItem(21)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(21)?.description) || ""}
+        />
+      ),
+    },
   ];
 
   // Payment Data
   const PaymentData = [
     {
-      question: "What payment methods does Blinkers accept?",
-      answer:
-        "The specific payment methods accepted by Blinkers may vary depending on your region. Please refer to the app for the latest information.",
+      question: cmsItem(22)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(22)?.description) || ""}
+        />
+      ),
     },
     {
-      question:
-        "I'm having trouble making a subscription payment. What can I do?",
-      answer:
-        "If you encounter any issues while making a subscription payment, you can directly chat with the Blinkers admin within the app for assistance.",
+      question: cmsItem(23)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(23)?.description) || ""}
+        />
+      ),
     },
     {
-        question:
-          "I'm having trouble making a subscription payment. What can I do?",
-        answer:"To contact a seller or buyer on Blinkers, simply navigate to the item listing and click on the user's profile. From there, you can send a direct message to initiate communication"
-      },
+      question: cmsItem(24)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(24)?.description) || ""}
+        />
+      ),
+    },
   ];
 
-//Additional Question
+  //Additional Question
   const AdditionalData = [
     {
-      question: "Does Blinkers offer any buyer or seller protection?",
-      answer:'Blinkers prioritizes the safety and security of its users. We employ various security measures, including user verification, secure payment processing, and proactive monitoring of suspicious activities, to safeguard transactions conducted on our platform.'
+      question: cmsItem(25)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(25)?.description) || ""}
+        />
+      ),
     },
     {
-      question:
-        " How do I contact Blinkers support?",
-      answer:"If you have any further questions that aren't addressed in this FAQ, you can contact Blinkers support directly through the app."
+      question: cmsItem(26)?.title,
+      answer: (
+        <Description
+          description={(cmsItem(26)?.description) || ""}
+        />
+      ),
     },
-   
   ];
   return (
     <div className="wrapper">
@@ -296,9 +331,8 @@ const FAQ = () => {
             })}
           </div>
 
-
-             {/* AdditionalData */}
-             <div className={styles.card}>
+          {/* AdditionalData */}
+          <div className={styles.card}>
             <h2>Additional Questions</h2>
             {AdditionalData.map((faq, index) => {
               const uniqueKey = `payment-${index}`;

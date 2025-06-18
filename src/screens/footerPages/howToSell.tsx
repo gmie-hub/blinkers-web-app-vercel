@@ -5,8 +5,10 @@ import DOMPurify from "dompurify";
 const HowToSell = () => {
   const { data } = useCms();
 
-  const cmsData = data?.data?.data[3]?.description;
-  const cmsDataTitle = data?.data?.data[3]?.title;
+  const cmsItem = data?.data?.data?.find((item: any) => item.id === 10);
+
+  const cmsData = cmsItem?.description;
+  const cmsDataTitle = cmsItem?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks

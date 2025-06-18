@@ -4,9 +4,10 @@ import DOMPurify from "dompurify";
 
 const HowToBuy = () => {
   const { data } = useCms();
+  const cmsItem = data?.data?.data?.find((item: any) => item.id === 11);
 
-  const cmsData = data?.data?.data[2]?.description;
-  const cmsDataTitle = data?.data?.data[2]?.title;
+  const cmsData = cmsItem?.description;
+  const cmsDataTitle =cmsItem?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks

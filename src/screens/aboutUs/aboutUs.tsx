@@ -65,8 +65,10 @@ const cardData = [
 const AboutUs = () => {
   const { data } = useCms();
 
-  const cmsData = data?.data?.data[4]?.description;
-  const cmsDataTitle = data?.data?.data[4]?.title;
+  const cmsItem = data?.data?.data?.find((item: any) => item.id === 9);
+
+  const cmsData = cmsItem?.description;
+  const cmsDataTitle = cmsItem?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks

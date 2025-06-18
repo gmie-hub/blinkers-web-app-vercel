@@ -651,6 +651,7 @@ updated_at: string;
 group:string[];
 user_ids?: number[];
 is_read?:number;
+notification:any, 
 }
 interface NotificationData{
   data:NotificationDatum[]

@@ -5,8 +5,10 @@ import DOMPurify from "dompurify";
 const SafetyTips = () => {
   const { data } = useCms();
 
-  const cmsData = data?.data?.data[1]?.description;
-  const cmsDataTitle = data?.data?.data[1]?.title;
+  const cmsItem = data?.data?.data?.find((item: any) => item.id === 12);
+
+  const cmsData = cmsItem?.description;
+  const cmsDataTitle =cmsItem?.title;
 
   const Description = ({ description }: { description: string }) => {
     // Sanitize the HTML to prevent XSS attacks
