@@ -247,7 +247,7 @@ const Notification = () => {
         buttonText={"Yes, Mark all as read"}
         show2Button={true}
         showButton={false}
-        icon={<img src={FileIcon} alt="FileIcon" />}        
+        Icon={<img src={FileIcon} alt="FileIcon" />}        
         message="Mark all as read"
         // handleClick={MarkasPaidHandler}
       />
