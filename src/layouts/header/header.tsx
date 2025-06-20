@@ -574,7 +574,7 @@ const Header = () => {
   });
 
   const readNotificationHandler = async (id: number) => {
-    const payload = { ids: [id] };
+    const payload = { ids: [id] , user_id:user?.id };
 
     try {
       await readNotificationMutation.mutateAsync(payload, {

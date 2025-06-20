@@ -83,7 +83,9 @@ const ProductList: React.FC<ProductListProps> = ({
     local_government_area_id?: number,
     order?: string
   ) => {
-    let url = `/ads/all?per_page=${50}`;
+
+    let url = order === null || order === undefined || order === "" ?    `/ads/all?per_page=${50}&order=${'desc'}&sort=${'created_at'}` : `/ads/all?per_page=${50}`
+    // let url = `/ads/all?per_page=${50}&order=${'desc'}&sort=${'created_at'}`;
 
     const queryParams: string[] = [];
 
@@ -105,10 +107,10 @@ const ProductList: React.FC<ProductListProps> = ({
     ) {
       queryParams.push(`local_government_area_id=${local_government_area_id}`);
     }
-    if (order !== undefined && order !== "") {
+    if (order !== undefined && order !== "" && order !== null) {
       queryParams.push(`sort=${"price"}`);
     }
-    if (order !== undefined && order !== "") {
+    if (order !== undefined && order !== "" && order !== null) {
       queryParams.push(`order=${order}`);
     }
 

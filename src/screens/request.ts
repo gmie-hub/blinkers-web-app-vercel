@@ -120,15 +120,23 @@ export const getPromotedAdsById = async (id?:number) => {
 //   return (await api.get(`/user-notifications?user_id=${id}&is_read=${hasRead}`))?.data ;
 // };
 
-export const getUserNotifications = async (id?: number, hasRead?: number) => {
+export const getUserNotifications = async (id?: number, hasRead?: number, channel?:string,page?:number) => {
   const queryParams = new URLSearchParams();
 
   if (id !== undefined) {
     queryParams.append("user_id", id.toString());
   }
+ 
+
+  if (page !== undefined) {
+    queryParams.append("page", page.toString());
+  }
 
   if (hasRead !== undefined) {
     queryParams.append("is_read", hasRead.toString());
+  }
+  if (channel !== undefined) {
+    queryParams.append("channel", channel.toString());
   }
 
   const queryString = queryParams.toString();
@@ -234,7 +242,7 @@ export const getAllMarket = async (
 export const CreateJob = async (payload: Partial<JobDatum>) => {
   return (await api.post("jobs", payload, {}))?.data ;
 };
-export const ReadNotification = async (payload:{ids:number[]}) => {
+export const ReadNotification = async (payload:any) => {
   return (await api.post("user-notifications/read", payload, {}))?.data ;
 };
 

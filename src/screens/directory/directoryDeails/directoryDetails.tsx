@@ -360,17 +360,18 @@ const NotClaim = () => {
                     </div>
 
                     <div>
+                    {businessDetailsData?.business_hours && businessDetailsData?.business_hours?.length > 0 && <div className={styles.open}>
+
                       <div className={styles.info}>
                         <img src={TimeIcon} alt="TimeIcon" />
 
-                        <div className={styles.open}>
                           <p>Opening Hours</p>
                           {/* <p>Monday - Fridays (10am- 11pm)</p> */}
                           {groupBusinessHours(
                             businessDetailsData?.business_hours || []
                           )}
                         </div>
-                      </div>
+                      </div>}
                       <div className={styles.info}>
                         <img src={LocationIcon} alt="LocationIcon" />
                         <p>{businessDetailsData?.address}</p>
@@ -503,7 +504,7 @@ const NotClaim = () => {
                     </div>
                     <div className={styles.photo}>
                       <div className={styles.reviewbtn}>
-                        <h1>Video</h1>
+                        <h1>Videos</h1>
                         {videos && videos?.length > 4 && (
                           <div
                             onClick={handleNavigateToVideo}

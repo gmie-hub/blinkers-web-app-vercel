@@ -12,10 +12,10 @@ export default function Gallery({ businessDetailsData }: GalleryProps) {
   const [view, setView] = useState<'images' | 'videos' | null>(null); // State to determine which view to show
 
   // Function to check if the file is an image
-  const isImage = (url: string) => /\.(jpg|jpeg|png|svg|gif)$/i.test(url);
+  const isImage = (url: string) => /\.(jpg|jpeg|png|svg|gif|webp)$/i.test(url);
 
   // Function to check if the file is a video
-  const isVideo = (url: string) => /\.(mp4|avi|mov|wmv|webm)$/i.test(url);
+  const isVideo = (url: string) => /\.(mp4|avi|mov|wmv|webm|MOV)$/i.test(url);
 
   // Handle opening the gallery view
   const openGalleryView = (type: 'images' | 'videos') => {
@@ -50,6 +50,8 @@ export default function Gallery({ businessDetailsData }: GalleryProps) {
               .filter((item: gallery) => isImage(item?.url)) // Filter only images
               .map((item: gallery, index: number) => (
                 <div key={index} className={styles.imageContainer}>
+
+                  
                   <img src={item?.url} alt={`myimg ${index + 1}`} />
                 </div>
               ))}

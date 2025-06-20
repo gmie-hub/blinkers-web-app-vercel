@@ -4,12 +4,12 @@ import { Image } from "antd";
 import CallIcon from "../../assets/callclaim.svg";
 import LocationIcon from "../../assets/locationnot.svg";
 import Button from "../../customs/button/button";
-import { getBusinessById } from "../request";
+import { getApplicantsbyId, getBusinessById } from "../request";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
 import { useQueries } from "@tanstack/react-query";
 import Index from "./businessInformation/basicInfomation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import CustomSpin from "../../customs/spin";
 import { useNavigate } from "react-router-dom";
@@ -17,19 +17,33 @@ import { groupBusinessHours } from "../directory/directoryDeails/displayBusiness
 
 const MyBusinesses = () => {
   const user = useAtomValue(userAtom);
+  const [businessId, setBusinessId] = useState<string>('')
   const [showBusinessInfo, setShowBusinessInfo] = useState(false);
   const navigate = useNavigate();
-  const [getBusinessDetailsQuery] = useQueries({
+  const [getBusinessDetailsQuery, getProfileQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-business-details", user?.business?.id],
-        queryFn: () => getBusinessById(user?.business?.id!),
+        queryKey: ["get-business-details", businessId],
+        queryFn: () => getBusinessById(parseInt(businessId!)),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!user?.business?.id,
+        enabled: !!businessId,
+      },
+      {
+        queryKey: ["get-profile"],
+        queryFn: () => getApplicantsbyId(user?.id!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
       },
     ],
   });
+
+  const profileData = getProfileQuery?.data?.data;
+
+  useEffect(()=>{
+    setBusinessId(profileData?.business?.id)
+  },[profileData])
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
@@ -46,7 +60,8 @@ const MyBusinesses = () => {
       ) : (
         showBusinessInfo === false && (
           <div className="wrapper">
-            {user?.business !== null ? (
+            {/* {user?.business !== null ? ( */}
+            {profileData?.claim_status === "successful" ? (
               <div className={styles.mainContent}>
                 <div className={styles.card}>
                   <div
@@ -122,6 +137,9 @@ const MyBusinesses = () => {
                   </div>
                 </div>
               </div>
+            ) : profileData?.claim_status === "pending" ? (
+              <p 
+              style={{ cursor: "pointer", textAlign: "center" }}> Your Business Status is <strong>Pending</strong></p>
             ) : (
               <p
                 style={{ cursor: "pointer", textAlign: "center" }}

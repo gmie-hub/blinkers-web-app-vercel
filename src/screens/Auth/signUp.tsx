@@ -19,7 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { errorMessage } from "../../utils/errorMessage";
 import { SignUpCall } from "./request";
 import PhoneInput from "react-phone-input-2";
-import {  useState } from "react";
+import { useState } from "react";
 import { CountryData } from "react-phone-input-2"; // Import the CountryData type
 // import ReCAPTCHA from "react-google-recaptcha";
 // import ReCAPTCHA from "react-google-recaptcha";
@@ -55,15 +55,17 @@ const SignUp = () => {
     const payload: Partial<signUp> = {
       name: values?.name,
       country_code: countryCode, // Use the updated country code
-      number:  values.phoneNumber,
+      number: values.phoneNumber,
       address: values.address,
       address_lat: values.address,
       address_long: values?.address,
       email: values?.email,
       password: values?.password,
       confirm_password: values.confirm_password,
-      register_method:'WEB',
+      register_method: "WEB",
       ...(referralCode && { referral_code: referralCode }),
+      ...(values?.referralCode && { referral_code: values?.referralCode }),
+
     };
 
     try {
@@ -83,7 +85,6 @@ const SignUp = () => {
 
           resetForm(); // Reset the form on success
           // (recaptchaRef.current as unknown as { reset: () => void })?.reset();
-
         },
       });
     } catch (error) {
@@ -149,13 +150,14 @@ const SignUp = () => {
             email: "",
             password: "",
             confirm_password: "",
+            referralCode: "",
           }}
           onSubmit={(values, { resetForm }) => {
             SignUpHandler(values, resetForm);
             // resetForm();
             console.log(values);
           }}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
         >
           {() => {
             return (
@@ -208,6 +210,12 @@ const SignUp = () => {
                   className={styles.inputText}
                 />
 
+                <Input
+                  name="referralCode"
+                  label="Referral Code"
+                  placeholder="Referral Code"
+                  className={styles.inputText}
+                />
                 <Input
                   name="password"
                   label="Password"

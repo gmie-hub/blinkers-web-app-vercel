@@ -10,7 +10,11 @@ import { App, Modal } from "antd";
 import { useState } from "react";
 import FlagJob from "./flagJob/flagJob";
 import { useMutation, useQueries } from "@tanstack/react-query";
-import { ApplyForJobApi, getFlaggedJobByJob_idUser_id, getJobDetails } from "../../request";
+import {
+  ApplyForJobApi,
+  getFlaggedJobByJob_idUser_id,
+  getJobDetails,
+} from "../../request";
 import { AxiosError } from "axios";
 import { formatAmount, getTimeAgo } from "../../../utils/formatTime";
 import DOMPurify from "dompurify";
@@ -50,7 +54,7 @@ const JobDetails = () => {
     //       navigate(`/login?redirect=${currentPath}`);
     //     },
     //   });
-    // } else 
+    // } else
     if (user?.is_applicant) {
       // navigate(`/job/apply/${id}`);
       ApplyJobHandler();
@@ -60,7 +64,7 @@ const JobDetails = () => {
     window.scrollTo(0, 0);
   };
 
-  const [getJobDetailsQuery,getFlaggedJobQuery] = useQueries({
+  const [getJobDetailsQuery, getFlaggedJobQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-jobs-details", id],
@@ -70,11 +74,11 @@ const JobDetails = () => {
         enabled: !!id,
       },
       {
-        queryKey: ["get-flagged-job-by-userId",id],
+        queryKey: ["get-flagged-job-by-userId", id],
         queryFn: () => getFlaggedJobByJob_idUser_id(parseInt(id!), user?.id!),
         retry: 0,
         refetchOnWindowFocus: true,
-        enabled: !!user?.id 
+        enabled: !!user?.id,
       },
     ],
   });
@@ -140,7 +144,7 @@ const JobDetails = () => {
     mutationFn: ApplyForJobApi,
     mutationKey: ["apply-job"],
   });
-  console.log(user?.applicant?.id)
+  console.log(user?.applicant?.id);
 
   const ApplyJobHandler = async () => {
     const payload: Partial<FlagJob> = {
@@ -161,20 +165,16 @@ const JobDetails = () => {
     } catch (error: any) {
       notification.error({
         message: "Error",
-        description:
-       
-          errorMessage(error) ||
-          "An error occurred",
+        description: errorMessage(error) || "An error occurred",
       });
     }
   };
   const hasUserFlaggedJob = getFlaggedJobQuery?.data?.data?.data?.length > 0;
 
-
   return (
     <main>
       {getJobDetailsQuery?.isLoading ? (
-         <CustomSpin />
+        <CustomSpin />
       ) : getJobDetailsQuery?.isError ? (
         <h1 className="error">{jobDetailsErrorMessage}</h1>
       ) : (
@@ -185,12 +185,27 @@ const JobDetails = () => {
           <section className={styles.header}>
             <div>
               <span className={styles.logo}>
-                <img
+                {/* <img
                   className={styles.icon}
                   src={JobDetailsData?.business?.logo}
                   alt="logo"
-                />
-                <p>{JobDetailsData?.business?.name}</p>
+                /> */}
+                <>
+                {JobDetailsData?.business?.logo ? (
+                  <img
+                    className={styles.icon}
+                    src={JobDetailsData.business.logo}
+                    alt="Business Logo"
+                  />
+                ) : (
+                  <div className={styles.placeholderCircle}></div>
+                )}
+                </>
+
+                <p>
+                  {JobDetailsData?.business?.name ||
+                    JobDetailsData?.user?.store_name}
+                </p>
               </span>
               <span className={styles.location}>
                 <img src={JobLocation} alt="JobLocation" />

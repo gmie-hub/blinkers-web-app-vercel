@@ -25,6 +25,7 @@ interface JobDatum {
   business: Business;
   total_feedbacks: number;
   related_jobs: RelatedJobData[];
+  user:UserData
   
 }
 

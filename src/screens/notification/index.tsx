@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { App, Pagination, Tabs, TabsProps } from "antd";
 import { deleteAds, getUserNotifications, ReadNotification } from "../request";
@@ -7,22 +7,32 @@ import { userAtom } from "../../utils/store";
 import { useAtom } from "jotai";
 import usePagination from "../../hooks/usePagnation";
 import Icon from "/Container.svg";
-import DoneIcon from "../../assets/deleteicon.svg";
+// import DoneIcon from "../../assets/deleteicon.svg";
 import { errorMessage } from "../../utils/errorMessage";
 import ReusableModal from "../../partials/deleteModal/deleteModal";
 import SuccessModalContent from "../../partials/sucessModal";
-import FileIcon from '../../assets/file.svg';
+// import FileIcon from '../../assets/file.svg';
+import CustomSpin from "../../customs/spin";
+import { AxiosError } from "axios";
 
 const Notification = () => {
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
   const [user] = useAtom(userAtom);
-  const [activeKey, setActiveKey] = useState("0");
-  const { currentPage, onChange } = usePagination();
+  const [activeKey, setActiveKey] = useState("general");
+  // const { currentPage, onChange } = usePagination();
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [markAll, setMarkAll] = useState(false);
   const [openMarkAll, setOpenMarkAll] = useState(false);
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage]);
+
+  console.log(openMarkAll,'openMarkAll')
 
   const handleCloseDelete = () => {
     setIsDeleteModal(false);
@@ -64,8 +74,8 @@ const Notification = () => {
   const [getAllUserNotificationQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-notification", activeKey],
-        queryFn: () => getUserNotifications(user?.id),
+        queryKey: ["get-all-notification", activeKey, currentPage],
+        queryFn: () => getUserNotifications(user?.id, undefined, activeKey,currentPage),
         retry: 0,
         refetchOnWindowFocus: false,
       },
@@ -73,12 +83,15 @@ const Notification = () => {
   });
 
   const notifyData = getAllUserNotificationQuery?.data?.data?.data;
-  // const  notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
+  const notifyError = getAllUserNotificationQuery?.error as AxiosError;
+  const notifyErrorMessage =
+  notifyError?.message || "An error occurred. Please try again later.";
 
   const items: TabsProps["items"] = [
-    { key: "0", label: "General" },
-    { key: "1", label: "Business" },
-    { key: "2", label: "Job" },
+    { key: "", label: "All" },
+    { key: "ad", label: "Market" },
+    { key: "business", label: "Business" },
+    { key: "job", label: "Job" },
   ];
 
   const handleTabChange = (key: string) => {
@@ -90,11 +103,14 @@ const Notification = () => {
     mutationFn: ReadNotification,
     mutationKey: ["read-notification"],
   });
-  const readNotificationHandler = async (id: number) => {
+  const readNotificationHandler = async (id?: number) => {
     const payload = {
-      ids: [id],
-      mark_all: markAll,
-      // ...(markAll === false && { ids: [id] }),
+      // ids: [id],
+      // mark_all: markAll,
+      user_id:user?.id,
+      ...(markAll === false && { ids: [id] }),
+      ...(markAll === true && { mark_all: markAll }),
+
 
 
     };
@@ -149,14 +165,20 @@ const Notification = () => {
               items={items}
             />
           </div>
+          {getAllUserNotificationQuery?.isLoading ? (
+        <CustomSpin />
+      ) : getAllUserNotificationQuery?.isError ? (
+        <h1 className="error">{notifyErrorMessage}</h1>
+      ) : (
+          <>
           <div className={styles.notificationActions}>
-            <div
+            {/* <div
               onClick={() => setIsDeleteModal(true)}
               style={{ display: "flex", gap: "1rem", cursor: "pointer" }}
             >
               <img src={DoneIcon} alt="DoneIcon" />
               <p style={{ color: "#E21B1B" }}> Clear Notification</p>
-            </div>
+            </div> */}
             <p
               onClick={() => {
                 setOpenMarkAll(true);
@@ -207,7 +229,7 @@ const Notification = () => {
               </div>
             );
           })}
-        </div>
+      
         <Pagination
           current={currentPage}
           total={getAllUserNotificationQuery?.data?.data?.total}
@@ -221,6 +243,9 @@ const Notification = () => {
             justifyContent: "center",
           }}
         />
+        </>
+      )}
+        </div>
       </div>
       <ReusableModal
         open={isDeleteModal}
@@ -247,9 +272,9 @@ const Notification = () => {
         buttonText={"Yes, Mark all as read"}
         show2Button={true}
         showButton={false}
-        Icon={<img src={FileIcon} alt="FileIcon" />}        
+        // Icon={<img src={FileIcon} alt="FileIcon" />}        
         message="Mark all as read"
-        // handleClick={MarkasPaidHandler}
+        handleClick={()=>readNotificationHandler( )}
       />
     </>
   );

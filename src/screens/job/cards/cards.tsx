@@ -38,13 +38,8 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
   //   window.scrollTo(0, 0);
   // };
 
-  const handleNavigateDetails = (
-    id: number,
-    title: string,
-  ) => {
-    navigate(
-      `/job-details/${id}/${sanitizeUrlParam(title)}`
-    );
+  const handleNavigateDetails = (id: number, title: string) => {
+    navigate(`/job-details/${id}/${sanitizeUrlParam(title)}`);
     window.scrollTo(0, 0);
   };
 
@@ -98,21 +93,20 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
             {JobData && JobData?.length > 0 ? (
               JobData?.map((item) => (
                 <div
-                  onClick={() =>
-                    handleNavigateDetails(
-                      item?.id,
-                      item?.title,
-                    )
-                  }
+                  onClick={() => handleNavigateDetails(item?.id, item?.title)}
                   className={styles.chooseCard}
                   key={item.id}
                 >
                   <div className={styles.cardWrapper}>
-                    <img
-                      className={styles.icon}
-                      src={item?.business?.logo}
-                      alt="Image2"
-                    />
+                    {item?.business?.logo ? (
+                      <img
+                        className={styles.icon}
+                        src={item?.business?.logo}
+                        alt="Business Logo"
+                      />
+                    ) : (
+                      <div className={styles.placeholderCircle}></div>
+                    )}
                     <div className={styles.textContent}>
                       <p className={styles.title}>{item?.title}</p>
                       {item?.business?.name}

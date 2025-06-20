@@ -60,7 +60,7 @@ interface Props {
 
 
 
-const   SuccessModalContent = ({
+const SuccessModalContent = ({
   openSuccess,
   message,
   onClose,

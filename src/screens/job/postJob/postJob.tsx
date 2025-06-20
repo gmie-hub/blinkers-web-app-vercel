@@ -143,6 +143,25 @@ export default function PostJobs() {
     }
   };
 
+   const employmentTypeData = [
+    {
+      name: "full-time",
+      value: "full-time",
+    },
+    {
+      name: "part-time",
+      value: "part-time",
+    },
+    {
+      name: "contract",
+      value: "contract",
+    },
+    {
+      name: "other",
+      value: "other",
+    },
+  ];
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

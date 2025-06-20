@@ -140,7 +140,7 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({
         onSubmit={(values) => {
           createBusinessHandler(values);
         }}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
       >
         {() => {
           return (

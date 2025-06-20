@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
   businessAddress: validator.businessAddress,
   phoneNumber: validator.phoneNumber,
   email: validator.email,
-  website: validator.website,
+  // website: validator.website,
   aboutBusiness: validator.aboutBusiness,
 });
 
