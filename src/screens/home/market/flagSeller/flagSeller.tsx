@@ -15,7 +15,7 @@ import { errorMessage } from "../../../../utils/errorMessage";
 
 interface Props {
   handleCloseModal: () => void;
-  sellerId?:number;
+  sellerId?:any;
   hasUserFlaggedSeller?:boolean
 }
 
