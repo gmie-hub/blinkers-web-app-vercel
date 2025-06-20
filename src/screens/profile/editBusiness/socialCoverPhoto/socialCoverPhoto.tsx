@@ -9,7 +9,6 @@ import Button from "../../../../customs/button/button";
 import Input from "../../../../customs/input/input";
 import { useAtomValue } from "jotai";
 import { basicInfoAtom, userAtom } from "../../../../utils/store";
-import * as Yup from "yup";
 import { errorMessage } from "../../../../utils/errorMessage";
 import OpeningHoursForm from "./businessHour";
 
