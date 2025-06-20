@@ -157,7 +157,7 @@ const SignUp = () => {
             // resetForm();
             console.log(values);
           }}
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
         >
           {() => {
             return (

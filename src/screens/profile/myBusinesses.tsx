@@ -42,7 +42,7 @@ const MyBusinesses = () => {
   const profileData = getProfileQuery?.data?.data;
 
   useEffect(()=>{
-    setBusinessId(profileData?.business?.id)
+    setBusinessId(profileData?.business?.id?.toString())
   },[profileData])
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;

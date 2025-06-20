@@ -124,14 +124,14 @@ const SocialsCoverPhotoForm: FC<ComponentProps> = ({
 
 
  
-  const validationSchema = Yup.object().shape({
-    instagram: Yup.string()
-      .required("required")
-      .url('Please enter a valid URL'),
-    facebook: Yup.string()
-      .required("required")
-      .url('Please enter a valid URL'),
-  });
+  // const validationSchema = Yup.object().shape({
+  //   instagram: Yup.string()
+  //     .required("required")
+  //     .url('Please enter a valid URL'),
+  //   facebook: Yup.string()
+  //     .required("required")
+  //     .url('Please enter a valid URL'),
+  // });
 
   return (
     <>

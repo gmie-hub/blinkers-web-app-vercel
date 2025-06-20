@@ -371,7 +371,7 @@ interface CmsData {
 // }
 
 interface UserData {
-  id: number;
+  id: string | number;
   name: string;
   slug: string | null;
   email: string;
@@ -380,7 +380,7 @@ interface UserData {
   address_lat: string;
   address_long: string;
   apple_id: string | null;
-  business: string | null;
+  business: any;
   business_claim: string | null;
   claim_status: string | null;
   country_code: string;
