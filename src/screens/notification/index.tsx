@@ -93,7 +93,6 @@ import { useNavigate } from "react-router-dom";
 import { formatDateToDayMonthYear } from "../../utils/formatTime";
 
 const Notification = () => {
-  const [activeIndex, setActiveIndex] = useState<string | null>(null);
   const [user] = useAtom(userAtom);
   const [activeKey, setActiveKey] = useState("general");
   // const { currentPage, onChange } = usePagination();
@@ -284,10 +283,10 @@ const Notification = () => {
                 const uniqueKey = `faq-${index}`;
                 return (
                   <div
-                    key={uniqueKey}
-                    className={`${styles.faq} ${
-                      activeIndex === uniqueKey ? styles.active : ""
-                    }`}
+                    key={uniqueKey}  className={styles.faq}
+                    // className={`${styles.faq} ${
+                    //   activeIndex === uniqueKey ? styles.active : ""
+                    // }`}
                     onClick={() => {
                       if (item?.is_read === 0) {
                         readNotificationHandler(item?.id);
