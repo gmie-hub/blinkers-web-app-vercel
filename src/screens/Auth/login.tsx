@@ -174,7 +174,7 @@ const Login = () => {
         <Image src={LoginIcon} alt={LoginIcon} preview={false} />
 
         <p className={styles.welcome}>Welcome Back!</p>
-        <small>Enter your details to log in as an admin</small>
+        <small>Enter your details to log in</small>
 
         <Formik
           initialValues={{

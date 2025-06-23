@@ -57,6 +57,7 @@ import TermsCondition from "./screens/footerPages/termsCondition";
 import SafetyTips from "./screens/footerPages/safetyTips";
 import HowToBuy from "./screens/footerPages/howTobuy";
 import HowToSell from "./screens/footerPages/howToSell";
+import Pricing from "./screens/pricing/pricing";
 
 
 function App() {
@@ -128,6 +129,7 @@ function App() {
 
     { path: routes.profile.myAds, element: <MyAds /> },
     { path: routes.profile.myapplicationDetails, element: <MyApplicantsDetails /> },
+    { path: routes.pricing.pricing, element: <Pricing /> },
 
   ];
 

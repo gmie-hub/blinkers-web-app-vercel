@@ -60,6 +60,10 @@ export const routes = {
     myAds:'/my-ads',
     myapplicationDetails:'/my-application-details/:id/:applicationDetailsId'
   },
+  pricing:{
+    pricing:'/pricing'
+
+  },
 
   auth: {
     signUp: "/sign-up",

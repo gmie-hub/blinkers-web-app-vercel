@@ -369,13 +369,13 @@ const routeData = [
   { name: "MY JOBS BUSINESS OWNER", value: "my_jobs_business_owner", route: "/profile", tabKey: "6" },
   { name: "MY BUSINESS PROFILE", value: "my_business_profile", route: "/profile", tabKey: "2" },
   { name: "MY PROFILE", value: "my_profile", route: "/profile", tabKey: "1" },
+  { name: "EDIT JOB", value: "edit_job", route: "/profile", tabKey: "6"  },
 
   // Others
   { name: "REVIEWS", value: "reviews", route: "/reviews" },
   { name: "AUDIENCE", value: "audience", route: "/audience" },
   { name: "MY PLAN", value: "my_plan", route: "/plans" },
   { name: "CHAT", value: "chat", route: "/chat" },
-  { name: "EDIT JOB", value: "edit_job", route: "/jobs/edit" },
   { name: "VIEW APPLICANTS", value: "view_applicants", route: "/jobs/applicants" },
   { name: "CATEGORIES PAGE", value: "categories_page", route: "/categories" },
 
@@ -746,9 +746,10 @@ const navItems = [
   { id: 1, name: "Market", route: "/market" },
   { id: 2, name: "Directory", route: "/directory" },
   { id: 3, name: "Jobs", route: "/jobs" },
-  { id: 4, name: "About Us", route: "/about-us" },
-  { id: 5, name: "Contact Us", route: "/contact-us" },
-  { id: 6, name: "FAQ", route: "/faq" },
+  // { id: 4, name: "Pricing", route: "/pricing" },
+  { id: 5, name: "About Us", route: "/about-us" },
+  { id: 6, name: "Contact Us", route: "/contact-us" },
+  { id: 7, name: "FAQ", route: "/faq" },
 ];
 
 export default Header;
