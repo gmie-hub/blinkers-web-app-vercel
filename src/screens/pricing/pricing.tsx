@@ -188,7 +188,7 @@ const PricingPlansPage = () => {
           ) : (
             <div className={styles.plansContainer}>
               {[...subData]
-                .sort((a, b) => {
+                .sort((a:any, b:any) => {
                   const order = { free: 0, platinum: 1, gold: 2 };
                   return (
                     order[a?.name?.toLowerCase()] -
@@ -248,7 +248,7 @@ const PricingPlansPage = () => {
                     <div className={styles.planBody}>
                       <h4 className={styles.featureTitle}>What's included</h4>
                       <ul className={styles.featureList}>
-                        {plan?.features?.map((feature, idx) => (
+                        {plan?.features?.map((feature:any, idx:number) => (
                           <li key={idx} className={styles.featureItem}>
                             <CheckCircleFilled className={styles.icon} />{" "}
                             {feature?.name}

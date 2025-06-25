@@ -4,7 +4,7 @@ import { useState } from "react";
 import Button from "../../../customs/button/button";
 import ModalContent from "../../../partials/successModal/modalContent";
 import { useQueries } from "@tanstack/react-query";
-import { getAllSubscription, getAllSubscriptionById } from "../../request";
+import { getAllSubscriptionById } from "../../request";
 import { AxiosError } from "axios";
 import { formatAmount } from "../../../utils/formatTime";
 import CustomSpin from "../../../customs/spin";

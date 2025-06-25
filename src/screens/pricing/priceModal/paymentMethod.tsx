@@ -2,11 +2,9 @@ import { Radio } from "antd";
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import Button from "../../../customs/button/button";
-import ModalContent from "../../../partials/successModal/modalContent";
 import { useQueries } from "@tanstack/react-query";
-import { getAllSubscription, getAllSubscriptionById } from "../../request";
+import {  getAllSubscriptionById } from "../../request";
 import { AxiosError } from "axios";
-import { formatAmount } from "../../../utils/formatTime";
 import CustomSpin from "../../../customs/spin";
 import ArrowIcon from "../../../assets/arrow-right-noty.svg";
 
@@ -17,7 +15,6 @@ interface Props {
 
 const PaymentMethod = ({ handleClose, selectedPlan }: Props) => {
   const [selected, setSelected] = useState("3");
-  const [openSuccess, setOpenSuccess] = useState(false);
 
   const options = [{ label: "Paystack" }, { label: "Flutterwave" }];
 

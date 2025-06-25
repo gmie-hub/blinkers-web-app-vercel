@@ -407,3 +407,14 @@ a:visited {
   text-align: center !important;
 }
 
+
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+  border-color: green !important;
+  background-color: green !important;
+}
+
+/* White dot inside the green radio */
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner::after {
+  background-color: white !important;
+}
