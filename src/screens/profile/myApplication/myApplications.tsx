@@ -43,9 +43,8 @@ const MyApplications = () => {
 
   const items: TabsProps["items"] = [
     { key: "0", label: "Pending" },
-    { key: "1", label: "Shortlisted" },
     { key: "3", label: "Rejected" },
-    { key: "2", label: "Approved" },
+    { key: "2", label: "Shortlisted" },
   ];
 
   const handleTabChange = (key: string) => {

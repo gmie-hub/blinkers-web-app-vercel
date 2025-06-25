@@ -668,3 +668,49 @@ interface AdsStatusPayload {
   status: string;
 
 }
+interface Feature {
+  id?: number;
+  name?: string;
+  slug?: string;
+  category?: string;
+  per_time?: number;
+  context?: string | null;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+  pivot?: Pivot;
+  limit?:number
+}
+interface FeatureResponse extends Response {
+  data: FeatureData;
+}
+
+interface FeatureData {
+  data: Feature[];
+  total: number;
+}
+
+interface PlanDatum {
+  id?: number;
+  name: string;
+  description: string;
+  created_at?: string;
+  updated_at?: string;
+  features?: Feature[];
+  pricings?: Pricing[];
+  plan_id?:number
+}
+
+interface PlanData {
+  data: PlanDatum[];
+  total: number;
+}
+
+interface PlanDatumResponse extends Response {
+  data: PlanDatum;
+}
+
+
+interface PlanResponse extends Response {
+  data: PlanData;
+}

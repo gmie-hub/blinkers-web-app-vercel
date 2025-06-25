@@ -12,6 +12,7 @@ import MyAds from "./myAds/myAds";
 import MyFavorite from "./myFavorite";
 // import Notification from "../notification";
 import JobPosted from "./businessInformation/postedJob/postedJob";
+import SubscriptionCard from "./subscription/sub";
 
 const Profile = () => {
   const { id } = useParams();
@@ -40,7 +41,7 @@ const Profile = () => {
     {
       key: "3",
       label: "My Subscription",
-      // children: <BasicInformation />,
+      children: <SubscriptionCard />,
     },
     {
       key: "4",

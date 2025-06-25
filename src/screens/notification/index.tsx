@@ -94,7 +94,7 @@ import { formatDateToDayMonthYear } from "../../utils/formatTime";
 
 const Notification = () => {
   const [user] = useAtom(userAtom);
-  const [activeKey, setActiveKey] = useState("general");
+  const [activeKey, setActiveKey] = useState("ad");
   // const { currentPage, onChange } = usePagination();
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
@@ -162,7 +162,7 @@ const Notification = () => {
     notifyError?.message || "An error occurred. Please try again later.";
 
   const items: TabsProps["items"] = [
-    { key: "", label: "All" },
+    // { key: "", label: "All" },
     { key: "ad", label: "Market" },
     { key: "business", label: "Business" },
     { key: "job", label: "Job" },

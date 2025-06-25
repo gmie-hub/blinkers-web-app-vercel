@@ -70,6 +70,10 @@ export const getIndustries = async (search?: string) => {
   return (await api.get(url))?.data ;
 };
 
+export const getAllSubscription = async () => {
+  return (await api.get(`plans`))?.data as any;
+};
+
 export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };
@@ -604,4 +608,9 @@ export const replyReview = async (
 ) => {
   const response = await api.patch(`/business/reviews/${id}`, payload);
   return response.data;
+};
+
+
+export const getAllSubscriptionById = async (id: number) => {
+  return (await api.get(`plans/${id}`))?.data as PlanDatumResponse;
 };
