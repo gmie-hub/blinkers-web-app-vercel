@@ -188,13 +188,21 @@ const PricingPlansPage = () => {
           ) : (
             <div className={styles.plansContainer}>
               {[...subData]
-                .sort((a:{ free: number; platinum: number; gold: number; }, b:{ free: number; platinum: number; gold: number; }) => {
-                  const order = { free: 0, platinum: 1, gold: 2 };
-                  return (
-                    order[a?.name?.toLowerCase()] -
-                    order[b?.name?.toLowerCase()]
-                  );
-                })
+              .sort((a, b) => {
+                 const order = { free: 0, platinum: 1, gold: 2 };
+
+                return (
+                  order[a?.name?.toLowerCase() as 'free' | 'platinum' | 'gold'] -
+                  order[b?.name?.toLowerCase() as 'free' | 'platinum' | 'gold']
+                );
+              })
+                // .sort((a, b) => {
+                //   const order = { free: 0, platinum: 1, gold: 2 };
+                //   return (
+                //     order[a?.name?.toLowerCase()] -
+                //     order[b?.name?.toLowerCase()]
+                //   );
+                // })
                 .map((plan: any, index: number) => (
                   <div
                     className={`${styles.planCard} ${
