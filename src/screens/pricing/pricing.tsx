@@ -12,10 +12,12 @@ import CustomSpin from "../../customs/spin";
 import Gold from "../../assets/gold.svg";
 import Free from "../../assets/Frame 1618872852.svg";
 import Platinum from "../../assets/platinum.svg";
+import ModalContent from "../../partials/successModal/modalContent";
 
 const PricingPlansPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [openSuccess, setOpenSuccess] = useState(false);
 
   const [getAllSubQuery] = useQueries({
     queries: [
@@ -61,14 +63,18 @@ const PricingPlansPage = () => {
           ) : (
             <div className={styles.plansContainer}>
               {[...subData]
-              .sort((a, b) => {
-                 const order = { free: 0, platinum: 1, gold: 2 };
+                .sort((a, b) => {
+                  const order = { free: 0, platinum: 1, gold: 2 };
 
-                return (
-                  order[a?.name?.toLowerCase() as 'free' | 'platinum' | 'gold'] -
-                  order[b?.name?.toLowerCase() as 'free' | 'platinum' | 'gold']
-                );
-              })
+                  return (
+                    order[
+                      a?.name?.toLowerCase() as "free" | "platinum" | "gold"
+                    ] -
+                    order[
+                      b?.name?.toLowerCase() as "free" | "platinum" | "gold"
+                    ]
+                  );
+                })
                 // .sort((a, b) => {
                 //   const order = { free: 0, platinum: 1, gold: 2 };
                 //   return (
@@ -129,7 +135,7 @@ const PricingPlansPage = () => {
                     <div className={styles.planBody}>
                       <h4 className={styles.featureTitle}>What's included</h4>
                       <ul className={styles.featureList}>
-                        {plan?.features?.map((feature:any, idx:number) => (
+                        {plan?.features?.map((feature: any, idx: number) => (
                           <li key={idx} className={styles.featureItem}>
                             <CheckCircleFilled className={styles.icon} />{" "}
                             {feature?.name}
@@ -153,8 +159,18 @@ const PricingPlansPage = () => {
         <PricingOptions
           selectedPlan={selectedPlan}
           handleClose={() => setOpenModal(false)}
+          handlePaymentSuccess={() => setOpenSuccess(true)}
         />
       </Modal>
+
+      <ModalContent
+        open={openSuccess}
+        handleCancel={() => setOpenSuccess(false)}
+        handleClick={() => {
+          setOpenSuccess(false);
+        }}
+        text={" You've successfully activated the Free Plan."}
+      />
     </>
   );
 };
