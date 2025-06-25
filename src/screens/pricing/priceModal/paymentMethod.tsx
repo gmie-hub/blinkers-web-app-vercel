@@ -43,10 +43,8 @@ const PaymentMethod = ({ handleClose, selectedPlan }: Props) => {
         <h1 className="error">{planErrorMessage}</h1>
       ) : (
         <div className={styles.pricingModal}>
-          <h3>Select Pricing For {planData?.name} Plan</h3>
-          <p className={styles.subtitle}>
-            Select the pricing you would like to subscribe to
-          </p>
+          <h3>Select Payment Method</h3>
+         
 
         
 
