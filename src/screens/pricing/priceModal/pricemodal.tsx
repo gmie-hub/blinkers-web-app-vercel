@@ -2,7 +2,6 @@ import { Modal, Radio } from "antd";
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import Button from "../../../customs/button/button";
-import ModalContent from "../../../partials/successModal/modalContent";
 import { useQueries } from "@tanstack/react-query";
 import { getAllSubscriptionById } from "../../request";
 import { AxiosError } from "axios";
@@ -12,12 +11,13 @@ import PaymentMethod from "./paymentMethod";
 interface Props {
   handleClose: () => void;
   selectedPlan: any;
+  handlePaymentSuccess: () => void;
 }
 
-const PricingOptions = ({ handleClose, selectedPlan }: Props) => {
-  const [selected, setSelected] = useState("3");
-  const [openSuccess, setOpenSuccess] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+const PricingOptions = ({ handleClose, handlePaymentSuccess, selectedPlan }: Props) => {
+  const [selected, setSelected] = useState<number>();
+  const [price, setPrice] = useState<number>(0);
+  const [openModal, setOpenModal] = useState(false);  
 
   const [getSubQuery] = useQueries({
     queries: [
@@ -54,35 +54,41 @@ const PricingOptions = ({ handleClose, selectedPlan }: Props) => {
             value={selected}
             className={styles.radioGroup}
           >
-            {planData?.pricings?.map((option) => (
-              <div
-                key={option.value}
-                className={`${styles.optionCard} ${
-                  selected === option.value ? styles.active : ""
-                }`}
-              >
-                <Radio value={option.value} className={styles.radio}>
-                  <div className={styles.optionText}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        textAlign: "start",
-                      }}
-                    >
-                      <p>
-                        {" "}
-                        {option?.duration}{" "}
-                        {option?.duration === 1 ? "Month" : "Months"}
-                      </p>
-                      <p className={styles.price}>
-                        {formatAmount(option?.price)}
-                      </p>
+            {planData?.pricings?.map((option) => {
+              return (
+                <div
+                  key={option.value}
+                  className={`${styles.optionCard} ${
+                    selected === option.id ? styles.active : ""
+                  }`}
+                >
+                  <Radio
+                    value={option.id}
+                    className={styles.radio}
+                    onClick={() => setPrice(option?.price)}
+                  >
+                    <div className={styles.optionText}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          textAlign: "start",
+                        }}
+                      >
+                        <p>
+                          {" "}
+                          {option?.duration}{" "}
+                          {option?.duration === 1 ? "Month" : "Months"}
+                        </p>
+                        <p className={styles.price}>
+                          {formatAmount(option?.price)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Radio>
-              </div>
-            ))}
+                  </Radio>
+                </div>
+              );
+            })}
           </Radio.Group>
 
           <div className={styles.footerButtons}>
@@ -93,9 +99,16 @@ const PricingOptions = ({ handleClose, selectedPlan }: Props) => {
             >
               Cancel
             </Button>
-            <Button onClick={()=>{
-              setOpenModal(true)}
-            } className={"buttonStyle"}>Subscribe Now</Button>
+            <Button
+              onClick={() => {
+                setOpenModal(true);
+                handleClose();
+              }}
+              className={"buttonStyle"}
+              disabled={!selected}
+            >
+              Subscribe Now
+            </Button>
           </div>
         </div>
       )}
@@ -107,19 +120,12 @@ const PricingOptions = ({ handleClose, selectedPlan }: Props) => {
         footer={null}
       >
         <PaymentMethod
+          price={price}
           selectedPlan={selectedPlan}
           handleClose={() => setOpenModal(false)}
+          handlePaymentSuccess={handlePaymentSuccess}
         />
       </Modal>
-
-      <ModalContent
-        open={openSuccess}
-        handleCancel={() => setOpenSuccess(false)}
-        handleClick={() => {
-          setOpenSuccess(false);
-        }}
-        text={" You've successfully activated the Free Plan."}
-      />
     </>
   );
 };

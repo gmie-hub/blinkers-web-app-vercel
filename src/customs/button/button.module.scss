@@ -30,7 +30,7 @@
   font-weight: var(--font-w-normal);
   width: 100%;
   cursor: pointer;
-border: 1px solid var(--color-grey-lighter);
+  border: 1px solid var(--color-grey-lighter);
   & > span {
     display: flex;
     justify-content: center;
@@ -58,10 +58,7 @@ border: 1px solid var(--color-grey-lighter);
     align-items: center;
     gap: 0.5rem;
   }
-
- 
 }
-
 
 .red {
   @extend .white;
@@ -104,7 +101,7 @@ border: 1px solid var(--color-grey-lighter);
 
 .green {
   @extend .white;
-    background: var(--color-main-primary);
+  background: var(--color-main-primary);
   border-radius: 0.8rem;
   color: var(--color-primary-white);
   border: none;
