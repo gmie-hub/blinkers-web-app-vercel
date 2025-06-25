@@ -188,7 +188,7 @@ const PricingPlansPage = () => {
           ) : (
             <div className={styles.plansContainer}>
               {[...subData]
-                .sort((a:any, b:any) => {
+                .sort((a:{ free: number; platinum: number; gold: number; }, b:{ free: number; platinum: number; gold: number; }) => {
                   const order = { free: 0, platinum: 1, gold: 2 };
                   return (
                     order[a?.name?.toLowerCase()] -

@@ -85,6 +85,8 @@ const PaymentMethod = ({ handleClose, selectedPlan }: Props) => {
                     </div>
                   </div>
                 </Radio>
+
+
               </div>
             ))}
           </Radio.Group>
