@@ -338,10 +338,10 @@ const Main = () => {
         <div>
           {windowWidth < 1024 ? (
             <SmallScreen
-              handleFollowBusiness={handleFollowBusiness}
+              handleFollowBusiness={handleFollowSeller}
               handleFollowSeller={handleFollowSeller}
               productDetailsData={productDetailsData}
-              followBusinessMutation={followBusinessMutation?.isPending}
+              followBusinessMutation={followSellersMutation?.isPending}
               followSellersMutation={followSellersMutation?.isPending}
               isUserFollowingBusiness={isUserFollowingBusiness}
               isUserFollowingSeller={isUserFollowingSeller}
@@ -353,10 +353,11 @@ const Main = () => {
           ) : (
             <BigScreen
               handleFollowSeller={handleFollowSeller}
-              handleFollowBusiness={handleFollowBusiness}
+              handleFollowBusiness={handleFollowSeller}
+              // handleFollowBusiness={handleFollowBusiness}
               productDetailsData={productDetailsData}
               followSellersMutation={followSellersMutation?.isPending}
-              followBusinessMutation={followBusinessMutation?.isPending}
+              followBusinessMutation={followSellersMutation?.isPending}
               isUserFollowingBusiness={isUserFollowingBusiness}
               isUserFollowingSeller={isUserFollowingSeller}
               businessDetailsData={businessDetailsData}

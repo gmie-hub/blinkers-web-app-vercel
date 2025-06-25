@@ -25,11 +25,11 @@ export default function JobPosted() {
   const [getAllJobByBusinessQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-jobs"],
-        queryFn: () => getJobBYBusinessId(user?.business?.id!),
+        queryKey: ["get-all-jobs",user?.id],
+        queryFn: () => getJobBYBusinessId(user?.id!),
         retry: 0,
         refetchOnWindowFocus: false,
-        enabled:!!user?.business?.id!
+        enabled:!!user?.id!
       },
     ],
   });

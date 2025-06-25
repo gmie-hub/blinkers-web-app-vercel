@@ -52,7 +52,7 @@ export const routes = {
   profile: {
     profile: "/profile/:id?",
     editBusiness: "/edit-business",
-    viewJobDetails: "/view-job-dzetails/:id",
+    viewJobDetails: "/view-job-details/:id",
     applicants: "/applicants/:id",
     viewApplicant: "/jobs/view-applicant/:id",
     createAd: "/create-ad",

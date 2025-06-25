@@ -11,18 +11,21 @@ import { AxiosError } from "axios";
 import { convertDate, getTimeFromDate } from "../../../../../utils/formatTime";
 import CustomSpin from "../../../../../customs/spin";
 import { countUpTo } from "../../../../../utils";
+import WriteReviewAds from "../../writeReview/reviewAds";
 
 // Reviews Component
 export default function ProductReviews({
   canSeeAllBtn = true,
   limit,
+  id,
 }: {
   canSeeAllBtn?: boolean;
   limit?: number;
+  id?:number
 }) {
   const navigate = useNavigate();
   const { user_id } = useParams();
-  const { id } = useParams();
+  // const { id } = useParams();
   const idToUse =user_id ? user_id : id
 
 
@@ -30,11 +33,11 @@ export default function ProductReviews({
   const [getAllReviewQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-all-review", idToUse],
-        queryFn: () => getAllSellerReviews(idToUse! ),
+        queryKey: ["get-all-review", id],
+        queryFn: () => getAllSellerReviews(id?.toString()!),
         retry: 0,
         refetchOnWindowFocus: false,
-        enabled:!!idToUse 
+        enabled:!!id 
 
       },
     ],
@@ -134,42 +137,4 @@ function ReviewCard({ item }: { item: ReviewDatum }) {
     </div>
   );
 }
-
-// No Reviews Component
-// function NoReviews({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
-//   return (
-//     <div className={styles.NoReviewWrapper}>
-//       <div className={styles.noReview}>
-//         <Image
-//           width={"8.3rem"}
-//           src={EmptyIcon}
-//           alt="EmptyIcon"
-//           preview={false}
-//         />
-//         <p>No Reviews Posted Yet</p>
-//         <p>Be the first person to rate this seller</p>
-
-//         <div className={styles.emtBtn}>
-//           <Button
-//             text="Write A Review"
-//             variant="transparent"
-//             className="buttonStyle"
-//             onClick={() => {
-//               navigate("/write-review");
-//             }}
-//             icon={
-//               <Image
-//                 width={20}
-//                 src={StarIconGreen}
-//                 alt="StarIconGreen"
-//                 preview={false}
-//               />
-//             }
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 

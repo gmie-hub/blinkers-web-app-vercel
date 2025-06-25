@@ -552,7 +552,7 @@ export const handleCopyLink = (textToCopy: string) => {
 };
 
 export const getJobBYBusinessId = async (id: number) => {
-  return (await api.get(`jobs?business_id=${id}`))?.data as JobResponse;
+  return (await api.get(`jobs?user_id=${id}`))?.data as JobResponse;
 };
 
 export const deleteJob = async ({ id }: { id: number }) => {

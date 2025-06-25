@@ -135,7 +135,7 @@ function ReviewCard({ item }: { item: ReviewDatum }) {
           <div></div>
           <span>{getTimeFromDate(item?.created_at) || ""}</span>
         </div>
-        <span>{"N/A"}</span>
+        <span>{item?.user?.name}</span>
       </div>
       <div className={styles.starWrapper}>
         {countUpTo(

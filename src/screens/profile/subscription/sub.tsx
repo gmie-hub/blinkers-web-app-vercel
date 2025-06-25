@@ -1,5 +1,7 @@
 import styles from './styles.module.scss';
 import { CheckCircleFilled } from '@ant-design/icons';
+import Platinum from "../../../assets/platinum.svg";
+import Button from '../../../customs/button/button';
 
 const features = Array(12).fill('10 products advert');
 
@@ -7,10 +9,12 @@ const SubscriptionCard = () => {
   return (
     <div className={styles.card}>
       <div className={styles.header}>
-        <span className={styles.icon}>👑</span>
+        <img src={Platinum} alt="Platinum" />
+
         <span className={styles.planName}>Platinum Plan</span>
       </div>
       <h2 className={styles.price}>3 months plan - ₦60,000</h2>
+      <p className={styles.bill}>Billing cycles</p>
 
       <div className={styles.timeline}>
         <div className={styles.line}>
@@ -36,8 +40,22 @@ const SubscriptionCard = () => {
       </div>
 
       <div className={styles.buttons}>
-        <button className={styles.modify}>Modify Subscription plan</button>
-        <button className={styles.cancel}>Cancel Subscription</button>
+
+
+        <Button
+              // variant="  "
+              // className={"buttonStyle"}
+
+            >
+            Modify Subscription plan
+            </Button>
+        <Button
+              variant="redOutline"
+              // className={"buttonStyle"}
+
+            >
+              Cancel Subscription
+            </Button>
       </div>
     </div>
   );

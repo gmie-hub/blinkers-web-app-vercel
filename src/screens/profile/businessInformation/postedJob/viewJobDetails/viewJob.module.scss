@@ -171,3 +171,18 @@
     font-size: 2.4rem;
     color: var(--color-header-text);
   }
+  .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .placeholderCircle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ccc; // or any neutral color
+    display: inline-block;
+  }
+  

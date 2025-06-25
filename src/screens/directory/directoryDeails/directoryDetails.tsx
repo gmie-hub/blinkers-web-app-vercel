@@ -292,14 +292,14 @@ const NotClaim = () => {
                             )
                           </p>
                         )}
-                        <p style={{ paddingBlockEnd: "0.4rem" }}>
+                        {/* <p style={{ paddingBlockEnd: "0.4rem" }}>
                           {businessDetailsData?.total_followers}
 
                           {businessDetailsData?.total_followers &&
                           businessDetailsData?.total_followers > 1
                             ? " Followers"
                             : " Follower"}
-                        </p>
+                        </p> */}
                       </div>
                       <p style={{ paddingBlock: "0.2rem" }}>
                         Number of Ads Posted:{" "}
@@ -333,7 +333,7 @@ const NotClaim = () => {
                           <p>Share</p>
                         </div>
 
-                        {user?.id !== businessDetailsData?.user_id && (
+                        {/* {user?.id !== businessDetailsData?.user_id && (
                           <Button
                             icon={
                               <Image
@@ -355,7 +355,7 @@ const NotClaim = () => {
                             }
                             variant="transparent"
                           />
-                        )}
+                        )} */}
                       </div>
                     </div>
 
@@ -419,7 +419,7 @@ const NotClaim = () => {
                         </div>
                       )}
 
-                    <div className={styles.social}>
+                    {/* <div className={styles.social}>
                       <Image
                         style={{ cursor: "pointer" }}
                         src={WhatsappLogo}
@@ -458,7 +458,7 @@ const NotClaim = () => {
                           }
                         }}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className={styles.rightSection}>

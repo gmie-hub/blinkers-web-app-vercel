@@ -33,6 +33,7 @@ import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import ProfileIcon from "../../../../assets/Avatarprofile.svg";
 import { countUpTo } from "../../../../utils";
+import WriteReviewAds from "../writeReview/reviewAds";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -91,7 +92,7 @@ const SmallScreen = ({
     {
       key: "2",
       label: "Reviews",
-      children: <Reviews limit={3} />,
+      children: <Reviews id={productDetailsData?.user_id} limit={3} />,
     },
   ];
 
@@ -619,58 +620,60 @@ const SmallScreen = ({
           </div>
         </div>
         {activeKey === "2" && (
-          <div>
-            <Formik
-              initialValues={{ message: "", selectedItems: [] }}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
-            >
-              <Form>
-                <div className={styles.cardreview}>
-                  <h2 className={styles.write}>Write A Review</h2>
+          <WriteReviewAds id={productDetailsData?.user_id} />
 
-                  <p className={styles.adding}>
-                    Add a rating. Tap on the icons to rate this product
-                  </p>
+          // <div>
+          //   <Formik
+          //     initialValues={{ message: "", selectedItems: [] }}
+          //     onSubmit={(values) => {
+          //       console.log(values);
+          //     }}
+          //   >
+          //     <Form>
+          //       <div className={styles.cardreview}>
+          //         <h2 className={styles.write}>Write A Review</h2>
 
-                  <div className={styles.starWrapper}>
-                    {countUpTo(
-                      0,
-                      <Image
-                        width={20}
-                        src={StarYellow}
-                        alt="StarYellow"
-                        preview={false}
-                      />,
-                      <Image
-                        width={20}
-                        src={StarIcon}
-                        alt="StarIcon"
-                        preview={false}
-                      />
-                    )}
-                  </div>
-                  <div className={styles.reviewInput}>
-                    <Input
-                      name="review"
-                      placeholder="Write  review"
-                      type="textarea"
-                    />
-                  </div>
-                  <div className={styles.seeBtn}>
-                    <Button
-                      onClick={() => {
-                        setOpenSuccess(true);
-                      }}
-                      text="Submit"
-                      className="buttonStyle"
-                    />
-                  </div>
-                </div>
-              </Form>
-            </Formik>
-          </div>
+          //         <p className={styles.adding}>
+          //           Add a rating. Tap on the icons to rate this product
+          //         </p>
+
+          //         <div className={styles.starWrapper}>
+          //           {countUpTo(
+          //             0,
+          //             <Image
+          //               width={20}
+          //               src={StarYellow}
+          //               alt="StarYellow"
+          //               preview={false}
+          //             />,
+          //             <Image
+          //               width={20}
+          //               src={StarIcon}
+          //               alt="StarIcon"
+          //               preview={false}
+          //             />
+          //           )}
+          //         </div>
+          //         <div className={styles.reviewInput}>
+          //           <Input
+          //             name="review"
+          //             placeholder="Write  review"
+          //             type="textarea"
+          //           />
+          //         </div>
+          //         <div className={styles.seeBtn}>
+          //           <Button
+          //             onClick={() => {
+          //               setOpenSuccess(true);
+          //             }}
+          //             text="Submit"
+          //             className="buttonStyle"
+          //           />
+          //         </div>
+          //       </div>
+          //     </Form>
+          //   </Formik>
+          // </div>
         )}
       </div>
 

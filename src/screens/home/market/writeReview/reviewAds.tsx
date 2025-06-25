@@ -6,24 +6,25 @@ import { App, Image } from "antd";
 import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DoneIcon from "../../../../assets/Done.svg";
 import * as Yup from "yup";
-import BackIcon from "../../../../assets/back.svg";
 import { useMutation } from "@tanstack/react-query";
 import { WriteSellerReviewApi } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../../utils/errorMessage";
 
-const WriteReviewAds = () => {
+interface Props{
+  id?:number
+}
+const WriteReviewAds = ({id}:Props) => {
   // const [currentRating, setCurrentRating] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(true);
   const [showCard, setShowCard] = useState(false);
   const navigate = useNavigate();
   const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
-  const { id } = useParams();
 
   const handleSubmit = () => {
     setShowReviewForm(false);
@@ -74,13 +75,13 @@ const WriteReviewAds = () => {
   });
 
   return (
-    <div className="wrapper">
+    <div >
       <div className={styles.RewiwvWrapper}>
         <div>
-          <div onClick={() => navigate(-1)} className={styles.back}>
+          {/* <div onClick={() => navigate(-1)} className={styles.back}>
             <Image width={9} src={BackIcon} alt="BackIcon" preview={false} />
             <p>Back</p>
-          </div>
+          </div> */}
 
           {showReviewForm && (
             <Formik
@@ -153,7 +154,7 @@ const WriteReviewAds = () => {
                 <h2>Review Submitted</h2>
                 <p>Your Rating and Review Has Been Submitted Successfully</p>
                 <Button
-                  onClick={handleModalOkay}
+                  onClick={()=>setShowCard(false)}
                   text="Okay"
                   className="buttonStyle"
                 />

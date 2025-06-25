@@ -127,14 +127,33 @@ const JobDetails = () => {
           </div>
           <section className={styles.header}>
             <div>
-              <span className={styles.logo}>
+            <span className={styles.logo}>
+             
+                <>
+                {JobDetailsData?.business?.logo ? (
+                  <img
+                    className={styles.icon}
+                    src={JobDetailsData.business.logo}
+                    alt="Business Logo"
+                  />
+                ) : (
+                  <div className={styles.placeholderCircle}></div>
+                )}
+                </>
+
+                <p>
+                  {JobDetailsData?.business?.name ||
+                    JobDetailsData?.user?.store_name}
+                </p>
+              </span>
+              {/* <span className={styles.logo}>
                 <img
                   className={styles.icon}
                   src={JobDetailsData?.business?.logo}
                   alt="logo"
                 />
                 <p>{JobDetailsData?.business?.name}</p>
-              </span>
+              </span> */}
               <span className={styles.location}>
                 <img src={JobLocation} alt="JobLocation" />
                 <p>{JobDetailsData?.location}</p>
