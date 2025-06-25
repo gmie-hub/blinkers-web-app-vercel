@@ -80,11 +80,12 @@ const PaymentMethod = ({ handleClose, selectedPlan }: Props) => {
                         }}
                       >
                         <p>{option?.label}</p>
-                        <img src={ArrowIcon} alt="ArrowIcon" />
                       </div>
                     </div>
                   </div>
                 </Radio>
+                <img src={ArrowIcon} alt="ArrowIcon" />
+
 
 
               </div>
