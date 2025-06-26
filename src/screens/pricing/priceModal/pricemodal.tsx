@@ -217,7 +217,9 @@ const PricingOptions = ({
                 <Radio
                   value={option.id}
                   className={styles.radio}
-                  onClick={() => setPrice(option?.price)}
+                  onClick={() => {setPrice(option?.price)
+
+                  }}
                 >
                   <div className={styles.optionText}>
                     <div
@@ -260,7 +262,7 @@ const PricingOptions = ({
 
                   notification.error({
                     message: "No Plan Selected",
-                    description: "Please select a plan before subscribing.",
+                    description: "Please select a plan before subscribing.  ",
                   });
                   return;
 

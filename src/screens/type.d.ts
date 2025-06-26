@@ -371,6 +371,8 @@ interface CmsData {
 // }
 
 interface UserData {
+  subscription:any;
+  plan_name:string;
   id: string | number;
   name: string;
   slug: string | null;

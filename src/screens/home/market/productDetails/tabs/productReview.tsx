@@ -11,7 +11,6 @@ import { AxiosError } from "axios";
 import { convertDate, getTimeFromDate } from "../../../../../utils/formatTime";
 import CustomSpin from "../../../../../customs/spin";
 import { countUpTo } from "../../../../../utils";
-import WriteReviewAds from "../../writeReview/reviewAds";
 
 // Reviews Component
 export default function ProductReviews({

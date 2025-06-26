@@ -12,9 +12,7 @@ import CopyIcon from "../../../../assets/copy.svg";
 import ProfileIcon from "../../../../assets/Avatarprofile.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import { Form, Formik } from "formik";
-import Input from "../../../../customs/input/input";
 import RelatedAds from "../../../../partials/relatedAds";
-import StarIcon from "../../../../assets/Vector.svg";
 import favorite from "../../../../assets/Icon + container.svg";
 import redFavorite from "../../../../assets/redfav.svg";
 import Details from "./tabs/details";
@@ -34,7 +32,6 @@ import {
 import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
-import { countUpTo } from "../../../../utils";
 import WriteReviewAds from "../writeReview/reviewAds";
 
 const safetyTips = [

@@ -177,7 +177,6 @@
 
 // export default PricingPlansPage;
 
-
 import { Modal } from "antd";
 import Button from "../../customs/button/button";
 import PricingOptions from "./priceModal/pricemodal";
@@ -192,6 +191,7 @@ import Gold from "../../assets/gold.svg";
 import Free from "../../assets/Frame 1618872852.svg";
 import Platinum from "../../assets/platinum.svg";
 import ModalContent from "../../partials/successModal/modalContent";
+import { useNavigate } from "react-router-dom";
 
 const PricingPlansPage = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -199,7 +199,9 @@ const PricingPlansPage = () => {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [resetTrigger, setResetTrigger] = useState(false);
 
+  const navigate = useNavigate();
   const [getAllSubQuery] = useQueries({
+    
     queries: [
       {
         queryKey: ["get-all-sub"],
@@ -216,7 +218,7 @@ const PricingPlansPage = () => {
     subError?.message || "An error occurred. Please try again later.";
 
   const getPlanImage = (name: string) => {
-    const planName = name.toLowerCase();
+    const planName = name?.toLowerCase();
     if (planName === "gold") return Gold;
     if (planName === "free") return Free;
     return Platinum;
@@ -225,6 +227,9 @@ const PricingPlansPage = () => {
   const resetSelection = () => {
     setResetTrigger((prev) => !prev);
   };
+  const selectedPlanFromStorage = JSON.parse(
+    localStorage.getItem("setPlan") || "{}"
+  );
 
   return (
     <>
@@ -277,7 +282,7 @@ const PricingPlansPage = () => {
                         }}
                       >
                         <img
-                          src={getPlanImage(plan.name)}
+                          src={getPlanImage(plan?.name)}
                           alt={`${plan.name} plan`}
                           className={styles.planImage}
                         />
@@ -303,6 +308,10 @@ const PricingPlansPage = () => {
                           text={"Choose Plan"}
                           className={styles.chooseButton}
                           onClick={() => {
+                            localStorage.setItem(
+                              "setPlan",
+                              JSON.stringify(plan?.name)
+                            ); // ✅ Save full option
                             setSelectedPlan(plan?.id);
                             setOpenModal(true);
                           }}
@@ -353,8 +362,12 @@ const PricingPlansPage = () => {
       <ModalContent
         open={openSuccess}
         handleCancel={() => setOpenSuccess(false)}
-        handleClick={() => setOpenSuccess(false)}
-        text={"You've successfully activated the Free Plan."}
+        handleClick={() => {
+          setOpenSuccess(false);
+          navigate("/profile");
+          localStorage.setItem("activeTabKeyProfile", '3');
+        }}
+        text={`You've successfully activated the ${selectedPlanFromStorage} Plan.`}
       />
     </>
   );

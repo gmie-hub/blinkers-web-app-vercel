@@ -5,12 +5,12 @@ import { useState } from "react";
 import ArrowIcon from "../../../assets/arrow-right-green.svg";
 import { App, Image, Modal } from "antd";
 import Star from "../../../assets/Vector.svg";
-import WhatsappLogo from "../../../assets/whatsapp.svg";
-import InstagramIcon from "../../../assets/instagram.svg";
-import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
+// import WhatsappLogo from "../../../assets/whatsapp.svg";
+// import InstagramIcon from "../../../assets/instagram.svg";
+// import FaceBookStoreIcon from "../../../assets/fbIcon.svg";
 import HouseLock from "../../../assets/House Lock.svg";
 import shareIcon from "../../../assets/share 2.svg";
-import linkIcon from "../../../assets/link-2.svg";
+// import linkIcon from "../../../assets/link-2.svg";
 import RelatedBusinesses from "../relatedBusinesses/relatedBusiness";
 import TimeIcon from "../../../assets/time42.svg";
 import LocationIcon from "../../../assets//revielocation.svg";
@@ -159,32 +159,32 @@ const NotClaim = () => {
       });
     }
   };
-  const handleFollowBusiness = () => {
-    if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
-    } else {
-      followBusinessHandler();
-    }
-  };
+  // const handleFollowBusiness = () => {
+  //   if (!user) {
+  //     notification.open({
+  //       message: "You need to log in to complete this action.",
+  //       description: (
+  //         <>
+  //           <br />
+  //           <Button
+  //             type="button"
+  //             onClick={() => {
+  //               notification.destroy();
+  //               navigate(`/login?redirect=${currentPath}`);
+  //             }}
+  //           >
+  //             Click here to Login
+  //           </Button>
+  //         </>
+  //       ),
+  //       placement: "top",
+  //       duration: 4, // Auto close after 5 seconds
+  //       icon: null,
+  //     });
+  //   } else {
+  //     followBusinessHandler();
+  //   }
+  // };
 
   const handleNavigateToWriteReview = () => {
     if (!user) {

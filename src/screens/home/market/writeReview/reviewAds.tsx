@@ -6,7 +6,6 @@ import { App, Image } from "antd";
 import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import DoneIcon from "../../../../assets/Done.svg";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
@@ -22,7 +21,6 @@ const WriteReviewAds = ({id}:Props) => {
   // const [currentRating, setCurrentRating] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(true);
   const [showCard, setShowCard] = useState(false);
-  const navigate = useNavigate();
   const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
 
@@ -31,10 +29,6 @@ const WriteReviewAds = ({id}:Props) => {
     setShowCard(true);
   };
 
-  const handleModalOkay = () => {
-    navigate(-1);
-    window.scrollTo(0, 0);
-  };
 
   const WriteReviewMutation = useMutation({
     mutationFn: WriteSellerReviewApi,

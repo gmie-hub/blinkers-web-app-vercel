@@ -6,7 +6,6 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
   AddToFav,
-  FollowBusiness,
   FollowSeller,
   getApplicantsbyId,
   getBusinessById,
@@ -206,63 +205,63 @@ const Main = () => {
     productDetailsData,
   ]);
 
-  const followBusinessMutation = useMutation({
-    mutationFn: FollowBusiness,
-    mutationKey: ["follow-business"],
-  });
+  // const followBusinessMutation = useMutation({
+  //   mutationFn: FollowBusiness,
+  //   mutationKey: ["follow-business"],
+  // });
 
-  const followBusinessHandler = async () => {
-    const payload: Partial<FollowBusiness> = {
-      business_id: productDetailsData?.business_id || 0,
-      user_id: user?.id,
-      action: isUserFollowingBusiness ? "unfollow" : "follow",
-    };
+  // const followBusinessHandler = async () => {
+  //   const payload: Partial<FollowBusiness> = {
+  //     business_id: productDetailsData?.business_id || 0,
+  //     user_id: user?.id,
+  //     action: isUserFollowingBusiness ? "unfollow" : "follow",
+  //   };
 
-    try {
-      await followBusinessMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          queryClient.refetchQueries({
-            queryKey: ["get-business-followers"],
-          });
-        },
-      });
-    } catch (error) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error) || "An error occur",
-      });
-    }
-  };
-  const handleFollowBusiness = () => {
-    if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
-    } else {
-      followBusinessHandler();
-    }
-  };
+  //   try {
+  //     await followBusinessMutation.mutateAsync(payload, {
+  //       onSuccess: (data) => {
+  //         notification.success({
+  //           message: "Success",
+  //           description: data?.message,
+  //         });
+  //         queryClient.refetchQueries({
+  //           queryKey: ["get-business-followers"],
+  //         });
+  //       },
+  //     });
+  //   } catch (error) {
+  //     notification.error({
+  //       message: "Error",
+  //       description: errorMessage(error) || "An error occur",
+  //     });
+  //   }
+  // };
+  // const handleFollowBusiness = () => {
+  //   if (!user) {
+  //     notification.open({
+  //       message: "You need to log in to complete this action.",
+  //       description: (
+  //         <>
+  //           <br />
+  //           <Button
+  //             type="button"
+  //             onClick={() => {
+  //               notification.destroy();
+  //               navigate(`/login?redirect=${currentPath}`);
+  //             }}
+  //           >
+  //             Click here to Login
+  //           </Button>
+  //         </>
+  //       ),
+  //       placement: "top",
+  //       duration: 4, // Auto close after 5 seconds
+  //       icon: null,
+  //     });
+  //   } else {
+  //     followBusinessHandler();
+  //   }
+  // };
 
   const followSellersMutation = useMutation({
     mutationFn: FollowSeller,
