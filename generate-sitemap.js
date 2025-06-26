@@ -26,6 +26,7 @@ const routes = [
   "/how-to-buy",
   "/how-to-sell",
   "/jobs",
+  "/pricing"
   "/jobs/:search",
   "/job-details/:id/:title?/:description?",
   "/job-details/:id/:title?",
