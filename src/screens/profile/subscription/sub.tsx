@@ -13,11 +13,9 @@ import Gold from "../../../assets/gold.svg";
 import {
   formatAmount,
   formatDateToDayMonthYear,
-  getTimeFromDate,
 } from "../../../utils/formatTime";
 import CustomSpin from "../../../customs/spin";
 
-const features = Array(12).fill("10 products advert");
 
 const SubscriptionCard = () => {
   const user = useAtomValue(userAtom);
@@ -52,12 +50,12 @@ const SubscriptionCard = () => {
   const features = description?.split(',');
 
   return (
-    // <>
-    //    {getProfileQuery?.isLoading ? (
-    //         <CustomSpin />
-    //       ) : getProfileQuery?.isError ? (
-    //         <h1 className="error">{profileDetailsErrorMessage}</h1>
-    //       ) : (
+    <>
+       {getProfileQuery?.isLoading ? (
+            <CustomSpin />
+          ) : getProfileQuery?.isError ? (
+            <h1 className="error">{profileDetailsErrorMessage}</h1>
+          ) : (
       <div className={styles.card}>
       <div className={styles.header}>
         <img
@@ -122,8 +120,8 @@ const SubscriptionCard = () => {
         </Button> */}
       </div>
     </div>
-    //       )}
-    // </>
+          )}
+    </>
   
   );
 };

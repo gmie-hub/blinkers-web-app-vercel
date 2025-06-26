@@ -16,11 +16,9 @@ import TimeIcon from "../../../assets/time42.svg";
 import LocationIcon from "../../../assets//revielocation.svg";
 import CallIcon from "../../../assets/callclaim.svg";
 import copyIcon from "../../../assets/copywhite.svg";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import {  useQueries } from "@tanstack/react-query";
 import {
-  FollowBusiness,
   getBusinessById,
-  getFollowersByBusiness_id,
   handleCopyLink,
 } from "../../request";
 import { AxiosError } from "axios";
@@ -32,7 +30,6 @@ import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import StarYellow from "../../../assets/staryellow.svg";
-import { errorMessage } from "../../../utils/errorMessage";
 import { groupBusinessHours } from "./displayBusinessHour";
 import { countUpTo } from "../../../utils";
 
@@ -43,7 +40,6 @@ const NotClaim = () => {
   const { id } = useParams();
   const [openShare, setOpenShare] = useState(false);
   const user = useAtomValue(userAtom);
-  const queryClient = useQueryClient();
   const { notification } = App.useApp();
   const currentPath = location.pathname;
   const currentHref = location.href;
@@ -99,7 +95,7 @@ const NotClaim = () => {
     window.scrollTo(0, 0);
   };
 
-  const [getBusinessDetailsQuery, getBusinessFollowersQuery] = useQueries({
+  const [getBusinessDetailsQuery, ] = useQueries({
     queries: [
       {
         queryKey: ["get-business-details", id],
@@ -108,18 +104,18 @@ const NotClaim = () => {
         refetchOnWindowFocus: true,
         enabled: !!id,
       },
-      {
-        queryKey: ["get-business-followers", id],
-        queryFn: () => getFollowersByBusiness_id(user?.id ?? 0, parseInt(id!)),
-        retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!id,
-      },
+      // {
+      //   queryKey: ["get-business-followers", id],
+      //   queryFn: () => getFollowersByBusiness_id(user?.id ?? 0, parseInt(id!)),
+      //   retry: 0,
+      //   refetchOnWindowFocus: true,
+      //   enabled: !!id,
+      // },
     ],
   });
-  const userExists = getBusinessFollowersQuery?.data?.data?.data?.some(
-    (item) => item?.user_id === user?.id
-  );
+  // const userExists = getBusinessFollowersQuery?.data?.data?.data?.some(
+  //   (item) => item?.user_id === user?.id
+  // );
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
@@ -128,37 +124,37 @@ const NotClaim = () => {
     "An error occurred. Please try again later.";
   console.log(businessDetailsData?.gallery[0]?.url, "businessDetailsData");
 
-  const followBusinessMutation = useMutation({
-    mutationFn: FollowBusiness,
-    mutationKey: ["follow-business"],
-  });
+  // const followBusinessMutation = useMutation({
+  //   mutationFn: FollowBusiness,
+  //   mutationKey: ["follow-business"],
+  // });
 
-  const followBusinessHandler = async () => {
-    const payload: Partial<FollowBusiness> = {
-      business_id: businessDetailsData?.id,
-      user_id: user?.id,
-      action: userExists ? "unfollow" : "follow",
-    };
+  // const followBusinessHandler = async () => {
+  //   const payload: Partial<FollowBusiness> = {
+  //     business_id: businessDetailsData?.id,
+  //     user_id: user?.id,
+  //     action: userExists ? "unfollow" : "follow",
+  //   };
 
-    try {
-      await followBusinessMutation.mutateAsync(payload, {
-        onSuccess: (data) => {
-          notification.success({
-            message: "Success",
-            description: data?.message,
-          });
-          queryClient.refetchQueries({
-            queryKey: ["get-business-followers"],
-          });
-        },
-      });
-    } catch (error) {
-      notification.error({
-        message: "Error",
-        description: errorMessage(error),
-      });
-    }
-  };
+  //   try {
+  //     await followBusinessMutation.mutateAsync(payload, {
+  //       onSuccess: (data) => {
+  //         notification.success({
+  //           message: "Success",
+  //           description: data?.message,
+  //         });
+  //         queryClient.refetchQueries({
+  //           queryKey: ["get-business-followers"],
+  //         });
+  //       },
+  //     });
+  //   } catch (error) {
+  //     notification.error({
+  //       message: "Error",
+  //       description: errorMessage(error),
+  //     });
+  //   }
+  // };
   // const handleFollowBusiness = () => {
   //   if (!user) {
   //     notification.open({
