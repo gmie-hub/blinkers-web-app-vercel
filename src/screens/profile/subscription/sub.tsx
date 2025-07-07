@@ -2,8 +2,8 @@ import styles from "./styles.module.scss";
 import { CheckCircleFilled } from "@ant-design/icons";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { getApplicantsbyId } from "../../request";
-import { useQueries } from "@tanstack/react-query";
+import { getAllSubscription, getAllSubscriptionbyId, getApplicantsbyId } from "../../request";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../utils/store";
 import { AxiosError } from "axios";
@@ -30,8 +30,24 @@ const SubscriptionCard = () => {
         refetchOnWindowFocus: true,
         enabled: !!user?.id,
       },
+   
     ],
   });
+
+
+  
+  const planId = getProfileQuery?.data?.data?.subscription?.pricing?.plan?.id;
+  
+  const { data: subPlanData } = useQuery({
+    queryKey: ["get-all-sub", planId],
+    queryFn: () => getAllSubscriptionbyId(planId),
+    retry: 0,
+    enabled: !!planId, // only runs when planId is available
+    refetchOnWindowFocus: false,
+  });
+
+  const features = subPlanData?.data?.features;
+  
 
   const profileData = getProfileQuery?.data?.data;
   const profileDetailsError = getProfileQuery?.error as AxiosError;
@@ -40,14 +56,17 @@ const SubscriptionCard = () => {
     "An error occurred. Please try again later.";
 
   const getPlanImage = () => {
-    const planName = profileData && profileData?.plan_name?.toLowerCase();
+    const planName = profileData && profileData?.subscription?.pricing?.plan?.name?.toLowerCase();
     if (planName === "gold") return Gold;
     if (planName === "free") return Free;
     return Platinum;
   };
-  const description = profileData && profileData?.subscription?.pricing?.plan
-?.description
-  const features = description?.split(',');
+
+  console.log(features,'subPlan')
+
+//   const description = profileData && profileData?.subscription?.pricing?.plan
+// ?.description
+//   const features = description?.split(',');
 
   return (
     <>
@@ -60,11 +79,11 @@ const SubscriptionCard = () => {
       <div className={styles.header}>
         <img
           src={getPlanImage()}
-          alt={`${profileData?.plan_name} plan`}
+          alt={`${profileData?.subscription?.pricing?.plan?.name} plan`}
           className={styles.planImage}
         />
 
-        <span className={styles.planName}>{profileData?.plan_name} Plan</span>
+        <span className={styles.planName}>{profileData?.subscription?.pricing?.plan?.name} Plan</span>
       </div>
       <h2 className={styles.price}>
         {profileData?.subscription?.pricing?.duration} months plan -{" "}
@@ -95,7 +114,7 @@ const SubscriptionCard = () => {
           {features?.map((item:any, index:number) => (
             <li key={index}>
               <CheckCircleFilled style={{ color: "green" }} />
-              <span>{item}</span>
+              <span>{item?.name}</span>
             </li>
           ))}
         </ul>
@@ -110,7 +129,7 @@ const SubscriptionCard = () => {
             window.scroll(0, 0);
           }}
         >
-          Modify Subscription plan
+          Upgrade plan
         </Button>
         {/* <Button
           variant="redOutline"

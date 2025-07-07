@@ -74,6 +74,11 @@ export const getAllSubscription = async () => {
   return (await api.get(`plans`))?.data as any;
 };
 
+export const getAllSubscriptionbyId = async (id:number) => {
+  return (await api.get(`plans/${id}`))?.data as any;
+};
+
+
 export const getProductDetails = async (id: number) => {
   return (await api.get(`ads/${id}`))?.data as ProductDetailsResponse;
 };

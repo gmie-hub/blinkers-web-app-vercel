@@ -109,7 +109,7 @@ const Login = () => {
               message: "Success",
               description: 'admin cant login on client side',
             });
-            logout()
+            // logout()
           }
            if (data?.message !== "OTP sent, please verify your account." && (data?.data?.role !== '1' || data?.data?.role !== '4')){
              navigate(redirectPath ? redirectPath : "/")

@@ -27,6 +27,9 @@ const Profile = () => {
 //     localStorage.setItem("activeTabKeyProfile", activeKey);
 //   }, [activeKey]);
 
+
+
+//do not change the key, if you want to add new tab give it another number not exisitng number
   const items: TabsProps["items"] = [
     {
       key: "1",

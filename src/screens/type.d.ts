@@ -371,6 +371,7 @@ interface CmsData {
 // }
 
 interface UserData {
+  total_all_ads:number,
   subscription:any;
   plan_name:string;
   id: string | number;

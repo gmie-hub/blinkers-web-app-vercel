@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikProps, FormikValues } from "formik";
 import styles from "./editAds.module.scss";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
 import SearchableSelect from "../../../customs/searchableSelect/searchableSelect";
 import Button from "../../../customs/button/button";
@@ -10,6 +10,8 @@ import {
   deleteAdsVideobyId,
   getAllCategory,
   getAllState,
+  getAllSubscriptionbyId,
+  getApplicantsbyId,
   getLGAbyStateId,
   getProductDetails,
   getSpecSubCategory,
@@ -27,7 +29,10 @@ import { errorMessage } from "../../../utils/errorMessage";
 import DeleteIcon from "../../../assets/deleteicon.svg";
 import CustomSpin from "../../../customs/spin";
 import * as Yup from "yup";
-import Select from "../../../customs/select/select";
+import SpecificationSelect from "../../../customs/select/speSelect";
+import { userAtom } from "../../../utils/store";
+import { useAtomValue } from "jotai";
+import { LimitNotification } from "../../../utils/limitNotification";
 
 const EditAdz = () => {
   const { id } = useParams();
@@ -41,9 +46,10 @@ const EditAdz = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [subCategoryId, setSubCategoryId] = useState(0);
-const formikRef = useRef<FormikProps<any>>(null);
+  const formikRef = useRef<FormikProps<any>>(null);
+  const user = useAtomValue(userAtom);
 
-  console.log(subCategoryId,'subCategoryId')
+  console.log(subCategoryId, "subCategoryId");
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
     setFieldValue("local_government_area_id", "");
@@ -61,6 +67,7 @@ const formikRef = useRef<FormikProps<any>>(null);
     getAllCategoryQuery,
     getSubCategoryQuery,
     getSpecificationQuery,
+    getProfileQuery,
   ] = useQueries({
     queries: [
       {
@@ -103,8 +110,37 @@ const formikRef = useRef<FormikProps<any>>(null);
         refetchOnWindowFocus: true,
         enabled: !!subCategoryId,
       },
+
+      {
+        queryKey: ["get-profile"],
+        queryFn: () => getApplicantsbyId(user?.id!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
+      },
     ],
   });
+
+  const planId = getProfileQuery?.data?.data?.subscription?.pricing?.plan?.id;
+
+  const { data: subPlanData } = useQuery({
+    queryKey: ["get-all-sub", planId],
+    queryFn: () => getAllSubscriptionbyId(planId),
+    retry: 0,
+    enabled: !!planId, // only runs when planId is available
+    refetchOnWindowFocus: false,
+  });
+
+  const features = subPlanData?.data?.features;
+
+  const adsFeatures = features?.filter(
+    (feature: any) => feature?.category === "ads"
+  );
+
+  const findFeatureBySlug = (slug: string) => {
+    const match = adsFeatures?.find((feature: any) => feature?.slug === slug);
+    return match || null;
+  };
 
   const productDetailsData = getProductDetailsQuery?.data?.data;
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
@@ -112,15 +148,13 @@ const formikRef = useRef<FormikProps<any>>(null);
     productDetailsError?.message ||
     "An error occurred. Please try again later.";
 
- 
   const stateData = getStateQuery?.data?.data?.data ?? [];
   const lgaData = getLGAQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data ?? [];
 
- useEffect(()=>{
- setSubCategoryId(productDetailsData?.sub_category_id || 0)
-
- },[productDetailsData])
+  useEffect(() => {
+    setSubCategoryId(productDetailsData?.sub_category_id || 0);
+  }, [productDetailsData]);
 
   const stateOptions: { value: number; label: string }[] = [
     { value: 0, label: "Select State" }, // Default option
@@ -141,8 +175,6 @@ const formikRef = useRef<FormikProps<any>>(null);
         }))
       : []),
   ];
-
- 
 
   const categoryData = getAllCategoryQuery?.data?.data?.data ?? [];
 
@@ -166,12 +198,38 @@ const formikRef = useRef<FormikProps<any>>(null);
       : []),
   ];
 
-
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
     if (!e.target?.files) return;
+
+
+    const imageLimit = findFeatureBySlug("total-ads-images")?.pivot?.limit;
+
+    const uploadedCount = productDetailsData?.add_images?.filter(
+      (img: any) => img.is_featured === 0
+    )?.length ?? 0;
+
+    if (imageLimit === undefined || uploadedCount === imageLimit) {
+      LimitNotification({
+        message: "Limit Reached",
+        description: imageLimit === undefined
+        ? "You can't upload Image on your current plan."
+        : `You can't upload more than ${imageLimit} image${imageLimit === 1 ? '' : 's'}.`,
+        // description: `You can't upload more than ${
+        //   findFeatureBySlug("total-ads-images")?.pivot?.limit
+        // } images.`,
+        onClick: () => {
+          navigate("/pricing");
+          window.scroll(0, 0);
+        },
+      });
+      return;
+    }
+
+
+    
     const selectedFile = e.target?.files[0];
 
     const validFileTypes = [
@@ -197,6 +255,30 @@ const formikRef = useRef<FormikProps<any>>(null);
   ) => {
     setUploadVideo(null);
     if (!e.target?.files) return;
+
+    const videoLimit = findFeatureBySlug("total-ads-videos")?.pivot?.limit;
+    const uploadedCount =  productDetailsData?.add_videos?.length ?? 0;
+
+    if (videoLimit === undefined || uploadedCount < videoLimit) {
+      LimitNotification({
+        message: "Limit Reached",
+        description: videoLimit === undefined
+      ? "You can't upload video on your current plan."
+      : `You can't upload more than ${videoLimit} video${videoLimit === 1 ? '' : 's'}.`,
+        // description: `You can't upload more than ${
+        //   findFeatureBySlug("total-ads-videos")?.pivot?.limit === undefined
+        //     ? 0
+        //     : findFeatureBySlug("total-ads-videos")?.pivot?.limit
+        // } Video.`,
+        onClick: () => {
+          navigate("/pricing");
+          window.scroll(0, 0);
+        },
+      });
+      return;
+    }
+
+
     const selectedFile = e.target?.files[0];
 
     const validFileTypes = ["video/mp4"];
@@ -244,32 +326,8 @@ const formikRef = useRef<FormikProps<any>>(null);
     setSubCategoryId(value);
   };
 
-  console.log(subCategoryId, 'djdj')
 
-
-//  const handleSubCategoryChange = async (value, setFieldValue) => {
-//   setFieldValue("sub_category_id", value);
-
-//   // 👇 Replace this with your actual fetch logic
-//   const newSpecs = specifications || [];
-
-//   // Preserve previously entered values
-//   const currentValues = Formik.current?.values?.specifications || [];
-
-//   const updatedSpecs = newSpecs.map((spec:any) => {
-//     const existing = currentValues.find((s:any) => s.id === spec.id);
-//     return {
-//       id: spec.id,
-//       value: existing?.value ?? "",
-//     };
-//   });
-
-//   // setSpecifications(newSpecs); // updates fields
-//   setFieldValue("specifications", updatedSpecs); // updates Formik state
-// };
-
-
-
+ 
   const deleteGalaryMutation = useMutation({ mutationFn: deleteAdsGalarybyId });
 
   const DeleteGalaryHandler = async (imageIds: number[]) => {
@@ -487,13 +545,15 @@ const formikRef = useRef<FormikProps<any>>(null);
     }
     formData.append("_method", "patch");
 
-    
-    if ( getSpecificationQuery?.data?.data?.data  && getSpecificationQuery?.data?.data?.data?.length > 0) {
+    if (
+      getSpecificationQuery?.data?.data?.data &&
+      getSpecificationQuery?.data?.data?.data?.length > 0
+    ) {
       const specs = getSpecificationQuery.data.data.data[0].specifications;
-    
+
       specs.forEach((spec: any, index: number) => {
         const specValue = values?.[`specifications`]?.[index]?.value;
-    
+
         if (specValue !== undefined && specValue !== null && specValue !== "") {
           formData.append(`specifications[${index}][id]`, String(spec.id));
           formData.append(`specifications[${index}][value]`, String(specValue));
@@ -522,11 +582,8 @@ const formikRef = useRef<FormikProps<any>>(null);
     }
   };
 
-
   const specifications =
     getSpecificationQuery?.data?.data?.data[0]?.specifications;
-
-    console.log(specifications,'specifications')
 
   const validationSchema = Yup.object().shape({
     category_id: Yup.string().required("required"),
@@ -547,43 +604,28 @@ const formikRef = useRef<FormikProps<any>>(null);
     }
   };
 
-  // const specificationsstate = getSpecificationQuery?.data?.data?.data[0]?.specifications?.map(
-  //   (spec: any) => {
-  //     const matched = productDetailsData?.specification_values?.find(
-  //       (item: any) => item.specification_id === spec.id
-  //     );
-  
-  //     return {
-  //       ...spec,
-  //       value: matched?.value ?? '',
-  //     };
-  //   }
-  // );
-
   useEffect(() => {
     if (
       formikRef.current &&
       productDetailsData &&
       getSpecificationQuery?.data?.data?.data[0]?.specifications
     ) {
-      const specificationsstate = getSpecificationQuery?.data?.data?.data[0]?.specifications.map(
-        (spec: any) => {
-          const matched = productDetailsData.specification_values?.find(
-            (item: any) => item.specification_id === spec.id
-          );
-          return {
-            id: spec.id,
-            value: matched?.value ?? '',
-          };
-        }
-      );
-  
-      formikRef?.current?.setFieldValue('specifications', specificationsstate);
+      const specificationsstate =
+        getSpecificationQuery?.data?.data?.data[0]?.specifications.map(
+          (spec: any) => {
+            const matched = productDetailsData.specification_values?.find(
+              (item: any) => item.specification_id === spec.id
+            );
+            return {
+              id: spec.id,
+              value: matched?.value ?? "",
+            };
+          }
+        );
+
+      formikRef?.current?.setFieldValue("specifications", specificationsstate);
     }
   }, [productDetailsData, getSpecificationQuery?.data]);
-  
-
-  
 
   return (
     <section className="wrapper">
@@ -593,7 +635,7 @@ const formikRef = useRef<FormikProps<any>>(null);
         <h1 className="error">{productDetailsErrorMessage}</h1>
       ) : (
         <Formik
-        innerRef={formikRef}
+          innerRef={formikRef}
           initialValues={{
             title: productDetailsData?.title || "",
             Used: productDetailsData?.description_tags?.includes("USED"),
@@ -611,7 +653,7 @@ const formikRef = useRef<FormikProps<any>>(null);
               productDetailsData?.local_government_area_id || "",
             description: productDetailsData?.description || "",
             technical_details: productDetailsData?.technical_details || "",
-            specifications:[],
+            specifications: [],
             // specifications: specificationsstate?.map((spec:any) => ({
             //   id: spec.id,
             //   value: spec.value ?? '',
@@ -763,47 +805,45 @@ const formikRef = useRef<FormikProps<any>>(null);
                       onChange={(value: any) => handleSubCategoryChange(value)}
                     />
                   </div>
-                  {specifications &&
-                  specifications?.length > 0 &&
-                  <div className={styles.inputRowSpec}>
-                    {specifications &&
-                      specifications?.length > 0 &&
-                      specifications?.map((spec: any, index: number) => (
-                        <div key={spec.id} style={{ marginBottom: "1rem" }}>
-                          <Field
-                            type="hidden"
-                            name={`specifications[${index}].id`}
-                            value={spec.id}
-                          />
-                          {spec.type === "input" ? (
-                            <Input
-                              name={`specifications[${index}].value`}
-                              // name={`spec_${spec.title}`}
-                              label={spec.title}
-                              placeholder={spec.title}
-                              type="text"
-                              onChange={handleChange}
+                  {specifications && specifications?.length > 0 && (
+                    <div className={styles.inputRowSpec}>
+                      {specifications &&
+                        specifications?.length > 0 &&
+                        specifications?.map((spec: any, index: number) => (
+                          <div key={spec.id} style={{ marginBottom: "1rem" }}>
+                            <Field
+                              type="hidden"
+                              name={`specifications[${index}].id`}
+                              value={spec.id}
                             />
-                          ) : spec.type === "dropdown" ? (
-                            <Select
-                              name={`specifications[${index}].value`}
-                              // name={`spec_${spec.title}`}
-                              label={spec.title}
-                              placeholder={`Select ${spec.title}`}
-                              options={JSON.parse(spec.options || "[]")?.map(
-                                (opt: string) => ({
-                                  label: opt,
-                                  value: opt,
-                                })
-                              )}
-                              onChange={handleChange}
-                            />
-                          ) : null}
-                        </div>
-                      ))}
-                  </div>
-          }
-
+                            {spec.type === "input" ? (
+                              <Input
+                                name={`specifications[${index}].value`}
+                                // name={`spec_${spec.title}`}
+                                label={spec.title}
+                                placeholder={spec.title}
+                                type="text"
+                                onChange={handleChange}
+                              />
+                            ) : spec.type === "dropdown" ? (
+                              <SpecificationSelect
+                                name={`specifications[${index}].value`}
+                                // name={`spec_${spec.title}`}
+                                label={spec.title}
+                                placeholder={`Select ${spec.title}`}
+                                options={JSON.parse(spec.options || "[]")?.map(
+                                  (opt: string) => ({
+                                    label: opt,
+                                    value: opt,
+                                  })
+                                )}
+                                onChange={handleChange}
+                              />
+                            ) : null}
+                          </div>
+                        ))}
+                    </div>
+                  )}
 
                   <div className={styles.inputRow}>
                     <SearchableSelect

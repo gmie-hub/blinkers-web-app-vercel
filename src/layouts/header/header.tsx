@@ -403,7 +403,7 @@ import { useAtom } from "jotai";
 import { logout } from "../../utils/logout";
 import { isCurrentDateGreaterThan } from "../../utils";
 import { jwtDecode } from "jwt-decode";
-import { getUserNotifications, ReadNotification } from "../../screens/request";
+import { getApplicantsbyId, getUserNotifications, ReadNotification } from "../../screens/request";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
@@ -436,7 +436,7 @@ const Header = () => {
   }
 };
 
-  const [getAllUserNotificationQuery] = useQueries({
+  const [getAllUserNotificationQuery,getProfileQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-all-notification"],
@@ -444,8 +444,18 @@ const Header = () => {
         retry: 0,
         refetchOnWindowFocus: false,
       },
+      {
+        queryKey: ["get-profile"],
+        queryFn: () => getApplicantsbyId(user?.id!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
+      },
     ],
   });
+
+  const profileData = getProfileQuery?.data?.data;
+
 
   const notifyData = getAllUserNotificationQuery?.data?.data?.data;
   const notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
@@ -468,11 +478,20 @@ const Header = () => {
   };
 
   const handleNavigateToSell = () => {
-    if (user?.role === "2" || user?.business !== null) {
-      navigate("/create-ad");
-    } else {
+
+    if(user?.role !=='2' &&  user?.business === null){
       navigate("/seller-verification");
     }
+    else if(profileData?.subscription?.pricing?.plan?.name?.toLowerCase() === 'free' || profileData?.subscription?.is_active === 0)  {
+      navigate('/pricing')
+    }
+    else{
+    //  if (user?.role === "2" || user?.business !== null) {
+      navigate("/create-ad");
+     }
+    // } else {
+    //   navigate("/seller-verification");
+    // }
   };
 
   const handleNavigateToProfile = () => {

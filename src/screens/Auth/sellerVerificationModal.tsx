@@ -20,7 +20,7 @@ interface FormValues {
 
 const SellerVerificationCode = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [timeLeft, setTimeLeft] = useState(5); // 1:25 in seconds
+  const [timeLeft, setTimeLeft] = useState(60); // 1:25 in seconds
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const { notification } = App.useApp();
   const navigate = useNavigate();

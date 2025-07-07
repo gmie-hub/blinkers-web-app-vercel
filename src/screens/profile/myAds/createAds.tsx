@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikValues } from "formik";
 import styles from "./editAds.module.scss";
-import { useMutation, useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import Input from "../../../customs/input/input";
 import SearchableSelect from "../../../customs/searchableSelect/searchableSelect";
 import Button from "../../../customs/button/button";
@@ -10,20 +10,25 @@ import {
   //   deleteAdsGalarybyId,
   getAllCategory,
   getAllState,
+  getAllSubscriptionbyId,
+  getApplicantsbyId,
   getLGAbyStateId,
   getSpecSubCategory,
   getSubCategory,
   //   uploadAdsGallery,
   //   uploadAdsVideo,
 } from "../../request";
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Checkbox from "../../../customs/checkBox/checkbox";
 import Upload from "../../../customs/upload/upload";
 import { App } from "antd";
 import { errorMessage } from "../../../utils/errorMessage";
 
 import * as Yup from "yup";
-import Select from "../../../customs/select/select";
+import { useAtomValue } from "jotai";
+import { userAtom } from "../../../utils/store";
+import { LimitNotification } from "../../../utils/limitNotification";
+import SpecificationSelect from "../../../customs/select/speSelect";
 
 const CreateAdz = () => {
   const [stateId, setStateId] = useState(0);
@@ -33,11 +38,11 @@ const CreateAdz = () => {
   const [uploads, setUploads] = useState<File[]>([]);
   const [uploadVideos, setUploadVideos] = useState<File[]>([]);
   const [subCategoryId, setSubCategoryId] = useState(0);
+  const user = useAtomValue(userAtom);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-
 
   const handleStateChange = (value: number, setFieldValue: any) => {
     setStateId(value);
@@ -52,13 +57,13 @@ const CreateAdz = () => {
     setSubCategoryId(value);
   };
 
-
   const [
     getStateQuery,
     getLGAQuery,
     getAllCategoryQuery,
     getSubCategoryQuery,
     getSpecificationQuery,
+    getProfileQuery,
   ] = useQueries({
     queries: [
       {
@@ -94,8 +99,37 @@ const CreateAdz = () => {
         refetchOnWindowFocus: true,
         enabled: !!subCategoryId,
       },
+
+      {
+        queryKey: ["get-profile"],
+        queryFn: () => getApplicantsbyId(user?.id!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
+      },
     ],
   });
+
+  const planId = getProfileQuery?.data?.data?.subscription?.pricing?.plan?.id;
+
+  const { data: subPlanData } = useQuery({
+    queryKey: ["get-all-sub", planId],
+    queryFn: () => getAllSubscriptionbyId(planId),
+    retry: 0,
+    enabled: !!planId, // only runs when planId is available
+    refetchOnWindowFocus: false,
+  });
+
+  const features = subPlanData?.data?.features;
+
+  const adsFeatures = features?.filter(
+    (feature: any) => feature?.category === "ads"
+  );
+
+  const findFeatureBySlug = (slug: string) => {
+    const match = adsFeatures?.find((feature: any) => feature?.slug === slug);
+    return match || null;
+  };
 
   const stateData = getStateQuery?.data?.data?.data ?? [];
   const lgaData = getLGAQuery?.data?.data?.data ?? [];
@@ -144,15 +178,33 @@ const CreateAdz = () => {
   const specifications =
     getSpecificationQuery?.data?.data?.data[0]?.specifications;
 
-  
-
-
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
     const files = e.target.files;
     if (!files) return;
+
+  
+    const imageLimit = findFeatureBySlug("total-ads-images")?.pivot?.limit;
+    const uploadedCount = uploads?.length ?? 0;
+
+    if (imageLimit === undefined || uploadedCount === imageLimit) {
+      LimitNotification({
+        message: "Limit Reached",
+        description: imageLimit === undefined
+        ? "You can't upload Image on your current plan."
+        : `You can't upload more than ${imageLimit} image${imageLimit === 1 ? '' : 's'}.`,
+        // description: `You can't upload more than ${
+        //   findFeatureBySlug("total-ads-images")?.pivot?.limit
+        // } images.`,
+        onClick: () => {
+          navigate("/pricing");
+          window.scroll(0, 0);
+        },
+      });
+      return;
+    }
 
     const validFiles = Array.from(files).filter((file) =>
       ["image/jpeg", "image/png", "image/jpg", "image/gif"].includes(file.type)
@@ -168,12 +220,34 @@ const CreateAdz = () => {
       });
     }
   };
+
   const handleVideoChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: Function
   ) => {
     const files = e.target.files;
     if (!files) return;
+
+   
+    const videoLimit = findFeatureBySlug("total-ads-videos")?.pivot?.limit;
+    if (videoLimit === undefined || uploadVideos?.length < videoLimit) {
+      LimitNotification({
+        message: "Limit Reached",
+        description: videoLimit === undefined
+      ? "You can't upload video on your current plan."
+      : `You can't upload more than ${videoLimit} video${videoLimit === 1 ? '' : 's'}.`,
+        // description: `You can't upload more than ${
+        //   findFeatureBySlug("total-ads-videos")?.pivot?.limit === undefined
+        //     ? 0
+        //     : findFeatureBySlug("total-ads-videos")?.pivot?.limit
+        // } Video.`,
+        onClick: () => {
+          navigate("/pricing");
+          window.scroll(0, 0);
+        },
+      });
+      return;
+    }
 
     // const validVideos = Array.from(files).filter((file) =>
     //   ["video/mp4", "video/x-matroska", "video/webm"].includes(file.type)
@@ -288,24 +362,24 @@ const CreateAdz = () => {
     });
 
     uploadVideos.forEach((file, index: number) => {
-
       formData.append(`add_video[${index}]`, file);
     });
 
-    
+    if (
+      getSpecificationQuery?.data?.data?.data &&
+      getSpecificationQuery?.data?.data?.data?.length > 0
+    ) {
+      const specs = getSpecificationQuery.data.data.data[0].specifications;
 
-    if ( getSpecificationQuery?.data?.data?.data  && getSpecificationQuery?.data?.data?.data?.length > 0) {
-  const specs = getSpecificationQuery.data.data.data[0].specifications;
+      specs.forEach((spec: any, index: number) => {
+        const specValue = values?.[`specifications`]?.[index]?.value;
 
-  specs.forEach((spec: any, index: number) => {
-    const specValue = values?.[`specifications`]?.[index]?.value;
-
-    if (specValue !== undefined && specValue !== null && specValue !== "") {
-      formData.append(`specifications[${index}][id]`, String(spec.id));
-      formData.append(`specifications[${index}][value]`, String(specValue));
+        if (specValue !== undefined && specValue !== null && specValue !== "") {
+          formData.append(`specifications[${index}][id]`, String(spec.id));
+          formData.append(`specifications[${index}][value]`, String(specValue));
+        }
+      });
     }
-  });
-}
 
     try {
       await createAdsMutation.mutateAsync(formData, {
@@ -357,11 +431,8 @@ const CreateAdz = () => {
     setUploadVideos((prev) => prev.filter((_, i) => i !== index));
   };
 
-
   return (
     <section className="wrapper">
-      
-    
       <Formik
         initialValues={{
           title: "",
@@ -377,14 +448,36 @@ const CreateAdz = () => {
           local_government_area_id: "",
           description: "",
           technical_details: "",
-          specifications: specifications?.map((spec:any) => ({
-            id: spec.id,
-            value: "",
-          })) || [],
+          specifications:
+            specifications?.map((spec: any) => ({
+              id: spec.id,
+              value: "",
+            })) || [],
         }}
         onSubmit={(values, { resetForm }) => {
-          createAdsHandler(values, resetForm);
+          const totalAdsCreated =
+            getProfileQuery?.data?.data?.total_all_ads ?? 0;
+          const adLimit = findFeatureBySlug("total-ads")?.pivot?.limit;
+          if (adLimit !== undefined && totalAdsCreated < adLimit) {
+            createAdsHandler(values, resetForm);
+          } else
+            LimitNotification({
+              message: "Limit Reached",
 
+              description: adLimit === undefined
+              ? "You can't Post Ads on your current plan."
+              : `You can't Post more than ${adLimit} Ad${adLimit === 1 ? '' : 's'}. on your current Plan,`,
+              
+              // description: `You can't Create more than ${
+              //   findFeatureBySlug("total-ads")?.pivot?.limit === undefined
+              //     ? 0
+              //     : findFeatureBySlug("total-ads")?.pivot?.limit
+              // } Ad.`,
+              onClick: () => {
+                navigate("/pricing");
+                window.scroll(0, 0);
+              },
+            });
         }}
         validationSchema={validationSchema}
         // enableReinitialize
@@ -541,52 +634,48 @@ const CreateAdz = () => {
                     label="Sub Category"
                     options={subCategoryOptions}
                     placeholder="Select Sub Category"
-                    onChange={(value: any) =>
-                      handleSubCategoryChange(value)
-                    }
+                    onChange={(value: any) => handleSubCategoryChange(value)}
                   />
                 </div>
-                {specifications &&
-                specifications?.length > 0 &&
-                <div className={styles.inputRowSpec}>
-                  {specifications &&
-                    specifications?.length > 0 &&
-                    specifications?.map((spec: any, index: number) => (
-                      <div key={spec.id} style={{ marginBottom: "1rem" }}>
-                        <Field
-                          type="hidden"
-                          name={`specifications[${index}].id`}
-                          value={spec.id}
-                        />
-                        {spec.type === "input" ? (
-                          <Input
-                            name={`specifications[${index}].value`}
-                            label={spec.title}
-                            placeholder={spec.title}
-                            type="text"
-                            onChange={handleChange}
+                {specifications && specifications?.length > 0 && (
+                  <div className={styles.inputRowSpec}>
+                    {specifications &&
+                      specifications?.length > 0 &&
+                      specifications?.map((spec: any, index: number) => (
+                        <div key={index} style={{ marginBottom: "1rem" }}>
+                          <Field
+                            type="hidden"
+                            name={`specifications[${index}].id`}
+                            value={spec.id}
                           />
-                        ) : spec.type === "dropdown" ? (
-                          <Select
-                            name={`specifications[${index}].value`}
-                            // name={`spec_${spec.title}`}
-                            label={spec.title}
-                            placeholder={`Select ${spec.title}`}
-                            options={JSON.parse(spec.options || "[]")?.map(
-                              (opt: string) => ({
-                                label: opt,
-                                value: opt,
-                              })
-                            )}
-                            onChange={handleChange}
-
-                            
-                            
-                          />
-                        ) : null}
-                      </div>
-                    ))}
-                </div>}
+                          {spec.type === "input" ? (
+                            <Input
+                              name={`specifications[${index}].value`}
+                              label={spec.title}
+                              placeholder={spec.title}
+                              type="text"
+                              onChange={handleChange}
+                            />
+                          ) : spec.type === "dropdown" ? (
+                            <SpecificationSelect
+                              name={`specifications[${index}].value`}
+                              // name={`spec_${spec.title}`}
+                              label={spec.title}
+                              placeholder={`Select ${spec.title}`}
+                              options={JSON.parse(spec.options || "[]")?.map(
+                                (opt: string) => ({
+                                  label: opt,
+                                  value: opt,
+                                })
+                              )}
+                             
+                              onChange={handleChange}
+                            />
+                          ) : null}
+                        </div>
+                      ))}
+                  </div>
+                )}
                 <div className={styles.inputRow}>
                   <SearchableSelect
                     name="state_id"

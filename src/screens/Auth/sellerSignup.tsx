@@ -11,10 +11,11 @@ import { useMutation, useQueries } from "@tanstack/react-query";
 import { errorMessage } from "../../utils/errorMessage";
 import { SellerSignUpCall } from "./request";
 import { useState } from "react";
-import { getAllState, getLGAbyStateId } from "../request";
+import { getAllState, getApplicantsbyId, getLGAbyStateId } from "../request";
 import SearchableSelect from "../../customs/searchableSelect/searchableSelect";
 import { userAtom } from "../../utils/store";
 import { useAtom } from "jotai";
+import RouteIndicator from "../../customs/routeIndicator";
 
 const SellerSignUp = () => {
   const { notification } = App.useApp();
@@ -27,11 +28,26 @@ const SellerSignUp = () => {
     setFieldValue("local_government_area_id", "");
   };
 
+  const [getProfileQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["get-profile"],
+        queryFn: () => getApplicantsbyId(user?.id!),
+        retry: 0,
+        refetchOnWindowFocus: true,
+        enabled: !!user?.id,
+      },
+    ],
+  });
+
+  const profileData = getProfileQuery?.data?.data;
+
+
+
   const SignUpMutation = useMutation({
     mutationFn: SellerSignUpCall,
     mutationKey: ["sign-up"],
   });
-
 
   const signUpHandler = async (values: FormikValues) => {
     const payload: Partial<SellerSignUpData> = {
@@ -52,43 +68,45 @@ const SellerSignUp = () => {
       website_address: values?.website_address,
     };
 
-    if (
-      !values?.facebook_address &&
-      !values?.instagram_address &&
-      !values?.twitter_address &&
-      !values?.website_address
-    ) {
-      notification.error({
-        message: "Social media Link",
-        description: "at least one social media link is compulsory",
-        placement: "top",
-        duration: 4,
+    // if (
+    //   !values?.facebook_address &&
+    //   !values?.instagram_address &&
+    //   !values?.twitter_address &&
+    //   !values?.website_address
+    // ) {
+    //   notification.error({
+    //     message: "Social media Link",
+    //     description: "at least one social media link is compulsory",
+    //     placement: "top",
+    //     duration: 4,
+    //   });
+    //   return; // Ensure this stops further execution
+    // }
+
+    try {
+      await SignUpMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+
+          setUser((prevUser: any) => ({
+            ...prevUser,
+            role: "2",
+          }));
+          if(profileData?.subscription?.pricing?.plan?.name?.toLowerCase() === 'free' || profileData?.subscription?.is_active === 0)  {
+            navigate('/pricing')
+          }else
+          handleNavigateCreateAds();
+        },
       });
-      return; // Ensure this stops further execution
-    }     
-
-
-      try {
-        await SignUpMutation.mutateAsync(payload, {
-          onSuccess: (data) => {
-            notification.success({
-              message: "Success",
-              description: data?.message,
-            });
-
-            setUser((prevUser: any) => ({
-              ...prevUser,
-              role: "2",
-            }));
-            handleNavigateCreateAds();
-          },
-        });
-      } catch (error) {
-        notification.error({
-          message: "Error",
-          description: errorMessage(error) || "An error occurred",
-        });
-      }
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -169,7 +187,7 @@ const SellerSignUp = () => {
 
       <Card style={styles.card}>
         {/* <Image src={LoginIcon} alt={LoginIcon} preview={false} /> */}
-
+        <RouteIndicator showBack />
         <p className={styles.welcome}>Complete Profile</p>
         <small></small>
 
