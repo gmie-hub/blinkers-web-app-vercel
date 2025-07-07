@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import { CheckCircleFilled } from "@ant-design/icons";
 import Button from "../../../customs/button/button";
 import { useNavigate } from "react-router-dom";
-import { getAllSubscription, getAllSubscriptionbyId, getApplicantsbyId } from "../../request";
+import {  getAllSubscriptionbyId, getApplicantsbyId } from "../../request";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../utils/store";

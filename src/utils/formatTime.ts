@@ -1,4 +1,3 @@
-import { notification } from "antd";
 import { formatDistanceToNow, format, parseISO } from "date-fns";
 
 export const getTimeAgo = (postedDate: string | null | undefined): string => {
