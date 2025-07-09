@@ -218,7 +218,10 @@ const PricingOptions = ({
                   value={option.id}
                   className={styles.radio}
                   onClick={() => {setPrice(option?.price)
-
+                    localStorage.setItem(
+                      "setPricingId",
+                      JSON.stringify(option?.id)
+                    );
                   }}
                 >
                   <div className={styles.optionText}>

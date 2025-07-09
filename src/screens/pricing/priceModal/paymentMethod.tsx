@@ -1,8 +1,9 @@
-import { Radio } from "antd";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { App, Radio } from "antd";
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import Button from "../../../customs/button/button";
-import { useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { getAllSubscriptionById } from "../../request";
 import { AxiosError } from "axios";
 import CustomSpin from "../../../customs/spin";
@@ -12,12 +13,20 @@ import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../utils/store";
 import btnStyles from "../../../customs/button/button.module.scss";
+import api from "../../../utils/apiClient";
+import { errorMessage } from "../../../utils/errorMessage";
 
 interface Props {
   handleClose: () => void;
   selectedPlan: any;
   price: number;
   handlePaymentSuccess: () => void;
+}
+
+interface VerifyPayload {
+  reference: string;
+  gateway: string;
+  pricing_id: number;
 }
 
 const PAYSTACK = "Paystack";
@@ -33,6 +42,46 @@ const PaymentMethod = ({
 
   const userInfo = useAtomValue(userAtom);
 
+  const { notification } = App.useApp();
+
+  const postVerifyPayment = async (payload: VerifyPayload) => {
+    return (await api.post("payments/verify", payload)).data;
+  };
+
+  const verifyPaymentMutation = useMutation({
+    mutationKey: ["verifyPayment"],
+    mutationFn: postVerifyPayment,
+  });
+
+
+  const selectedPrincingFromStorage = JSON.parse(
+    localStorage.getItem("setPricingId") || "{}"
+  );
+
+  const verifyPaymentHandler = async (reference: string) => {
+    const payload: VerifyPayload = {
+      reference,
+      gateway: selected?.toUpperCase(),
+      pricing_id: selectedPrincingFromStorage,
+    };
+
+    try {
+      await verifyPaymentMutation.mutateAsync(payload, {
+        onSuccess: (data) => {
+          notification.success({
+            message: "Success",
+            description: data?.message,
+          });
+        },
+      });
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: errorMessage(error) || "An error occurred",
+      });
+    }
+  };
+
   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
   const amount = price * 100;
   const email = userInfo?.email ?? "";
@@ -42,9 +91,11 @@ const PaymentMethod = ({
     amount,
     publicKey,
     text: "Proceed",
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       handlePaymentSuccess();
       handleClose();
+
+      verifyPaymentHandler(data?.reference);
     },
     onClose: () => {},
   };
@@ -75,6 +126,8 @@ const PaymentMethod = ({
       closePaymentModal();
       handlePaymentSuccess();
       handleClose();
+
+      verifyPaymentHandler(response?.transaction_id);
     },
     onClose: () => {},
   };

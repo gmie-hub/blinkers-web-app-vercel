@@ -142,6 +142,7 @@ const PricingPlansPage = () => {
                               "setPlan",
                               JSON.stringify(plan?.name)
                             ); // ✅ Save full option
+                           
                             setSelectedPlan(plan?.id);
                             setOpenModal(true);
                           }}
