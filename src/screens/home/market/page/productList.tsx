@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { App, Image, Modal, Pagination } from "antd";
+import { Image, Modal, Pagination } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";

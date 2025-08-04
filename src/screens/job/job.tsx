@@ -1,5 +1,5 @@
 import styles from "./job.module.scss";
-import { Image, Modal, notification } from "antd";
+import { Image, Modal } from "antd";
 import { useState } from "react";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
