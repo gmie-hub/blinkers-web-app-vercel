@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { App, Image, Pagination } from "antd";
+import { App, Image, Modal, Pagination } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
@@ -15,11 +15,12 @@ import FaArrowLeft from "../../../../assets/backArrow.svg"; // Assuming you use 
 import Button from "../../../../customs/button/button";
 import CustomSpin from "../../../../customs/spin";
 import usePagination from "../../../../hooks/usePagnation";
-import { useEffect, } from "react";
-import { countUpTo} from "../../../../utils";
+import { useEffect, useState } from "react";
+import { countUpTo } from "../../../../utils";
 import { AddToFav } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
+import GeneralWelcome from "../marketLogin/marketLogin";
 
 interface ProductListProps {
   appliedSearchTerm: string;
@@ -48,12 +49,11 @@ const ProductList: React.FC<ProductListProps> = ({
   const navigate = useNavigate();
   const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const { search } = useParams();
-  const { notification } = App.useApp();
+  // const { notification } = App.useApp();
   const queryClient = useQueryClient();
   const user = useAtomValue(userAtom);
-  const currentPath = location.pathname;
-
- 
+  // const currentPath = location.pathname;
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   useEffect(() => {
     if (currentPage !== pageNum) {
@@ -83,8 +83,10 @@ const ProductList: React.FC<ProductListProps> = ({
     local_government_area_id?: number,
     order?: string
   ) => {
-
-    let url = order === null || order === undefined || order === "" ?    `/ads/all?per_page=${50}&order=${'desc'}&sort=${'created_at'}` : `/ads/all?per_page=${50}`
+    let url =
+      order === null || order === undefined || order === ""
+        ? `/ads/all?per_page=${50}&order=${"desc"}&sort=${"created_at"}`
+        : `/ads/all?per_page=${50}`;
     // let url = `/ads/all?per_page=${50}&order=${'desc'}&sort=${'created_at'}`;
 
     const queryParams: string[] = [];
@@ -209,16 +211,10 @@ const ProductList: React.FC<ProductListProps> = ({
   //   window.scrollTo(0, 0);
   // };
 
-  const handleNavigateToProductDetails = (
-    id: string,
-  
-  ) => {
-    navigate(
-      `/product-details/${id}`
-    );
+  const handleNavigateToProductDetails = (id: string) => {
+    navigate(`/product-details/${id}`);
     window.scrollTo(0, 0);
   };
-  
 
   const handleBack = () => {
     appliedSearchTerm = "";
@@ -264,29 +260,29 @@ const ProductList: React.FC<ProductListProps> = ({
           });
         },
       });
-    } catch  {
+    } catch {
+      setOpenLoginModal(true);
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //     <br />
+      //     <Button
+      //       type="button"
+      //       onClick={() => {
+      //         notification.destroy();
+      //         navigate(`/login?redirect=${currentPath}`);
+      //       }}
+      //     >
+      //       Click here to Login
+      //     </Button>
+      //     </>
 
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-          <br />
-          <Button
-            type="button"
-            onClick={() => {
-              notification.destroy();
-              navigate(`/login?redirect=${currentPath}`);
-            }}
-          >
-            Click here to Login
-          </Button>
-          </>
-          
-        ),
-        placement: "top",
-        duration: 3, // Auto close after 5 seconds
-        icon: null,
-      });
+      //   ),
+      //   placement: "top",
+      //   duration: 3, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     }
   };
 
@@ -326,13 +322,7 @@ const ProductList: React.FC<ProductListProps> = ({
                   //   )
                   // }
 
-                    onClick={() =>
-                    handleNavigateToProductDetails(
-                      item?.slug,
-              
-                    )
-                  }
-
+                  onClick={() => handleNavigateToProductDetails(item?.slug)}
                 >
                   <div
                     className={styles.favoriteIcon}
@@ -446,6 +436,15 @@ const ProductList: React.FC<ProductListProps> = ({
           />
         </div>
       )}
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome handleCloseModal={() => setOpenLoginModal(false)} />
+      </Modal>
     </>
   );
 };

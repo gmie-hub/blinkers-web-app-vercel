@@ -92,11 +92,23 @@
     padding: 1rem;
   }
 }
+.postJob{
+  min-width: 22rem;
+  width: 100%;
+  border: red solid 1px !important;
+  @media screen and (min-width: 768px) {
+    min-width: 22rem;
+    width: 0 !important;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100% !important;
+  }
+}
 
 .buttonStyle {
   min-width: 22rem;
   width: 100%;
-  color: white;
+  border: #009900 1px solid !important;
   @media screen and (min-width: 768px) {
     min-width: 22rem;
     width: 0 !important;
@@ -114,7 +126,7 @@
   display: flex;
   gap: 1.6rem;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   margin-block-start: 2.4rem;
   @media (max-width: 600px) {
     flex-direction: column;
@@ -127,3 +139,62 @@
   font-size: 2.5rem;
   font-weight: bold;
 }
+
+
+.newCard{
+  background-color: #EFFFEF;
+  width: 100%;
+  border: #EFFFEF solid 1px;
+  padding: 2.4rem;
+  margin-block: 4rem;
+  display: flex;
+  flex-direction: row;
+  gap:2.4rem;
+  justify-content: space-between;
+}
+
+.newCardH1{
+  color: #009900;
+  font-size: 3.2rem;
+  font-weight: 600;
+}
+
+.newCardP{
+color: #707070;
+font-size: 2.4rem;
+padding-block-start: 0.8rem;
+padding-block-end: 2.4rem;
+
+}
+
+
+
+.reviewbtn {
+  display: flex;
+  justify-content: space-between;
+  //   margin-block-end: 2.4rem;
+  align-items: center;
+  //   margin-block-start: 4rem;
+}
+
+.review {
+    padding-block-start: 2.4rem;
+    padding-block-end: 2.1rem;
+  } 
+
+  .title {
+    font-weight: 600;
+    font-size: 2.4rem;
+    color: var(--color-header-text);
+  }
+  .btnWrapper {
+    display: flex;
+    align-items: center;
+  }
+  .btn {
+    color: var(--color-primary-green);
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  

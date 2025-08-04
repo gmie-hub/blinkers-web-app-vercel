@@ -57,7 +57,7 @@ flex-direction: column;
   // height: auto; /* Maintain aspect ratio */
   // object-fit: cover; /* Cover the container area without distortion */
   // height: 26rem !important;
-  object-fit: cover;
+  object-fit: contain;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
@@ -239,6 +239,7 @@ flex-direction: column;
   color: #222222;
   font-weight: 700;
   font-size: 1.8rem;
+  padding-block-end: 3rem;
 }
 .buttonStyle {
   min-width: 22rem;
@@ -251,4 +252,66 @@ flex-direction: column;
   @media screen and (max-width: 768px) {
     width: 100% !important;
   }
+}
+
+
+.newCard{
+  background-color: #EFFFEF;
+  width: 100%;
+  border: #EFFFEF solid 1px;
+  padding: 2.4rem;
+  margin-block: 4rem;
+  display: flex;
+  flex-direction: row;
+  gap:2.4rem;
+  justify-content: space-between;
+}
+
+.newCardH1{
+  color: #009900;
+  font-size: 3.2rem;
+  font-weight: 600;
+}
+
+.newCardP{
+color: #707070;
+font-size: 2.4rem;
+padding-block-start: 0.8rem;
+padding-block-end: 2.4rem;
+
+}
+
+
+
+.review {
+  padding-block-start: 1.6rem;
+  & > h1 {
+    padding-block-end: 0.8rem;
+  }
+}
+
+.reviewbtn {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 2.4rem;
+  align-items: center;
+  margin-block-start: 4rem;
+  & > h1 {
+    font-size: 2.4rem;
+    font-weight: 600;
+  }
+}
+.titleHead {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--color-header-text);
+}
+.btn {
+  color: var(--color-primary-green);
+  font-size: 2rem;
+  cursor: pointer;
+}
+.btnWrapper {
+  display: flex;
+  align-items: center;
 }

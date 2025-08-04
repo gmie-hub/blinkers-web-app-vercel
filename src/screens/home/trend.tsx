@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { App, Image } from "antd";
+import { App, Image, Modal } from "antd";
 import Product2 from "../../assets/Image.svg";
 import locationIcon from "../../assets/location.svg";
 import Button from "../../customs/button/button";
@@ -14,13 +14,16 @@ import CustomSpin from "../../customs/spin";
 import redFavorite from "../../assets/redfav.svg";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
+import { useState } from "react";
+import GeneralWelcome from "./market/marketLogin/marketLogin";
 
 const Trends = () => {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
-  const { notification } = App.useApp();
+  // const { notification } = App.useApp();
   const queryClient = useQueryClient();
-  const currentPath = location.pathname;
+  // const currentPath = location.pathname;
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const favData = {
     user_id: user?.id,
@@ -129,26 +132,28 @@ const Trends = () => {
         },
       });
     } catch  {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true)
+
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     }
   };
 
@@ -485,6 +490,17 @@ const Trends = () => {
           </div>
         </section>
       )}
+
+<Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
+        />
+      </Modal>
     </div>
   );
 };

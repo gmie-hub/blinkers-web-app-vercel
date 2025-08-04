@@ -2,7 +2,7 @@ import { Form, Formik, FormikValues } from "formik";
 import Input from "../../../../customs/input/input";
 import Button from "../../../../customs/button/button";
 import styles from "./index.module.scss";
-import { App, Image } from "antd";
+import { App, Image, Modal } from "antd";
 import StarYellow from "../../../../assets/staryellow.svg";
 import StarIcon from "../../../../assets/Vector.svg";
 import { useState } from "react";
@@ -13,6 +13,7 @@ import { WriteSellerReviewApi } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import { errorMessage } from "../../../../utils/errorMessage";
+import GeneralWelcome from "../marketLogin/marketLogin";
 
 interface Props{
   id?:number
@@ -23,6 +24,7 @@ const WriteReviewAds = ({id}:Props) => {
   const [showCard, setShowCard] = useState(false);
   const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const handleSubmit = () => {
     setShowReviewForm(false);
@@ -82,7 +84,10 @@ const WriteReviewAds = ({id}:Props) => {
               initialValues={{ review: "", rating: 0 }}
               validationSchema={validationSchema}
               onSubmit={(values, { resetForm }) => {
-                WriteReviewHandler(values, resetForm);
+                if (!user) {
+                  setOpenLoginModal(true)
+                }else{
+                WriteReviewHandler(values, resetForm);}
               }}
             >
               {({ errors, touched, setFieldValue, values }) => (
@@ -157,6 +162,17 @@ const WriteReviewAds = ({id}:Props) => {
           )}
         </div>
       </div>
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
+        />
+      </Modal>
     </div>
   );
 };

@@ -33,6 +33,7 @@ import { handleCopyLink } from "../../../request";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import WriteReviewAds from "../writeReview/reviewAds";
+import GeneralWelcome from "../marketLogin/marketLogin";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -81,6 +82,7 @@ const BigScreen = ({
   const [isNumberVisible, setIsNumberVisible] = useState(false);
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   console.log(productDetailsData, "productDetailsData");
 
@@ -178,9 +180,16 @@ const BigScreen = ({
     images?.length &&
     images?.slice(currentIndex, currentIndex + maxVisibleImages);
 
+  const handlFlagSeller = () => {
+    if (!user) {
+      setOpenLoginModal(true);
+    } else {
+      setFlagSeller(true);
+    }
+  };
+
   return (
     <main>
-     
       <div className="wrapper">
         <div className={styles.container}>
           <div className={styles.leftSide}>
@@ -493,9 +502,7 @@ const BigScreen = ({
                         }
                         text="Flag Seller"
                         variant="redOutline"
-                        onClick={() => {
-                          setFlagSeller(true);
-                        }}
+                        onClick={handlFlagSeller}
                       />
                     </div>
 
@@ -604,7 +611,7 @@ const BigScreen = ({
                       )}
                     </div>
                     <div className={styles.social}>
-                      { profileDetailsData?.whatsapp_address &&
+                      {profileDetailsData?.whatsapp_address && (
                         <Image
                           src={WhatsappLogo}
                           alt="WhatsappLogo"
@@ -618,7 +625,7 @@ const BigScreen = ({
                             }
                           }}
                         />
-                      }
+                      )}
                       {profileDetailsData?.instagram_address && (
                         <Image
                           src={InstagramIcon}
@@ -693,9 +700,7 @@ const BigScreen = ({
                           hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"
                         }
                         variant="redOutline"
-                        onClick={() => {
-                          setFlagSeller(true);
-                        }}
+                        onClick={handlFlagSeller}
                       />
                     </div>
 
@@ -758,59 +763,7 @@ const BigScreen = ({
           </div>
         </div>
         {activeKey === "2" && (
-          <WriteReviewAds id={productDetailsData?.user_id}/>
-          // <div>
-          //   <Formik
-          //     initialValues={{ message: "", selectedItems: [] }}
-          //     onSubmit={(values) => {
-          //       console.log(values);
-          //     }}
-          //   >
-          //     <Form>
-          //       <div className={styles.cardreview}>
-          //         <h2 className={styles.write}>Write A Review</h2>
-
-          //         <p className={styles.adding}>
-          //           Add a rating. Tap on the icons to rate this product
-          //         </p>
-
-          //         <div className={styles.starWrapper}>
-          //           {countUpTo(
-          //             0,
-          //             <Image
-          //               width={20}
-          //               src={StarYellow}
-          //               alt="StarYellow"
-          //               preview={false}
-          //             />,
-          //             <Image
-          //               width={20}
-          //               src={StarIcon}
-          //               alt="StarIcon"
-          //               preview={false}
-          //             />
-          //           )}
-          //         </div>
-          //         <div className={styles.reviewInput}>
-          //           <Input
-          //             name="review"
-          //             placeholder="Write  review"
-          //             type="textarea"
-          //           />
-          //         </div>
-          //         <div className={styles.seeBtn}>
-          //           <Button
-          //             onClick={() => {
-          //               setOpenSuccess(true);
-          //             }}
-          //             text="Submit"
-          //             className="buttonStyle"
-          //           />
-          //         </div>
-          //       </div>
-          //     </Form>
-          //   </Formik>
-          // </div>
+          <WriteReviewAds id={productDetailsData?.user_id} />
         )}
       </div>
 
@@ -859,6 +812,15 @@ const BigScreen = ({
           sellerId={productDetailsData?.user_id}
           handleCloseModal={() => setFlagSeller(false)}
         />
+      </Modal>
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome handleCloseModal={() => setOpenLoginModal(false)} />
       </Modal>
     </main>
   );

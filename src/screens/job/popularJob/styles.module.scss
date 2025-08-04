@@ -2,7 +2,7 @@
   margin: 0; /* Remove any default margins */
   padding: 0; /* Remove padding */
   width: 100%; /* Ensure the wrapper spans the full width */
-  margin-block-end: 10rem;
+  // margin-block-end: 10rem;
   @media (max-width: 600px) {
     margin-block-end: 0rem;
   }
@@ -22,7 +22,7 @@
   border: #eeeeee solid 1px;
   flex: 1 1 calc(25% - 2.4rem); /* Adjust width for 4 cards per row, considering the gap */
   // background-color: var(--color-primary-white);
-  background-color: #EFFFEF;
+  background-color: #efffef;
   padding-block: 1.2rem;
   padding-inline: 1.6rem;
   box-shadow: 0px 4px 40px 0px #00990012;
@@ -100,7 +100,7 @@
 .posted {
   color: #707070;
   font-size: 1rem;
-  padding-block-start: 1rem
+  padding-block-start: 1rem;
 }
 .full {
   font-size: 1.2rem;
@@ -109,36 +109,44 @@
   }
 }
 
-.back{
-    display:flex;
-    align-items: center;
-    gap:1rem;
-    cursor: pointer;
-    padding-block: 2.4rem;
-    & > p{
-        font-size: 2rem;
-        font-weight: 600;
-    }
+.back {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  padding-block: 2.4rem;
+  & > p {
+    font-size: 2rem;
+    font-weight: 600;
+  }
 }
 
 .placeholderCircle {
   width: 4rem;
   height: 4rem;
-    background-color: #ccc;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    text-transform: uppercase;
-  }
+  background-color: #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+}
 
-  
-  .type{
-    background-color: #00990014;
-    border: #00990014 solid 1px;
-    padding: 0.4rem;
-    border-radius: 1rem;
+.type {
+  background-color: #00990014;
+  border: #00990014 solid 1px;
+  padding: 0.4rem;
+  border-radius: 1rem;
+}
+
+
+
+  .title {
+    font-weight: 700;
+    font-size: 2.4rem;
+    color: var(--color-header-text);
+    padding-block-end: 2.4rem;
   }

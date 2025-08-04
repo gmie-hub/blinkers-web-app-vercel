@@ -110,11 +110,8 @@
 .review {
   padding-block-start: 2.4rem;
   padding-block-end: 2.1rem;
-
-  //   & > h1 {
-  //     padding-block-end: 0.8rem;
-  //   }
 }
+
 .btn {
   color: var(--color-primary-green);
   font-size: 2rem;
@@ -176,9 +173,15 @@
 }
 
 .placeholderCircle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #ccc; // or any neutral color
-  display: inline-block;
-}
+  width: 4rem;
+  height: 4rem;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+  }

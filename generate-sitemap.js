@@ -66,6 +66,12 @@ const routes = [
   "/verification-code/:email?/:phoneNumber?",
   "/reset-password-verification-code/:email/",
   "/seller-verification",
+  "/recommended-businesses",
+  "/top-businesses",
+  "/jobs-for-you",
+  "/popular-jobs",
+
+
 ];
 
 async function generateSitemap() {

@@ -58,7 +58,10 @@ import SafetyTips from "./screens/footerPages/safetyTips";
 import HowToBuy from "./screens/footerPages/howTobuy";
 import HowToSell from "./screens/footerPages/howToSell";
 import Pricing from "./screens/pricing/pricing";
-
+import PopularJobs from "./screens/job/popularJob/popularJob";
+import JobsForYou from "./screens/job/jobForYou/forYou";
+import TopBusinesses from "./screens/directory/topBusiness/topBusiness";
+import RecommendedBusinesses from "./screens/directory/recommended/recommendedBusiness";
 
 function App() {
   const appRoutes = [
@@ -97,6 +100,9 @@ function App() {
     { path: routes.directory.relatedBusinesses, element: <RelatedBusinesses /> },
     { path: routes.directory.SubscriptionPricing, element: <SubscriptionPricing /> },
     { path: routes.directory.ClaimBusiness, element: <ClaimBusiness /> },
+    { path: routes.directory.topBusinesses, element: <TopBusinesses /> },
+    { path: routes.directory.recommendedBusinesses, element: <RecommendedBusinesses /> },
+
     // { path: routes.directory.ClaimedBusiness, element: <ClaimedBusiness /> },
     {
       path: routes.directory.SubmittedSuccessfully,
@@ -116,6 +122,8 @@ function App() {
     { path: routes.job.AddBusiness, element: <AddBusiness /> },
     { path: routes.job.postJob, element: <PostJob /> },
     { path: routes.job.editJob, element: <EditJob/> },
+    { path: routes.job.popular, element: <PopularJobs/> },
+    { path: routes.job.forYou, element: <JobsForYou/> },
 
     { path: routes.profile.profile, element: <Profile /> },
 

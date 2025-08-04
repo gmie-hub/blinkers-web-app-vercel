@@ -1,48 +1,56 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { getTimeAgo } from "../../../utils/formatTime";
 import { AxiosError } from "axios";
 import { useQueries } from "@tanstack/react-query";
-import { getJobDetails } from "../../request";
+import { getForYouJobs } from "../../request";
 import RouteIndicator from "../../../customs/routeIndicator";
 import CustomSpin from "../../../customs/spin";
 import { sanitizeUrlParam } from "../../../utils";
-import { getColorByString, getInitials } from "../../../utils/limitNotification";
+import {
+  getColorByString,
+  getInitials,
+} from "../../../utils/limitNotification";
+import usePagination from "../../../hooks/usePagnation";
+import { useEffect } from "react";
+import { Pagination } from "antd";
 
 interface Props {
   canSeeBtn?: boolean;
   limit?: number;
 }
 
-const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
+const JobForYou = ({ canSeeBtn = true, limit }: Props) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage]);
 
-  const [getJobDetailsQuery] = useQueries({
+  const [getPopularJobsQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-jobs-details", id],
-        queryFn: () => getJobDetails(parseInt(id!)),
+        queryKey: ["get-foryou-jobs", currentPage],
+        queryFn: () => getForYouJobs(currentPage),
         retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!id,
+        refetchOnWindowFocus: false,
       },
     ],
   });
 
-  const JobDetailsData = getJobDetailsQuery?.data?.data;
-  const jobDetailsError = getJobDetailsQuery?.error as AxiosError;
+  const popularJobsData = getPopularJobsQuery?.data?.data?.data;
+  const jobDetailsError = getPopularJobsQuery?.error as AxiosError;
   const jobDetailsErrorMessage =
     jobDetailsError?.message || "An error occurred. Please try again later.";
 
-  const reletedJob = JobDetailsData?.related_jobs;
+  const popularJobs =
+    popularJobsData && popularJobsData?.length > 0
+      ? popularJobsData.slice(0, limit)
+      : popularJobsData;
 
-  const relatedJobsData =
-    reletedJob && reletedJob?.length > 0
-      ? reletedJob.slice(0, limit)
-      : reletedJob;
-
-  const businessReviewError = getJobDetailsQuery?.error as AxiosError;
+  const businessReviewError = getPopularJobsQuery?.error as AxiosError;
   const businessReviewErrorMessage =
     businessReviewError?.message ||
     "An error occurred. Please try again later.";
@@ -60,25 +68,25 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
   };
 
   return (
-    <div className="wrapper">
+    <div className={canSeeBtn ? "wrapper" : ""}>
       <div className={styles.whyWrapper}>
         {canSeeBtn && (
-          // <div onClick={() => navigate(-1)} className={styles.back}>
-          //   <img src={BackIcon} alt="BackIcon" />
-          //   <p>Back</p>
-          // </div>
-          <RouteIndicator showBack />
+          <div>
+            <RouteIndicator showBack />
+
+            <p className={styles.title}>Jobs For You</p>
+          </div>
         )}
 
-        {getJobDetailsQuery?.isLoading ? (
+        {getPopularJobsQuery?.isLoading ? (
           <CustomSpin />
-        ) : getJobDetailsQuery?.isError ? (
+        ) : getPopularJobsQuery?.isError ? (
           <h1 className="error">{jobDetailsErrorMessage}</h1>
         ) : (
           <div className={styles.cardContainer}>
             {/* Only map through the data if it's not empty */}
-            {relatedJobsData && relatedJobsData.length > 0 ? (
-              relatedJobsData?.map((item: any, index: number) => (
+            {popularJobs && popularJobs.length > 0 ? (
+              popularJobs?.map((item: any, index: number) => (
                 <div
                   onClick={() => handleNavigateDetails(item?.id, item?.title)}
                   className={styles.chooseCard}
@@ -90,7 +98,7 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
                       {item?.business?.name}
                     </div>
                   </div> */}
-                   <div className={styles.cardWrapper}>
+                  <div className={styles.cardWrapper}>
                     {item?.business?.logo ? (
                       <img
                         className={styles.icon}
@@ -148,8 +156,24 @@ const MoreJobsLikeThis = ({ canSeeBtn = true, limit }: Props) => {
           </div>
         )}
       </div>
+
+      {canSeeBtn && (
+        <Pagination
+          current={currentPage}
+          total={getPopularJobsQuery?.data?.data?.total} // Total number of items
+          pageSize={20} // Number of items per page
+          onChange={onChange} // Handle page change
+          showSizeChanger={false} // Hide the option to change the page size
+          style={{
+            marginTop: "20px",
+            textAlign: "center", // Center the pagination
+            display: "flex",
+            justifyContent: "center", // Ensure the pagination is centered
+          }}
+        />
+      )}
     </div>
   );
 };
 
-export default MoreJobsLikeThis;
+export default JobForYou;

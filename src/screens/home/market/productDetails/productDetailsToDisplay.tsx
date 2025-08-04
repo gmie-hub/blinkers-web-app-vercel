@@ -15,13 +15,14 @@ import {
   getProductDetails,
   getProductDetailsByslug,
 } from "../../../request";
-import { App } from "antd";
+import { App, Modal } from "antd";
 import RouteIndicator from "../../../../customs/routeIndicator";
 import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import CustomSpin from "../../../../customs/spin";
 import { errorMessage } from "../../../../utils/errorMessage";
 import Button from "../../../../customs/button/button";
+import GeneralWelcome from "../marketLogin/marketLogin";
 
 const Main = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
@@ -33,6 +34,7 @@ const Main = () => {
   const navigate = useNavigate();
   const [businessId, setBusinessId] = useState<null | number>();
   const [sellerId, setSellerId] = useState<null | number>();
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const idOrSlug = id!;
 
@@ -40,7 +42,6 @@ const Main = () => {
 
   console.log(isId, "jummy");
   console.log("idOrSlug:", JSON.stringify(idOrSlug));
-
 
   console.log(sellerId, businessId, "sellerId");
   useEffect(() => {
@@ -68,9 +69,7 @@ const Main = () => {
         queryFn: () =>
           isId
             ? getProductDetails(parseInt(idOrSlug))
-            : 
-            
-            getProductDetailsByslug(idOrSlug),
+            : getProductDetailsByslug(idOrSlug),
 
         retry: 0,
         refetchOnWindowFocus: true,
@@ -180,15 +179,13 @@ const Main = () => {
     );
   console.log(getProductDetailsQuery?.data?.data, "isUserFollowingBusiness");
 
-  const productDetailsData =   getProductDetailsQuery?.data?.data ;
+  const productDetailsData = getProductDetailsQuery?.data?.data;
 
   // const productDetailsData = isId ?  getProductDetailsQuery?.data?.data : getProductDetailsQuery?.data?.data?.data[0];
   const productDetailsError = getProductDetailsQuery?.error as AxiosError;
   const productDetailsErrorMessage =
     productDetailsError?.message ||
     "An error occurred. Please try again later.";
-
-
 
   const businessDetailsData = getBusinessDetailsQuery?.data?.data;
   const profileDetailsData = getUserDetailsQuery?.data?.data;
@@ -296,26 +293,28 @@ const Main = () => {
 
   const handleFollowSeller = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true)
+
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     } else {
       followSellerHandler();
     }
@@ -367,6 +366,17 @@ const Main = () => {
           )}
         </div>
       )}
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
+        />
+      </Modal>
     </>
   );
 };

@@ -31,6 +31,7 @@ import { userAtom } from "../../../../utils/store";
 import { useAtomValue } from "jotai";
 import ProfileIcon from "../../../../assets/Avatarprofile.svg";
 import WriteReviewAds from "../writeReview/reviewAds";
+import GeneralWelcome from "../marketLogin/marketLogin";
 
 const safetyTips = [
   { key: 1, text: "Do not pay in advance, even for the delivery." },
@@ -79,6 +80,7 @@ const SmallScreen = ({
   const user = useAtomValue(userAtom);
   const currenthref = location.href;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const items: TabsProps["items"] = [
     {
@@ -136,6 +138,15 @@ const SmallScreen = ({
     images &&
     images?.length > 0 &&
     images?.slice(currentIndex, currentIndex + maxVisibleImages);
+
+    
+    const handlFlagSeller = () => {
+      if (!user) {
+        setOpenLoginModal(true);
+      } else{
+        setFlagSeller(true)
+      }
+    };
 
   return (
     <main>
@@ -431,9 +442,7 @@ const SmallScreen = ({
                         }
                         text="Flag Seller"
                         variant="redOutline"
-                        onClick={() => {
-                          setFlagSeller(true);
-                        }}
+                        onClick={handlFlagSeller}
                       />
                     </div>
 
@@ -718,6 +727,17 @@ const SmallScreen = ({
           hasUserFlaggedSeller={hasUserFlaggedSeller}
           sellerId={productDetailsData?.user_id}
           handleCloseModal={() => setFlagSeller(false)}
+        />
+      </Modal>
+      
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
         />
       </Modal>
     </main>

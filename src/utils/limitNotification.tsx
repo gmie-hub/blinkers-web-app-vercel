@@ -38,3 +38,32 @@ export const LimitNotification = ({
     duration: 0,
   });
 };
+
+
+
+
+export const getInitials = (title: string = ""): string => {
+  const words = title.trim().split(" ");
+  const initials  = words
+    .filter(word => word.length > 0)
+    .slice(0, 2)
+    .map(word => word[0].toUpperCase())
+    .join("");
+  return initials;
+};
+
+
+const colorList = ["#f97316", "#10b981", "#3b82f6", "#ef4444"]; // orange, green, blue, red
+
+ export const getColorByString = (str?: string): string => {
+if (!str) return colorList[1]; // fallback
+
+let hash = 0;
+for (let i = 0; i < str.length; i++) {
+  hash = str.charCodeAt(i) + ((hash << 5) - hash);
+}
+
+const index = Math.abs(hash) % colorList.length;
+return colorList[index];
+};
+ 

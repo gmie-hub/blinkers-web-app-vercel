@@ -13,12 +13,17 @@ import Free from "../../assets/Frame 1618872852.svg";
 import Platinum from "../../assets/platinum.svg";
 import ModalContent from "../../partials/successModal/modalContent";
 import { useNavigate } from "react-router-dom";
+import GeneralWelcome from "../home/market/marketLogin/marketLogin";
+import { userAtom } from "../../utils/store";
+import { useAtomValue } from "jotai";
 
 const PricingPlansPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [resetTrigger, setResetTrigger] = useState(false);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
+  const user = useAtomValue(userAtom);
 
   const navigate = useNavigate();
   const [getAllSubQuery] = useQueries({
@@ -138,13 +143,17 @@ const PricingPlansPage = () => {
                           text={"Choose Plan"}
                           className={styles.chooseButton}
                           onClick={() => {
-                            localStorage.setItem(
-                              "setPlan",
-                              JSON.stringify(plan?.name)
-                            ); // ✅ Save full option
-                           
-                            setSelectedPlan(plan?.id);
-                            setOpenModal(true);
+                            if (!user) {
+                              setOpenLoginModal(true);
+                            } else {
+                              localStorage.setItem(
+                                "setPlan",
+                                JSON.stringify(plan?.name)
+                              );
+
+                              setSelectedPlan(plan?.id);
+                              setOpenModal(true);
+                            }
                           }}
                         />
                       )}
@@ -174,7 +183,7 @@ const PricingPlansPage = () => {
             text={"Choose Free Plan"}
             className={"buttonStyle"}
             onClick={() => {
-              navigate('/create-ad')
+              navigate("/create-ad");
               // navigate("/profile");
               // localStorage.setItem("activeTabKeyProfile", "3");
               window.scrollTo(0, 0);
@@ -215,6 +224,15 @@ const PricingPlansPage = () => {
         }}
         text={`You've successfully activated the ${selectedPlanFromStorage} Plan.`}
       />
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome handleCloseModal={() => setOpenLoginModal(false)} />
+      </Modal>
     </>
   );
 };

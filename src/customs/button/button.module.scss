@@ -89,7 +89,7 @@
 .greenOutline {
   @extend .white;
   background: transparent;
-  border: 1px solid var(--color-main-primary) !important;
+  border: 1px solid  var(--color-green-text) !important;
   border-radius: 8px;
   color: var(--color-green-text);
 
@@ -101,7 +101,8 @@
 
 .green {
   @extend .white;
-  background: var(--color-main-primary);
+  // background: var(--color-main-primary);
+  background-color: #009900;
   border-radius: 0.8rem;
   color: var(--color-primary-white);
   border: none;

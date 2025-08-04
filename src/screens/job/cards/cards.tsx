@@ -9,9 +9,13 @@ import FaArrowLeft from "../../../assets/backArrow.svg";
 import Button from "../../../customs/button/button";
 import CustomSpin from "../../../customs/spin";
 import usePagination from "../../../hooks/usePagnation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { sanitizeUrlParam } from "../../../utils";
 import LocationIcon from "../../../assets/locationrelated.svg";
+import {
+  getColorByString,
+  getInitials,
+} from "../../../utils/limitNotification";
 
 interface Props {
   searchTerm: string;
@@ -26,7 +30,17 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
       setCurrentPage(pageNum);
     }
   }, [pageNum, currentPage, setCurrentPage]);
+  const moreJobsRef = useRef<HTMLParagraphElement>(null);
 
+  const handlePageChange = (page: number) => {
+    onChange(page); // this triggers the pagination logic from your custom hook
+    if (moreJobsRef.current) {
+      moreJobsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
   // const handleNavigateDetails = (
   //   id: number,
   //   title: string,
@@ -89,6 +103,10 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
             </div>
           )}
 
+          <p ref={moreJobsRef} className={styles.titleMoreJobs}>
+            More Jobs
+          </p>
+
           <div className={styles.cardContainer}>
             {JobData && JobData?.length > 0 ? (
               JobData?.map((item) => (
@@ -105,7 +123,14 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                         alt="Business Logo"
                       />
                     ) : (
-                      <div className={styles.placeholderCircle}></div>
+                      <div
+                        className={styles.placeholderCircle}
+                        style={{
+                          backgroundColor: getColorByString(item?.title),
+                        }}
+                      >
+                        {getInitials(item?.title)}
+                      </div>
                     )}
                     <div className={styles.textContent}>
                       <p className={styles.title}>{item?.title}</p>
@@ -113,23 +138,23 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
                     </div>
                   </div>
                   <div>
-                    <span>
+                    <span className={styles.type}>
                       {" "}
                       {item?.employment_type &&
                         item?.employment_type?.length > 0 &&
                         item?.employment_type?.charAt(0)?.toUpperCase() +
                           item?.employment_type?.slice(1)}
                     </span>{" "}
-                    <div className={styles.dot}></div>
-                    <span>
+                    {/* <div className={styles.dot}></div> */}
+                    <span className={styles.type}>
                       {" "}
                       {item?.job_type &&
                         item?.job_type?.length > 0 &&
                         item?.job_type?.charAt(0)?.toUpperCase() +
                           item?.job_type?.slice(1)}
                     </span>{" "}
-                    <div className={styles.dot}></div>
-                    <span>
+                    {/* <div className={styles.dot}></div> */}
+                    <span className={styles.type}>
                       {" "}
                       {item?.level &&
                         item?.level?.length > 0 &&
@@ -166,7 +191,7 @@ const JobLists = ({ searchTerm, resetSearchTerm }: Props) => {
             current={currentPage}
             total={getAllJobQuery?.data?.data?.total} // Total number of items
             pageSize={20} // Number of items per page
-            onChange={onChange} // Handle page change
+            onChange={handlePageChange} // Handle page change
             showSizeChanger={false} // Hide the option to change the page size
             style={{
               marginTop: "20px",

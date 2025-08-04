@@ -32,6 +32,7 @@ import Reviews from "../../home/market/productDetails/tabs/businessReview";
 import StarYellow from "../../../assets/staryellow.svg";
 import { groupBusinessHours } from "./displayBusinessHour";
 import { countUpTo } from "../../../utils";
+import BusinessDirectoryWelcome from "../directorLogin/directoryLoginCard";
 
 const NotClaim = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const NotClaim = () => {
   const { notification } = App.useApp();
   const currentPath = location.pathname;
   const currentHref = location.href;
+  const [openLoginModal, setOpenLoginModal] =useState(false)
 
   // let  type: 'images' | 'videos';
 
@@ -51,26 +53,28 @@ const NotClaim = () => {
 
   const handleClaim = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true)
+
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     } else {
       navigate(`/claim-business/${id}`);
       window.scrollTo(0, 0);
@@ -609,6 +613,14 @@ const NotClaim = () => {
           </div>
         )}
       </div>
+      <Modal
+      open={openLoginModal}
+      onCancel={() => setOpenLoginModal(false)}
+      centered
+      footer={null}
+    >
+      <BusinessDirectoryWelcome handleCloseModal={() => setOpenLoginModal(false)}/>
+    </Modal>
     </>
   );
 };

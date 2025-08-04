@@ -35,6 +35,8 @@ export const routes = {
     applyForJob: "/job/apply/:id",
     postJob: "/post-job",
     editJob: "/edit-job/:id",
+    popular:'/popular-jobs',
+    forYou:'/jobs-for-you',
   },
 
   directory: {
@@ -48,6 +50,8 @@ export const routes = {
     ClaimedBusiness: "/claimed-business",
     ClaimBusiness: "/claim-business/:id",
     SubmittedSuccessfully: "/submittedsuccessfully",
+    topBusinesses:"/top-businesses",
+    recommendedBusinesses:'/recommended-businesses'
   },
   profile: {
     profile: "/profile/:id?",

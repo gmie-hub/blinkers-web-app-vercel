@@ -22,6 +22,17 @@ export const getAllSellerReviews = async (id: string, page?: number) => {
 //   return (await api.get(`jobs?page=${page}&search=${search}`))
 //     ?.data as JobResponse;
 // };
+export const getPopularJobs = async (page?: number) => {
+ const url = `jobs?page=${page}&popular=${true}`;
+  return (await api.get(url))?.data as JobResponse;
+};
+
+
+export const getForYouJobs = async (page?: number) => {
+  const url = `jobs?page=${page}&for_applicant=${true}`;
+   return (await api.get(url))?.data as JobResponse;
+ };
+
 export const getAllJobs = async (page: number, search?: string | number) => {
   const url = search
     ? `jobs?page=${page}&search=${search}`
@@ -173,6 +184,15 @@ export const getUserNotificationById = async (userId?:number, id?: number,) => {
 export const getMyAdzByUserId = async (user_id?: number, status?:number) => {
   return (await api.get(`/ads?per_page=${30}&user_id=${user_id}&status=${status}`))?.data ;
 };
+
+export const getTopBusiness = async () => {
+  return (await api.get(`/businesses?top=${1}`))?.data ;
+};
+
+export const getRecommentationBusiness = async () => {
+  return (await api.get(`/recommendations?type=${'businesses'}`))?.data ;
+};
+
 
 
 export const getAllBusiness = async (

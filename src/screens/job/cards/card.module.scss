@@ -34,7 +34,8 @@
   cursor: pointer;
   border: #eeeeee solid 1px;
   flex: 1 1 calc(25% - 3.4rem); /* Adjust width for 4 cards per row, considering the gap */
-  background-color: var(--color-primary-white);
+  // background-color: var(--color-primary-white);
+  background-color: #EFFFEF;
   padding-block: 1.2rem;
   padding-inline: 1.6rem;
   box-shadow: 0px 4px 40px 0px #00990012;
@@ -111,9 +112,31 @@
 }
 
 .placeholderCircle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #ccc; // or any neutral color
-  display: inline-block;
-}
+  width: 4rem;
+  height: 4rem;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+
+
+  .type{
+    background-color: #00990014;
+    border: #00990014 solid 1px;
+    padding: 0.4rem;
+    border-radius: 1rem;
+  }
+  
+  .titleMoreJobs {
+    font-weight: 700;
+    font-size: 2.4rem;
+    color: var(--color-header-text);
+    padding-block-end: 2.4rem;
+  }

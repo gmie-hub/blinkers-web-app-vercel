@@ -29,6 +29,11 @@ import { routes } from "../../../routes";
 import ModalContent from "../../../partials/successModal/modalContent";
 import { errorMessage } from "../../../utils/errorMessage";
 import CustomSpin from "../../../customs/spin";
+import {
+  getColorByString,
+  getInitials,
+} from "../../../utils/limitNotification";
+import JobWelcome from "../jobLogin/jobLogin";
 
 const JobDetails = () => {
   const navigate = useNavigate();
@@ -37,7 +42,8 @@ const JobDetails = () => {
   const user = useAtomValue(userAtom);
   const [regModal, setRegModal] = useState(false);
   const { notification } = App.useApp();
-  const currentPath = location.pathname;
+  // const currentPath = location.pathname;
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const handleNavigateToMoreJob = () => {
     navigate(`/job/more-jobs-like-this/${id}`);
@@ -109,26 +115,28 @@ const JobDetails = () => {
   };
   const handleFlagJob = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true);
+
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     } else if (user.is_applicant) {
       setFlagJob(true);
     } else {
@@ -191,20 +199,30 @@ const JobDetails = () => {
                   alt="logo"
                 /> */}
                 <>
-                {JobDetailsData?.business?.logo ? (
-                  <img
-                    className={styles.icon}
-                    src={JobDetailsData.business.logo}
-                    alt="Business Logo"
-                  />
-                ) : (
-                  <div className={styles.placeholderCircle}></div>
-                )}
+                  {JobDetailsData?.business?.logo ? (
+                    <img
+                      className={styles.icon}
+                      src={JobDetailsData.business.logo}
+                      alt="Business Logo"
+                    />
+                  ) : (
+                    <div
+                      className={styles.placeholderCircle}
+                      style={{
+                        backgroundColor: getColorByString(
+                          JobDetailsData?.title
+                        ),
+                      }}
+                    >
+                      {getInitials(JobDetailsData?.title)}
+                    </div>
+                  )}
                 </>
 
                 <p>
                   {JobDetailsData?.business?.name ||
-                    JobDetailsData?.user?.store_name}
+                    JobDetailsData?.user?.store_name ||
+                    JobDetailsData?.user?.name}
                 </p>
               </span>
               <span className={styles.location}>
@@ -347,28 +365,32 @@ const JobDetails = () => {
           </section>
         </div>
       )}
-      <section>
-        <div className="wrapper">
-          <div className={styles.review}>
-            <div className={styles.reviewbtn}>
-              <p className={styles.title}>More Jobs Like This</p>
 
-              {JobDetailsData?.related_jobs &&
-                JobDetailsData?.related_jobs?.length > 4 && (
-                  <div
-                    onClick={handleNavigateToMoreJob}
-                    className={styles.btnWrapper}
-                  >
-                    <p className={styles.btn}>See All</p>
-                    <img src={ArrowIcon} alt="ArrowIcon" />
-                  </div>
-                )}
+      {JobDetailsData?.related_jobs &&
+        JobDetailsData?.related_jobs?.length > 0 && (
+          <section>
+            <div className="wrapper">
+              <div className={styles.review}>
+                <div className={styles.reviewbtn}>
+                  <p className={styles.title}>More Jobs Like This</p>
+
+                  {JobDetailsData?.related_jobs &&
+                    JobDetailsData?.related_jobs?.length > 4 && (
+                      <div
+                        onClick={handleNavigateToMoreJob}
+                        className={styles.btnWrapper}
+                      >
+                        <p className={styles.btn}>See All</p>
+                        <img src={ArrowIcon} alt="ArrowIcon" />
+                      </div>
+                    )}
+                </div>
+                {/* <p>No Reviews available yet</p> */}
+              </div>
             </div>
-            {/* <p>No Reviews available yet</p> */}
-          </div>
-        </div>
-        <MoreJobsLikeThis limit={4} canSeeBtn={false} />,
-      </section>
+            <MoreJobsLikeThis limit={4} canSeeBtn={false} />,
+          </section>
+        )}
 
       <Modal
         open={flagJob}
@@ -388,6 +410,17 @@ const JobDetails = () => {
         }}
         heading={"Please Register as an applicant before perform this action"}
       />
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <JobWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
+        />
+      </Modal>
     </main>
   );
 };

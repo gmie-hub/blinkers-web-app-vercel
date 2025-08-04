@@ -1,13 +1,13 @@
 import styles from "./directory.module.scss";
-import { Image, notification, Pagination } from "antd";
-import { useEffect, useState } from "react";
-import { useNavigate, } from "react-router-dom";
+import { Image, Modal, Pagination } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
 import CallIcon from "../../assets/callrelated.svg";
 import LocationIcon from "../../assets/locationrelated.svg";
 import { useQueries } from "@tanstack/react-query";
-import { getAllBusiness } from "../request";
+import { getAllBusiness, getRecommentationBusiness, getTopBusiness } from "../request";
 import { AxiosError } from "axios";
 import Button from "../../customs/button/button";
 import CustomSpin from "../../customs/spin";
@@ -16,15 +16,34 @@ import usePagination from "../../hooks/usePagnation";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
 import { sanitizeUrlParam } from "../../utils";
+import WhiteAdd from "../../assets/add-circle.svg";
+import DirectoryImage from "../../assets/image 33.svg";
+import CheckIcon from "../../assets/checkico.svg";
+import Arrow from "../../assets/arrow-left.svg";
+import ArrowIcon from "../../assets/arrow-right-green.svg";
+import TopBusiness from "./topBusiness/topBusiness";
+import RecommendedBusinesses from "./recommended/recommendedBusiness";
+import BusinessDirectoryWelcome from "./directorLogin/directoryLoginCard";
 
 const Directory = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [appliedSearchTerm, setAppliedSearchTerm] = useState( "");
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
   const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
-  const currentPath = location.pathname;
+  // const currentPath = location.pathname;
   const user = useAtomValue(userAtom);
+  const [showContent] = useState(true); // Manage review form visibility
+  const moreBusinessesRef = useRef<HTMLParagraphElement>(null);
 
+  const [openLoginModal, setOpenLoginModal] =useState(false)
+
+  const handlePageChange = (page: number) => {
+    onChange(page); // this triggers the pagination logic from your custom hook
+    if (moreBusinessesRef.current) {
+      moreBusinessesRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  
   useEffect(() => {
     if (currentPage !== pageNum) {
       setCurrentPage(pageNum);
@@ -37,7 +56,14 @@ const Directory = () => {
   const handleSearch = () => {
     setAppliedSearchTerm(searchTerm);
   };
-
+  const handleNavigateTopBusiness = () => {
+    navigate(`/top-bussinesses`);
+    window.scrollTo(0, 0);
+  };
+  const handleNavigateToRecommendedBusinesses = () => {
+    navigate(`/recommended-businesses`);
+    window.scrollTo(0, 0);
+  };
   // const handleNavigateDirectory = (id: number, name: string, about:string) => {
   //   navigate(
   //     `/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`
@@ -46,16 +72,15 @@ const Directory = () => {
   // };
 
   const handleNavigateDirectory = (id: number, name: string) => {
-    navigate(
-      `/directory-details/${id}/${sanitizeUrlParam(name)}`
-    );
+    navigate(`/directory-details/${id}/${sanitizeUrlParam(name)}`);
     window.scroll(0, 0);
   };
 
-
- 
-
-  const [getAllDirectoryQuery] = useQueries({
+  const [
+    getAllDirectoryQuery,
+    getAllTopBsinessQuery,
+    getAllRecommendBusinessQuery,
+  ] = useQueries({
     queries: [
       {
         queryKey: ["get-all-directory", appliedSearchTerm, currentPage],
@@ -63,8 +88,34 @@ const Directory = () => {
         retry: 0,
         refetchOnWindowFocus: false,
       },
+      {
+        queryKey: ["getall-top-business"],
+        queryFn: getTopBusiness,
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+      {
+        queryKey: ["get-all-recommended-bus"],
+        queryFn:  getRecommentationBusiness,
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
     ],
   });
+
+  const topBusiness = getAllTopBsinessQuery?.data?.data?.data;
+
+  const topBusinessError = getAllTopBsinessQuery?.error as AxiosError;
+  const topBusinessErrorMessage =
+    topBusinessError?.message || "An error occurred. Please try again later.";
+
+  const recommendBusiness = getAllRecommendBusinessQuery?.data?.data?.data;
+
+  const recommendBusinessError =
+    getAllRecommendBusinessQuery?.error as AxiosError;
+  const recommendBusinessErrorMessage =
+    recommendBusinessError?.message ||
+    "An error occurred. Please try again later.";
 
   const directoryData = getAllDirectoryQuery?.data?.data?.data || [];
   const directoryError = getAllDirectoryQuery?.error as AxiosError;
@@ -80,26 +131,33 @@ const Directory = () => {
   };
   const handleAddDirectory = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true)
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+         
+         
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
+      
+
+ 
+
     } else if (user?.business === null) {
       navigate("/job/add-business");
     } else navigate("/profile/2");
@@ -162,6 +220,152 @@ const Directory = () => {
           </div>
         </div>
       </div>
+
+      <div className={styles.newCard}>
+        <div>
+          <h1 className={styles.newCardH1}>
+            Welcome to Blinkers Business Directory{" "}
+          </h1>
+          <ul
+            style={{
+              paddingBlockEnd: "1rem",
+              listStyle: "disc inside",
+            }}
+          >
+            {[
+              "Claim your business",
+              "List your business",
+              "Explore and connect with other business owners",
+            ].map((item, index) => (
+              <li
+                key={index}
+                style={{
+                  color: "#707070",
+                  paddingBlock: "0.4rem",
+                  fontSize: "2.4rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                <Image src={CheckIcon} alt={CheckIcon} preview={false} />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className={styles.btnFlex}>
+            {(user && !user?.is_applicant) || !user ? (
+              <Button
+                icon={<Image src={WhiteAdd} alt={WhiteAdd} preview={false} />}
+                className={styles.buttonStyle}
+                text="Add Business To Directory"
+                variant="green"
+                onClick={handleAddDirectory}
+              />
+            ) : (
+              <Button
+                AfterTexticon={
+                  <Image src={Arrow} alt={Arrow} preview={false} />
+                }
+                className={styles.buttonStyle}
+                text="Add Business To Directory"
+                variant="green"
+                onClick={handleAddDirectory}
+              />
+            )}
+          </div>
+        </div>
+        <img src={DirectoryImage} alt="DirectoryImage" />
+      </div>
+
+      {getAllTopBsinessQuery?.isLoading ? (
+        <CustomSpin />
+      ) : getAllTopBsinessQuery?.isError ? (
+        <h1 className="error">{topBusinessErrorMessage}</h1>
+      ) : (
+        topBusiness &&
+        topBusiness?.length > 0 && (
+          <div>
+            {showContent && (
+              <div>
+                <div className={styles.reviewbtn}>
+                  <p className={styles.title}> Top Businesses</p>
+                  {topBusiness && topBusiness?.length > 4 && (
+                    <div
+                      onClick={handleNavigateTopBusiness}
+                      className={styles.btnWrapper}
+                    >
+                      <p className={styles.btn}>See All</p>
+                      <Image
+                        width={20}
+                        src={ArrowIcon}
+                        alt="ArrowIcon"
+                        preview={false}
+                      />
+                    </div>
+                  )}
+                </div>
+                <TopBusiness showHeading={false} limit={4} />
+              </div>
+            )}
+          </div>
+        )
+      )}
+
+      {getAllRecommendBusinessQuery?.isLoading ? (
+        <CustomSpin />
+      ) : getAllRecommendBusinessQuery?.isError ? (
+        <h1 className="error">{recommendBusinessErrorMessage}</h1>
+      ) : (
+        recommendBusiness &&
+        recommendBusiness?.length > 0 && (
+          <div>
+            {showContent && (
+              <div>
+                <div className={styles.reviewbtn}>
+                  <p className={styles.title}> Recommended Businesses</p>
+                  {recommendBusiness && recommendBusiness?.length > 4 && (
+                    <div
+                      onClick={handleNavigateToRecommendedBusinesses}
+                      className={styles.btnWrapper}
+                    >
+                      <p className={styles.btn}>See All</p>
+                      <Image
+                        width={20}
+                        src={ArrowIcon}
+                        alt="ArrowIcon"
+                        preview={false}
+                      />
+                    </div>
+                  )}
+                </div>
+                <RecommendedBusinesses showHeading={false} limit={4} />
+              </div>
+            )}
+          </div>
+        )
+      )}
+
+      <div className={styles.newCard}>
+        <div>
+          <h1 className={styles.newCardH1}>Get Your Business Listed Today? </h1>
+          <p className={styles.newCardP}>
+            Discover businesses near you and grow your brand with the Directory{" "}
+          </p>
+          <div className={styles.btnFlex}>
+            {((user && !user?.is_applicant) || !user) && (
+              <Button
+                icon={<Image src={WhiteAdd} alt={WhiteAdd} preview={false} />}
+                className={styles.buttonStyle}
+                text="Add Business To Directory"
+                variant="green"
+                // onClick={handleNavigateRegisterAsAnApplicant}
+              />
+            )}
+          </div>
+        </div>
+        <img src={DirectoryImage} alt="DirectoryImage" />
+      </div>
       <div className={styles.whyWrapper}>
         {getAllDirectoryQuery?.isLoading ? (
           <CustomSpin />
@@ -182,6 +386,7 @@ const Directory = () => {
                 <br />
               </div>
             )}
+            <p  ref={moreBusinessesRef} className={styles.titleHead}>More Businesses</p>
 
             <section className={styles.promoImageContainer}>
               {directoryData && directoryData?.length > 0 ? (
@@ -192,7 +397,7 @@ const Directory = () => {
                     onClick={() =>
                       handleNavigateDirectory(item?.id, item?.name)
                     }
-                    
+
                     // onClick={() =>
                     //   handleNavigateDirectory(item?.id, item?.name,item?.about)
                     // }
@@ -223,11 +428,13 @@ const Directory = () => {
                           </p>
                         </div>
                       )}
-                      <div className={styles.info}>
-                        <Image width={20} src={CallIcon} alt="CallIcon" />
+                      {item?.phone && (
+                        <div className={styles.info}>
+                          <Image width={20} src={CallIcon} alt="CallIcon" />
 
-                        <p>{item?.phone}</p>
-                      </div>{" "}
+                          <p>{item?.phone}</p>
+                        </div>
+                      )}
                       <div className={styles.subjectBg}>
                         {item?.category?.title}
                       </div>
@@ -254,7 +461,7 @@ const Directory = () => {
               current={currentPage}
               total={getAllDirectoryQuery?.data?.data?.total} // Total number of items
               pageSize={20} // Number of items per page
-              onChange={onChange} // Handle page change
+              onChange={handlePageChange} // Handle page change
               showSizeChanger={false} // Hide the option to change the page size
               style={{
                 marginTop: "20px",
@@ -266,6 +473,14 @@ const Directory = () => {
           </>
         )}
       </div>
+      <Modal
+      open={openLoginModal}
+      onCancel={() => setOpenLoginModal(false)}
+      centered
+      footer={null}
+    >
+      <BusinessDirectoryWelcome handleCloseModal={() => setOpenLoginModal(false)}/>
+    </Modal>
     </div>
   );
 };

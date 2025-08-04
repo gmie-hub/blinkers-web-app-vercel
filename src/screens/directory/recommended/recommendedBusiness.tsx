@@ -1,26 +1,32 @@
-import styles from "./relatedBusiness.module.scss";
-import { Image } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import styles from "./styles.module.scss";
+import { Image, Pagination } from "antd";
+import { useNavigate } from "react-router-dom";
 import LocationIcon from "../../../assets/locationrelated.svg";
 import CallIcon from "../../../assets/callrelated.svg";
 import { useQueries } from "@tanstack/react-query";
-import { getBusinessById } from "../../request";
+import { getAllBusiness } from "../../request";
 import { AxiosError } from "axios";
 import RouteIndicator from "../../../customs/routeIndicator";
 import { sanitizeUrlParam } from "../../../utils";
+import usePagination from "../../../hooks/usePagnation";
+import { useEffect } from "react";
 
 
 interface Props {
   limit?: number;
   showHeading?: boolean;
 }
-const RelatedBusinesses = ({
+const RecommendedBusinesses = ({
   showHeading = true,
   limit,
 }: Props) => {
   const navigate = useNavigate();
-  const { id } = useParams();
-
+  const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
+  useEffect(() => {
+    if (currentPage !== pageNum) {
+      setCurrentPage(pageNum);
+    }
+  }, [pageNum, currentPage, setCurrentPage]);
   // const handleNavigateDirectory = (id: number, name:string,about:string) => {
   //   // navigate(`/directory-details/${id}`);
   //   navigate(`/directory-details/${id}/${sanitizeUrlParam(name)}/${sanitizeUrlParam(about)}`);
@@ -35,31 +41,35 @@ const RelatedBusinesses = ({
     window.scroll(0, 0);
   };
 
-  const [getBusinessDetailsQuery] = useQueries({
+  
+
+  const [getAllRecommendedBusinessQuery] = useQueries({
     queries: [
       {
-        queryKey: ["get-business-details", id],
-        queryFn: () => getBusinessById(parseInt(id!)),
+        queryKey: ["get-all-recommended",],
+        queryFn: () => getAllBusiness(),
         retry: 0,
-        refetchOnWindowFocus: true,
-        enabled: !!id,
+        refetchOnWindowFocus: false,
       },
     ],
   });
 
-  const businessDetailsData = getBusinessDetailsQuery?.data?.data;
-  const businessDetailsError = getBusinessDetailsQuery?.error as AxiosError;
-  const businessDetailsErrorMessage =
-    businessDetailsError?.message ||
+
+  const recommendedBusiness = getAllRecommendedBusinessQuery?.data?.data?.data;
+
+
+
+  const recommendedBusinessError = getAllRecommendedBusinessQuery?.error as AxiosError;
+  const recommendedBusinessErrorMessage =
+  recommendedBusinessError?.message ||
     "An error occurred. Please try again later.";
 
-  const relatedBusiness = businessDetailsData?.related_businesses;
 
 
-  const relatedBusinessData =
-    relatedBusiness && relatedBusiness?.length > 0
-      ? relatedBusiness?.slice(0, limit)
-      : relatedBusiness;
+  const recommendedBusinessData =
+  recommendedBusiness && recommendedBusiness?.length > 0
+      ? recommendedBusiness?.slice(0, limit)
+      : recommendedBusiness;
 
 
   
@@ -68,40 +78,21 @@ const RelatedBusinesses = ({
       <div className={showHeading ? "wrapper" : ""}>
         {showHeading && <RouteIndicator showBack />}
 
-        {/* {showSeeAll && relatedBusinessLength > 0 && (
-          <div>
-            <div className={styles.reviewbtn}>
-              <p className={styles.title}> Related Businesses</p>
-
-              <div
-                onClick={handleNavigateToRelatedBusiness}
-                className={styles.btnWrapper}
-              >
-                <p className={styles.btn}>See All</p>
-                <Image
-                  width={20}
-                  src={ArrowIcon}
-                  alt="ArrowIcon"
-                  preview={false}
-                />
-              </div>
-            </div>
-          </div>
-        )} */}
+       
 
         <div>
           {showHeading && (
             <div className={styles.promoHead}>
-              <p>Related Businesses</p>
+              <p>Recommended Businesses</p>
             </div>
           )}
-          {getBusinessDetailsQuery?.isError ? (
-            <h1 className="error">{businessDetailsErrorMessage}</h1>
+          {recommendedBusiness?.isError ? (
+            <h1 className="error">{recommendedBusinessErrorMessage}</h1>
           ) : (
             <section className={styles.promoImageContainer}>
-              {relatedBusinessData &&
-                relatedBusinessData?.length > 0 &&
-                relatedBusinessData?.map((item: any, index: number) => (
+              {recommendedBusinessData &&
+                recommendedBusinessData?.length > 0 &&
+                recommendedBusinessData?.map((item: any, index: number) => (
                   <div
                   onClick={() => handleNavigateDirectory(item?.id, item?.name)}
                     // onClick={() => handleNavigateDirectory(item?.id, item?.name,item?.about)}
@@ -151,8 +142,24 @@ const RelatedBusinesses = ({
           )}
         </div>
       </div>
+
+            {showHeading && (
+        <Pagination
+          current={currentPage}
+          total={getAllRecommendedBusinessQuery?.data?.data?.total} // Total number of items
+          pageSize={20} // Number of items per page
+          onChange={onChange} // Handle page change
+          showSizeChanger={false} // Hide the option to change the page size
+          style={{
+            marginTop: "20px",
+            textAlign: "center", // Center the pagination
+            display: "flex",
+            justifyContent: "center", // Ensure the pagination is centered
+          }}
+        />
+      )}
     </>
   );
 };
 
-export default RelatedBusinesses;
+export default RecommendedBusinesses;

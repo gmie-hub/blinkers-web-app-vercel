@@ -34,15 +34,17 @@ import { useState } from "react";
 import FlagSeller from "../market/flagSeller/flagSeller";
 import ProfileIcon from "../../../assets/Avatarprofile.svg";
 import ProductReviews from "../market/productDetails/tabs/productReview";
+import GeneralWelcome from "../market/marketLogin/marketLogin";
 
 const SellerProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const currentPath = location.pathname;
+  // const currentPath = location.pathname;
   const { notification } = App.useApp();
   const user = useAtomValue(userAtom);
   const queryClient = useQueryClient();
   const [flagSeller, setFlagSeller] = useState(false);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   // const hasReviews = reviewData?.length;
   // console.log(hasReviews, "hasReviews");
@@ -58,10 +60,22 @@ const SellerProfile = () => {
   };
 
   const handleNavigateToWriteReview = () => {
+    if (!user) {
+      setOpenLoginModal(true);
+    } else{
     navigate(`/review-seller/${id}`);
     window.scrollTo(0, 0);
+    }
   };
 
+
+  const handlFlagSeller = () => {
+    if (!user) {
+      setOpenLoginModal(true);
+    } else{
+      setFlagSeller(true)
+    }
+  };
   const [getSellersDetailsQuery, getSellersFollowersQuery] = useQueries({
     queries: [
       {
@@ -124,26 +138,28 @@ const SellerProfile = () => {
 
   const handleFollowSeller = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true)
+
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     } else {
       followSellerHandler();
     }
@@ -297,9 +313,9 @@ const SellerProfile = () => {
                       hasUserFlaggedSeller ? "Unflag Seller" : "Flag Seller"
                     }
                     variant="redOutline"
-                    onClick={() => {
-                      setFlagSeller(true);
-                    }}
+                    onClick={
+                      handlFlagSeller
+                    }
                   />
                   {/* </div> */}
 
@@ -416,6 +432,17 @@ const SellerProfile = () => {
           hasUserFlaggedSeller={hasUserFlaggedSeller}
           sellerId={sellersDetailsData?.id}
           handleCloseModal={() => setFlagSeller(false)}
+        />
+      </Modal>
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
         />
       </Modal>
     </>

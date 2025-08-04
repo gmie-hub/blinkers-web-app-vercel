@@ -1,18 +1,28 @@
 import styles from "./job.module.scss";
-import { Image, notification } from "antd";
+import { Image, Modal, notification } from "antd";
 import { useState } from "react";
 import Icon from "/Container.svg";
 import SearchInput from "../../customs/searchInput";
 import Button from "../../customs/button/button";
-import job1 from "../../assets/job1.svg";
-import job2 from "../../assets/job2.svg";
+import JobImage from "../../assets/image 39.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import ModalContent from "../../partials/successModal/modalContent";
-import warn from "../../assets/warned.svg"
+import warn from "../../assets/warned.svg";
 import JobLists from "./cards/cards";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
 import { routes } from "../../routes";
+import ViewVacancy from "../../assets/viewVacancy.svg";
+import WhiteAdd from "../../assets/whitecircleadd.svg";
+import WhiteProfile from "../../assets/whiteaddprofile.svg";
+import PopularJobs from "./popularJob/popularJob";
+import { AxiosError } from "axios";
+import { getForYouJobs, getPopularJobs } from "../request";
+import { useQueries } from "@tanstack/react-query";
+import ArrowIcon from "../../assets/arrow-right-green.svg";
+import CustomSpin from "../../customs/spin";
+import JobForYou from "./jobForYou/forYou";
+import JobWelcome from "./jobLogin/jobLogin";
 
 const Jobs = () => {
   const navigate = useNavigate();
@@ -21,13 +31,12 @@ const Jobs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [appliedSearchTerm, setAppliedSearchTerm] = useState(search || "");
   const user = useAtomValue(userAtom);
-  const currentPath = location.pathname;
+  // const currentPath = location.pathname;
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Update the search query state
   };
-
-  console.log(   ( user?.claim_status !== 'successful' ), 'user &&   ( user?.claim_status !==')
 
   const handleSearch = () => {
     setAppliedSearchTerm(searchTerm);
@@ -35,71 +44,114 @@ const Jobs = () => {
     search = "";
   };
 
+  const handleNavigateToPopularJob = () => {
+    navigate(`/popular-jobs`);
+    window.scrollTo(0, 0);
+  };
+  const handleNavigateToForYouJob = () => {
+    navigate(`/jobs-for-you`);
+    window.scrollTo(0, 0);
+  };
+
+  const [getPopularJobsQuery, getJobForYouQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["getall-popular-jobs"],
+        queryFn: () => getPopularJobs(1),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+      {
+        queryKey: ["get-foryou-jobs"],
+        queryFn: () => getForYouJobs(1),
+        retry: 0,
+        refetchOnWindowFocus: false,
+      },
+    ],
+  });
+
+  const popularJobsData = getPopularJobsQuery?.data?.data?.data;
+
+  const popularJobsError = getPopularJobsQuery?.error as AxiosError;
+  const popularJobsErrorMessage =
+    popularJobsError?.message || "An error occurred. Please try again later.";
+
+  const forYouJobData = getJobForYouQuery?.data?.data?.data;
+
+  const fotYouJobsError = getJobForYouQuery?.error as AxiosError;
+  const forYouJobErrorMessage =
+    fotYouJobsError?.message || "An error occurred. Please try again later.";
+
   const handleNavigateRegisterAsAnApplicant = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
+      setOpenLoginModal(true);
+
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
     } else {
       navigate("/job/register-as-applicant");
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
+ 
   };
 
   const handleNavigateAddBusiness = () => {
     if (!user) {
-      notification.open({
-        message: "You need to log in to complete this action.",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
-      });
-    } 
-     if (
+      setOpenLoginModal(true)
+      // notification.open({
+      //   message: "You need to log in to complete this action.",
+      //   description: (
+      //     <>
+      //       <br />
+      //       <Button
+      //         type="button"
+      //         onClick={() => {
+      //           notification.destroy();
+      //           navigate(`/login?redirect=${currentPath}`);
+      //         }}
+      //       >
+      //         Click here to Login
+      //       </Button>
+      //     </>
+      //   ),
+      //   placement: "top",
+      //   duration: 4, // Auto close after 5 seconds
+      //   icon: null,
+      // });
+    }
+    if (
       // user?.claim_status === null ||
       // user?.claim_status?.toString() === "2" ||
       // user?.claim_status?.toLowerCase() === "rejected" ||
-      user?.claim_status !== 'successful' &&
+      user?.claim_status !== "successful" &&
       user?.role === "3"
     ) {
       setOpenAddBusiness(true);
-    } 
-    if( user?.claim_status === 'successful' || user?.role === "2"){
+    }
+    if (user?.claim_status === "successful" || user?.role === "2") {
       navigate(routes.job.postJob);
+      window.scrollTo(0, 0);
     }
 
-    window.scrollTo(0, 0);
+   
   };
 
   const handleCloseBusinessModal = () => {
@@ -149,26 +201,138 @@ const Jobs = () => {
               </SearchInput>
             </div>
           </div>
-          <div className={styles.btnFlex}>
-            <Button
-              icon={<Image src={job1} alt={job1} preview={false} />}
-              className={styles.buttonStyle}
-              text="Post a Job"
-              variant="white"
-              onClick={handleNavigateAddBusiness}
-            />
-
-            {((user && !user?.is_applicant) || !user) && (
-              <Button
-                icon={<Image src={job2} alt={job2} preview={false} />}
-                className={styles.WhiteButtonStyle}
-                text="Register as An Applicant"
-                variant="white"
-                onClick={handleNavigateRegisterAsAnApplicant}
-              />
-            )}
-          </div>
         </div>
+        <div className={styles.newCard}>
+          <div>
+            <h1 className={styles.newCardH1}>
+              Find Jobs And Hire Talents On Blinkers
+            </h1>
+            <p className={styles.newCardP}>
+              Discover job opportunities or post vacancies to connect with the
+              right candidates
+            </p>
+            <div className={styles.btnFlex}>
+              <Button
+                icon={<Image src={WhiteAdd} alt={WhiteAdd} preview={false} />}
+                className={styles.buttonStyle}
+                text={
+                  user && user?.security_token
+                    ? "Post a Job"
+                    : "Post a Job For Free"
+                }
+                variant="greenOutline"
+                onClick={handleNavigateAddBusiness}
+              />
+
+              {((user && !user?.is_applicant) || !user) && (
+                <Button
+                  icon={
+                    <Image
+                      src={WhiteProfile}
+                      alt={WhiteProfile}
+                      preview={false}
+                    />
+                  }
+                  className={styles.buttonStyle}
+                  text="Register as An Applicant"
+                  variant="green"
+                  onClick={handleNavigateRegisterAsAnApplicant}
+                />
+              )}
+            </div>
+          </div>
+          <img src={ViewVacancy} alt="ViewVacancy" />
+        </div>
+
+        {getPopularJobsQuery?.isLoading ? (
+          <CustomSpin />
+        ) : getPopularJobsQuery?.isError ? (
+          <h1 className="error">{popularJobsErrorMessage}</h1>
+        ) : (
+          popularJobsData &&
+          popularJobsData?.length > 0 && (
+            <section>
+              <div>
+                <div className={styles.review}>
+                  <div className={styles.reviewbtn}>
+                    <p className={styles.title}>Popular Jobs</p>
+
+                    {popularJobsData && popularJobsData?.length > 4 && (
+                      <div
+                        onClick={handleNavigateToPopularJob}
+                        className={styles.btnWrapper}
+                      >
+                        <p className={styles.btn}>See All</p>
+                        <img src={ArrowIcon} alt="ArrowIcon" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <PopularJobs limit={4} canSeeBtn={false} />
+            </section>
+          )
+        )}
+
+        {getJobForYouQuery?.isLoading ? (
+          <CustomSpin />
+        ) : getJobForYouQuery?.isError ? (
+          <h1 className="error">{forYouJobErrorMessage}</h1>
+        ) : (
+          forYouJobData &&
+          forYouJobData?.length > 0 && (
+            <section>
+              <div>
+                <div className={styles.review}>
+                  <div className={styles.reviewbtn}>
+                    <p className={styles.title}>Jobs For You</p>
+
+                    {forYouJobData && forYouJobData?.length > 4 && (
+                      <div
+                        onClick={handleNavigateToForYouJob}
+                        className={styles.btnWrapper}
+                      >
+                        <p className={styles.btn}>See All</p>
+                        <img src={ArrowIcon} alt="ArrowIcon" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <JobForYou limit={4} canSeeBtn={false} />
+            </section>
+          )
+        )}
+
+        <div className={styles.newCard}>
+          <div>
+            <h1 className={styles.newCardH1}>Looking For Job? </h1>
+            <p className={styles.newCardP}>
+              Find jobs that match your skills and apply today.
+            </p>
+            <div className={styles.btnFlex}>
+              {((user && !user?.is_applicant) || !user) && (
+                <Button
+                  icon={
+                    <Image
+                      src={WhiteProfile}
+                      alt={WhiteProfile}
+                      preview={false}
+                    />
+                  }
+                  className={styles.buttonStyle}
+                  text="Register as An Applicant"
+                  variant="green"
+                  onClick={handleNavigateRegisterAsAnApplicant}
+                />
+              )}
+            </div>
+          </div>
+          <img src={JobImage} alt="JobImage" />
+        </div>
+
         <JobLists
           searchTerm={appliedSearchTerm}
           resetSearchTerm={resetSearchTerm}
@@ -196,6 +360,17 @@ const Jobs = () => {
         BtnText="Login"
         heading="Please Login to continue"
       /> */}
+
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <JobWelcome
+          handleCloseModal={() => setOpenLoginModal(false)}
+        />
+      </Modal>
     </div>
   );
 };
