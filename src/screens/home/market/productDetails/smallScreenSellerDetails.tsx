@@ -118,7 +118,7 @@ const SmallScreen = ({
     }
   };
 
-  const maxVisibleImages = 4;
+  const maxVisibleImages = 3;
 
   const images = productDetailsData?.add_images || [];
 
@@ -139,14 +139,13 @@ const SmallScreen = ({
     images?.length > 0 &&
     images?.slice(currentIndex, currentIndex + maxVisibleImages);
 
-    
-    const handlFlagSeller = () => {
-      if (!user) {
-        setOpenLoginModal(true);
-      } else{
-        setFlagSeller(true)
-      }
-    };
+  const handlFlagSeller = () => {
+    if (!user) {
+      setOpenLoginModal(true);
+    } else {
+      setFlagSeller(true);
+    }
+  };
 
   return (
     <main>
@@ -209,6 +208,8 @@ const SmallScreen = ({
               </div> */}
 
               <div className={styles.firstSideLeft}>
+              {currentIndex > 0 && (
+
                 <button
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
@@ -216,6 +217,7 @@ const SmallScreen = ({
                 >
                   &lt; {/* Left arrow */}
                 </button>
+              )}
                 {visibleImages &&
                   visibleImages?.map((dress) => (
                     <div key={dress.id} className={styles.dressCard}>
@@ -230,13 +232,15 @@ const SmallScreen = ({
                       </div>
                     </div>
                   ))}
-                <button
-                  onClick={handleNext}
-                  disabled={currentIndex + maxVisibleImages >= images.length}
-                  className={styles.arrowButton}
-                >
-                  &gt; {/* Right arrow */}
-                </button>
+                {currentIndex + maxVisibleImages < images.length && (
+                  <button
+                    onClick={handleNext}
+                    disabled={currentIndex + maxVisibleImages >= images.length}
+                    className={styles.arrowButton}
+                  >
+                    &gt; {/* Right arrow */}
+                  </button>
+                )}
               </div>
 
               <div className={styles.secondSideLeft}>
@@ -729,16 +733,14 @@ const SmallScreen = ({
           handleCloseModal={() => setFlagSeller(false)}
         />
       </Modal>
-      
+
       <Modal
         open={openLoginModal}
         onCancel={() => setOpenLoginModal(false)}
         centered
         footer={null}
       >
-        <GeneralWelcome
-          handleCloseModal={() => setOpenLoginModal(false)}
-        />
+        <GeneralWelcome handleCloseModal={() => setOpenLoginModal(false)} />
       </Modal>
     </main>
   );

@@ -75,7 +75,9 @@ const PricingPlansPage = () => {
           ) : getAllSubQuery?.isError ? (
             <h1 className="error">{subErrorMessage}</h1>
           ) : (
-            <div className={styles.plansContainer}>
+            <>
+
+<div className={styles.plansContainer}>
               {/* {[...subData]
                 .sort((a, b) => {
                   const order = { free: 0, platinum: 1, gold: 2 };
@@ -173,23 +175,29 @@ const PricingPlansPage = () => {
                   </div>
                 ))}
             </div>
+            <br /><br />
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="white"
+                    type="submit"
+                    text={"Choose Free Plan"}
+                    className={"buttonStyle"}
+                    onClick={() => {
+                      navigate("/create-ad");
+                      // navigate("/profile");
+                      // localStorage.setItem("activeTabKeyProfile", "3");
+                      window.scrollTo(0, 0);
+                    }}
+                  />
+                </div>
+
+            </>
+       
+            
           )}
         </div>
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            variant="white"
-            type="submit"
-            text={"Choose Free Plan"}
-            className={"buttonStyle"}
-            onClick={() => {
-              navigate("/create-ad");
-              // navigate("/profile");
-              // localStorage.setItem("activeTabKeyProfile", "3");
-              window.scrollTo(0, 0);
-            }}
-          />
-        </div>
+   
       </main>
 
       <Modal

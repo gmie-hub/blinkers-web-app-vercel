@@ -255,7 +255,34 @@ flex-direction: column;
 }
 
 
-.newCard{
+// .newCard{
+//   background-color: #EFFFEF;
+//   width: 100%;
+//   border: #EFFFEF solid 1px;
+//   padding: 2.4rem;
+//   margin-block: 4rem;
+//   display: flex;
+//   flex-direction: row;
+//   gap:2.4rem;
+//   justify-content: space-between;
+// }
+
+// .newCardH1{
+//   color: #009900;
+//   font-size: 3.2rem;
+//   font-weight: 600;
+// }
+
+// .newCardP{
+// color: #707070;
+// font-size: 2.4rem;
+// padding-block-start: 0.8rem;
+// padding-block-end: 2.4rem;
+
+// }
+
+
+.newCard {
   background-color: #EFFFEF;
   width: 100%;
   border: #EFFFEF solid 1px;
@@ -263,22 +290,45 @@ flex-direction: column;
   margin-block: 4rem;
   display: flex;
   flex-direction: row;
-  gap:2.4rem;
+  gap: 2.4rem;
   justify-content: space-between;
+  flex-wrap: wrap; /* Allows wrapping on small screens */
+
+  @media (max-width: 768px) {
+    flex-direction: column; /* Stack items vertically */
+    gap: 1.6rem;
+    padding: 1.6rem;
+  }
 }
 
-.newCardH1{
+.newCardH1 {
   color: #009900;
   font-size: 3.2rem;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 2.4rem; /* Reduce heading size */
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2rem; /* Even smaller for very small devices */
+  }
 }
 
-.newCardP{
-color: #707070;
-font-size: 2.4rem;
-padding-block-start: 0.8rem;
-padding-block-end: 2.4rem;
+.newCardP {
+  color: #707070;
+  font-size: 2.4rem;
+  padding-block-start: 0.8rem;
+  padding-block-end: 2.4rem;
 
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    padding-block-end: 1.6rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.6rem;
+  }
 }
 
 

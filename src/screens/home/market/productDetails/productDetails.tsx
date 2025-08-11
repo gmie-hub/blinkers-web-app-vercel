@@ -159,7 +159,7 @@ const BigScreen = ({
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const maxVisibleImages = 4;
+  const maxVisibleImages = 3;
 
   const images = productDetailsData?.add_images || [];
 
@@ -218,6 +218,7 @@ const BigScreen = ({
 
             <div className={styles.leftContainer}>
               <div>
+              {currentIndex > 0 && (
                 <button
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
@@ -225,6 +226,7 @@ const BigScreen = ({
                 >
                   ↑
                 </button>
+              )}
 
                 <div className={styles.firstSideLeft}>
                   {visibleImages &&
@@ -243,6 +245,7 @@ const BigScreen = ({
                       </div>
                     ))}
                 </div>
+                {currentIndex + maxVisibleImages < images.length && (
                 <button
                   onClick={handleNext}
                   disabled={currentIndex + maxVisibleImages >= images.length}
@@ -250,6 +253,7 @@ const BigScreen = ({
                 >
                   ↓
                 </button>
+                )}
               </div>
               <div className={styles.secondSideLeft}>
                 <div className={styles.promoImage}>
