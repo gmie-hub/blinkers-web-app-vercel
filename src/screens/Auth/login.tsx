@@ -88,7 +88,6 @@ const Login = () => {
           });
           const pin = data?.data?.pin_id?.length > 4 ? data?.data?.pin_id : "";
           localStorage.setItem("savedPinSignUp", pin);
-          console.log(data?.data?.role, 'kik')
 
           const userResponse = {
             ...data, // Spread all matching properties
