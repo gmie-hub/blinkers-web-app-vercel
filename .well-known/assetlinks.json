@@ -1,0 +1,13 @@
+
+
+  [{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.app.blinkers",
+      "sha256_cert_fingerprints": [
+        "25:5D:41:14:24:27:5A:F8:B5:1F:BA:91:AC:B7:C7:01:A3:DC:C2:16:6C:AC:D4:0F:CC:26:B4:61:18:D9:53:DE"
+      ]
+    }
+  }]
+  
