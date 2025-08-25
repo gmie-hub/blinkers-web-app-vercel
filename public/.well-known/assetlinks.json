@@ -1,13 +1,13 @@
-
-
   [{
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
       "package_name": "com.app.blinkers",
       "sha256_cert_fingerprints": [
-        "25:5D:41:14:24:27:5A:F8:B5:1F:BA:91:AC:B7:C7:01:A3:DC:C2:16:6C:AC:D4:0F:CC:26:B4:61:18:D9:53:DE"
+        "60:C4:FA:EE:92:DA:99:C8:36:DA:FE:E9:35:7B:86:6C:8E:C7:B5:F7:80:D4:CC:D0:5C:79:45:B4:24:E4:69:FD"
       ]
     }
   }]
   
+
+ 
