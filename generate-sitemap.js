@@ -6,7 +6,8 @@ const BASE_URL = "https://www.blinkersnigeria.com";
 
 const routes = [
   "/",
-  "/market/:search?",
+  // "/market/:search?",
+  "/product-listing/:search?",
   "/product-details/:id/:user_id/:title?/:description?",
   "/product-details/:id",
   "/related-ads/:id",

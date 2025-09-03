@@ -167,7 +167,9 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     appliedSearchTerm = "";
     setAppliedSearchTerm("");
     // search = "";
-    navigate("/market");
+    // navigate("/market");
+    navigate("/product-listing");
+
     setStateId(0);
     setLgaId(0);
     setSelectedItems([]);

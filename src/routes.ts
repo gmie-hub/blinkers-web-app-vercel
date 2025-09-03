@@ -2,7 +2,9 @@ export const routes = {
   // home: "/",
   page: {
     home: "/",
-    market: "/market/:search?",
+    // market: "/market/:search?",
+    market: "/product-listing/:search?",
+    
     productDetails: "/product-details/:id/:user_id/:title?/:description?",
     newproductDetails: "/product-details/:id",
     relatedAds: "/related-ads/:id",

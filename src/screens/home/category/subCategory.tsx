@@ -121,24 +121,29 @@ const CategoryWithSubcategories = ({ category, handleClose }: CategoryWithSubcat
 
   const handleSubCategoryClick = (sub: string) => {
     setSelectedSubCategory(sub);
+    handleClose();
   };
 
   useEffect(() => {
     if (selectedSubCategory) {
-      navigate(`/market/${selectedSubCategory}`);
-      handleClose();
+      // navigate(`/market/${selectedSubCategory}`);
+      navigate(`/product-listing/${selectedSubCategory}`);
+
+      // handleClose();
     }
-  }, [selectedSubCategory, navigate, handleClose]);
+  }, [selectedSubCategory]);
+
+
 
   return (
     <div className={styles.subCategory}>
-      <p>{category.title}</p>
+      <p style={{cursor:'pointer'}}  onClick={()=>handleSubCategoryClick(category?.title)}>{category.title} </p>
       {subcategoriesLoading ? (
         <p>Loading subcategories...</p>
       ) : (
         <ul>
           {subCategoryData.map((sub) => (
-            <li key={sub.id} onClick={() => handleSubCategoryClick(sub.title)}>
+            <li key={sub.id}   onClick={()=>handleSubCategoryClick(sub?.title)}>
               {sub.title}
             </li>
           ))}

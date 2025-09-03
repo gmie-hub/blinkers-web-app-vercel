@@ -14,7 +14,8 @@ const cardData = [
     icon: <Image src={cardIcon} alt="cardIcon" preview={false} />,
     title: "Categories",
     content: "Browse diverse product categories to find exactly what you need.",
-    route: "/market", // Route for this card
+    // route: "/market", // Route for this card
+     route: "/product-listing",
     placeholder: "Search Categories...",
   },
   {
@@ -40,7 +41,9 @@ const cardData = [
     title: "Market",
     content:
       "Explore products and services worldwide to connect with sellers directly",
-    route: "/market",
+    // route: "/market",
+    route: "/product-listing",
+
     placeholder: "Search Market...",
   },
 ];

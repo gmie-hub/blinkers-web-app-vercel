@@ -31,7 +31,10 @@ const PictureBg = () => {
 
 
   const handleNavigateToMarket = () => {
-    navigate("/market");
+    // navigate("/market");
+    navigate("/product-listing");
+
+
   }
   // Function to handle moving to the previous image
   const handlePrevImage = () => {
@@ -58,7 +61,9 @@ const PictureBg = () => {
   };
 
   const handleSearch = () => {
-    navigate(`/market/${searchTerm}`);
+    // navigate(`/market/${searchTerm}`);
+    navigate(`/product-listing/${searchTerm}`);
+
 
   };
 

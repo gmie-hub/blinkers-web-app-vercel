@@ -72,7 +72,9 @@ const Trends = () => {
     trendError?.message || "An error occurred. Please try again later.";
 
   const handleNavigateToMarket = () => {
-    navigate(`/market`);
+    // navigate(`/market`);
+    navigate(`/product-listing`);
+
     window.scrollTo(0, 0); // Scrolls to the top of the page
   };
 

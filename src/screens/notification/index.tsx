@@ -1,6 +1,8 @@
 const routeData = [
   { name: "HOME PAGE", value: "home_page", route: "/" },
-  { name: "ALL ADS", value: "all_ads", route: "/market" },
+  // { name: "ALL ADS", value: "all_ads", route: "/market" },
+  { name: "ALL ADS", value: "all_ads", route: "/product-listing" },
+
   { name: "POST ADS", value: "post_ads", route: "/create-ad" },
   {
     name: "REGISTER AS SELLER",

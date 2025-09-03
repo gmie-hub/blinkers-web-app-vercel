@@ -357,7 +357,9 @@
 
 const routeData = [
   { name: "HOME PAGE", value: "home_page", route: "/" },
-  { name: "ALL ADS", value: "all_ads", route: "/market" },
+  // { name: "ALL ADS", value: "all_ads", route: "/market" },
+  { name: "ALL ADS", value: "all_ads", route: "/product-listing" },
+
   { name: "POST ADS", value: "post_ads", route: "/create-ad" },
   { name: "REGISTER AS SELLER", value: "register_as_seller", route: "/seller-signUp" },
 
@@ -762,7 +764,9 @@ const Header = () => {
 };
 
 const navItems = [
-  { id: 1, name: "Market", route: "/market" },
+  { id: 1, name: "Market", route: "/product-listing" },
+
+  // { id: 1, name: "Market", route: "/market" },
   { id: 2, name: "Directory", route: "/directory" },
   { id: 3, name: "Jobs", route: "/jobs" },
   { id: 4, name: "Pricing", route: "/pricing" },

@@ -221,7 +221,9 @@ const ProductList: React.FC<ProductListProps> = ({
     setAppliedSearchTerm("");
     // search = "";
     setCurrentPage(1);
-    navigate("/market");
+    // navigate("/market");
+    navigate("/product-listing");
+
     getAllMarketQuery?.refetch();
     setStateId(0);
     setLgaId(0);

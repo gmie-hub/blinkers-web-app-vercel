@@ -57,7 +57,11 @@ const PromotedAds = () => {
   const navigate  = useNavigate()
   return (
     <div className="wrapper" style={{ marginBlock: "2rem" }}>
-      <div onClick={()=>navigate('/market')} className={styles.back}>
+      <div 
+      // onClick={()=>navigate('/market')}
+      onClick={()=>navigate('/product-listing')}
+      
+      className={styles.back}>
         <Image width={9} src={BackIncon} alt="BackIncon" preview={false} />
         <p>Back</p>
       </div>
