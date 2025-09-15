@@ -5,7 +5,7 @@ import styles from "./index.module.scss";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons"; // Antd icons for arrows
 import Icon from "/Component 5.svg"; // Actual image import
 import Icon2 from "../../../assets/Component 6.svg"; // Actual image import
-import Icon3 from "../../../assets/Component 7.svg"; // Actual image import
+import Icon3 from "../../../assets/homeImage3.svg"; // Actual image import
 import SearchInput from "../../../customs/searchInput";
 import { useNavigate } from "react-router-dom";
 

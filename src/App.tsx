@@ -39,7 +39,7 @@ import RegisterAsApplicant from "./screens/job/apply/applyAsApplicant/index";
 import PostJob from "./screens/job/postJob/postJob";
 import EditJob from "./screens/job/postJob/postJob";
 import AddBusiness from "./screens/job/postJob/addBusiness/addBusiness";
-import Images  from "./screens/directory/gallery/image";
+import Images from "./screens/directory/gallery/image";
 import Videos from "./screens/directory/gallery/video";
 import Profile from "./screens/profile/profile";
 import EditBusiness from "./screens/profile/editBusiness/editBusiness";
@@ -62,6 +62,7 @@ import PopularJobs from "./screens/job/popularJob/popularJob";
 import JobsForYou from "./screens/job/jobForYou/forYou";
 import TopBusinesses from "./screens/directory/topBusiness/topBusiness";
 import RecommendedBusinesses from "./screens/directory/recommended/recommendedBusiness";
+import Page404 from "./screens/404Page/index";
 
 function App() {
   const appRoutes = [
@@ -84,7 +85,6 @@ function App() {
     { path: routes.page.howToBuy, element: <HowToBuy /> },
     { path: routes.page.howToSell, element: <HowToSell /> },
 
-    
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },
     { path: routes.page.faq, element: <FAQ /> },
@@ -97,11 +97,20 @@ function App() {
     { path: routes.directory.NotClaimed, element: <NotClaim /> },
     { path: routes.directory.newNotClaimed, element: <NotClaim /> },
 
-    { path: routes.directory.relatedBusinesses, element: <RelatedBusinesses /> },
-    { path: routes.directory.SubscriptionPricing, element: <SubscriptionPricing /> },
+    {
+      path: routes.directory.relatedBusinesses,
+      element: <RelatedBusinesses />,
+    },
+    {
+      path: routes.directory.SubscriptionPricing,
+      element: <SubscriptionPricing />,
+    },
     { path: routes.directory.ClaimBusiness, element: <ClaimBusiness /> },
     { path: routes.directory.topBusinesses, element: <TopBusinesses /> },
-    { path: routes.directory.recommendedBusinesses, element: <RecommendedBusinesses /> },
+    {
+      path: routes.directory.recommendedBusinesses,
+      element: <RecommendedBusinesses />,
+    },
 
     // { path: routes.directory.ClaimedBusiness, element: <ClaimedBusiness /> },
     {
@@ -121,9 +130,9 @@ function App() {
     { path: routes.job.RegAsApplicant, element: <RegisterAsApplicant /> },
     { path: routes.job.AddBusiness, element: <AddBusiness /> },
     { path: routes.job.postJob, element: <PostJob /> },
-    { path: routes.job.editJob, element: <EditJob/> },
-    { path: routes.job.popular, element: <PopularJobs/> },
-    { path: routes.job.forYou, element: <JobsForYou/> },
+    { path: routes.job.editJob, element: <EditJob /> },
+    { path: routes.job.popular, element: <PopularJobs /> },
+    { path: routes.job.forYou, element: <JobsForYou /> },
 
     { path: routes.profile.profile, element: <Profile /> },
 
@@ -136,9 +145,11 @@ function App() {
     { path: routes.profile.editAds, element: <EditAds /> },
 
     { path: routes.profile.myAds, element: <MyAds /> },
-    { path: routes.profile.myapplicationDetails, element: <MyApplicantsDetails /> },
+    {
+      path: routes.profile.myapplicationDetails,
+      element: <MyApplicantsDetails />,
+    },
     { path: routes.pricing.pricing, element: <Pricing /> },
-
   ];
 
   const authRoutes = [
@@ -154,8 +165,10 @@ function App() {
       element: <PasswordResetPassword />,
     },
     { path: routes.auth.VerificationCode, element: <VerificationCode /> },
-    { path: routes.auth.ResetVerificationCode, element: <ResetVerificationCode /> },
-
+    {
+      path: routes.auth.ResetVerificationCode,
+      element: <ResetVerificationCode />,
+    },
   ];
   return (
     <Routes>
@@ -169,7 +182,8 @@ function App() {
         {appRoutes.map((item) => (
           <Route path={item.path} element={item.element} />
         ))}
-      </Route>
+      </Route>  
+      <Route path={"*"} element={<Page404 />} />
     </Routes>
   );
 }
