@@ -1,12 +1,5 @@
 import styles from "./footer.module.scss";
 import { Image } from "antd";
-import TwitterLogo from "../../assets/Social icon.svg";
-// import LinkedinleStoreIcon from "../../assets/Social icon (1).svg";
-import FaceBookStoreIcon from "../../assets/Social icon (2).svg";
-// import BrowseLogo from "../../assets/Social icon (3).svg";
-
-import Whatsapp from "../../assets/whatsapp.svg";
-import Instagram from "../../assets/instagram.svg";
 
 import Social1 from "../../assets/social1.svg";
 import Social2 from "../../assets/social2.svg";
