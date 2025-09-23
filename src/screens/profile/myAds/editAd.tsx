@@ -211,7 +211,7 @@ const EditAdz = () => {
       (img: any) => img.is_featured === 0
     )?.length ?? 0;
 
-    if (imageLimit === undefined || uploadedCount === imageLimit) {
+    if (imageLimit === undefined || (uploadedCount  >= imageLimit)) {
       LimitNotification({
         message: "Limit Reached",
         description: imageLimit === undefined
@@ -259,7 +259,7 @@ const EditAdz = () => {
     const videoLimit = findFeatureBySlug("total-ads-videos")?.pivot?.limit;
     const uploadedCount =  productDetailsData?.add_videos?.length ?? 0;
 
-    if (videoLimit === undefined || uploadedCount < videoLimit) {
+    if (videoLimit === undefined || (uploadedCount  >= videoLimit)) {
       LimitNotification({
         message: "Limit Reached",
         description: videoLimit === undefined
@@ -660,8 +660,29 @@ const EditAdz = () => {
             // })),
           }}
           onSubmit={(values) => {
-            UpdateAdsHandler(values);
+            const totalAdsCreated =
+              getProfileQuery?.data?.data?.total_all_ads ?? 0;
+            const adLimit = findFeatureBySlug("total-ads")?.pivot?.limit;
+            if (adLimit !== undefined && (totalAdsCreated < adLimit)) {
+              
+             
+              UpdateAdsHandler(values);
+            } else
+              LimitNotification({
+                message: "Limit Reached",
+  
+                description: adLimit === undefined
+                ? "You can't Post Ads on your current plan."
+                : `You can't Post more than ${adLimit} Ad${adLimit === 1 ? '' : 's'}. on your current Plan,`,
+                
+              
+                onClick: () => {
+                  navigate("/pricing");
+                  window.scroll(0, 0);
+                },
+              });
           }}
+      
           validationSchema={validationSchema}
           enableReinitialize
         >

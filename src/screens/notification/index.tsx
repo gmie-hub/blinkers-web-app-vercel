@@ -41,10 +41,10 @@ const routeData = [
   { name: "EDIT JOB", value: "edit_job", route: "/profile", tabKey: "6" },
 
   // Others
-  { name: "REVIEWS", value: "reviews", route: "/reviews" },
-  { name: "AUDIENCE", value: "audience", route: "/audience" },
-  { name: "MY PLAN", value: "my_plan", route: "/plans" },
-  { name: "CHAT", value: "chat", route: "/chat" },
+  { name: "REVIEWS", value: "reviews",route: "/profile" },
+  { name: "AUDIENCE", value: "audience",route: "/profile" },
+  { name: "MY PLAN", value: "my_plan", route: "/profile",tabKey: "3" },
+  { name: "CHAT", value: "chat", route: "/profile" },
   {
     name: "VIEW APPLICANTS",
     value: "view_applicants",

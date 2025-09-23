@@ -189,7 +189,7 @@ const CreateAdz = () => {
     const imageLimit = findFeatureBySlug("total-ads-images")?.pivot?.limit;
     const uploadedCount = uploads?.length ?? 0;
 
-    if (imageLimit === undefined || uploadedCount === imageLimit) {
+    if (imageLimit === undefined || (uploadedCount  >=  imageLimit)) {
       LimitNotification({
         message: "Limit Reached",
         description: imageLimit === undefined
@@ -227,10 +227,14 @@ const CreateAdz = () => {
   ) => {
     const files = e.target.files;
     if (!files) return;
-
    
     const videoLimit = findFeatureBySlug("total-ads-videos")?.pivot?.limit;
-    if (videoLimit === undefined || uploadVideos?.length < videoLimit) {
+   
+    console.log(videoLimit,'videoLimit')
+
+
+    if (videoLimit === undefined || (uploadVideos?.length  >=  videoLimit)) {
+      
       LimitNotification({
         message: "Limit Reached",
         description: videoLimit === undefined
@@ -458,7 +462,9 @@ const CreateAdz = () => {
           const totalAdsCreated =
             getProfileQuery?.data?.data?.total_all_ads ?? 0;
           const adLimit = findFeatureBySlug("total-ads")?.pivot?.limit;
-          if (adLimit !== undefined && totalAdsCreated < adLimit) {
+          if (adLimit !== undefined && (totalAdsCreated < adLimit)) {
+            
+           
             createAdsHandler(values, resetForm);
           } else
             LimitNotification({
@@ -468,11 +474,7 @@ const CreateAdz = () => {
               ? "You can't Post Ads on your current plan."
               : `You can't Post more than ${adLimit} Ad${adLimit === 1 ? '' : 's'}. on your current Plan,`,
               
-              // description: `You can't Create more than ${
-              //   findFeatureBySlug("total-ads")?.pivot?.limit === undefined
-              //     ? 0
-              //     : findFeatureBySlug("total-ads")?.pivot?.limit
-              // } Ad.`,
+            
               onClick: () => {
                 navigate("/pricing");
                 window.scroll(0, 0);

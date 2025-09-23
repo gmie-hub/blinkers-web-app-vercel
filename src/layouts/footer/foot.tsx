@@ -6,12 +6,16 @@ import Social2 from "../../assets/social2.svg";
 import Social3 from "../../assets/social3.svg";
 import Social4 from "../../assets/social4.svg";
 
+
 const Foot = () => {
   return (
     <div>
       <section className={styles.section3}>
         <p>© 2024 Blinkers Nigeria. All rights reserved.</p>
         <div className={styles.social}>
+
+         
+
           <a
             href="https://x.com/BlinkersN/"
             target="_blank"

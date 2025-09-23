@@ -557,15 +557,15 @@ const Header = () => {
                 }}
               >
                 <span>Total: {notifyTotal}</span>
-                <span
+                <div
                   style={{ color: "#1890ff", cursor: "pointer" }}
                   onClick={() => {
-                    navigate(`/notifications`);
-                    setNotificationDropdownOpen(false); // ✅ Close on "View All"
+                    navigate('/notifications');
+                    // setNotificationDropdownOpen(false); // ✅ Close on "View All"
                   }}
                 >
                   View All
-                </span>
+                </div>
               </div>
             </Menu.Item>
           )}
@@ -676,12 +676,13 @@ const Header = () => {
                   />
                   {notifyTotal > 0 && (
                     <span className={styles.notifyBadge}>
-                      {notifyTotal > 10 ? "9+" : notifyTotal}
+                      {notifyTotal}
+                      {/* {notifyTotal > 10 ? "9+" : notifyTotal} */}
                     </span>
                   )}
                 </div>
               </Dropdown>
-              <img src={ChatIcon} alt="Messages" className={styles.chatIcon} />
+              {/* <img src={ChatIcon} alt="Messages" className={styles.chatIcon} /> */}
             </div>
             <div className={styles.mobileButtonWrapper}>
               <Button onClick={handleNavigateToSell} className={styles.btn}>
@@ -719,7 +720,8 @@ const Header = () => {
                 />
                 {notifyTotal > 0 && (
                   <span className={styles.notifyBadge}>
-                    {notifyTotal > 10 ? "9+" : notifyTotal}
+                    {notifyTotal}
+                    {/* {notifyTotal > 10 ? "9+" : notifyTotal} */}
                   </span>
                 )}
               </div>

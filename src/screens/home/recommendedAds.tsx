@@ -112,7 +112,7 @@ const RecommendedAds = () => {
                 : styles.greenBackground
             }`}
             onClick={handleNext}
-            style={currentPage === totalPages ? { backgroundColor: "# " } : {}}
+            style={currentPage === totalPages ? { backgroundColor: "#009900 " } : {}}
           >
             <Image src={RightIcon} alt="Right Arrow" preview={false} />
           </div>
