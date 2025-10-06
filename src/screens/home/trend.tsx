@@ -14,10 +14,29 @@ import CustomSpin from "../../customs/spin";
 import redFavorite from "../../assets/redfav.svg";
 import { userAtom } from "../../utils/store";
 import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GeneralWelcome from "./market/marketLogin/marketLogin";
+import { getCityAndState } from "../../utils/location";
 
 const Trends = () => {
+
+    const [location, setLocation] = useState<{ city?: string; state?: string }>({});
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const loc = await getCityAndState();
+        setLocation(loc);
+      } catch (err: any) {
+        setError(err);
+      }
+    })();
+  }, []);
+
+  console.log(error, location.state, location.city)
+
+  
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
   // const { notification } = App.useApp();
@@ -49,8 +68,8 @@ const Trends = () => {
   const [getTrendingAdsQuery, getAllFavAds] = useQueries({
     queries: [
       {
-        queryKey: ["get-trending-ads"],
-        queryFn: getTrendingAds,
+        queryKey: ["get-trending-ads",location.city ,location.state],
+        queryFn:()=> getTrendingAds(location.city ,location.state),
         retry: 0,
         refetchOnWindowFocus: true,
       },

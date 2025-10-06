@@ -120,22 +120,22 @@ export const getAllCategory = async (search?: string | number) => {
   return (await api.get(url))?.data as CategoryResponse;
 };
 
-export const getTrendingAds = async () => {
-  return (await api.get(`ads/trending`))?.data ;
+// export const getTrendingAds = async () => {
+//   return (await api.get(`ads/trending`))?.data ;
   
-};
-
-// export const getTrendingAds = async (city?: string, state?: string) => {
-//   const params = new URLSearchParams();
-
-//   if (city) params.append("city", city);
-//   if (state) params.append("state", state);
-
-//   const query = params.toString();
-//   const url = query ? `ads/trending?${query}` : `ads/trending`;
-
-//   return (await api.get(url))?.data;
 // };
+
+export const getTrendingAds = async (city?: string, state?: string) => {
+  const params = new URLSearchParams();
+
+  if (city) params.append("city", city);
+  if (state) params.append("state", state);
+
+  const query = params.toString();
+  const url = query ? `ads/trending?${query}` : `ads/trending`;
+
+  return (await api.get(url))?.data;
+};
 
 export const getRecommededAds = async () => {
   return (await api.get(`/recommendations?type=${"ads"}`))?.data ;

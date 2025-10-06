@@ -361,30 +361,70 @@ const routeData = [
   { name: "ALL ADS", value: "all_ads", route: "/product-listing" },
 
   { name: "POST ADS", value: "post_ads", route: "/create-ad" },
-  { name: "REGISTER AS SELLER", value: "register_as_seller", route: "/seller-signUp" },
+  {
+    name: "REGISTER AS SELLER",
+    value: "register_as_seller",
+    route: "/seller-signUp",
+  },
 
   // Profile Tabs
   { name: "MY ADS", value: "my_ads", route: "/profile", tabKey: "7" },
   { name: "MY FAVORITE", value: "my_favorite", route: "/profile", tabKey: "8" },
-  { name: "MY APPLICANT PROFILE", value: "my_applicant_profile", route: "/profile", tabKey: "1" },
-  { name: "MY JOBS SELLER", value: "my_jobs_seller", route: "/profile", tabKey: "6" },
-  { name: "MY JOBS BUSINESS OWNER", value: "my_jobs_business_owner", route: "/profile", tabKey: "6" },
-  { name: "MY BUSINESS PROFILE", value: "my_business_profile", route: "/profile", tabKey: "2" },
+  {
+    name: "MY APPLICANT PROFILE",
+    value: "my_applicant_profile",
+    route: "/profile",
+    tabKey: "1",
+  },
+  {
+    name: "MY JOBS SELLER",
+    value: "my_jobs_seller",
+    route: "/profile",
+    tabKey: "6",
+  },
+  {
+    name: "MY JOBS BUSINESS OWNER",
+    value: "my_jobs_business_owner",
+    route: "/profile",
+    tabKey: "6",
+  },
+  {
+    name: "MY BUSINESS PROFILE",
+    value: "my_business_profile",
+    route: "/profile",
+    tabKey: "2",
+  },
   { name: "MY PROFILE", value: "my_profile", route: "/profile", tabKey: "1" },
-  { name: "EDIT JOB", value: "edit_job", route: "/profile", tabKey: "6"  },
+  { name: "EDIT JOB", value: "edit_job", route: "/profile", tabKey: "6" },
 
   // Others
   { name: "REVIEWS", value: "reviews", route: "/reviews" },
   { name: "AUDIENCE", value: "audience", route: "/audience" },
   { name: "MY PLAN", value: "my_plan", route: "/plans" },
   { name: "CHAT", value: "chat", route: "/chat" },
-  { name: "VIEW APPLICANTS", value: "view_applicants", route: "/jobs/applicants" },
+  {
+    name: "VIEW APPLICANTS",
+    value: "view_applicants",
+    route: "/jobs/applicants",
+  },
   { name: "CATEGORIES PAGE", value: "categories_page", route: "/categories" },
 
   { name: "POST A JOB", value: "post_a_job", route: "/post-job" },
-  { name: "REGISTER AS APPLICANT", value: "register_as_applicant", route: "/job/register-as-applicant" },
-  { name: "CREATE BUSINESS", value: "create_business", route: "/job/add-business" },
-  { name: "DIRECTORY HOMEPAGE", value: "directory_homepage", route: "/directory" },
+  {
+    name: "REGISTER AS APPLICANT",
+    value: "register_as_applicant",
+    route: "/job/register-as-applicant",
+  },
+  {
+    name: "CREATE BUSINESS",
+    value: "create_business",
+    route: "/job/add-business",
+  },
+  {
+    name: "DIRECTORY HOMEPAGE",
+    value: "directory_homepage",
+    route: "/directory",
+  },
   { name: "JOB HOMEPAGE", value: "job_homepage", route: "/jobs" },
   { name: "HELP", value: "help", route: "/contact-us" },
 ];
@@ -405,8 +445,13 @@ import { useAtom } from "jotai";
 import { logout } from "../../utils/logout";
 import { isCurrentDateGreaterThan } from "../../utils";
 import { jwtDecode } from "jwt-decode";
-import { getApplicantsbyId, getUserNotifications, ReadNotification } from "../../screens/request";
+import {
+  getApplicantsbyId,
+  getUserNotifications,
+  ReadNotification,
+} from "../../screens/request";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import SuccessModalContent from "../../partials/sucessModal";
 
 const Header = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
@@ -418,6 +463,7 @@ const Header = () => {
   const [user] = useAtom(userAtom);
   const queryClient = useQueryClient();
   const token = user?.security_token;
+  const [isLogout, setIsLogout] = useState(false);
 
   // const getRouteFromNotification = (value: string) => {
   //   const match = routeData.find((item) => item.value === value);
@@ -425,20 +471,20 @@ const Header = () => {
   // };
 
   const getRouteFromNotification = (notificationValue: string) => {
-  const match = routeData.find(item => item.value === notificationValue);
+    const match = routeData.find((item) => item.value === notificationValue);
 
-  if (match) {
-    if (match.route === "/profile" && match.tabKey) {
-      localStorage.setItem("activeTabKeyProfile", match.tabKey);
+    if (match) {
+      if (match.route === "/profile" && match.tabKey) {
+        localStorage.setItem("activeTabKeyProfile", match.tabKey);
+      }
+
+      navigate(match.route);
+    } else {
+      console.warn("No matching route for notification:", notificationValue);
     }
+  };
 
-    navigate(match.route);
-  } else {
-    console.warn("No matching route for notification:", notificationValue);
-  }
-};
-
-  const [getAllUserNotificationQuery,getProfileQuery] = useQueries({
+  const [getAllUserNotificationQuery, getProfileQuery] = useQueries({
     queries: [
       {
         queryKey: ["get-all-notification"],
@@ -457,7 +503,6 @@ const Header = () => {
   });
 
   const profileData = getProfileQuery?.data?.data;
-
 
   const notifyData = getAllUserNotificationQuery?.data?.data?.data;
   const notifyTotal = getAllUserNotificationQuery?.data?.data?.total;
@@ -480,17 +525,18 @@ const Header = () => {
   };
 
   const handleNavigateToSell = () => {
-
-    if(user?.role !=='2' &&  user?.business === null){
+    if (user?.role !== "2" && user?.business === null) {
       navigate("/seller-verification");
-    }
-    else if(profileData?.subscription?.pricing?.plan?.name?.toLowerCase() === 'free' || profileData?.subscription?.is_active === 0)  {
-      navigate('/pricing')
-    }
-    else{
-    //  if (user?.role === "2" || user?.business !== null) {
+    } else if (
+      profileData?.subscription?.pricing?.plan?.name?.toLowerCase() ===
+        "free" ||
+      profileData?.subscription?.is_active === 0
+    ) {
+      navigate("/pricing");
+    } else {
+      //  if (user?.role === "2" || user?.business !== null) {
       navigate("/create-ad");
-     }
+    }
     // } else {
     //   navigate("/seller-verification");
     // }
@@ -511,10 +557,16 @@ const Header = () => {
 
   const profileMenu = (
     <Menu>
-      <Menu.Item key="1" onClick={handleNavigateToProfile}>
+      <Menu.Item
+        key="1"
+        onClick={() => {
+          setIsMenuOpen(false);
+          handleNavigateToProfile();
+        }}
+      >
         View Profile
       </Menu.Item>
-      <Menu.Item key="2" onClick={logout}>
+      <Menu.Item key="2" onClick={()=>setIsLogout(true)}>
         Logout
       </Menu.Item>
     </Menu>
@@ -532,10 +584,9 @@ const Header = () => {
                 onClick={() => {
                   // navigate(`/notifications/${noty?.id}`);
                   // const route = getRouteFromNotification(noty?.notification?.route);
-                  getRouteFromNotification(noty?.notification?.route)
+                  getRouteFromNotification(noty?.notification?.route);
                   readNotificationHandler(noty?.id);
                   setNotificationDropdownOpen(false);
-                
                 }}
               >
                 {noty.title.length > 40
@@ -560,7 +611,7 @@ const Header = () => {
                 <div
                   style={{ color: "#1890ff", cursor: "pointer" }}
                   onClick={() => {
-                    navigate('/notifications');
+                    navigate("/notifications");
                     // setNotificationDropdownOpen(false); // ✅ Close on "View All"
                   }}
                 >
@@ -577,6 +628,8 @@ const Header = () => {
             <span
               style={{ color: "#1890ff", cursor: "pointer" }}
               onClick={() => {
+                setIsMenuOpen(false);
+
                 navigate(`/notifications`);
                 setNotificationDropdownOpen(false); // ✅ Close on fallback
               }}
@@ -595,7 +648,7 @@ const Header = () => {
   });
 
   const readNotificationHandler = async (id: number) => {
-    const payload = { ids: [id] , user_id:user?.id };
+    const payload = { ids: [id], user_id: user?.id };
 
     try {
       await readNotificationMutation.mutateAsync(payload, {
@@ -658,34 +711,50 @@ const Header = () => {
 
         {user?.email !== undefined && isMenuOpen && (
           <>
-            <div className={styles.loggedInIcons}>
-              <Dropdown
-                overlay={notificationMenu}
-                trigger={["click"]}
-                open={notificationDropdownOpen}
-                onOpenChange={(flag) => setNotificationDropdownOpen(flag)}
-              >
-                <div
-                  className={styles.notificationWrapper}
-                  style={{ cursor: "pointer" }}
-                >
-                  <img
-                    src={NotyIcon}
-                    alt="Notifications"
-                    className={styles.chatIcon}
-                  />
-                  {notifyTotal > 0 && (
-                    <span className={styles.notifyBadge}>
-                      {notifyTotal}
-                      {/* {notifyTotal > 10 ? "9+" : notifyTotal} */}
-                    </span>
-                  )}
-                </div>
-              </Dropdown>
-              {/* <img src={ChatIcon} alt="Messages" className={styles.chatIcon} /> */}
-            </div>
             <div className={styles.mobileButtonWrapper}>
-              <Button onClick={handleNavigateToSell} className={styles.btn}>
+              <div className={styles.loggedInIcons}>
+                <Dropdown
+                  overlay={notificationMenu}
+                  trigger={["click"]}
+                  // open={notificationDropdownOpen}
+                  // onOpenChange={(flag) => setNotificationDropdownOpen(flag)}
+                >
+                  <div
+                    className={styles.notificationWrapper}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img
+                      src={NotyIcon}
+                      alt="Notifications"
+                      // className={styles.chatIcon}
+                    />
+                    {notifyTotal > 0 && (
+                      <span className={styles.notifyBadge}>
+                        {notifyTotal}
+                        {/* {notifyTotal > 10 ? "9+" : notifyTotal} */}
+                      </span>
+                    )}
+                  </div>
+                </Dropdown>
+
+                {/* <img src={ChatIcon} alt="Messages" className={styles.chatIcon} /> */}
+              </div>
+              <Dropdown overlay={profileMenu} trigger={["click"]}>
+                <img
+                  src={ProfileIcon}
+                  alt="Profile"
+                  className={styles.profileIcon}
+                  style={{ cursor: "pointer" }}
+                />
+              </Dropdown>
+              <Button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  handleNavigateToSell();
+                }}
+                // onClick={handleNavigateToSell}
+                className={styles.btn}
+              >
                 Sell
               </Button>
             </div>
@@ -761,6 +830,21 @@ const Header = () => {
       >
         <CategoriesCard handleClose={() => setIsCardVisible(false)} />
       </Modal>
+
+
+      <SuccessModalContent
+        openSuccess={isLogout}
+        message="Are You Sure You Want to Log Out?"
+        text='Your login  credentials (Email and Password)  will be required to access your account again.'
+        onClose={() =>  setIsLogout(false)}
+        buttonText="Yes, Logout"
+        show2Button={true}
+        showButton={false}
+        // Icon={LogoutIconBig}
+        handleClick={logout}
+        showIcon={true}
+        variant='red'
+      />
     </nav>
   );
 };
