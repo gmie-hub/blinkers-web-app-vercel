@@ -24,7 +24,7 @@ export const routes = {
     safetyTips:"/safety-tips",
     howToBuy:"/how-to-buy",
     howToSell:"/how-to-sell",
-    PrivacyPolicy:"/privacy-and-policy",
+    PrivacyPolicy:"/privacy-policy",
 
   },
   job: {  
