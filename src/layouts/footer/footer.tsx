@@ -112,7 +112,7 @@ const Footer = () => {
         <div className={styles.section2Item}>
           <div className={styles.list}>
             <h3 className={styles.title}>Quick Links</h3>
-            <p>Privacy Policy</p>
+            <p onClick={()=>{navigate(routes.page.PrivacyPolicy); window.scroll(0, 0)}}  >Privacy Policy</p>
             <p onClick={()=>{navigate(routes.page.terms) ; window.scroll(0, 0)} }>Terms and Conditions</p>
             <p  onClick={()=>{navigate(routes.page.safetyTips) ; window.scroll(0, 0)} }>Safety Tips</p>
             <p

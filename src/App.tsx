@@ -63,6 +63,7 @@ import JobsForYou from "./screens/job/jobForYou/forYou";
 import TopBusinesses from "./screens/directory/topBusiness/topBusiness";
 import RecommendedBusinesses from "./screens/directory/recommended/recommendedBusiness";
 import Page404 from "./screens/404Page/index";
+import PrivacyPolicy from "./screens/footerPages/privacyPolicy";
 
 function App() {
   const appRoutes = [
@@ -84,6 +85,7 @@ function App() {
     { path: routes.page.safetyTips, element: <SafetyTips /> },
     { path: routes.page.howToBuy, element: <HowToBuy /> },
     { path: routes.page.howToSell, element: <HowToSell /> },
+    { path: routes.page.PrivacyPolicy, element: <PrivacyPolicy /> },
 
     { path: routes.page.ContactUs, element: <ContactUs /> },
     { path: routes.page.AboutUS, element: <AboutUs /> },

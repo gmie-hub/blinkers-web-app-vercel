@@ -65,7 +65,7 @@ const cardData = [
 const AboutUs = () => {
   const { data } = useCms();
 
-  const cmsItem = data?.data?.data?.find((item: any) => item.id === 9);
+  const cmsItem = data?.data?.data?.find((item: any) => item.id === 27);
 
   const cmsData = cmsItem?.description;
   const cmsDataTitle = cmsItem?.title;

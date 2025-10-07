@@ -1,3 +1,5 @@
+import PrivacyPolicy from "./screens/footerPages/privacyPolicy";
+
 export const routes = {
   // home: "/",
   page: {
@@ -22,7 +24,9 @@ export const routes = {
     terms:"/terms-conditions",
     safetyTips:"/safety-tips",
     howToBuy:"/how-to-buy",
-    howToSell:"/how-to-sell"
+    howToSell:"/how-to-sell",
+    PrivacyPolicy:"/privacy-and-policy"
+
   },
   job: {  
     job: "/jobs",
