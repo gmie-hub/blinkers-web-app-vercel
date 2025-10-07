@@ -71,6 +71,7 @@ const routes = [
   "/top-businesses",
   "/jobs-for-you",
   "/popular-jobs",
+  "/privacy-and-policy",
 
 
 ];
