@@ -208,16 +208,15 @@ const SmallScreen = ({
               </div> */}
 
               <div className={styles.firstSideLeft}>
-              {currentIndex > 0 && (
-
-                <button
-                  onClick={handlePrev}
-                  disabled={currentIndex === 0}
-                  className={styles.arrowButton}
-                >
-                  &lt; {/* Left arrow */}
-                </button>
-              )}
+                {currentIndex > 0 && (
+                  <button
+                    onClick={handlePrev}
+                    disabled={currentIndex === 0}
+                    className={styles.arrowButton}
+                  >
+                    &lt; {/* Left arrow */}
+                  </button>
+                )}
                 {visibleImages &&
                   visibleImages?.map((dress) => (
                     <div key={dress.id} className={styles.dressCard}>
@@ -373,27 +372,68 @@ const SmallScreen = ({
                     </div>
 
                     <div className={styles.social}>
-                      <Image
-                        src={WhatsappLogo}
-                        alt="WhatsappLogo"
-                        preview={false}
-                      />
-                      <Image
-                        src={InstagramIcon}
-                        alt="InstagramIcon"
-                        preview={false}
-                      />
-                      <Image
-                        src={FaceBookStoreIcon}
-                        alt="FaceBookStoreIcon"
-                        preview={false}
-                        height={32}
-                      />
-                      <Image
-                        src={BrowseLogo}
-                        alt="BrowseLogo"
-                        preview={false}
-                      />
+                      {businessDetailsData.whatsapp && (
+                        <Image
+                          src={WhatsappLogo}
+                          alt="WhatsappLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (businessDetailsData?.whatsapp) {
+                              window.open(
+                                businessDetailsData.whatsapp,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                        {businessDetailsData?.instagram && (
+                        <Image
+                          src={InstagramIcon}
+                          alt="InstagramIcon"
+                          preview={false}
+                          onClick={() => {
+                            if (businessDetailsData?.instagram) {
+                              window.open(
+                                businessDetailsData.instagram,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                     {businessDetailsData?.facebook && (
+                        <Image
+                          src={FaceBookStoreIcon}
+                          alt="FaceBookStoreIcon"
+                          preview={false}
+                          // width={40}
+                          height={32}
+                          onClick={() => {
+                            if (businessDetailsData?.facebook) {
+                              window.open(
+                                businessDetailsData.facebook,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                      {businessDetailsData?.website && (
+                        <Image
+                          src={BrowseLogo}
+                          alt="BrowseLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (businessDetailsData?.website) {
+                              window.open(
+                                businessDetailsData.website,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
                     </div>
 
                     <div className={styles.flexViewProfile}>
@@ -512,27 +552,68 @@ const SmallScreen = ({
                     </div>
 
                     <div className={styles.social}>
-                      <Image
-                        src={WhatsappLogo}
-                        alt="WhatsappLogo"
-                        preview={false}
-                      />
-                      <Image
-                        src={InstagramIcon}
-                        alt="InstagramIcon"
-                        preview={false}
-                      />
-                      <Image
-                        src={FaceBookStoreIcon}
-                        alt="FaceBookStoreIcon"
-                        preview={false}
-                        height={32}
-                      />
-                      <Image
-                        src={BrowseLogo}
-                        alt="BrowseLogo"
-                        preview={false}
-                      />
+                      {profileDetailsData?.whatsapp_address && (
+                        <Image
+                          src={WhatsappLogo}
+                          alt="WhatsappLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (profileDetailsData?.whatsapp_address) {
+                              window.open(
+                                profileDetailsData.whatsapp_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                        {profileDetailsData?.instagram_address && (
+                        <Image
+                          src={InstagramIcon}
+                          alt="InstagramIcon"
+                          preview={false}
+                          onClick={() => {
+                            if (profileDetailsData?.instagram_address) {
+                              window.open(
+                                profileDetailsData?.instagram_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                            {profileDetailsData?.facebook_address && (
+                        <Image
+                          src={FaceBookStoreIcon}
+                          alt="FaceBookStoreIcon"
+                          preview={false}
+                          // width={40}
+                          height={32}
+                          onClick={() => {
+                            if (profileDetailsData?.facebook_address) {
+                              window.open(
+                                profileDetailsData.facebook_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
+                        {profileDetailsData?.website_address && (
+                        <Image
+                          src={BrowseLogo}
+                          alt="BrowseLogo"
+                          preview={false}
+                          onClick={() => {
+                            if (profileDetailsData?.website_address) {
+                              window.open(
+                                profileDetailsData?.website_address,
+                                "_blank"
+                              );
+                            }
+                          }}
+                        />
+                      )}
                     </div>
 
                     <div className={styles.flexViewProfile}>
