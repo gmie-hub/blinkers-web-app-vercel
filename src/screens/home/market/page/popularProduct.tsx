@@ -394,7 +394,7 @@ const PopularProducts = () => {
       ) : (
         <div>
           <section className={styles.promoImageContainer}>
-            {marketData?.length > 0 &&
+            {marketData && marketData?.length > 0 &&
               marketData?.map((item: any, index: number) => (
                 <div
                   className={styles.promoImage}
