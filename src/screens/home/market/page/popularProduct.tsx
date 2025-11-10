@@ -313,11 +313,11 @@ const PopularProducts = () => {
   });
 
   // === Fetch favorites ===
-  const getAllFavs = async () => {
-    const url = `/ads/fav`;
-    const { data } = await getFavapi.get(url);
-    return data;
-  };
+  // const getAllFavs = async () => {
+  //   const url = `/ads/fav`;
+  //   const { data } = await getFavapi.get(url);
+  //   return data;
+  // };
 
   // === React Query multiple queries ===
   const [getAllPopularMarketQuery, getAllFavAds] = useQueries({
@@ -394,8 +394,8 @@ const PopularProducts = () => {
       ) : (
         <div>
           <section className={styles.promoImageContainer}>
-            {marketData.length > 0 &&
-              marketData.map((item: any, index: number) => (
+            {marketData?.length > 0 &&
+              marketData?.map((item: any, index: number) => (
                 <div
                   className={styles.promoImage}
                   key={index}

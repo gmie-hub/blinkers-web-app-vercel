@@ -15,7 +15,6 @@ import {
 import { useQueries } from "@tanstack/react-query";
 import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
 import { useNavigate } from "react-router-dom";
-import PopularProducts from "./popularProduct.tsx";
 
 const PriceOptions = [
   { key: "asc", value: "Low To High" },
