@@ -15,6 +15,7 @@ import {
 import { useQueries } from "@tanstack/react-query";
 import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
 import { useNavigate } from "react-router-dom";
+import PopularProducts from "./popularProduct.tsx";
 
 const PriceOptions = [
   { key: "asc", value: "Low To High" },
@@ -284,20 +285,6 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                         </li>
                       ))}
                     </ul>
-                    {/* <ul className={styles.itemList}>
-                      {PriceOptions?.map((option: any, index: number) => (
-                        <li key={index}>
-                          <Checkbox
-                            label={option.value}
-                            name={`selectedPrices.${option.key}`}
-                            isChecked={false}
-                            onChange={
-                              (e: any) => handleCheckboxChange(e, option.value) // Pass price option value
-                            }
-                          />
-                        </li>
-                      ))}
-                    </ul> */}
                   </div>
                   <div style={{ marginBlockStart: "2rem" }}>
                     {/* <Button text="Apply Filter" /> */}
@@ -328,6 +315,10 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
             </div>
 
             <div className={styles.rightSide}>
+              <p className={styles.title1}>Popular Products</p>
+              {/* <PopularProducts/> */}
+
+              <p className={styles.title1}>All Products</p>
               <ProductList
                 appliedSearchTerm={appliedSearchTerm}
                 setAppliedSearchTerm={setAppliedSearchTerm}

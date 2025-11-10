@@ -4,7 +4,11 @@
     "details": [
       {
         "appID": "6473721412.com.app.blinkers",
-        "paths": ["/product/", "/business/"]
+        "paths": [
+          "/product-details/*",
+          "/directory-details/*",
+          "/job-details/*"
+        ]
       }
     ]
   }

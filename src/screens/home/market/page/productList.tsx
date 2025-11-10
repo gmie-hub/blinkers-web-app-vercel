@@ -220,7 +220,7 @@ const ProductList: React.FC<ProductListProps> = ({
     appliedSearchTerm = "";
     setAppliedSearchTerm("");
     // search = "";
-    setCurrentPage(1);
+    setCurrentPage(1);  
     // navigate("/market");
     navigate("/product-listing");
 

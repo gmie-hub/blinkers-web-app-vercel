@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
-import DirectoryImage from "../../../../assets/image 33.svg";
+import BlinkersLogo from "../../../../assets/Logo.svg";
 import Button from "../../../../customs/button/button";
 
 interface Props {
@@ -14,7 +14,7 @@ const GeneralWelcome = ({handleCloseModal}:Props) => {
   return (
     <div className={styles.container}>
       
-      <img src={DirectoryImage} alt="DirectoryImage" />
+      <img width={'30%'} src={BlinkersLogo} alt="BlinkersLogo" />
 
       <h2 className={styles.title}>Welcome To Blinker</h2>
       <p className={styles.subtitle}>

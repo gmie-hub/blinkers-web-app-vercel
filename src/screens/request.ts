@@ -143,6 +143,20 @@ export const getRecommededAds = async () => {
 
 
 
+
+export const getAllPopularMarket = async ( page: number,per_page:number) => {
+  return (await api.get(`/ads/popular?page=${page}&per_page=${per_page}`))
+    ?.data as AllProductaResponse;
+};
+
+export const getAllFav = async ( user_id?: number) => {
+  return (await api.get(`/ads/fav?user_id=${user_id}`))
+    ?.data ;
+};
+
+
+
+
 export const getPromotedAds = async () => {
   return (await api.get(`/banners`))?.data ;
 };
