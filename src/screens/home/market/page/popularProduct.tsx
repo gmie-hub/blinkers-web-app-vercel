@@ -273,7 +273,7 @@ import redFavorite from "../../../../assets/redfav.svg";
 import LocationIcon from "../../../../assets/locationrelated.svg";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
 
@@ -298,19 +298,19 @@ const PopularProducts = () => {
   }, [pageNum, currentPage, setCurrentPage]);
 
   // === Setup axios instance for favorites ===
-  const favData = { user_id: user?.id };
+  // const favData = { user_id: user?.id };
 
-  const getFavapi = axios.create({
-    baseURL: import.meta.env.VITE_GATEWAY_URL,
-    headers: {
-      "Cache-Control": "no-cache",
-      "Content-Type": "application/json",
-      Pragma: "no-cache",
-      Expires: "0",
-      Authorization: `Bearer ${user?.security_token}`,
-    },
-    params: favData,
-  });
+  // const getFavapi = axios.create({
+  //   baseURL: import.meta.env.VITE_GATEWAY_URL,
+  //   headers: {
+  //     "Cache-Control": "no-cache",
+  //     "Content-Type": "application/json",
+  //     Pragma: "no-cache",
+  //     Expires: "0",
+  //     Authorization: `Bearer ${user?.security_token}`,
+  //   },
+  //   params: favData,
+  // });
 
   // === Fetch favorites ===
   // const getAllFavs = async () => {
