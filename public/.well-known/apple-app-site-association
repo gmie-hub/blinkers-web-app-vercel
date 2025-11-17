@@ -3,13 +3,13 @@
     "apps": [],
     "details": [
       {
-        "appID": "6473721412.com.app.blinkers",
+        "appID": "38L3FXAFC2.com.app.blinkers",
         "paths": [
           "/product-details/*",
           "/directory-details/*",
           "/job-details/*"
         ]
-      }
-    ]
-  }
+      }
+    ]
+  }
 }
