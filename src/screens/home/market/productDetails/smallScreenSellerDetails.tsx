@@ -78,7 +78,7 @@ const SmallScreen = ({
   const { id } = useParams();
   const [isNumberVisible, setIsNumberVisible] = useState(false);
   const user = useAtomValue(userAtom);
-  const currenthref = location.href;
+  // const currenthref = location.href;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 

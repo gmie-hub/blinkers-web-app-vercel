@@ -1,12 +1,12 @@
 import styles from "./style.module.scss";
-import { Image, Modal } from "antd";
+import { App, Image, Modal } from "antd";
 import Product2 from "../../../assets/Image.svg";
 import locationIcon from "../../../assets/location.svg";
 import Button from "../../../customs/button/button";
 import favorite from "../../../assets/Icon + container.svg";
 import redFavorite from "../../../assets/redfav.svg";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { AddToFav, getTrendingAds } from "../../request";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import CustomSpin from "../../../customs/spin";
@@ -20,7 +20,8 @@ const Trends = () => {
   const [location, setLocation] = useState<{ city?: string; state?: string }>(
     {}
   );
-  const [error, setError] = useState("");
+    const { notification } = App.useApp();
+  
 
   useEffect(() => {
     (async () => {
@@ -28,7 +29,10 @@ const Trends = () => {
         const loc = await getCityAndState();
         setLocation(loc);
       } catch (err: any) {
-        setError(err);
+        notification.error({
+          message: "Error",
+          description:err || "Failed to access location. Please enable GPS.",
+        });
       }
     })();
   }, []);
