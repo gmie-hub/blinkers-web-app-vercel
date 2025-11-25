@@ -132,7 +132,7 @@ export const getTrendingAds = async (city?: string, state?: string) => {
   if (state) params.append("state", state);
 
   const query = params.toString();
-  const url = query ? `ads/trending?${query}` : `ads/trending`;
+  const url = query ? `ads/trending?${query}&per_page${50}` : `ads/trending?per_page${50}`;
 
   return (await api.get(url))?.data;
 };

@@ -387,7 +387,7 @@ const SmallScreen = ({
                           }}
                         />
                       )}
-                        {businessDetailsData?.instagram && (
+                      {businessDetailsData?.instagram && (
                         <Image
                           src={InstagramIcon}
                           alt="InstagramIcon"
@@ -402,7 +402,7 @@ const SmallScreen = ({
                           }}
                         />
                       )}
-                     {businessDetailsData?.facebook && (
+                      {businessDetailsData?.facebook && (
                         <Image
                           src={FaceBookStoreIcon}
                           alt="FaceBookStoreIcon"
@@ -499,7 +499,10 @@ const SmallScreen = ({
                       text="Copy URL"
                       variant="noBg"
                       onClick={() => {
-                        handleCopyLink(currenthref || "");
+                        // handleCopyLink(currenthref || "");
+                        handleCopyLink(
+                          `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`
+                        );
                       }}
                     />
                   </div>
@@ -567,7 +570,7 @@ const SmallScreen = ({
                           }}
                         />
                       )}
-                        {profileDetailsData?.instagram_address && (
+                      {profileDetailsData?.instagram_address && (
                         <Image
                           src={InstagramIcon}
                           alt="InstagramIcon"
@@ -582,7 +585,7 @@ const SmallScreen = ({
                           }}
                         />
                       )}
-                            {profileDetailsData?.facebook_address && (
+                      {profileDetailsData?.facebook_address && (
                         <Image
                           src={FaceBookStoreIcon}
                           alt="FaceBookStoreIcon"
@@ -599,7 +602,7 @@ const SmallScreen = ({
                           }}
                         />
                       )}
-                        {profileDetailsData?.website_address && (
+                      {profileDetailsData?.website_address && (
                         <Image
                           src={BrowseLogo}
                           alt="BrowseLogo"
@@ -683,7 +686,10 @@ const SmallScreen = ({
                       text="Copy URL"
                       variant="noBg"
                       onClick={() => {
-                        handleCopyLink(currenthref || "");
+                        // handleCopyLink(currenthref || "");
+                        handleCopyLink(
+                          `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`
+                        );
                       }}
                     />
                   </div>

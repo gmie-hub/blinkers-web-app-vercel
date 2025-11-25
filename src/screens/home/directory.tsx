@@ -99,7 +99,7 @@ const HomeDirectory = () => {
                   : "#FFD7001A", // Apply different colors based on the card index
             }}
           >
-            <div>{card.icon}</div>
+            <div style={{width:40, height:40}}>{card.icon}</div>
             <h3
               className={styles.dirTitle}
               style={{
@@ -115,7 +115,7 @@ const HomeDirectory = () => {
             >
               {card.title}
             </h3>
-            <p>{card.content}</p>
+            <p style={{fontSize:'1.6rem',color:'#707070'}}>{card.content}</p>
             <br />
 
             {/* <SearchInput

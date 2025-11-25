@@ -137,3 +137,59 @@
 .activeDot {
   background-color: var(--color-primary-green);
 }
+
+
+
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px;
+  width: 100%;
+  max-width: 750px;
+  margin: auto;
+  gap: 10px;
+}
+
+.locationBox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 15px;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #fff;
+  
+}
+
+
+.locIcon {
+  width: 18px;
+}
+
+.arrowDown {
+  font-size: 12px;
+  color: #777;
+}
+
+.searchInputBox {
+  flex: 1;
+  // border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: white;
+}
+
+.searchBtn {
+  background: green;
+  border: none;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+

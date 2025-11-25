@@ -5,22 +5,22 @@ import PictureBg from "./landingImage/picture";
 import MoreThanMarket from "./moreThanMarket";
 import PromotedAds from "./promotedAds";
 import RecommendedAds from "./recommendedAds";
-import Trends from "./trend";
+import Trends from "./trend/newTrendDesign";
 
 const Home = () => {
   return (
     <section>
       {" "}
       <PictureBg />
-      <div className='wrapper'>
+      <div className="wrapper">
         <Directory />
+        <Trends />
+
         <PromotedAds />
         <RecommendedAds />
-        <Trends />
         <MoreThanMarket />
         <Access />
         <GetStarted />
-      
       </div>
     </section>
   );

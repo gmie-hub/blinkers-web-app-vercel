@@ -1,22 +1,22 @@
-import styles from "./index.module.scss";
+import styles from "../index.module.scss";
 import {  Image, Modal } from "antd";
-import Product2 from "../../assets/Image.svg";
-import locationIcon from "../../assets/location.svg";
-import Button from "../../customs/button/button";
+import Product2 from "../../../assets/Image.svg";
+import locationIcon from "../../../assets/location.svg";
+import Button from "../../../customs/button/button";
 // import Star from "../../assets/Vector.svg";
 // import StarYellow from "../../assets/staryellow.svg";
-import favorite from "../../assets/Icon + container.svg";
+import favorite from "../../../assets/Icon + container.svg";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
-import { AddToFav, getTrendingAds } from "../request";
+import { AddToFav, getTrendingAds } from "../../request";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import CustomSpin from "../../customs/spin";
-import redFavorite from "../../assets/redfav.svg";
-import { userAtom } from "../../utils/store";
+import CustomSpin from "../../../customs/spin";
+import redFavorite from "../../../assets/redfav.svg";
+import { userAtom } from "../../../utils/store";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import GeneralWelcome from "./market/marketLogin/marketLogin";
-import { getCityAndState } from "../../utils/location";
+import GeneralWelcome from "../market/marketLogin/marketLogin";
+import { getCityAndState } from "../../../utils/location";
 
 const Trends = () => {
 

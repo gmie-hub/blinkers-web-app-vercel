@@ -218,15 +218,15 @@ const BigScreen = ({
 
             <div className={styles.leftContainer}>
               <div>
-              {currentIndex > 0 && (
-                <button
-                  onClick={handlePrev}
-                  disabled={currentIndex === 0}
-                  className={styles.arrowButton}
-                >
-                  ↑
-                </button>
-              )}
+                {currentIndex > 0 && (
+                  <button
+                    onClick={handlePrev}
+                    disabled={currentIndex === 0}
+                    className={styles.arrowButton}
+                  >
+                    ↑
+                  </button>
+                )}
 
                 <div className={styles.firstSideLeft}>
                   {visibleImages &&
@@ -246,13 +246,13 @@ const BigScreen = ({
                     ))}
                 </div>
                 {currentIndex + maxVisibleImages < images.length && (
-                <button
-                  onClick={handleNext}
-                  disabled={currentIndex + maxVisibleImages >= images.length}
-                  className={styles.arrowButton}
-                >
-                  ↓
-                </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={currentIndex + maxVisibleImages >= images.length}
+                    className={styles.arrowButton}
+                  >
+                    ↓
+                  </button>
                 )}
               </div>
               <div className={styles.secondSideLeft}>
@@ -519,7 +519,9 @@ const BigScreen = ({
                       text="Copy URL"
                       variant="noBg"
                       onClick={() => {
-                        handleCopyLink(currenthref || "");
+                        // handleCopyLink(currenthref || "");
+                                                handleCopyLink( `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`);
+
                       }}
                     />
 
@@ -717,7 +719,10 @@ const BigScreen = ({
                       text="Copy URL"
                       variant="noBg"
                       onClick={() => {
-                        handleCopyLink(currenthref || "");
+                        // handleCopyLink(currenthref || "");
+                        handleCopyLink( `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`);
+
+                        ;
                       }}
                     />
 
