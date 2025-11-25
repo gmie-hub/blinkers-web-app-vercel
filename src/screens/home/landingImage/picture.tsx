@@ -143,7 +143,7 @@ import Icon3 from "../../../assets/homeImage3.svg";
 import SearchInput from "../../../customs/searchInput";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import CategoriesCard from "../category";
+// import CategoriesCard from "../category";
 import LocationModal from "../market/locationModal/location";
 
 // Background images

@@ -81,7 +81,7 @@ const BigScreen = ({
   const { id } = useParams();
   const [isNumberVisible, setIsNumberVisible] = useState(false);
   const user = useAtomValue(userAtom);
-  const currenthref = location.href;
+  // const currenthref = location.href;
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
   console.log(productDetailsData, "productDetailsData");
