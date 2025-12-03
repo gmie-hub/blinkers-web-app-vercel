@@ -1,5 +1,5 @@
 import styles from "./index.module.scss";
-import { Image, Modal, Pagination } from "antd";
+import { App, Image, Modal, Pagination } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
@@ -32,6 +32,7 @@ interface ProductListProps {
   setStateId: any;
   setSelectedItems: any;
   selectedPrice?: any;
+  category_id: number | string;
 }
 
 const ProductList: React.FC<ProductListProps> = ({
@@ -44,12 +45,13 @@ const ProductList: React.FC<ProductListProps> = ({
   selectedItems,
   setSelectedItems,
   selectedPrice,
+  category_id,
 }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const { currentPage, setCurrentPage, onChange, pageNum } = usePagination();
   const { search } = useParams();
-  // const { notification } = App.useApp();
+  const { notification } = App.useApp();
   const queryClient = useQueryClient();
   const user = useAtomValue(userAtom);
   // const currentPath = location.pathname;
@@ -81,7 +83,8 @@ const ProductList: React.FC<ProductListProps> = ({
     search?: string | number,
     state_id?: number,
     local_government_area_id?: number,
-    order?: string
+    order?: string,
+    category_id?: string | number
   ) => {
     let url =
       order === null || order === undefined || order === ""
@@ -114,6 +117,14 @@ const ProductList: React.FC<ProductListProps> = ({
     }
     if (order !== undefined && order !== "" && order !== null) {
       queryParams.push(`order=${order}`);
+    }
+    if (
+      category_id !== undefined &&
+      category_id !== "" &&
+      category_id != 0 &&
+      category_id !== null
+    ) {
+      queryParams.push(`category_id=${category_id}`);
     }
 
     // if(sub_category_id !==undefined && sub_category_id.length !== 0){
@@ -159,6 +170,7 @@ const ProductList: React.FC<ProductListProps> = ({
           lgaId,
           selectedItems,
           selectedPrice,
+          category_id,
         ],
         queryFn: () =>
           getAllMarket(
@@ -166,7 +178,8 @@ const ProductList: React.FC<ProductListProps> = ({
             appliedSearchTerm,
             stateId,
             lgaId,
-            selectedPrice
+            selectedPrice,
+            category_id
           ),
         // retry: 0,
         refetchOnWindowFocus: true,
@@ -220,7 +233,7 @@ const ProductList: React.FC<ProductListProps> = ({
     appliedSearchTerm = "";
     setAppliedSearchTerm("");
     // search = "";
-    setCurrentPage(1);  
+    setCurrentPage(1);
     // navigate("/market");
     navigate("/product-listing");
 
@@ -262,29 +275,11 @@ const ProductList: React.FC<ProductListProps> = ({
           });
         },
       });
-    } catch {
-      setOpenLoginModal(true);
-      // notification.open({
-      //   message: "You need to log in to complete this action.",
-      //   description: (
-      //     <>
-      //     <br />
-      //     <Button
-      //       type="button"
-      //       onClick={() => {
-      //         notification.destroy();
-      //         navigate(`/login?redirect=${currentPath}`);
-      //       }}
-      //     >
-      //       Click here to Login
-      //     </Button>
-      //     </>
-
-      //   ),
-      //   placement: "top",
-      //   duration: 3, // Auto close after 5 seconds
-      //   icon: null,
-      // });
+    } catch (err: any) {
+      notification.error({
+        message: "Error",
+        description: err || "failed",
+      });
     }
   };
 
@@ -329,8 +324,12 @@ const ProductList: React.FC<ProductListProps> = ({
                   <div
                     className={styles.favoriteIcon}
                     onClick={(event) => {
-                      event.stopPropagation(); // Prevents click from bubbling to parent div
-                      addToFavHandler(item?.id?.toString());
+                      event.stopPropagation(); // Prevent parent click
+                      if (user) {
+                        addToFavHandler(item?.id?.toString());
+                      } else {
+                        setOpenLoginModal(true);
+                      }
                     }}
                   >
                     <img

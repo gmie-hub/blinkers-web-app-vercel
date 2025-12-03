@@ -29,14 +29,16 @@ const Trends = () => {
         const loc = await getCityAndState();
         setLocation(loc);
       } catch (err: any) {
-        notification.error({
-          message: "Error",
-          description:err || "Failed to access location. Please enable GPS.",
-        });
+        // notification.error({
+        //   message: "Error",
+        //   description:err || "Failed to access location. Please enable GPS.",
+        // });
       }
     })();
   }, []);
 
+
+  console.log(location,'location')
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
   const queryClient = useQueryClient();
@@ -100,9 +102,12 @@ const Trends = () => {
           queryClient.refetchQueries({ queryKey: ["get-all-fav"] });
         },
       });
-    } catch {
-      setOpenLoginModal(true);
-    }
+    } catch (err: any) {
+      notification.error({
+        message: "Error",
+        description: err || "failed",
+      });
+  };
   };
 
   const handleNavigateToProductDetails = (slug: string) => {
@@ -133,10 +138,15 @@ const Trends = () => {
             >
               <div
                 className={styles.favoriteIcon}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToFavHandler(item.id?.toString());
-                }}
+              onClick={(event) => {
+  event.stopPropagation(); // Prevent parent click
+  if (user) {
+    addToFavHandler(item?.id?.toString());
+  } else {
+    setOpenLoginModal(true);
+  }
+}}
+
               >
                 <Image
                   width={25}

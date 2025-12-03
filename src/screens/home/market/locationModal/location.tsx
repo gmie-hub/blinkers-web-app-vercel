@@ -4,6 +4,8 @@ import { getAllState, getLGAbyStateId } from "../../../request";
 import { useQueries } from "@tanstack/react-query";
 import { App } from "antd";
 import CustomSpin from "../../../../customs/spin";
+import SearchIcon from "../../../../assets/Search.svg";
+import LocationIcon from "../../../../assets/locationrelated.svg";
 
 interface Props {
   handleClose: () => void;
@@ -18,7 +20,6 @@ const LocationModal = ({ handleClose }: Props) => {
     id: number;
     name: string;
   } | null>(null);
-
 
   const [statesQuery, lgaQuery] = useQueries({
     queries: [
@@ -45,59 +46,17 @@ const LocationModal = ({ handleClose }: Props) => {
     l?.local_government_area?.toLowerCase()?.includes(search?.toLowerCase())
   );
 
+  const handleCloseModal = () => {
+    setActiveState(null); // 👈 RESET HERE
+    handleClose();
+  };
+
   const handleSelectState = (state: any) => {
     setActiveState({ id: state.id, name: state.state_name });
     setSearch("");
   };
 
-// const handleMyLocation = () => {
-//   if (!navigator.geolocation) {
-//     alert("Geolocation is not supported on this device.");
-//     return;
-//   }
-
-//   navigator.geolocation.getCurrentPosition(
-//     async (position) => {
-//       const { latitude, longitude } = position.coords;
-
-//       console.log("User Coordinates:", latitude, longitude);
-
-//       try {
-//         const res = await fetch(
-//           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-//         );
-//         const data = await res.json();
-
-//         const detectedState = data?.principalSubdivision; // Example: Lagos
-//         const detectedLGA = data?.locality; // Example: Ikeja
-
-//         console.log("Detected:", detectedState, detectedLGA);
-
-//         if (!detectedState) {
-//           alert("Unable to detect your location. Try again.");
-//           return;
-//         }
-
-//         // 👉 If you want to pass result back to parent:
-//         // handleSelectLocation({ state: detectedState, lga: detectedLGA });
-
-//         // 🚀 CLOSE MODAL IMMEDIATELY — do NOT open LGA modal
-//         handleClose();
-
-//       } catch (err) {
-//         console.error("Location error:", err);
-//         alert("Unable to detect your location.");
-//       }
-//     },
-
-//     (error) => {
-//       console.error(error);
-//       alert("Failed to access location. Please enable GPS.");
-//     }
-//   );
-// };
-
-const handleMyLocation = () => {
+  const handleMyLocation = () => {
     if (!navigator.geolocation) {
       notification.error({
         message: "Error",
@@ -143,8 +102,15 @@ const handleMyLocation = () => {
             setLoading(false);
             return;
           }
-                  console.log("Detected:", detectedState, detectedLGA);
+          console.log("Detected:", detectedState, detectedLGA);
 
+          localStorage.setItem(
+            "userLocation",
+            JSON.stringify({
+              state: detectedState,
+              lga: detectedLGA || null,
+            })
+          );
 
           setActiveState({ id: stateObj.id, name: stateObj.state_name });
 
@@ -152,19 +118,18 @@ const handleMyLocation = () => {
           setTimeout(() => {
             if (!detectedLGA) return;
 
-            const foundLGA = lgas.find(
-              (l: any) =>
-                l.local_government_area
-                  .toLowerCase()
-                  .includes(detectedLGA.toLowerCase())
+            const foundLGA = lgas.find((l: any) =>
+              l.local_government_area
+                .toLowerCase()
+                .includes(detectedLGA.toLowerCase())
             );
 
             if (foundLGA) {
-              handleClose(); // close modal after selecting
+              handleCloseModal(); // close modal after selecting
             }
           }, 600);
 
-          handleClose();
+          handleCloseModal();
         } catch (err) {
           console.error("Location error:", err);
           notification.error({
@@ -177,15 +142,29 @@ const handleMyLocation = () => {
       },
       (error) => {
         console.error(error);
-        notification.error({
-          message: "Error",
-          description: "Failed to access location. Please enable GPS.",
-        });
+        // notification.error({
+        //   message: "Error",
+        //   description: "Failed to access location. Please enable GPS.",
+        // });
         setLoading(false);
       }
     );
   };
 
+  const handleSelectLGA = (lga: any) => {
+    const selectedLocation = {
+      state: activeState?.name,
+      stateId: activeState?.id,
+      lga: lga.local_government_area,
+      lgaId:lga?.id
+    };
+
+    localStorage.setItem("userLocation", JSON.stringify(selectedLocation));
+
+    console.log("Saved to localStorage:", selectedLocation);
+
+    handleCloseModal();
+  };
 
   return (
     <div className={styles.container}>
@@ -197,23 +176,34 @@ const handleMyLocation = () => {
       )}
 
       {/* Page Title */}
-      <h3 className={styles.header}>
-        {activeState ? `All ${activeState.name} (LGAs)` : "My Location"}
-      </h3>
+      <div className={styles.headerRow}>
+        <h3 className={styles.header}>
+          {activeState ? `All ${activeState.name} (LGAs)` : "My Location"}
+        </h3>
 
-      {/* Search Input */}
-      <input
-        className={styles.search}
-        placeholder="Find state, city or region…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        <div className={styles.searchWrapper}>
+          <img src={SearchIcon} alt="search" className={styles.searchIcon} />
+
+          <input
+            className={styles.search}
+            placeholder="Find state, city or region…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
 
       {/* Tap to find my location --- show ONLY on page 1 */}
       {!activeState && (
         <div className={styles.myLocationBox} onClick={handleMyLocation}>
           <div className={styles.left}>
-            <span className={styles.icon}>📍</span>
+            {/* <span className={styles.icon}>📍</span> */}
+            <img
+              src={LocationIcon}
+              alt="LocationIcon"
+              className={styles.icon}
+            />
+
             {/* <div className={styles.texts}>
               <p className={styles.main}>My Location</p>
               <p className={styles.sub}>Tap to find location</p>
@@ -234,6 +224,32 @@ const handleMyLocation = () => {
       {/* STATES PAGE */}
       {!activeState && (
         <div className={styles.listWrapper}>
+          {/* First option */}
+          <div
+            className={styles.itemBox}
+            onClick={() => {
+              const selectedLocation = {
+                state: "All Nigeria",
+                stateId: 0,
+                lga: "All Nigeria",
+                lgaId: 0
+              };
+
+              localStorage.setItem(
+                "userLocation",
+                JSON.stringify(selectedLocation)
+              );
+
+              console.log("Saved to localStorage:", selectedLocation);
+
+              handleCloseModal(); // closes modal + resets state
+            }}
+          >
+            <span className={styles.itemText}>All Nigeria</span>
+            <span className={styles.arrow}>›</span>
+          </div>
+
+          {/* Existing mapped options */}
           {filteredStates.map((item: any) => (
             <div
               key={item.id}
@@ -251,7 +267,11 @@ const handleMyLocation = () => {
       {activeState && (
         <div className={styles.listWrapper}>
           {filteredLGAs.map((item: any) => (
-            <div key={item.id} className={styles.itemBox} onClick={handleClose}>
+            <div
+              key={item.id}
+              className={styles.itemBox}
+              onClick={() => handleSelectLGA(item)}
+            >
               <span className={styles.itemText}>
                 {item.local_government_area}
               </span>

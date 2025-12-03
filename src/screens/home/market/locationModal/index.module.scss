@@ -22,17 +22,11 @@
 .header {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+//   margin-bottom: 1rem;
+    margin: 0;
 }
 
-.search {
-  width: 100%;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 2rem;
-  font-size: 1.4rem;
-}
+
 
 .listWrapper {
   display: grid;
@@ -84,10 +78,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.4rem 1rem;
-  background: #f6f6f6;
+//   background: #f6f6f6;
   border-radius: 8px;
   margin-bottom: 2rem;
   cursor: pointer;
+  margin-block-start: 2rem;
+  width: 33%;
 
   .left {
     display: flex;
@@ -97,6 +93,9 @@
 
   .icon {
     font-size: 1.6rem;
+    background-color:#0099001A;
+    border-radius: 50%;
+    padding: 0.6rem;
   }
 
   .texts {
@@ -138,4 +137,44 @@
   font-size: 1.4rem;
   margin-bottom: 1rem;
   cursor: pointer;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // pushes them to opposite ends
+  gap: 12px; // space between them if needed
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // pushes them to opposite ends
+  gap: 12px; // space between them if needed
+}
+
+.header {
+  white-space: nowrap;   // prevents "My Location" from breaking to next line
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;               // search takes remaining space
+}
+
+.search {
+  width: 30%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
 }

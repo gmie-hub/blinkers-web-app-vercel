@@ -1,10 +1,7 @@
 import styles from "./myFavorite.module.scss";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import {
-  formatDateOnly,
-  getTimeFromDate,
-} from "../../../utils/formatTime";
+import { formatDateOnly, getTimeFromDate } from "../../../utils/formatTime";
 import CustomSpin from "../../../customs/spin";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../utils/store";

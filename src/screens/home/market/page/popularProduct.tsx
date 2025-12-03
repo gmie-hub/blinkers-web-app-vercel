@@ -264,7 +264,7 @@
 
 
 import styles from "./index.module.scss";
-import { Image, Modal, Pagination } from "antd";
+import { App, Image, Modal, Pagination } from "antd";
 import Star from "../../../../assets/Vector.svg";
 import StarYellow from "../../../../assets/staryellow.svg";
 import Product3 from "../../../../assets/Image (1).svg";
@@ -290,6 +290,7 @@ const PopularProducts = () => {
   const queryClient = useQueryClient();
   const user = useAtomValue(userAtom);
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const { notification } = App.useApp();
 
   useEffect(() => {
     if (currentPage !== pageNum) {
@@ -324,7 +325,7 @@ const PopularProducts = () => {
     queries: [
       {
         queryKey: ["get-popular-ads", currentPage],
-        queryFn: () => getAllPopularMarket(currentPage, 50),
+        queryFn: () => getAllPopularMarket(currentPage, 5),
         retry: 0,
         refetchOnWindowFocus: true,
       },
@@ -380,9 +381,11 @@ const PopularProducts = () => {
           queryClient.refetchQueries({ queryKey: ["get-all-fav"] });
         },
       });
-    } catch (error) {
-      console.error("Failed to update favorite:", error);
-    }
+    }catch (err: any) {
+      notification.error({
+        message: "Error",
+        description: err || "failed",
+      });
   };
 
   return (
@@ -403,10 +406,18 @@ const PopularProducts = () => {
                 >
                   <div
                     className={styles.favoriteIcon}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      addToFavHandler(item?.id?.toString());
-                    }}
+                onClick={(event) => {
+  event.stopPropagation(); // Prevent parent click
+  if (user) {
+    addToFavHandler(item?.id?.toString());
+  } else {
+    setOpenLoginModal(true);
+  }
+}}
+
+                    
+
+                    
                   >
                     <img
                       width={30}

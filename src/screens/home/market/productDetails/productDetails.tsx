@@ -259,12 +259,20 @@ const BigScreen = ({
                 <div className={styles.promoImage}>
                   <div
                     className={styles.favoriteIcon}
-                    onClick={addToFavHandler}
+                    // onClick={addToFavHandler}
                     // onClick={() => {
                     //   if (addToFavHandler) {
                     //     addToFavHandler(id);
                     //   }
                     // }}
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevent parent click
+                      if (user) {
+                        addToFavHandler?.();
+                      } else {
+                        setOpenLoginModal(true);
+                      }
+                    }}
                   >
                     <Image
                       width={30}
@@ -520,8 +528,9 @@ const BigScreen = ({
                       variant="noBg"
                       onClick={() => {
                         // handleCopyLink(currenthref || "");
-                                                handleCopyLink( `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`);
-
+                        handleCopyLink(
+                          `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`
+                        );
                       }}
                     />
 
@@ -720,9 +729,9 @@ const BigScreen = ({
                       variant="noBg"
                       onClick={() => {
                         // handleCopyLink(currenthref || "");
-                        handleCopyLink( `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`);
-
-                        ;
+                        handleCopyLink(
+                          `https://api-v2.blinkersnigeria.com/share/ads/${productDetailsData?.id}`
+                        );
                       }}
                     />
 

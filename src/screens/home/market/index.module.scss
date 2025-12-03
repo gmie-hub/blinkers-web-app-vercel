@@ -59,12 +59,18 @@
   }
   
   .searchWrapper {
-    padding: 1rem;
-    background-color: white;
-    border-radius: 0.8rem;
-    max-width: 100%;
-    width: 40rem; // Set width for the search input
-    margin-bottom: 20px;
+    // padding: 1rem;
+    // background-color: white;
+    // border-radius: 0.8rem;
+    // max-width: 100%;
+    // width: 40rem; // Set width for the search input
+    // margin-bottom: 20px;
+
+      flex: 1;
+  // border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: white;
   }
   
   /* Responsive Styles */
@@ -122,3 +128,38 @@
     }
   }
   
+
+  
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px;
+  width: 100%;
+  max-width: 750px;
+  margin: auto;
+  gap: 10px;
+}
+
+.locationBox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 15px;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #fff;
+  
+}
+
+
+.locIcon {
+  width: 18px;
+}
+
+.arrowDown {
+  font-size: 12px;
+  color: #777;
+}

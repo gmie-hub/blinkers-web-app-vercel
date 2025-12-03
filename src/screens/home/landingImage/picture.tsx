@@ -141,10 +141,11 @@ import Icon from "/Component 5.svg";
 import Icon2 from "../../../assets/Component 6.svg";
 import Icon3 from "../../../assets/homeImage3.svg";
 import SearchInput from "../../../customs/searchInput";
-import { Modal } from "antd";
+import { App, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 // import CategoriesCard from "../category";
 import LocationModal from "../market/locationModal/location";
+import { getCityAndState } from "../../../utils/location";
 
 // Background images
 const images = [Icon, Icon2, Icon3];
@@ -154,6 +155,30 @@ const PictureBg = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [openLocationModal, setOpenLocationModal] = useState(false);
+  const [location, setLocation] = useState<{ city?: string; state?: string ,lga:string}>(
+    {}
+  );
+  const { notification } = App.useApp();
+  const savedLocation = JSON.parse(localStorage.getItem("userLocation") || "{}");
+
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const loc = await getCityAndState();
+        setLocation(loc);
+      } catch (err: any) {
+        // notification.error({
+        //   message: "Error",
+        //   description: err || "Failed to access location. Please enable GPS.",
+        // });
+      }
+    })();
+  }, []);
+
+
+
+  console.log(location, "locat");
 
   // Next image
   const handleNextImage = () => {
@@ -213,17 +238,16 @@ const PictureBg = () => {
         {/* --- SEARCH BAR SECTION --- */}
         <div className={styles.searchBarContainer}>
           {/* Location Box */}
-          {/* <div
+          <div
             className={styles.locationBox}
             onClick={() => setOpenLocationModal(true)}
           >
             <img src="/location-icon.svg" className={styles.locIcon} />
-            <span style={{ color: 'black', fontSize: '20px' }}>My Location</span>
-
+            <span style={{ color: "black", fontSize: "20px" }}>
+              {savedLocation?.lga ? savedLocation?.lga : location?.lga ? location?.lga : "Select Location"}
+            </span>
             <span className={styles.arrowDown}>▼</span>
-          </div> */}
-
-        
+          </div>
 
           {/* Search Input */}
           <div className={styles.searchInputBox}>
@@ -238,7 +262,7 @@ const PictureBg = () => {
             Search
           </button>
         </div>
-        <br />  
+        <br />
 
         {/* CTA Button */}
         <Button
@@ -277,9 +301,9 @@ const PictureBg = () => {
         onCancel={() => setOpenLocationModal(false)}
         footer={null}
         centered
-          width={1300}
+        width={1300}
       >
-        <LocationModal handleClose={()=>setOpenLocationModal(false)}/>
+        <LocationModal handleClose={() => setOpenLocationModal(false)} />
       </Modal>
     </div>
   );

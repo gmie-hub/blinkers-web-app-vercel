@@ -5,16 +5,23 @@ import Button from "../../../../customs/button/button";
 import Checkbox from "../../../../customs/checkBox/checkbox"; // Import the custom checkbox
 import ProductList from "./productList.tsx";
 import FilterIcon from "../../../../assets/setting-4.svg";
-import { Image } from "antd";
+import { Image, Modal } from "antd";
 import {
   getAllCategory,
-  getAllState,
-  getLGAbyStateId,
+  getApplicantsbyId,
+  // getAllState,
+  // getLGAbyStateId,
   getSubCategory,
 } from "../../../request.ts";
 import { useQueries } from "@tanstack/react-query";
-import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
+// import SearchableSelect from "../../../../customs/searchableSelect/searchableSelect.tsx";
 import { useNavigate } from "react-router-dom";
+import LocationModal from "../locationModal/location.tsx";
+// import PopularProducts from "./popularProduct.tsx";
+import { getCityAndState } from "../../../../utils/location.ts";
+import { userAtom } from "../../../../utils/store.ts";
+import { useAtom } from "jotai";
+import GeneralWelcome from "../marketLogin/marketLogin.tsx";
 
 const PriceOptions = [
   { key: "asc", value: "Low To High" },
@@ -36,30 +43,49 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
   const [stateId, setStateId] = useState(0);
   const [lgaId, setLgaId] = useState(0);
   const navigate = useNavigate();
+  const [openLocationModal, setOpenLocationModal] = useState(false);
+  const [location, setLocation] = useState<{ city?: string; state?: string,lga?:string }>(
+    {}
+  );
 
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
+  const [user] = useAtom(userAtom);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const loc = await getCityAndState();
+        setLocation(loc);
+      } catch (err: any) {
+        // notification.error({
+        //   message: "Error",
+        //   description: err || "Failed to access location. Please enable GPS.",
+        // });
+      }
+    })();
+  }, []);
+
+  
 
   const handleCheckboxPriceChange = (optionKey: string) => {
     setSelectedPrice((prevSelected) =>
       prevSelected === optionKey ? null : optionKey
     );
   };
-  const handleStateChange = (value: number, setFieldValue: any) => {
-    setStateId(value);
-    setLgaId(0);
-    setFieldValue("lga", "");
-  };
 
-  const handleLgaChange = (value: number) => {
-    setLgaId(value);
-    // setFieldValue("lga", "")
-  };
+  // const handleStateChange = (value: number, setFieldValue: any) => {
+  //   setStateId(value);
+  //   setLgaId(0);
+  //   setFieldValue("lga", "");
+  // };
 
-  // useEffect(() => {
-  //   if (selectedItems.length > 0) {
-  //     setAppliedSearchTerm(selectedItems); // Get the last item
-  //   }
-  // }, [selectedItems]);
+  // const handleLgaChange = (value: number) => {
+  //   setLgaId(value);
+  //   // setFieldValue("lga", "")
+  // };
+
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -83,10 +109,11 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
 
   const toggleItems = (index: number, id: number) => {
     setCategoryId(id);
+    setSelectedItems([]);
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const [getCategoryQuery, getSubCategoryQuery, getStateQuery, getLGAQuery] =
+  const [getCategoryQuery, getSubCategoryQuery,getProfileQuery] =
     useQueries({
       queries: [
         {
@@ -102,46 +129,56 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
           refetchOnWindowFocus: true,
           enabled: !!categoryId,
         },
-        {
-          queryKey: ["get-all-state"],
-          queryFn: getAllState,
-          retry: 0,
-          refetchOnWindowFocus: true,
-        },
-        {
-          queryKey: ["get-all-lga", stateId],
-          queryFn: () => getLGAbyStateId(stateId!),
-          retry: 0,
-          refetchOnWindowFocus: true,
-          enabled: !!stateId,
-        },
+       {
+           queryKey: ["get-profile"],
+           queryFn: () => getApplicantsbyId(user?.id!),
+           retry: 0,
+           refetchOnWindowFocus: true,
+           enabled: !!user?.id,
+         },
+
+        // {
+        //   queryKey: ["get-all-state"],
+        //   queryFn: getAllState,
+        //   retry: 0,
+        //   refetchOnWindowFocus: true,
+        // },
+        // {
+        //   queryKey: ["get-all-lga", stateId],
+        //   queryFn: () => getLGAbyStateId(stateId!),
+        //   retry: 0,
+        //   refetchOnWindowFocus: true,
+        //   enabled: !!stateId,
+        // },
       ],
     });
 
   const categoryData = getCategoryQuery?.data?.data?.data ?? [];
   const subCategory = getSubCategoryQuery?.data?.data?.data;
-  const stateData = getStateQuery?.data?.data?.data ?? [];
-  const lgaData = getLGAQuery?.data?.data?.data ?? [];
+    const profileData = getProfileQuery?.data?.data;
 
-  const stateOptions: { value: number; label: string }[] = [
-    { value: 0, label: "Select State" }, // Default option
-    ...(stateData && stateData?.length > 0
-      ? stateData?.map((item: StateDatum) => ({
-          value: item?.id,
-          label: item?.state_name,
-        }))
-      : []),
-  ];
+  // const stateData = getStateQuery?.data?.data?.data ?? [];
+  // const lgaData = getLGAQuery?.data?.data?.data ?? [];
 
-  const lgaOptions: { value: number; label: string }[] = [
-    { value: 0, label: "Select Lga" }, // Default option
-    ...(lgaData && lgaData?.length > 0
-      ? lgaData?.map((item: LGADatum) => ({
-          value: item?.id,
-          label: item?.local_government_area,
-        }))
-      : []),
-  ];
+  // const stateOptions: { value: number; label: string }[] = [
+  //   { value: 0, label: "Select State" }, // Default option
+  //   ...(stateData && stateData?.length > 0
+  //     ? stateData?.map((item: StateDatum) => ({
+  //         value: item?.id,
+  //         label: item?.state_name,
+  //       }))
+  //     : []),
+  // ];
+
+  // const lgaOptions: { value: number; label: string }[] = [
+  //   { value: 0, label: "Select Lga" }, // Default option
+  //   ...(lgaData && lgaData?.length > 0
+  //     ? lgaData?.map((item: LGADatum) => ({
+  //         value: item?.id,
+  //         label: item?.local_government_area,
+  //       }))
+  //     : []),
+  // ];
 
   // Updated handleCheckboxChange to save only subCategory titles
   const handleCheckboxChange = (
@@ -175,7 +212,28 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     setSelectedItems([]);
     setSelectedPrice("");
   };
+  const savedLocation = JSON.parse(
+    localStorage.getItem("userLocation") || "{}"
+  );
 
+    const handleNavigateToSell = () => {
+  
+    if (user?.role !== "2" && user?.business === null) {
+      navigate("/seller-verification");
+    } else if (
+      profileData?.subscription?.pricing?.plan?.name?.toLowerCase() ===
+        "free" ||
+      profileData?.subscription?.is_active === 0
+    ) {
+      navigate("/pricing");
+    } else {
+      //  if (user?.role === "2" || user?.business !== null) {
+      navigate("/create-ad");
+    }
+    // } else {
+    //   navigate("/seller-verification");
+    // }
+  };
   return (
     <Formik
       initialValues={{
@@ -189,14 +247,31 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         console.log(values);
       }}
     >
-      {({ setFieldValue }) => (
+      {() => (
         <Form>
           <div className={styles.container}>
+            <div>
+               <Button
+              // onClick={handleNavigateToSell}
+                onClick={() => {
+                      if (user) {
+                        handleNavigateToSell();
+                      } else {
+                        setOpenLoginModal(true);
+                      }
+                    }}
+                  
+              className={`${styles.btn} ${styles.sellButton}`}
+            >
+              Sell
+            </Button>
+            </div>
             <div className={styles.leftSide}>
               {isFilterVisible && (
                 <>
                   <div className={styles.spaceBetween}>
-                    <p>Filters</p>
+                    <p className={styles.filterText}>Filters</p>
+
                     <Image
                       className={styles.filter}
                       onClick={toggleFilterVisibility}
@@ -206,6 +281,27 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       preview={false}
                     />
                   </div>
+                  <div className={styles.locationContainer}>
+                    <p className={styles.label}>Location</p>
+
+                    <div className={styles.leftLocation}>
+                      <p className={styles.value}>
+                        {" "}
+                        {savedLocation?.lga
+                          ? savedLocation?.lga
+                          : location.lga
+                          ? location.lga
+                          : "Select Location"}
+                      </p>
+                      <p
+                        className={styles.change}
+                        onClick={() => setOpenLocationModal(true)}
+                      >
+                        Change Location
+                      </p>
+                    </div>
+                  </div>
+
                   {/* <Checkbox
                     label="Nearby Me"
                     name="nearby_me"
@@ -245,7 +341,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                     </div>
                   ))}
 
-                  <div>
+                  {/* <div>
                     <p className={styles.subjectBg}>LOCATION</p>
 
                     <SearchableSelect
@@ -267,7 +363,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       placeholder="Select LGA"
                       onChange={(value) => handleLgaChange(value)} // Update stateId here
                     />
-                  </div>
+                  </div> */}
                   <div>
                     <p className={styles.subjectBg}>Price</p>
                     <ul className={styles.itemList}>
@@ -322,6 +418,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                 appliedSearchTerm={appliedSearchTerm}
                 setAppliedSearchTerm={setAppliedSearchTerm}
                 selectedItems={selectedItems}
+                category_id={categoryId}
                 stateId={stateId}
                 lgaId={lgaId}
                 setStateId={setStateId}
@@ -331,6 +428,25 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
               />
             </div>
           </div>
+
+          <Modal
+            open={openLocationModal}
+            onCancel={() => setOpenLocationModal(false)}
+            footer={null}
+            centered
+            width={1300}
+          >
+            <LocationModal handleClose={() => setOpenLocationModal(false)} />
+          </Modal>
+          
+      <Modal
+        open={openLoginModal}
+        onCancel={() => setOpenLoginModal(false)}
+        centered
+        footer={null}
+      >
+        <GeneralWelcome handleCloseModal={() => setOpenLoginModal(false)} />
+      </Modal>
         </Form>
       )}
     </Formik>

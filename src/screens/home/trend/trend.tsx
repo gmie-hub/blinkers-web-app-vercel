@@ -1,5 +1,5 @@
 import styles from "../index.module.scss";
-import {  Image, Modal } from "antd";
+import {  App, Image, Modal } from "antd";
 import Product2 from "../../../assets/Image.svg";
 import locationIcon from "../../../assets/location.svg";
 import Button from "../../../customs/button/button";
@@ -39,7 +39,7 @@ const Trends = () => {
   
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
-  // const { notification } = App.useApp();
+  const { notification } = App.useApp();
   const queryClient = useQueryClient();
   // const currentPath = location.pathname;
   const [openLoginModal, setOpenLoginModal] = useState(false);
@@ -152,29 +152,11 @@ const Trends = () => {
           });
         },
       });
-    } catch  {
-      setOpenLoginModal(true)
-
-      // notification.open({
-      //   message: "You need to log in to complete this action.",
-      //   description: (
-      //     <>
-      //       <br />
-      //       <Button
-      //         type="button"
-      //         onClick={() => {
-      //           notification.destroy();
-      //           navigate(`/login?redirect=${currentPath}`);
-      //         }}
-      //       >
-      //         Click here to Login
-      //       </Button>
-      //     </>
-      //   ),
-      //   placement: "top",
-      //   duration: 4, // Auto close after 5 seconds
-      //   icon: null,
-      // });
+    } catch (err: any) {
+      notification.error({
+        message: "Error",
+        description: err || "failed",
+      });
     }
   };
 
@@ -214,9 +196,13 @@ const Trends = () => {
                 >
                   <div
                     className={styles.favoriteIcon}
-                    onClick={(event) => {
-                      event.stopPropagation(); // Prevents click from bubbling to parent div
-                      addToFavHandler(item?.id?.toString());
+                      onClick={(event) => {
+                      event.stopPropagation(); // Prevent parent click
+                      if (user) {
+                        addToFavHandler(item?.id?.toString());
+                      } else {
+                        setOpenLoginModal(true);
+                      }
                     }}
                   >
                     <Image
@@ -319,10 +305,16 @@ const Trends = () => {
               >
                 <div
                   className={styles.favoriteIcon}
-                  onClick={(event) => {
-                    event.stopPropagation(); // Prevents click from bubbling to parent div
-                    addToFavHandler(trendData[3]?.id?.toString());
-                  }}
+               
+
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevent parent click
+                      if (user) {
+                        addToFavHandler(trendData[3]?.id?.toString());
+                      } else {
+                        setOpenLoginModal(true);
+                      }
+                    }}
                 >
                   <Image
                     width={30}
@@ -426,8 +418,12 @@ const Trends = () => {
                   <div
                     className={styles.favoriteIcon}
                     onClick={(event) => {
-                      event.stopPropagation(); // Prevents click from bubbling to parent div
-                      addToFavHandler(item?.id?.toString());
+                      event.stopPropagation(); // Prevent parent click
+                      if (user) {
+                        addToFavHandler(item?.id?.toString());
+                      } else {
+                        setOpenLoginModal(true);
+                      }
                     }}
                   >
                     <Image

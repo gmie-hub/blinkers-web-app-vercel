@@ -246,12 +246,20 @@ const SmallScreen = ({
                 <div className={styles.promoImage}>
                   <div
                     className={styles.favoriteIcon}
-                    onClick={addToFavHandler}
+                    // onClick={addToFavHandler}
                     // onClick={() => {
                     //   if (addToFavHandler) {
                     //     addToFavHandler(id);
                     //   }
                     // }}
+                                        onClick={(event) => {
+                      event.stopPropagation(); // Prevent parent click
+                      if (user) {
+                        addToFavHandler?.();
+                      } else {
+                        setOpenLoginModal(true);
+                      }
+                    }}
                   >
                     <img
                       width={30}

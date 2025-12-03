@@ -140,28 +140,34 @@ const Main = () => {
           });
         },
       });
-    } catch {
-      notification.open({
-        message: "You need to logged in to save an item",
-        description: (
-          <>
-            <br />
-            <Button
-              type="button"
-              onClick={() => {
-                notification.destroy();
-                navigate(`/login?redirect=${currentPath}`);
-              }}
-            >
-              Click here to Login
-            </Button>
-          </>
-        ),
-        placement: "top",
-        duration: 4, // Auto close after 5 seconds
-        icon: null,
+    } catch (err: any) {
+      notification.error({
+        message: "Error",
+        description: err || "failed",
       });
     }
+    // catch {
+    //   notification.open({
+    //     message: "You need to logged in to save an item",
+    //     description: (
+    //       <>
+    //         <br />
+    //         <Button
+    //           type="button"
+    //           onClick={() => {
+    //             notification.destroy();
+    //             navigate(`/login?redirect=${currentPath}`);
+    //           }}
+    //         >
+    //           Click here to Login
+    //         </Button>
+    //       </>
+    //     ),
+    //     placement: "top",
+    //     duration: 4, // Auto close after 5 seconds
+    //     icon: null,
+    //   });
+    // }
   };
 
   const hasUserFlaggedSeller = getFlaggedSellerQuery?.data?.data?.data?.some(
@@ -293,7 +299,7 @@ const Main = () => {
 
   const handleFollowSeller = () => {
     if (!user) {
-      setOpenLoginModal(true)
+      setOpenLoginModal(true);
 
       // notification.open({
       //   message: "You need to log in to complete this action.",
@@ -373,9 +379,7 @@ const Main = () => {
         centered
         footer={null}
       >
-        <GeneralWelcome
-          handleCloseModal={() => setOpenLoginModal(false)}
-        />
+        <GeneralWelcome handleCloseModal={() => setOpenLoginModal(false)} />
       </Modal>
     </>
   );
