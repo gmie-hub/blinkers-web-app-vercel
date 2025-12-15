@@ -275,19 +275,19 @@
   width: 600;
 }
 
-.locationContainer {
-  border-radius: 0.8rem;
-  border: #EEEEEE solid 1px;
-   padding: 1.6rem;
-}
+  .locationContainer {
+    border-radius: 0.8rem;
+    border: #EEEEEE solid 1px;
+    padding: 1.6rem;
+  }
 
-.leftLocation {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  // gap :0.5rem;
- 
-}
+  .leftLocation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    // gap :0.5rem;
+  
+  }
 
 .label {
   font-size: 1.4rem;

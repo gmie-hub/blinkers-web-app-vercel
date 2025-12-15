@@ -58,10 +58,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
         const loc = await getCityAndState();
         setLocation(loc);
       } catch (err: any) {
-        // notification.error({
-        //   message: "Error",
-        //   description: err || "Failed to access location. Please enable GPS.",
-        // });
+
       }
     })();
   }, []);
@@ -216,6 +213,7 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
     localStorage.getItem("userLocation") || "{}"
   );
 
+
     const handleNavigateToSell = () => {
   
     if (user?.role !== "2" && user?.business === null) {
@@ -281,26 +279,26 @@ const Main = ({ appliedSearchTerm, setAppliedSearchTerm }: Props) => {
                       preview={false}
                     />
                   </div>
-                  <div className={styles.locationContainer}>
-                    <p className={styles.label}>Location</p>
+                    <div className={styles.locationContainer}>
+                      <p className={styles.label}>Location</p>
 
-                    <div className={styles.leftLocation}>
-                      <p className={styles.value}>
-                        {" "}
-                        {savedLocation?.lga
-                          ? savedLocation?.lga
-                          : location.lga
-                          ? location.lga
-                          : "Select Location"}
-                      </p>
-                      <p
-                        className={styles.change}
-                        onClick={() => setOpenLocationModal(true)}
-                      >
-                        Change Location
-                      </p>
+                      <div className={styles.leftLocation}>
+                        <p className={styles.value}>
+                          {" "}
+                          {savedLocation?.lga
+                            ? savedLocation?.lga
+                            : location.lga
+                            ? location.lga
+                            : "Select Location"}
+                        </p>
+                        <p
+                          className={styles.change}
+                          onClick={() => setOpenLocationModal(true)}
+                        >
+                          Change Location
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
                   {/* <Checkbox
                     label="Nearby Me"

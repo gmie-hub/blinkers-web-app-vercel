@@ -158,7 +158,6 @@ const PictureBg = () => {
   const [location, setLocation] = useState<{ city?: string; state?: string ,lga:string}>(
     {}
   );
-  const { notification } = App.useApp();
   const savedLocation = JSON.parse(localStorage.getItem("userLocation") || "{}");
 
 
