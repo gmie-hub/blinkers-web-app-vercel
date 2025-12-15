@@ -89,6 +89,9 @@ const Market = () => {
                 <button className={styles.searchBtn} onClick={handleSearch}>
                   Search
                 </button>
+
+
+                
               </SearchInput>
             </div>
           </div>
